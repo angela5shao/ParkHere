@@ -3,9 +3,6 @@ package resources;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-/**
- * Created by angela02pd2014 on 10/14/16.
- */
 
 public class ParkingSpot implements Serializable {
 

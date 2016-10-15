@@ -2,10 +2,6 @@ package resources;
 
 import java.io.Serializable;
 
-/**
- * Created by angela02pd2014 on 10/14/16.
- */
-
 public class Payment implements Serializable {
 
     private static final long serialVersionUID = 45666;

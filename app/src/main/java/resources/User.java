@@ -8,13 +8,11 @@ import java.io.Serializable;
 
 public class User implements Serializable {
 
-    static final long serialVersionUID = -7856374444889271384L;
+    private static final long serialVersionUID = -7856374444889271384L;
     public long userID;
     public String username;
     public String userDomain;
     public long userSessionKey;
-
-
 
     public User() // For guests?
     {

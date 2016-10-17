@@ -1,4 +1,4 @@
-package csci310.parkhere;
+package csci310.parkhere.ui;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import csci310.parkhere.R;
 
 /**
  * Created by ivylinlaw on 10/15/16.

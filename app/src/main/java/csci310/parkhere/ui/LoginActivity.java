@@ -21,7 +21,7 @@ public class LoginActivity extends AppCompatActivity {
     Button _loginButton;
     EditText email, password;
 
-    TextView signupLink, forgotPwLink;
+    TextView _signupLink, _forgotPwLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,11 +29,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.login_ui);
 
         _loginButton=(Button)findViewById(R.id.loginButton);
-        email=(EditText)findViewById(R.id.emailText);
-        password=(EditText)findViewById(R.id.passwordText);
-
-        signupLink=(TextView)findViewById(R.id.signupLink);
-        forgotPwLink=(TextView)findViewById(R.id.forgotPwLink);
+        _signupLink=(TextView)findViewById(R.id.signupLink);
+        _forgotPwLink=(TextView)findViewById(R.id.forgotPwLink);
 
         // Log in
         _loginButton.setOnClickListener(new View.OnClickListener() {
@@ -51,7 +48,15 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         //Sign up
-        signupLink.setOnClickListener(new View.OnClickListener() {
+        _signupLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //
+            }
+        });
+
+        //Forgot password
+        _forgotPwLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //
@@ -61,6 +66,9 @@ public class LoginActivity extends AppCompatActivity {
 
     public void login() {
         Log.d(TAG, "Login");
+
+        email=(EditText)findViewById(R.id.emailText);
+        password=(EditText)findViewById(R.id.passwordText);
 
         if (!validate()) {
             onLoginFailed();
@@ -75,20 +83,17 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
 
-//        String email = _emailText.getText().toString();
-//        String password = _passwordText.getText().toString();
-//
-//        // TODO: Implement your own authentication logic here.
-//
-//        new android.os.Handler().postDelayed(
-//                new Runnable() {
-//                    public void run() {
-//                        // On complete call either onLoginSuccess or onLoginFailed
-//                        onLoginSuccess();
-//                        // onLoginFailed();
-//                        progressDialog.dismiss();
-//                    }
-//                }, 3000);
+        // TODO: Implement your own authentication logic here.
+
+        new android.os.Handler().postDelayed(
+                new Runnable() {
+                    public void run() {
+                        // On complete call either onLoginSuccess or onLoginFailed
+                        onLoginSuccess();
+                        // onLoginFailed();
+                        progressDialog.dismiss();
+                    }
+                }, 3000);
     }
 
     public boolean validate() {
@@ -96,9 +101,13 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
+    public void onLoginSuccess() {
+        _loginButton.setEnabled(true);
+        finish();
+    }
+
     public void onLoginFailed() {
         Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
-
         _loginButton.setEnabled(true);
     }
 
@@ -124,3 +133,4 @@ public class LoginActivity extends AppCompatActivity {
 //        return super.onOptionsItemSelected(item);
 //    }
 }
+

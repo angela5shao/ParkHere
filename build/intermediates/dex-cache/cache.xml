@@ -3,75 +3,57 @@
 
     <item
         is-multidex="false"
-        jar="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.4.0/jars/libs/internal_impl-23.4.0.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.3"
-        sha1="ea3c07504d2c8f4b13aa17c45c1b68ed9c1c3674">
-        <dex dex="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/pre-dexed/debug/internal_impl-23.4.0_0c2180d345e4475170b81a4c8a8ccf308de02ab5.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.3"
-        sha1="548f06de403a9409f00554b3ee12a9fdea0e236c">
-        <dex dex="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-23.4.0_ba01a3bc03be8318a82248d3a04942eedd008485.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/angela02pd2014/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/23.4.0/support-annotations-23.4.0.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.3"
-        sha1="ffbe55fdb2bb456b1485831706a9eac3300bb6b8">
-        <dex dex="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/pre-dexed/debug/support-annotations-23.4.0_d0853092a612c1c173d7a25eaee3b586ac376587.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/23.4.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.3"
-        sha1="de4db3785756bfb0915a9f59a9b3f2fea7407be4">
-        <dex dex="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/pre-dexed/debug/com.android.support-animated-vector-drawable-23.4.0_055e4fa59c7743d4f6d320d3e11a58f2ac192453.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/23.4.0/jars/classes.jar"
-        jumboMode="true"
+        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/23.4.0/jars/classes.jar"
+        jumboMode="false"
         optimize="true"
         revision="23.0.3"
         sha1="c2c594cace5d83a3227b2b6e658ecbfd586d3ed9">
-        <dex dex="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/pre-dexed/debug/com.android.support-support-vector-drawable-23.4.0_81ca7b6692b10bcb3f0c9e0561205e8fb4c8f082.jar" />
+        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/pre-dexed/debug/com.android.support-support-vector-drawable-23.4.0_86e8abc9ce33058ac442ee3e91773e0e80c511df.jar" />
     </item>
     <item
         is-multidex="false"
-        jar="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
-        jumboMode="true"
+        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.4.0/jars/libs/internal_impl-23.4.0.jar"
+        jumboMode="false"
         optimize="true"
         revision="23.0.3"
-        sha1="92bbb2c153bcd4b53bbf97a173a6f7df60be5252">
-        <dex dex="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/pre-dexed/debug/instant-run_2467cbb8c122f3fb4737a8174854b38c22196d0e.jar" />
+        sha1="ea3c07504d2c8f4b13aa17c45c1b68ed9c1c3674">
+        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/pre-dexed/debug/internal_impl-23.4.0_fe792ef1ac67641cf970ab7228c39bb9b34a50e5.jar" />
     </item>
     <item
         is-multidex="false"
-        jar="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.3"
-        sha1="4b438aca5f0bdbcc1b078f68390584205af25c01">
-        <dex dex="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/pre-dexed/debug/instant-run-bootstrap_70e03ca36666a7abcf1003c71b1d70ba2772bdd9.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.4.0/jars/classes.jar"
-        jumboMode="true"
+        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.4.0/jars/classes.jar"
+        jumboMode="false"
         optimize="true"
         revision="23.0.3"
         sha1="67bd36ee9340ec7c254108936ad16b24bed160cc">
-        <dex dex="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-23.4.0_0ed5fa5c6c58776d9184ee71c6801d0a1cb77dcc.jar" />
+        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-23.4.0_84d75b7b5faaeede249fc4771762de226bf03001.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/23.4.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="de4db3785756bfb0915a9f59a9b3f2fea7407be4">
+        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/pre-dexed/debug/com.android.support-animated-vector-drawable-23.4.0_3ea7fe8e9ad5456a45b51e3d302835cd0d16b34a.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="548f06de403a9409f00554b3ee12a9fdea0e236c">
+        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-23.4.0_02f099a560736eea312b65b00e8d28858cc57078.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/ivylinlaw/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/23.4.0/support-annotations-23.4.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="ffbe55fdb2bb456b1485831706a9eac3300bb6b8">
+        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/pre-dexed/debug/support-annotations-23.4.0_5e97b155f59cfac53bd2c4ec4cf0c8eb2cd3046c.jar" />
     </item>
 
 </items>

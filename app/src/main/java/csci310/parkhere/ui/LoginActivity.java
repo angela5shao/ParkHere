@@ -1,6 +1,7 @@
 package csci310.parkhere.ui;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -36,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
         _loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                login();
+                login(v);
 //                if(email.getText().toString().equals("admin") &&
 //                        password.getText().toString().equals("admin")) {
 //                    Toast.makeText(getApplicationContext(), "Redirecting...", Toast.LENGTH_SHORT).show();
@@ -64,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    public void login() {
+    public void login(View v) {
         Log.d(TAG, "Login");
 
         email=(EditText)findViewById(R.id.emailText);
@@ -85,11 +86,13 @@ public class LoginActivity extends AppCompatActivity {
 
         // TODO: Implement your own authentication logic here.
 
+        final View curr_v = v;
         new android.os.Handler().postDelayed(
                 new Runnable() {
+//                    private View v;
                     public void run() {
                         // On complete call either onLoginSuccess or onLoginFailed
-                        onLoginSuccess();
+                        onLoginSuccess(curr_v);
                         // onLoginFailed();
                         progressDialog.dismiss();
                     }
@@ -101,9 +104,12 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
-    public void onLoginSuccess() {
+    public void onLoginSuccess(View v) {
         _loginButton.setEnabled(true);
         finish();
+
+        Intent myIntent = new Intent(v.getContext(), RenterActivity.class);
+        startActivityForResult(myIntent, 0);
     }
 
     public void onLoginFailed() {

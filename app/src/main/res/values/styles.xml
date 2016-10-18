@@ -6,9 +6,18 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorBackground">@color/colorBackground</item>
+        <item name="colorDarkBackground">@color/colorDarkBackground</item>
+        <item name="colorLightBackground">@color/colorLightBackground</item>
         <item name="colorLine">@color/colorLine</item>
         <item name="colorMainFont">@color/colorMainFont</item>
+        <item name="android:itemBackground">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar"  parent="AppTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:textColorPrimary">@color/colorMainFont</item>
+        <item name="colorControlNormal">@color/colorMainFont</item>
     </style>
 
 </resources>

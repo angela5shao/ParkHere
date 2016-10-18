@@ -9,11 +9,33 @@ import java.io.Serializable;
 public class Review implements Serializable {
 
     private static final long serialVersionUID = 9876543;
+
     public long reviewID;
     public long forUserID;
-    public int spotRating;
+    public long spaceID;
+    public float spotRating;
     public String spotComment;
-    public int provOrRentRating;
+    public float provOrRentRating;
     public String proOrRentComment;
 
+    public Review() {
+        reviewID = -1;
+        forUserID = -1;
+        spaceID = -1;
+        spotRating = -1;
+        spotComment = "";
+        provOrRentRating = -1;
+        proOrRentComment = "";
+    }
+
+    public Review(long inReviewID, long inForUserID, long inSpaceID, float inSpotRating,
+                    String inSpotComment, float inUserRating, String inUserComment) {
+        reviewID = inReviewID;
+        forUserID = inForUserID;
+        spaceID = inSpaceID;
+        spotRating = inSpotRating;
+        spotComment = inSpotComment;
+        provOrRentRating = inUserRating;
+        proOrRentComment = inUserComment;
+    }
 }

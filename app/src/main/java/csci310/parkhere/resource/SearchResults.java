@@ -1,4 +1,4 @@
-package csci310.parkhere.resource;
+package resources;
 
 import java.io.Serializable;
 import java.util.ArrayList;

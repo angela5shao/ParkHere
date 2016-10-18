@@ -15,6 +15,6 @@ hs_err_pid*
 *.iml
 .idea/
 #.idea/workspace.xml - remove # and delete .idea if it better suit your needs.
-.gradle
+.gradle/
 build/
 local.properties

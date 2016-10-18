@@ -8,7 +8,7 @@ import android.widget.Button;
 
 import csci310.parkhere.R;
 
-public class MainActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity {
     Button _loginButton, _registerButton, _guestButton;
 
     @Override

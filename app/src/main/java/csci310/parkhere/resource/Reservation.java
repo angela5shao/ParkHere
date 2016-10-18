@@ -4,7 +4,10 @@ import java.io.Serializable;
 
 public class Reservation implements Serializable {
 
-    private static final long serialVersionUID = 456789; // How to generate in Android Studio?
+/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3222156710414247019L;
     public long reservationID;
     public ParkingSpot spot;
     public TimeInterval reserveTimeInterval;

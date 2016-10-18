@@ -16,10 +16,14 @@ public class ParkingSpot implements Serializable {
         spotAddress = address;
     }
 
-    public class Location {
-        double lg;
+    public static class Location implements Serializable {
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 127970804711014803L;
+		double lg;
         double lt;
-        Location(int longitude, int latitude){
+        public Location(int longitude, int latitude){
             lg = longitude;
             lt = latitude;
         }

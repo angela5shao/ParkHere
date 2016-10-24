@@ -26,19 +26,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".ui.HomeActivity">
+        <!--<activity android:name=".ui.HomeActivity">-->
+        <activity android:name=".ui.ProviderActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.LoginActivity"/>
-        <activity android:name=".ui.RegisterActivity"/>
-        <activity android:name=".ui.RenterActivity"
-                  android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".ui.ProviderActivity"
-                  android:theme="@style/AppTheme.NoActionBar"/>
+        <!--<activity android:name=".ui.LoginActivity"/>-->
+        <!--<activity android:name=".ui.RegisterActivity"/>-->
+        <!--<activity android:name=".ui.RenterActivity"-->
+                  <!--android:theme="@style/AppTheme.NoActionBar"/>-->
+        <!--<activity android:name=".ui.ProviderActivity"-->
+                  <!--android:theme="@style/AppTheme.NoActionBar"/>-->
     </application>
 
 </manifest>

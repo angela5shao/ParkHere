@@ -3,6 +3,15 @@
 
     <item
         is-multidex="false"
+        jar="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="8e5dce09f2d9c0130f7bd4ae25dd9c90092de1ca">
+        <dex dex="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/pre-dexed/debug/instant-run-bootstrap_70e03ca36666a7abcf1003c71b1d70ba2772bdd9.jar" />
+    </item>
+    <item
+        is-multidex="false"
         jar="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.4.0/jars/libs/internal_impl-23.4.0.jar"
         jumboMode="true"
         optimize="true"
@@ -39,6 +48,15 @@
     </item>
     <item
         is-multidex="false"
+        jar="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.4.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="67bd36ee9340ec7c254108936ad16b24bed160cc">
+        <dex dex="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-23.4.0_0ed5fa5c6c58776d9184ee71c6801d0a1cb77dcc.jar" />
+    </item>
+    <item
+        is-multidex="false"
         jar="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/23.4.0/jars/classes.jar"
         jumboMode="true"
         optimize="true"
@@ -54,24 +72,6 @@
         revision="23.0.3"
         sha1="acc062385d5fd69be89b16fa3f1cfe3bb9a24ca3">
         <dex dex="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/pre-dexed/debug/instant-run_2467cbb8c122f3fb4737a8174854b38c22196d0e.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.3"
-        sha1="7f074facd2d6ab9128da565251bf3d0bf6ca95da">
-        <dex dex="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/pre-dexed/debug/instant-run-bootstrap_70e03ca36666a7abcf1003c71b1d70ba2772bdd9.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.4.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.3"
-        sha1="67bd36ee9340ec7c254108936ad16b24bed160cc">
-        <dex dex="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-23.4.0_0ed5fa5c6c58776d9184ee71c6801d0a1cb77dcc.jar" />
     </item>
 
 </items>

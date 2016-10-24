@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|center"
                 android:paddingLeft="10dp"
-                android:paddingRight="10dp"/>s
+                android:paddingRight="10dp"/>
 
             <ImageView
                 android:src="@mipmap/ic_reserve"

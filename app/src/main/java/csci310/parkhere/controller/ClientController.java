@@ -9,21 +9,23 @@ import csci310.parkhere.resource.Review;
 import csci310.parkhere.resource.TimeInterval;
 import csci310.parkhere.resource.User;
 
-/**
- * Created by angela02pd2014 on 10/16/16.
- */
-
 public class ClientController {
     private User user;
     private ArrayList<ParkingSpot> parkingSpots;
     private ArrayList<Reservation> reservations;
     private ArrayList<Review> reviews;
 
-    public ClientController() {
+    private static ClientController ourInstance = new ClientController();
+
+    private ClientController() { // private constructor
         user = null;
         parkingSpots = null;
         reservations = null;
         reviews = null;
+    }
+
+    public static ClientController getInstance() {
+        return ourInstance;
     }
 
     // Getters
@@ -110,6 +112,6 @@ public class ClientController {
     }
 
     public void loadPay(String method) {
-        
+
     }
 }

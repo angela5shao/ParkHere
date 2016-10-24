@@ -8,7 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 import csci310.parkhere.R;
+import csci310.parkhere.resource.ParkingSpot;
 
 
 /**
@@ -65,6 +68,9 @@ public class SpacesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Get list of my parking spaces
+//        ArrayList<ParkingSpot> mySpaces =
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_spaces, container, false);
     }

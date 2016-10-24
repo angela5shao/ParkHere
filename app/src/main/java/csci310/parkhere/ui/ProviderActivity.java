@@ -28,24 +28,24 @@ public class ProviderActivity extends AppCompatActivity {
 
         Toolbar renterToolbar = (Toolbar) findViewById(R.id.providerTabbar);
         setSupportActionBar(renterToolbar);
+//
+        _spaceLink = (TextView)findViewById(R.id.spaceLink);
+//
+        fm = getSupportFragmentManager();
+        spacesFragment = fm.findFragmentById(R.id.fragment_spaces);
+        spacesFragment = new SpacesFragment();
+//        // TODO: instantiate profile fragment
+//
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.add(R.id.fragment_spaces, spacesFragment);
+//        fragmentTransaction.commit();
+//
+        _spaceLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-//        _spaceLink = (TextView)findViewById(R.id.spaceLink);
-
-//        fm = getSupportFragmentManager();
-//        spacesFragment = fm.findFragmentById(R.id.fragment_spaces);
-//        spacesFragment = new SpacesFragment();
-        // TODO: instantiate profile fragment
-
-//        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-//        fragmentTransaction.add(R.id.fragment_spaces, spacesFragment);
-//        fragmentTransaction.commit(); // commit transaction
-
-//        _spaceLink.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //
-//            }
-//        });
+            }
+        });
 
     }
 

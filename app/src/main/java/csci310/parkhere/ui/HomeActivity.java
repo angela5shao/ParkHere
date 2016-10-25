@@ -1,14 +1,14 @@
 package csci310.parkhere.ui;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
 import csci310.parkhere.R;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends Activity {
     Button _loginButton, _registerButton, _guestButton;
 
     @Override

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.Toolbar
+<android.widget.Toolbar
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/providerTabbar"
     android:minHeight="?attr/actionBarSize"
@@ -22,26 +22,28 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|center"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"/>
+                android:layout_weight="1"/>
 
-            <ImageView
-                android:src="@mipmap/ic_space"
-                android:layout_height="30dp"
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_gravity="center"
-                android:paddingLeft="10dp"/>
-
-            <TextView
-                android:id="@+id/spaceLink"
-                android:text="Spaces"
-                android:textColor="@color/colorMainFont"
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
+            <LinearLayout android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:paddingRight="10dp"/>
+                android:layout_weight="6"
+                android:layout_gravity="center">
+                <ImageView
+                    android:src="@mipmap/ic_space"
+                    android:layout_height="30dp"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:id="@+id/spaceLink"
+                    android:text="Spaces"
+                    android:textColor="@color/colorMainFont"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
         </LinearLayout>
     </FrameLayout>
-</android.support.v7.widget.Toolbar>
+</android.widget.Toolbar>

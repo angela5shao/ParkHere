@@ -20,6 +20,11 @@
     <!--android:layout_width="match_parent"-->
     <!--android:layout_height="wrap_content" >-->
 
+    <FrameLayout
+        android:id="@+id/spaceFragContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <include
         layout="@layout/provider_tabbar_ui"
         android:layout_width="match_parent"

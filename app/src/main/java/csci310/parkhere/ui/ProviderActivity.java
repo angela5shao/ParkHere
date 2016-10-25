@@ -1,5 +1,6 @@
 package csci310.parkhere.ui;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,9 +17,10 @@ import csci310.parkhere.R;
 /**
  * Created by ivylinlaw on 10/17/16.
  */
-public class ProviderActivity extends AppCompatActivity {
+public class ProviderActivity extends AppCompatActivity implements SpacesFragment.OnFragmentInteractionListener {
     TextView _spaceLink;
     FragmentManager fm;
+    FragmentTransaction fragmentTransaction;
     Fragment spacesFragment;
 
     @Override
@@ -32,14 +34,13 @@ public class ProviderActivity extends AppCompatActivity {
         _spaceLink = (TextView)findViewById(R.id.spaceLink);
 //
         fm = getSupportFragmentManager();
-        spacesFragment = fm.findFragmentById(R.id.fragment_spaces);
+        fragmentTransaction = fm.beginTransaction();
+//        spacesFragment = fm.findFragmentById(R.id.fragment_spaces);
         spacesFragment = new SpacesFragment();
-//        // TODO: instantiate profile fragment
-//
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.add(R.id.fragment_spaces, spacesFragment);
-//        fragmentTransaction.commit();
-//
+
+        fragmentTransaction.add(R.id.spaceFragContainer, spacesFragment);
+        fragmentTransaction.commit();
+
         _spaceLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,5 +71,9 @@ public class ProviderActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void onFragmentInteraction(Uri uri){
+        //you can leave it empty
     }
 }

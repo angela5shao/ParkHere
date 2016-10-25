@@ -71,6 +71,15 @@ public class SpacesFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_spaces, container, false);
     }
 
+//    @Override
+//    public void onActivityCreated(Bundle savedInstanceState) {
+//        super.onActivityCreated(savedInstanceState);
+//        Bundle bundle = getArguments();
+//        if (bundle != null) {
+//            setText(bundle.getString("link"));
+//        }
+//    }
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {

@@ -2,14 +2,12 @@ package csci310.parkhere.controller;
 
 import java.util.ArrayList;
 
+import csci310.parkhere.resource.CarType;
 import csci310.parkhere.resource.ParkingSpot;
 import csci310.parkhere.resource.Reservation;
 import csci310.parkhere.resource.Review;
+import csci310.parkhere.resource.TimeInterval;
 import csci310.parkhere.resource.User;
-
-/**
- * Created by angela02pd2014 on 10/16/16.
- */
 
 public class ClientController {
     private User user;
@@ -17,11 +15,17 @@ public class ClientController {
     private ArrayList<Reservation> reservations;
     private ArrayList<Review> reviews;
 
-    public ClientController() {
+    private static ClientController ourInstance = new ClientController();
+
+    private ClientController() { // private constructor
         user = null;
         parkingSpots = null;
         reservations = null;
         reviews = null;
+    }
+
+    public static ClientController getInstance() {
+        return ourInstance;
     }
 
     // Getters
@@ -56,5 +60,60 @@ public class ClientController {
     // TODO: Functions for provider
 //    public ArrayList<>
 
+    public ArrayList<ParkingSpot> getSpaces(long userID) {
+        return null;
+    }
+
+    public boolean addSpace(TimeInterval interval, String address, long userID) {
+        return false;
+    }
+
+    public boolean editSpace(long spaceID, TimeInterval interval) {
+        return false;
+    }
+
+    public void publishSpace(long spaceID) {
+
+    }
+
+    public void unpublishSpace(long spaceID) {
+
+    }
+
     // TODO: Functions for renter
+    public ArrayList<Reservation> getReservations(long userID) {
+        return null;
+    }
+
+    public boolean editReservation(long resID) {
+        return false;
+    }
+
+    public boolean cancelReservation(long resID) {
+        return false;
+    }
+
+    public Reservation getReservationDetail(long resID) {
+        return null;
+    }
+
+    public void submitReview(Review rev) {
+
+    }
+
+    public void report(Reservation res) {
+
+    }
+
+    public ArrayList<ParkingSpot> search(String address, int dist, CarType type, TimeInterval interval, int length) {
+        return null;
+    }
+
+    public boolean book(long spaceID, long userID, TimeInterval interval) {
+        return false;
+    }
+
+    public void loadPay(String method) {
+
+    }
 }

@@ -13,6 +13,11 @@
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="wrap_content" >-->
 
+        <FrameLayout
+            android:id="@+id/searchFragContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
         <include
             layout="@layout/renter_tabbar_ui"
             android:layout_width="match_parent"

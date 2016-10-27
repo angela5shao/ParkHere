@@ -7,4 +7,5 @@
     <color name="colorLightBackground">#FFFFFF</color>
     <color name="colorLine">#FFFFFF</color>
     <color name="colorMainFont">#FFFFFF</color>
+    <color name="colorSubFont">#000000</color>
 </resources>

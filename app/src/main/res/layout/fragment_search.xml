@@ -1,0 +1,175 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_search"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="csci310.parkhere.ui.SearchFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Spinner
+                android:id="@+id/usertypeSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorAccent"
+                android:popupBackground="@color/colorAccent"
+                android:spinnerMode="dropdown"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginTop="24dp"
+                android:entries="@array/search_loctype_spinner"/>
+
+            <fragment
+                android:id="@+id/place_autocomplete_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <EditText
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/in_start_date"
+                    android:layout_marginTop="4dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:hint="start date"
+                    android:textColor="@color/colorSubFont"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SELECT START DATE"
+                    android:id="@+id/btn_start_date"
+                    android:layout_marginTop="6dp"
+                    android:layout_alignBottom="@+id/in_start_date"
+                    android:layout_toRightOf="@+id/in_start_date"
+                    android:layout_toEndOf="@+id/in_start_date" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <EditText
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/in_start_time"
+                    android:layout_marginTop="6dp"
+                    android:layout_below="@+id/in_start_date"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:hint="start time"
+                    android:textColor="@color/colorSubFont"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SELECT START TIME"
+                    android:id="@+id/btn_start_time"
+                    android:layout_below="@+id/btn_start_date"
+                    android:layout_alignLeft="@+id/btn_start_date"
+                    android:layout_alignStart="@+id/btn_start_date" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <EditText
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/in_end_date"
+                    android:layout_marginTop="4dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:hint="start date"
+                    android:textColor="@color/colorSubFont"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SELECT END DATE"
+                    android:id="@+id/btn_end_date"
+                    android:layout_marginTop="6dp"
+                    android:layout_alignBottom="@+id/in_end_date"
+                    android:layout_toRightOf="@+id/in_end_date"
+                    android:layout_toEndOf="@+id/in_end_date" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <EditText
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/in_end_time"
+                    android:layout_marginTop="6dp"
+                    android:layout_below="@+id/in_end_date"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:hint="end time"
+                    android:textColor="@color/colorSubFont"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SELECT END TIME"
+                    android:id="@+id/btn_end_time"
+                    android:layout_below="@+id/btn_end_date"
+                    android:layout_alignLeft="@+id/btn_end_date"
+                    android:layout_alignStart="@+id/btn_end_date" />
+            </LinearLayout>
+
+            <Spinner
+                android:id="@+id/distSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorAccent"
+                android:popupBackground="@color/colorAccent"
+                android:spinnerMode="dropdown"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:layout_margin="4dp"
+                android:entries="@array/search_dist_spinner"/>
+
+            <Spinner
+                android:id="@+id/cartypeSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorAccent"
+                android:popupBackground="@color/colorAccent"
+                android:spinnerMode="dropdown"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:layout_margin="4dp"
+                android:entries="@array/search_cartype_spinner"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Search"
+                android:id="@+id/btn_confirm"
+                android:layout_marginTop="6dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"/>
+
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

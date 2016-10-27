@@ -28,8 +28,8 @@ public class ProviderActivity extends FragmentActivity implements SpacesFragment
         super.onCreate(savedInstanceState);
         setContentView(R.layout.provider_ui);
 
-        Toolbar renterToolbar = (Toolbar) findViewById(R.id.providerTabbar);
-        setActionBar(renterToolbar);
+        Toolbar providerrToolbar = (Toolbar) findViewById(R.id.providerTabbar);
+        setActionBar(providerrToolbar);
 //
         _spaceLink = (TextView)findViewById(R.id.spaceLink);
 //

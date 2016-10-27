@@ -4,9 +4,12 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import csci310.parkhere.R;
 
@@ -19,11 +22,12 @@ import csci310.parkhere.R;
  * Use the {@link SpacesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SpacesFragment extends Fragment {
+public class SpacesFragment extends ListFragment implements AdapterView.OnItemClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private ListView spacesListView;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -33,6 +37,7 @@ public class SpacesFragment extends Fragment {
 
     public SpacesFragment() {
         // Required empty public constructor
+//        spacesListView = (ListView)rootView.findViewById(R.id.spaces_list);
     }
 
     /**
@@ -117,5 +122,11 @@ public class SpacesFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position,
+                            long id) {
+
     }
 }

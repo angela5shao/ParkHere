@@ -44,15 +44,22 @@ public class ProviderActivity extends FragmentActivity implements SpacesFragment
         spacesFragment = new SpacesFragment();
         privateProfileFragment = new PrivateProfileFragment();
 
-//        fragmentTransaction.add(R.id.fragContainer, spacesFragment);
-//        fragmentTransaction.commit();
+//        fragmentTransaction.add(R.id.fragContainer, spacesFragment).commit();
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragContainer, spacesFragment).commit();
 
         _spaceLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("Clicked on space tab item");
-//                fragmentTransaction.replace(R.id.fragContainer, spacesFragment);
-//                fragmentTransaction.commit();
+                System.out.println("Clicked on spaces tab item");
+                try {
+//                    fragmentTransaction.replace(R.id.fragContainer, spacesFragment)
+//                        .commit();
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragContainer, spacesFragment).commit();
+                } catch (Exception e) {
+                    System.out.println("Spaces tab item exception");
+                }
             }
         });
         _profilePic.setOnClickListener(new View.OnClickListener() {
@@ -60,14 +67,11 @@ public class ProviderActivity extends FragmentActivity implements SpacesFragment
             public void onClick(View v) {
                 System.out.println("Clicked on profile tab item");
                 try {
-                    fragmentTransaction.add(R.id.fragContainer, privateProfileFragment);
-//                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragContainer, privateProfileFragment).commit();
                 } catch (Exception e) {
                     System.out.println("Profile tab item exception");
                 }
-//                fragmentTransaction.replace(R.id.fragContainer, privateProfileFragment);
-//                fragmentTransaction.commit();
             }
         });
     }

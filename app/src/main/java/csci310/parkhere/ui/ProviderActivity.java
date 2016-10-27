@@ -3,24 +3,24 @@ package csci310.parkhere.ui;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import csci310.parkhere.R;
 
 /**
  * Created by ivylinlaw on 10/17/16.
  */
-public class ProviderActivity extends AppCompatActivity implements SpacesFragment.OnFragmentInteractionListener, PrivateProfileFragment.OnFragmentInteractionListener {
-    ImageView _profilePic;
+public class ProviderActivity extends FragmentActivity implements SpacesFragment.OnFragmentInteractionListener, PrivateProfileFragment.OnFragmentInteractionListener {
     TextView _spaceLink;
+    ImageView _profilePic;
 
     FragmentManager fm;
     FragmentTransaction fragmentTransaction;
@@ -33,7 +33,7 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         setContentView(R.layout.provider_ui);
 
         Toolbar renterToolbar = (Toolbar) findViewById(R.id.providerTabbar);
-        setSupportActionBar(renterToolbar);
+        setActionBar(renterToolbar);
 //
         _spaceLink = (TextView)findViewById(R.id.spaceLink);
         _profilePic = (ImageView)findViewById(R.id.profilePic);
@@ -70,14 +70,12 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 //                fragmentTransaction.commit();
             }
         });
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu items for use in the action bar
         getMenuInflater().inflate(R.menu.provider_menu_ui, menu);
-
         return true;
     }
 

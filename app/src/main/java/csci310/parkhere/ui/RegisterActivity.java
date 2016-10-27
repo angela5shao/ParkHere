@@ -1,7 +1,7 @@
 package csci310.parkhere.ui;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -11,7 +11,7 @@ import csci310.parkhere.R;
 /**
  * Created by ivylinlaw on 10/16/16.
  */
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends Activity {
     Button b1;
     EditText ed1,ed2;
 

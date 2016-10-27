@@ -58,6 +58,8 @@ public class ClientController {
     }
 
     // TODO: Functions for provider
+//    public ArrayList<>
+
     public ArrayList<ParkingSpot> getSpaces(long userID) {
         return null;
     }

@@ -6,11 +6,14 @@
     <item android:id="@+id/profileLink"
         android:orderInCategory="100"
         android:title="Switch to Renter"
+        android:icon="@mipmap/ic_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
     <item android:id="@+id/reservationsLink"
         android:orderInCategory="200"
         android:title="Log Out"
+        android:icon="@mipmap/ic_logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 </menu>

@@ -1,6 +1,7 @@
 package csci310.parkhere.controller;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -11,7 +12,7 @@ import csci310.parkhere.resource.Review;
 import csci310.parkhere.resource.TimeInterval;
 import csci310.parkhere.resource.User;
 
-public class ClientController {
+public class ClientController implements Serializable {
     private User user;
     private ArrayList<ParkingSpot> parkingSpots;
     private ArrayList<Reservation> reservations;
@@ -20,7 +21,7 @@ public class ClientController {
     private static ClientController ourInstance = new ClientController();
     private ClientCommunicator ClientCommunicator;
 
-    private ClientController() { // private constructor
+    public ClientController() { // private constructor
         user = null;
         parkingSpots = null;
         reservations = null;

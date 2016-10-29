@@ -8,7 +8,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.io.IOException;
+
 import csci310.parkhere.R;
+import csci310.parkhere.controller.ClientController;
 
 /**
  * Created by ivylinlaw on 10/29/16.
@@ -17,6 +20,7 @@ public class RegisterRenterActivity extends Activity {
     Button _nextButton;
     EditText _liscenseIdText, _liscensePlateNumText;
     String name, email, password, phonenum;
+    ClientController clientController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +36,8 @@ public class RegisterRenterActivity extends Activity {
         email = intent.getStringExtra("EMAIL");
         password = intent.getStringExtra("PASSWORD");
         phonenum = intent.getStringExtra("PHONE_NUM");
+
+        clientController = (ClientController) intent.getSerializableExtra("CLIENT_CONTROLLER");
 
         _nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,6 +58,11 @@ public class RegisterRenterActivity extends Activity {
         progressDialog.show();
 
         // TODO: Implement your own authentication logic here.
+        try {
+            clientController.register(email, password, phonenum, licenseID, licensePlate, "renter", name);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         final View curr_v = v;
         new android.os.Handler().postDelayed(

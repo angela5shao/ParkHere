@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import csci310.parkhere.R;
+import csci310.parkhere.controller.ClientController;
 
 /**
  * Created by ivylinlaw on 10/16/16.
@@ -17,11 +18,15 @@ public class RegisterMainActivity extends Activity {
     Button _nextButton;
     EditText _nameText, _emailText, _passwordText, _phoneText;
     Spinner _usertypeSpinner;
+    ClientController clientController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_main_ui);
+
+        Intent intent = getIntent();
+        clientController = (ClientController) intent.getSerializableExtra("CLIENT_CONTROLLER");
 
         _nextButton=(Button)findViewById(R.id.nextButton);
         _nameText=(EditText)findViewById(R.id.nameText); // name
@@ -48,6 +53,7 @@ public class RegisterMainActivity extends Activity {
                     intent.putExtra("EMAIL", email);
                     intent.putExtra("PASSWORD", password);
                     intent.putExtra("PHONE_NUM", phonenum);
+                    intent.putExtra("CLIENT_CONTROLLER", clientController);
                     startActivity(intent);
                 }
                 else {
@@ -56,6 +62,7 @@ public class RegisterMainActivity extends Activity {
                     intent.putExtra("EMAIL", email);
                     intent.putExtra("PASSWORD", password);
                     intent.putExtra("PHONE_NUM", phonenum);
+                    intent.putExtra("CLIENT_CONTROLLER", clientController);
                     startActivity(intent);
                 }
             }

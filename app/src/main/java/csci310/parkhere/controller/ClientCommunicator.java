@@ -5,4 +5,5 @@ package csci310.parkhere.controller;
  */
 
 public class ClientCommunicator {
+    //
 }

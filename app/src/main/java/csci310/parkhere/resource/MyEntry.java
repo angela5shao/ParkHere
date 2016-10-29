@@ -1,4 +1,4 @@
-package resource;
+package csci310.parkhere.resource;
 
 import java.util.Map;
 

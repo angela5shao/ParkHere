@@ -3,8 +3,8 @@
     <string name="login_signuplink"><u>No account yet? Sign up!</u></string>
     <string name="login_forgotpwlink"><u>Forgot password</u></string>
     <string-array name="signup_usertype_spinner">
-        <item>Signup as Renter</item>
-        <item>Signup as Provider</item>
+        <item>Renter</item>
+        <item>Provider</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->

@@ -31,7 +31,7 @@ public class HomeActivity extends Activity {
         _registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(v.getContext(), RegisterActivity.class);
+                Intent myIntent = new Intent(v.getContext(), RegisterMainActivity.class);
                 startActivityForResult(myIntent, 0);
             }
         });

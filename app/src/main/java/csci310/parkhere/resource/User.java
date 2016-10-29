@@ -1,4 +1,4 @@
-package csci310.parkhere.resource;
+package resource;
 
 import java.io.Serializable;
 
@@ -8,7 +8,6 @@ public class User implements Serializable {
     public long userID;
     public String username;
     public String userDomain;
-    public long userSessionKey;
 
 
 
@@ -17,14 +16,22 @@ public class User implements Serializable {
         userID = 0;
         username = "";
         userDomain = "";
-        userSessionKey = -1;
     }
 
-    public User(long UID, String uname, String udomain, long ukey)
+    public User(long UID, String uname, String udomain)
     {
         userID = UID;
         username = uname;
         userDomain = udomain;
-        userSessionKey = ukey;
+    }
+    
+    public long getID(){
+    	return userID;
+    }
+    public String getUsername(){
+    	return username;
+    }
+    public String getUserDomain(){
+    	return userDomain;
     }
 }

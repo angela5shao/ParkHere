@@ -14,14 +14,16 @@ public class ClientController {
     private ArrayList<ParkingSpot> parkingSpots;
     private ArrayList<Reservation> reservations;
     private ArrayList<Review> reviews;
-
+    private HashMap<String, Object> entry;
     private static ClientController ourInstance = new ClientController();
+    private ClientCommunicator;
 
     private ClientController() { // private constructor
         user = null;
         parkingSpots = null;
         reservations = null;
         reviews = null;
+        ClientCommunicator = new ClientCommunicator();
     }
 
     public static ClientController getInstance() {
@@ -45,8 +47,21 @@ public class ClientController {
         return 0;
     }
 
-    public long register(String username, String pw) {
-        return 0;
+    public long register(String username, String pw, String phone, String license, String plate, String usertype, String name) {
+        entry.put("USERNAME", username);
+        entry.put("PASSWORD", pw);
+        entry.put("NAME", name);
+        entry.put("PHONE", (int)phone);
+        entry.put("LICENSE", license);
+        entry.put("PLATE", plate);
+        boolean usertype_bool;
+        if(usertype=="renter"){
+            usertype_bool = true;
+        } else{
+            usertype_bool = false;
+        }
+        entry.put("USERTYPE", usertype_bool);
+        ClienCommunicator.send("REGISTER", entry);
     }
 
     public User getProfile(long userID) {

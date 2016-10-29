@@ -1,6 +1,8 @@
 package csci310.parkhere.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import csci310.parkhere.resource.CarType;
 import csci310.parkhere.resource.ParkingSpot;
@@ -16,7 +18,7 @@ public class ClientController {
     private ArrayList<Review> reviews;
     private HashMap<String, Object> entry;
     private static ClientController ourInstance = new ClientController();
-    private ClientCommunicator;
+    private ClientCommunicator ClientCommunicator;
 
     private ClientController() { // private constructor
         user = null;
@@ -47,11 +49,11 @@ public class ClientController {
         return 0;
     }
 
-    public long register(String username, String pw, String phone, String license, String plate, String usertype, String name) {
+    public void register(String username, String pw, String phone, String license, String plate, String usertype, String name) throws IOException {
         entry.put("USERNAME", username);
         entry.put("PASSWORD", pw);
         entry.put("NAME", name);
-        entry.put("PHONE", (int)phone);
+        entry.put("PHONE", Integer.parseInt(phone));
         entry.put("LICENSE", license);
         entry.put("PLATE", plate);
         boolean usertype_bool;
@@ -61,7 +63,7 @@ public class ClientController {
             usertype_bool = false;
         }
         entry.put("USERTYPE", usertype_bool);
-        ClienCommunicator.send("REGISTER", entry);
+        ClientCommunicator.send("REGISTER", entry);
     }
 
     public User getProfile(long userID) {

@@ -26,29 +26,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".ui.RegisterMainActivity">
-          <intent-filter>
-              <action android:name="android.intent.action.MAIN" />
+        <activity android:name=".ui.HomeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-              <category android:name="android.intent.category.LAUNCHER" />
-          </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
+        <activity android:name=".ui.LoginActivity"/>
+        <activity android:name=".ui.RegisterMainActivity"/>
         <activity android:name=".ui.RegisterRenterActivity"/>
         <activity android:name=".ui.RegisterProviderActivity"/>
-
-        <!--<activity android:name=".ui.HomeActivity">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-        <!--</activity>-->
-        <!--<activity android:name=".ui.LoginActivity"/>-->
-        <!--<activity android:name=".ui.RegisterMainActivity"/>-->
-        <!--<activity android:name=".ui.RenterActivity"-->
-                  <!--android:theme="@style/AppTheme.NoActionBar"/>-->
-        <!--<activity android:name=".ui.ProviderActivity"-->
-                  <!--android:theme="@style/AppTheme.NoActionBar"/>-->
+        <activity android:name=".ui.RenterActivity"
+                  android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.ProviderActivity"
+                  android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

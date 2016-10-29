@@ -1,5 +1,7 @@
 package csci310.parkhere.controller;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -22,11 +24,14 @@ public class ClientController implements Serializable {
     private ClientCommunicator ClientCommunicator;
 
     public ClientController() { // private constructor
-        user = null;
-        parkingSpots = null;
-        reservations = null;
-        reviews = null;
-        ClientCommunicator = new ClientCommunicator();
+        Log.d("&&&&&&&&&&&&&&&&& ", "waiting for the somthing wrong0");
+//        user = null;
+//        parkingSpots = null;
+//        reservations = null;
+//        reviews = null;
+        Log.d("&&&&&&&&&&&&&&&&& ", "waiting for the somthing wrong1");
+//        ClientCommunicator = new ClientCommunicator();
+        Log.d("&&&&&&&&&&&&&&&&& ", "waiting for the somthing else wrong1");
     }
 
     public static ClientController getInstance() {
@@ -51,6 +56,14 @@ public class ClientController implements Serializable {
     }
 
     public void register(String username, String pw, String phone, String license, String plate, String usertype, String name) throws IOException {
+        Log.v("############ ", username);
+        Log.v("############ ", pw);
+        Log.v("############ ", phone);
+        Log.v("############ ", license);
+        Log.v("############ ", plate);
+        Log.v("############ ", usertype);
+        Log.v("############ ", name);
+
         entry.put("USERNAME", username);
         entry.put("PASSWORD", pw);
         entry.put("NAME", name);

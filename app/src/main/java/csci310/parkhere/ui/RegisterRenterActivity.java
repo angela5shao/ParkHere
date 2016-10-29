@@ -4,11 +4,10 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
-import java.io.IOException;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
@@ -37,7 +36,16 @@ public class RegisterRenterActivity extends Activity {
         password = intent.getStringExtra("PASSWORD");
         phonenum = intent.getStringExtra("PHONE_NUM");
 
+        //
+        Log.v("@@@@@@@@@@@@ ", name);
+        Log.v("@@@@@@@@@@@@ ", email);
+        Log.v("@@@@@@@@@@@@ ", password);
+        Log.v("@@@@@@@@@@@@ ", phonenum);
+        //
+
         clientController = (ClientController) intent.getSerializableExtra("CLIENT_CONTROLLER");
+
+        if(clientController == null) Log.v("@@@@@@@@@@@@ ", "null client controller");
 
         _nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,11 +66,11 @@ public class RegisterRenterActivity extends Activity {
         progressDialog.show();
 
         // TODO: Implement your own authentication logic here.
-        try {
-            clientController.register(email, password, phonenum, licenseID, licensePlate, "renter", name);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            clientController.register(email, password, phonenum, licenseID, licensePlate, "renter", name);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         final View curr_v = v;
         new android.os.Handler().postDelayed(

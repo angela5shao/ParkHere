@@ -4,6 +4,8 @@ package csci310.parkhere.controller;
  * Created by angela02pd2014 on 10/16/16.
  */
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -12,22 +14,25 @@ import java.util.HashMap;
 
 import csci310.parkhere.resource.NetworkPackage;
 
-public class ClientCommunicator extends Thread{
+public class ClientCommunicator{
     private Socket socket;
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
     public ClientCommunicator(){
+        Log.d("&&&&&&&&&&&&&&&&& ", "waiting for the somthing wrong3");
         try {
+            Log.d("&&&&&&&&&&&&&&&&& ", "waiting for the somthing wrong4");
             socket = new Socket("104.236.143.142", 61129);
-//            System.out.println("Connected!");
+            Log.d("&&&&&&&&&&&&&&&&& ", "waiting for the somthing wrong5");
             ois = new ObjectInputStream(socket.getInputStream());
             oos = new ObjectOutputStream(socket.getOutputStream());
-            start();
+//            start();
         } catch (IOException ioe) {
-            System.out.println("IOE in Client constructor: " + ioe.getMessage());
+            Log.d("&&&&&&&&&&&&&&&&& ", "waiting for the somthing wrong6");
         }
     }
     public void send(String command, HashMap<String, Object> entry) throws IOException {
+        Log.v("send to server: ", command);
         NetworkPackage NP = new NetworkPackage();
         NP.addEntry(command, entry);
         oos.writeObject(NP);

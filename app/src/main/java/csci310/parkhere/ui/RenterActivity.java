@@ -17,11 +17,12 @@ import csci310.parkhere.R;
 /**
  * Created by ivylinlaw on 10/17/16.
  */
-public class RenterActivity extends FragmentActivity implements SearchFragment.OnFragmentInteractionListener {
+public class RenterActivity extends FragmentActivity implements SearchFragment.OnFragmentInteractionListener,
+        PrivateProfileFragment.OnFragmentInteractionListener, EditProfileFragment.OnFragmentInteractionListener {
     TextView _searchLink;
     FragmentManager fm;
     FragmentTransaction fragmentTransaction;
-    Fragment searchFragment;
+    Fragment searchFragment, privateProfileFragment, editProfileFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +36,20 @@ public class RenterActivity extends FragmentActivity implements SearchFragment.O
 
         fm = getSupportFragmentManager();
         fragmentTransaction = fm.beginTransaction();
+
         searchFragment = new SearchFragment();
+        privateProfileFragment = new PrivateProfileFragment();
+        editProfileFragment = new EditProfileFragment();
 
         // MOVE THESE INTO SEARCH LINK ON CLICK !!!
-        fragmentTransaction.add(R.id.searchFragContainer, searchFragment);
+//        fragmentTransaction.add(R.id.searchFragContainer, searchFragment);
+//        fragmentTransaction.commit();
+
+        // MOVE THESE INTO PROFILE PIC ON CLICK !!!
+//        fragmentTransaction.add(R.id.privateProfileFragContainer, privateProfileFragment);
+//        fragmentTransaction.commit();
+
+        fragmentTransaction.add(R.id.editProfileFragContainer, editProfileFragment);
         fragmentTransaction.commit();
         //
 

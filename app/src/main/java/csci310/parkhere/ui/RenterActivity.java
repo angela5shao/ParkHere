@@ -3,23 +3,27 @@ package csci310.parkhere.ui;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
-import android.widget.Toolbar;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import csci310.parkhere.R;
 
 /**
  * Created by ivylinlaw on 10/17/16.
  */
-public class RenterActivity extends FragmentActivity implements SearchFragment.OnFragmentInteractionListener,
+public class RenterActivity extends AppCompatActivity implements SearchFragment.OnFragmentInteractionListener,
         PrivateProfileFragment.OnFragmentInteractionListener, EditProfileFragment.OnFragmentInteractionListener {
-    TextView _searchLink;
+    LinearLayout _resLink, _searchLink;
+    ImageView _profilePic;
+    ImageView _editLogo;
     FragmentManager fm;
     FragmentTransaction fragmentTransaction;
     Fragment searchFragment, privateProfileFragment, editProfileFragment;
@@ -30,9 +34,7 @@ public class RenterActivity extends FragmentActivity implements SearchFragment.O
         setContentView(R.layout.renter_ui);
 
         Toolbar renterToolbar = (Toolbar) findViewById(R.id.renterTabbar);
-        setActionBar(renterToolbar);
-
-        _searchLink = (TextView)findViewById(R.id.searchLink);
+        setSupportActionBar(renterToolbar);
 
         fm = getSupportFragmentManager();
         fragmentTransaction = fm.beginTransaction();
@@ -41,24 +43,57 @@ public class RenterActivity extends FragmentActivity implements SearchFragment.O
         privateProfileFragment = new PrivateProfileFragment();
         editProfileFragment = new EditProfileFragment();
 
-        // MOVE THESE INTO SEARCH LINK ON CLICK !!!
-//        fragmentTransaction.add(R.id.searchFragContainer, searchFragment);
-//        fragmentTransaction.commit();
+        _resLink = (LinearLayout)findViewById(R.id.resLink);
+        _searchLink = (LinearLayout)findViewById(R.id.searchLink);
+        _profilePic = (ImageView) findViewById(R.id.profilePic);
 
-        // MOVE THESE INTO PROFILE PIC ON CLICK !!!
-//        fragmentTransaction.add(R.id.privateProfileFragContainer, privateProfileFragment);
-//        fragmentTransaction.commit();
-
-        fragmentTransaction.add(R.id.editProfileFragContainer, editProfileFragment);
+        fragmentTransaction.add(R.id.fragContainer, searchFragment);
         fragmentTransaction.commit();
-        //
+
+        _resLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//                fragmentTransaction.replace(R.id.fragContainer, );
+//                fragmentTransaction.addToBackStack(null);
+//                fragmentTransaction.commit();
+            }
+        });
 
         _searchLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragContainer, searchFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
+
+        _profilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragContainer, privateProfileFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
+
+        if(privateProfileFragment.getView() != null) {
+            Log.d("", "privateProfileFragment not null!!!!!!!!!!!!!!!!!");
+            _editLogo = (ImageView) privateProfileFragment.getView().findViewById(R.id.editLogo);
+            _editLogo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    fragmentTransaction.replace(R.id.fragContainer, editProfileFragment);
+                    fragmentTransaction.commit();
+                }
+            });
+        }else {
+            Log.d("", "privateProfileFragment null!!!!!!!!!!!!!!!!!");
+        }
+
     }
 
     @Override

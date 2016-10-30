@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -71,6 +72,8 @@ public class PrivateProfileFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -110,6 +113,12 @@ public class PrivateProfileFragment extends Fragment {
         mListener = null;
     }
 
+    // return edit ImageView for parent fragmaent
+//    public ImageView getEditLogo() {
+//        ImageView _editLogo = (ImageView) getActivity().findViewById(R.id.editLogo);
+//        return _editLogo;
+//    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -144,6 +153,17 @@ public class PrivateProfileFragment extends Fragment {
         bitmap.recycle();
 
         return output;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.action_save : {
+//                Log.i(TAG, "Save from fragment");
+//                return true;
+//            }
+//        }
+        return super.onOptionsItemSelected(item);
     }
 }
 

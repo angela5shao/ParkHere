@@ -49,7 +49,7 @@ public class SearchFragment extends Fragment {
     private String mParam2;
 
     private static final String TAG = "!!!!!!!!!!!!!!! "; // EDIT/DELETE LATER!
-    Button _btn_add_address, btnStartDatePicker, btnStartTimePicker, btnEndDatePicker, btnEndTimePicker;
+    Button _btn_add_address, btnStartDatePicker, btnStartTimePicker, btnEndDatePicker, btnEndTimePicker, _btn_confirm;
     EditText txtStartDate, txtStartTime, txtEndDate, txtEndTime;
     TextView _addressText;
 
@@ -218,6 +218,13 @@ public class SearchFragment extends Fragment {
                             }
                         }, endHour, endMinute, false);
                 timePickerDialog.show();
+            }
+        });
+
+        _btn_confirm=(Button)v.findViewById(R.id.btn_confirm);
+        _btn_confirm.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                //
             }
         });
 

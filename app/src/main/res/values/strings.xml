@@ -9,8 +9,8 @@
     <string name="private_profile_licenesID_label">License ID: </string>
     <string name="private_profile_licenesPlate_label">License plate #: </string>
     <string-array name="signup_usertype_spinner">
-        <item>Signup as Renter</item>
-        <item>Signup as Provider</item>
+        <item>Renter</item>
+        <item>Provider</item>
     </string-array>
     <string-array name="search_loctype_spinner">
         <item>Search by address</item>

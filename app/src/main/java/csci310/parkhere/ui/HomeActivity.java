@@ -3,19 +3,21 @@ package csci310.parkhere.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import java.io.Serializable;
-
 import csci310.parkhere.R;
+import csci310.parkhere.controller.ClientCommunicator;
 import csci310.parkhere.controller.ClientController;
 
 public class HomeActivity extends Activity {
     Button _loginButton, _registerButton, _guestButton;
     ClientController clientController;
+    Intent myIntent;
 
+    public static ClientCommunicator clientCommunicator;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,13 +29,18 @@ public class HomeActivity extends Activity {
 
         Log.v("HomeActivity", "start");
 
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+        StrictMode.setThreadPolicy(policy);
+
+
         clientController = new ClientController();
+
 
         _loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(v.getContext(), LoginActivity.class);
-                myIntent.putExtra("CLIENT_CONTROLLER", clientController);
+                myIntent = new Intent(v.getContext(), LoginActivity.class);
                 startActivityForResult(myIntent, 0);
             }
         });
@@ -41,8 +48,7 @@ public class HomeActivity extends Activity {
         _registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(v.getContext(), RegisterMainActivity.class);
-                myIntent.putExtra("CLIENT_CONTROLLER", (Serializable)clientController);
+                myIntent = new Intent(v.getContext(), RegisterMainActivity.class);
                 startActivity(myIntent);
             }
         });
@@ -54,6 +60,4 @@ public class HomeActivity extends Activity {
             }
         });
     }
-
-
 }

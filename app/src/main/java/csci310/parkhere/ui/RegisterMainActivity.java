@@ -25,8 +25,7 @@ public class RegisterMainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_main_ui);
 
-        Intent intent = getIntent();
-        clientController = (ClientController) intent.getSerializableExtra("CLIENT_CONTROLLER");
+        clientController = ClientController.getInstance();
 
         _nextButton=(Button)findViewById(R.id.nextButton);
         _nameText=(EditText)findViewById(R.id.nameText); // name
@@ -53,7 +52,6 @@ public class RegisterMainActivity extends Activity {
                     intent.putExtra("EMAIL", email);
                     intent.putExtra("PASSWORD", password);
                     intent.putExtra("PHONE_NUM", phonenum);
-                    intent.putExtra("CLIENT_CONTROLLER", clientController);
                     startActivity(intent);
                 }
                 else {
@@ -62,7 +60,6 @@ public class RegisterMainActivity extends Activity {
                     intent.putExtra("EMAIL", email);
                     intent.putExtra("PASSWORD", password);
                     intent.putExtra("PHONE_NUM", phonenum);
-                    intent.putExtra("CLIENT_CONTROLLER", clientController);
                     startActivity(intent);
                 }
             }

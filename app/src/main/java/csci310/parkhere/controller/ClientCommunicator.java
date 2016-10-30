@@ -7,37 +7,59 @@ package csci310.parkhere.controller;
 import android.util.Log;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.net.Socket;
 import java.util.HashMap;
 
-import csci310.parkhere.resource.NetworkPackage;
+import resource.NetworkPackage;
 
-public class ClientCommunicator extends Thread implements Serializable{
+public class ClientCommunicator extends Thread{
 
     private static final long serialVersionUID = 12391823917283L;
 
-    private MySocket socket;
-    private MyObjectInputStream ois;
+    private Socket socket;
+    private ObjectInputStream ois;
     private ObjectOutputStream oos;
     public ClientCommunicator(){
-//        Log.d("&&&&&&&&&&&&&&&&& ", "waiting for the somthing wrong3");
         try {
-////            Log.d("&&&&&&&&&&&&&&&&& ", "waiting for the somthing wrong4");
-            socket = new MySocket("104.236.143.142", 61129);
-////            Log.d("&&&&&&&&&&&&&&&&& ", "waiting for the somthing wrong5");
-            ois = new MyObjectInputStream(socket.getInputStream());
-            oos = new MyObjectOutputStream(socket.getOutputStream());
+            socket = new Socket("104.236.143.142", 61129);
+            oos = new ObjectOutputStream(socket.getOutputStream());
+            oos.flush();
+
+            ois = new ObjectInputStream(socket.getInputStream());
+
             start();
         }
         catch (IOException ioe) {
-            Log.d("&&&&&&&&&&&&&&&&& ", "waiting for the somthing wrong6");
+           ioe.printStackTrace();
         }
     }
+
+    public void run()
+    {
+        try {
+            while(true)
+            {
+                sleep(1000);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public void send(String command, HashMap<String, Serializable> entry) throws IOException {
         Log.v("send to server: ", command);
         NetworkPackage NP = new NetworkPackage();
         NP.addEntry(command, entry);
+
+        if(oos == null)
+            Log.d("oos","oos is null");
+
         oos.writeObject(NP);
+        oos.flush();
     }
 }

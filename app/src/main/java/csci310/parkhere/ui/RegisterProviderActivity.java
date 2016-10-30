@@ -36,7 +36,7 @@ public class RegisterProviderActivity extends Activity {
         password = intent.getStringExtra("PASSWORD");
         phonenum = intent.getStringExtra("PHONE_NUM");
 
-        clientController = (ClientController) intent.getSerializableExtra("CLIENT_CONTROLLER");
+        clientController = ClientController.getInstance();
 
         _nextButton.setOnClickListener(new View.OnClickListener() {
             @Override

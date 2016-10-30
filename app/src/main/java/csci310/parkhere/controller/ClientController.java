@@ -1,6 +1,5 @@
 package csci310.parkhere.controller;
 
-import android.os.StrictMode;
 import android.util.Log;
 
 import java.io.IOException;
@@ -8,14 +7,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import csci310.parkhere.resource.CarType;
-import csci310.parkhere.resource.ParkingSpot;
-import csci310.parkhere.resource.Reservation;
-import csci310.parkhere.resource.Review;
-import csci310.parkhere.resource.TimeInterval;
-import csci310.parkhere.resource.User;
+import resource.CarType;
+import resource.ParkingSpot;
+import resource.Reservation;
+import resource.Review;
+import resource.TimeInterval;
+import resource.User;
 
-public class ClientController implements Serializable {
+
+public class ClientController {
 
     private static final long serialVersionUID = 1239123098533917283L;
 
@@ -24,13 +24,12 @@ public class ClientController implements Serializable {
     private ArrayList<Reservation> reservations;
     private ArrayList<Review> reviews;
     private HashMap<String, Serializable> entry;
-//    private static ClientController ourInstance = new ClientController();
-    private ClientCommunicator ClientCommunicator;
+    public ClientCommunicator clientCommunicator;
+
+    private static ClientController instance;
 
     public ClientController() { // private constructor
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 
-        StrictMode.setThreadPolicy(policy);
         Log.d("&&&&&&&&&&&&&&&&& ", "waiting for the somthing wrong0");
         Log.d("new Tag", "a new tag");
         user = null;
@@ -39,13 +38,19 @@ public class ClientController implements Serializable {
         reviews = null;
         entry = new HashMap<>();
         Log.d("&&&&&&&&&&&&&&&&& ", "waiting for the somthing wrong1");
-        ClientCommunicator = new ClientCommunicator();
         Log.d("&&&&&&&&&&&&&&&&& ", "waiting for the somthing else wrong1");
+        clientCommunicator = new ClientCommunicator();
+
+        instance = this;
+
     }
 
-//    public static ClientController getInstance() {
-//        return ourInstance;
-//    }
+    public static ClientController getInstance() {
+        if(instance == null) {
+            instance = new ClientController();
+        }
+        return instance;
+    }
 
     // Getters
     public User getUser() { return user;}
@@ -86,7 +91,7 @@ public class ClientController implements Serializable {
             usertype_bool = false;
         }
         entry.put("USERTYPE", usertype_bool);
-        ClientCommunicator.send("REGISTER", entry);
+        clientCommunicator.send("REGISTER", entry);
     }
 
     public User getProfile(long userID) {

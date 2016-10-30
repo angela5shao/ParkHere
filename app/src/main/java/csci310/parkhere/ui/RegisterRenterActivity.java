@@ -45,9 +45,8 @@ public class RegisterRenterActivity extends Activity {
         Log.v("@@@@@@@@@@@@ ", phonenum);
         //
 
-        clientController = (ClientController) intent.getSerializableExtra("CLIENT_CONTROLLER");
-
-        if(clientController == null) Log.v("@@@@@@@@@@@@ ", "null client controller");
+//        clientController = (ClientController) intent.getSerializableExtra("CLIENT_CONTROLLER");
+        clientController = ClientController.getInstance();
 
         _nextButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -9,11 +9,11 @@ import android.util.Log;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OptionalDataException;
 import java.io.Serializable;
 import java.net.Socket;
 import java.util.HashMap;
-
-import resource.NetworkPackage;
+import resource.*;
 
 public class ClientCommunicator extends Thread{
 
@@ -40,15 +40,35 @@ public class ClientCommunicator extends Thread{
     public void run()
     {
         try {
-            while(true)
-            {
-                sleep(1000);
+            while(true) {
+                Object obj = ois.readObject();
+                System.out.println("do receive the networkpackage");
+                if (obj instanceof NetworkPackage) {
+                    NetworkPackage np = (NetworkPackage) obj;
+                    MyEntry<String, Serializable> entry = np.getCommand();
+                    String key = entry.getKey();
+                    Object value = entry.getValue();
+                    System.out.println("Command Key: " + key);
+                    if(key.equals("RF")){
+
+                    } else if(key.equals("LF")){
+
+                    } else if(key.equals("LOF")){
+
+                    } else if(key.equals("LOGIN")){
+
+                    } else if(key.equals("REGISTER")){
+
+                    }
+                }
             }
-        }
-        catch (Exception e) {
+        } catch (OptionalDataException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-
     }
 
     public void send(String command, HashMap<String, Serializable> entry) throws IOException {

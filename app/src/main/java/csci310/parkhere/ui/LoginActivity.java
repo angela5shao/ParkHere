@@ -11,7 +11,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+
 import csci310.parkhere.R;
+import csci310.parkhere.controller.ClientController;
 
 /**
  * Created by ivylinlaw on 10/15/16.
@@ -20,9 +23,11 @@ public class LoginActivity extends Activity {
     private static final String TAG = "LoginActivity";
 
     Button _loginButton;
-    EditText email, password;
+    EditText _email, _password;
+    String email, password;
 
     TextView _signupLink, _forgotPwLink;
+    ClientController clientController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +37,7 @@ public class LoginActivity extends Activity {
         _loginButton=(Button)findViewById(R.id.loginButton);
         _signupLink=(TextView)findViewById(R.id.signupLink);
         _forgotPwLink=(TextView)findViewById(R.id.forgotPwLink);
+        clientController = ClientController.getInstance();
 
         // Log in
         _loginButton.setOnClickListener(new View.OnClickListener() {
@@ -68,8 +74,10 @@ public class LoginActivity extends Activity {
     public void login(View v) {
         Log.d(TAG, "Login");
 
-        email=(EditText)findViewById(R.id.emailText);
-        password=(EditText)findViewById(R.id.passwordText);
+        _email=(EditText)findViewById(R.id.emailText);
+        _password=(EditText)findViewById(R.id.passwordText);
+        email = _email.getText().toString();
+        password = _password.getText().toString();
 
         if (!validate()) {
             onLoginFailed();
@@ -85,7 +93,11 @@ public class LoginActivity extends Activity {
         progressDialog.show();
 
         // TODO: Implement your own authentication logic here.
-
+        try {
+            clientController.login(email, password);
+        } catch(IOException e){
+            e.printStackTrace();
+        }
         final View curr_v = v;
         new android.os.Handler().postDelayed(
                 new Runnable() {

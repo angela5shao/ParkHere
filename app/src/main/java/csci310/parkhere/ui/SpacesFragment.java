@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import csci310.parkhere.R;
-import csci310.parkhere.resource.ParkingSpot;
+import resource.ParkingSpot;
 
 
 /**

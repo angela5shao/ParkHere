@@ -1,6 +1,7 @@
 package csci310.parkhere.controller;
 
 import android.util.Log;
+import android.widget.EditText;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -23,22 +24,16 @@ public class ClientController {
     private ArrayList<ParkingSpot> parkingSpots;
     private ArrayList<Reservation> reservations;
     private ArrayList<Review> reviews;
-    private HashMap<String, Serializable> entry;
     public ClientCommunicator clientCommunicator;
 
     private static ClientController instance;
 
     public ClientController() { // private constructor
 
-        Log.d("&&&&&&&&&&&&&&&&& ", "waiting for the somthing wrong0");
-        Log.d("new Tag", "a new tag");
         user = null;
         parkingSpots = null;
         reservations = null;
         reviews = null;
-        entry = new HashMap<>();
-        Log.d("&&&&&&&&&&&&&&&&& ", "waiting for the somthing wrong1");
-        Log.d("&&&&&&&&&&&&&&&&& ", "waiting for the somthing else wrong1");
         clientCommunicator = new ClientCommunicator();
 
         instance = this;
@@ -65,19 +60,15 @@ public class ClientController {
     public void setReviews(ArrayList<Review> rev) { reviews = rev; }
 
     // TODO: Functions for login, signup
-    public long login(String username, String pw) {
-        return 0;
+    public void login(String username, String pw) throws IOException {
+        HashMap<String, Serializable> entry = new HashMap<>();
+        entry.put("USERNAME", username);
+        entry.put("PASSWORD", pw);
+        clientCommunicator.send("LOGIN", entry);
     }
 
     public void register(String username, String pw, String phone, String license, String plate, String usertype, String name) throws IOException {
-        Log.v("############ ", username);
-        Log.v("############ ", pw);
-        Log.v("############ ", phone);
-        Log.v("############ ", license);
-        Log.v("############ ", plate);
-        Log.v("############ ", usertype);
-        Log.v("############ ", name);
-
+        HashMap<String, Serializable> entry = new HashMap<>();
         entry.put("USERNAME", username);
         entry.put("PASSWORD", pw);
         entry.put("NAME", name);

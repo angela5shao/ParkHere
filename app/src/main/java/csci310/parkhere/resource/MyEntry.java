@@ -1,8 +1,13 @@
 package csci310.parkhere.resource;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public final class MyEntry<K, V> implements Map.Entry<K, V> {
+public final class MyEntry<K, V> implements Map.Entry<K, V>, Serializable {
+    private static final long serialVersionUID = 12391091082917283L;
+
+
+
     private final K key;
     private V value;
 

@@ -9,7 +9,7 @@ public class NetworkPackage implements Serializable
 	 * 
 	 */
 	private static final long serialVersionUID = 7386596359060429547L;
-	private MyEntry<String, Object> entry;
+	private MyEntry<String, Serializable> entry;
 	private User user;
 	
 	
@@ -23,11 +23,11 @@ public class NetworkPackage implements Serializable
 		entry = null;
 	}
 	
-	public void addEntry(String command, Object obj) {
-		entry = new MyEntry<String, Object>(command, obj);
+	public void addEntry(String command, Serializable obj) {
+		entry = new MyEntry<String, Serializable>(command, obj);
 	}
 	
-	public MyEntry<String, Object> getCommand(){
+	public MyEntry<String, Serializable> getCommand(){
 		return entry;
 	}
 

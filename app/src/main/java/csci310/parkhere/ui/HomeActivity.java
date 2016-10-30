@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import java.io.Serializable;
+
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
 
@@ -23,7 +25,7 @@ public class HomeActivity extends Activity {
         _registerButton=(Button)findViewById(R.id.registerButton);
         _guestButton=(Button)findViewById(R.id.guestButton);
 
-        Log.d("HomeActivity", "start");
+        Log.v("HomeActivity", "start");
 
         clientController = new ClientController();
 
@@ -40,8 +42,8 @@ public class HomeActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(v.getContext(), RegisterMainActivity.class);
-                myIntent.putExtra("CLIENT_CONTROLLER", clientController);
-                startActivityForResult(myIntent, 0);
+                myIntent.putExtra("CLIENT_CONTROLLER", (Serializable)clientController);
+                startActivity(myIntent);
             }
         });
 

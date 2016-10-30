@@ -1,5 +1,6 @@
 package csci310.parkhere.controller;
 
+import android.os.StrictMode;
 import android.util.Log;
 
 import java.io.IOException;
@@ -15,28 +16,36 @@ import csci310.parkhere.resource.TimeInterval;
 import csci310.parkhere.resource.User;
 
 public class ClientController implements Serializable {
+
+    private static final long serialVersionUID = 1239123098533917283L;
+
     private User user;
     private ArrayList<ParkingSpot> parkingSpots;
     private ArrayList<Reservation> reservations;
     private ArrayList<Review> reviews;
-    private HashMap<String, Object> entry;
-    private static ClientController ourInstance = new ClientController();
+    private HashMap<String, Serializable> entry;
+//    private static ClientController ourInstance = new ClientController();
     private ClientCommunicator ClientCommunicator;
 
     public ClientController() { // private constructor
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+        StrictMode.setThreadPolicy(policy);
         Log.d("&&&&&&&&&&&&&&&&& ", "waiting for the somthing wrong0");
-//        user = null;
-//        parkingSpots = null;
-//        reservations = null;
-//        reviews = null;
+        Log.d("new Tag", "a new tag");
+        user = null;
+        parkingSpots = null;
+        reservations = null;
+        reviews = null;
+        entry = new HashMap<>();
         Log.d("&&&&&&&&&&&&&&&&& ", "waiting for the somthing wrong1");
-//        ClientCommunicator = new ClientCommunicator();
+        ClientCommunicator = new ClientCommunicator();
         Log.d("&&&&&&&&&&&&&&&&& ", "waiting for the somthing else wrong1");
     }
 
-    public static ClientController getInstance() {
-        return ourInstance;
-    }
+//    public static ClientController getInstance() {
+//        return ourInstance;
+//    }
 
     // Getters
     public User getUser() { return user;}

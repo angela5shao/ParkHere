@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import csci310.parkhere.R;
@@ -37,7 +38,7 @@ public class SpacesFragment extends ListFragment implements AdapterView.OnItemCl
 
     public SpacesFragment() {
         // Required empty public constructor
-//        spacesListView = (ListView)rootView.findViewById(R.id.spaces_list);
+//        spacesListView = (ListView)rootView().findViewById(R.id.spaces_list);
     }
 
     /**
@@ -76,14 +77,15 @@ public class SpacesFragment extends ListFragment implements AdapterView.OnItemCl
         return inflater.inflate(R.layout.fragment_spaces, container, false);
     }
 
-//    @Override
-//    public void onActivityCreated(Bundle savedInstanceState) {
-//        super.onActivityCreated(savedInstanceState);
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+//        ArrayAdapter
 //        Bundle bundle = getArguments();
 //        if (bundle != null) {
 //            setText(bundle.getString("link"));
 //        }
-//    }
+    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

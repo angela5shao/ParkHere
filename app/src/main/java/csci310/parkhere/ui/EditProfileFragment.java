@@ -9,18 +9,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import csci310.parkhere.R;
-import resource.ParkingSpot;
-
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link SpacesFragment.OnFragmentInteractionListener} interface
+ * {@link EditProfileFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link SpacesFragment#newInstance} factory method to
+ * Use the {@link EditProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SpacesFragment extends Fragment {
+public class EditProfileFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -32,7 +30,7 @@ public class SpacesFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public SpacesFragment() {
+    public EditProfileFragment() {
         // Required empty public constructor
     }
 
@@ -42,11 +40,11 @@ public class SpacesFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment SpacesFragment.
+     * @return A new instance of fragment EditProfileFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SpacesFragment newInstance(String param1, String param2) {
-        SpacesFragment fragment = new SpacesFragment();
+    public static EditProfileFragment newInstance(String param1, String param2) {
+        EditProfileFragment fragment = new EditProfileFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -66,20 +64,9 @@ public class SpacesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Get list of my spac
-
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_spaces, container, false);
+        return inflater.inflate(R.layout.fragment_edit_profile, container, false);
     }
-
-//    @Override
-//    public void onActivityCreated(Bundle savedInstanceState) {
-//        super.onActivityCreated(savedInstanceState);
-//        Bundle bundle = getArguments();
-//        if (bundle != null) {
-//            setText(bundle.getString("link"));
-//        }
-//    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -110,7 +97,7 @@ public class SpacesFragment extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.

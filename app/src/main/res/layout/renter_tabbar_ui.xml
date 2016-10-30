@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.widget.Toolbar
+<android.support.v7.widget.Toolbar
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/renterTabbar"
     android:minHeight="?attr/actionBarSize"
@@ -26,7 +26,8 @@
             <LinearLayout android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_gravity="center">
+                android:layout_gravity="center"
+                android:id="@+id/resLink">
                 <ImageView
                     android:src="@mipmap/ic_reserve"
                     android:layout_height="30dp"
@@ -35,7 +36,6 @@
                     android:layout_gravity="left|center"/>
 
                 <TextView
-                    android:id="@+id/resLink"
                     android:text="Reservations"
                     android:textColor="@color/colorMainFont"
                     android:orientation="horizontal"
@@ -47,17 +47,16 @@
             <LinearLayout android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_gravity="center">
+                android:layout_gravity="center"
+                android:id="@+id/searchLink">
                 <ImageView
                     android:src="@mipmap/ic_search"
                     android:layout_height="30dp"
                     android:orientation="horizontal"
                     android:layout_width="wrap_content"
-                    android:layout_gravity="left|center"
-                    android:paddingLeft="5dp"/>
+                    android:layout_gravity="left|center" />
 
                 <TextView
-                    android:id="@+id/searchLink"
                     android:text="Search"
                     android:textColor="@color/colorMainFont"
                     android:orientation="horizontal"
@@ -67,4 +66,4 @@
             </LinearLayout>
         </LinearLayout>
     </FrameLayout>
-</android.widget.Toolbar>
+</android.support.v7.widget.Toolbar>

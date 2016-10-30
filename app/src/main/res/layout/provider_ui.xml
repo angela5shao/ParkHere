@@ -8,17 +8,22 @@
     android:background="@color/colorLightBackground"
     tools:context=".ui.ProviderActivity">
 
-    <fragment android:name="csci310.parkhere.ui.SpacesFragment"
-        android:id="@+id/list"
-        android:layout_weight="1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        tools:layout="@layout/fragment_spaces" />
+    <!--<fragment android:name="csci310.parkhere.ui.SpacesFragment"-->
+        <!--android:id="@+id/fragment_spaces"-->
+        <!--android:layout_weight="1"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--tools:layout="@layout/fragment_spaces" />-->
 
     <!--<RelativeLayout-->
     <!--android:orientation="vertical"-->
     <!--android:layout_width="match_parent"-->
     <!--android:layout_height="wrap_content" >-->
+
+    <FrameLayout
+        android:id="@+id/spaceFragContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <include
         layout="@layout/provider_tabbar_ui"

@@ -43,6 +43,7 @@
             android:focusable="true"
             android:textColorHighlight="#ff7eff15"
             android:textColorHint="@color/colorAccent"
+            android:textColor="@color/colorAccent"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp" />
 

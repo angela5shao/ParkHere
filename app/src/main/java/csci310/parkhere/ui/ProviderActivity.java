@@ -1,9 +1,15 @@
 package csci310.parkhere.ui;
 
-import android.app.Activity;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toolbar;
 
 import csci310.parkhere.R;
@@ -11,14 +17,36 @@ import csci310.parkhere.R;
 /**
  * Created by ivylinlaw on 10/17/16.
  */
-public class ProviderActivity extends Activity {
+public class ProviderActivity extends FragmentActivity implements SpacesFragment.OnFragmentInteractionListener {
+    TextView _spaceLink;
+    FragmentManager fm;
+    FragmentTransaction fragmentTransaction;
+    Fragment spacesFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.provider_ui);
 
-        Toolbar renterToolbar = (Toolbar) findViewById(R.id.providerTabbar);
-        setActionBar(renterToolbar);
+        Toolbar providerrToolbar = (Toolbar) findViewById(R.id.providerTabbar);
+        setActionBar(providerrToolbar);
+//
+        _spaceLink = (TextView)findViewById(R.id.spaceLink);
+//
+        fm = getSupportFragmentManager();
+        fragmentTransaction = fm.beginTransaction();
+//        spacesFragment = fm.findFragmentById(R.id.fragment_spaces);
+        spacesFragment = new SpacesFragment();
+
+        fragmentTransaction.add(R.id.spaceFragContainer, spacesFragment);
+        fragmentTransaction.commit();
+
+        _spaceLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     @Override
@@ -41,5 +69,9 @@ public class ProviderActivity extends Activity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void onFragmentInteraction(Uri uri){
+        //you can leave it empty
     }
 }

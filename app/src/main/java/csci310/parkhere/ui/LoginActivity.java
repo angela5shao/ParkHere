@@ -23,6 +23,7 @@ public class LoginActivity extends Activity {
     private static final String TAG = "LoginActivity";
 
     Button _loginButton;
+
     EditText _email, _password;
     String email, password;
 

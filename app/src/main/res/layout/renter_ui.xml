@@ -12,6 +12,20 @@
         <!--android:orientation="vertical"-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="wrap_content" >-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:id="@+id/fragContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <!--<TextView-->
+            <!--android:text="hello"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"/>-->
+        </RelativeLayout>
 
         <include
             layout="@layout/renter_tabbar_ui"
@@ -19,15 +33,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"/>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp">
 
-            <!--<TextView-->
-                <!--android:text="hello"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"/>-->
-        </RelativeLayout>
     <!--</RelativeLayout>-->
 </RelativeLayout>

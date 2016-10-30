@@ -21,7 +21,6 @@ public class LoginActivity extends Activity {
 
     Button _loginButton;
     EditText email, password;
-
     TextView _signupLink, _forgotPwLink;
 
     @Override

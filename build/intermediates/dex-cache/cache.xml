@@ -48,6 +48,231 @@
     </item>
     <item
         is-multidex="true"
+        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-iid/9.8.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="85299bf1924dde0200109a58033c5ef84ecb6991">
+        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-iid-9.8.0_2d8f43f8d22925442bdabc2a1a60eed33e4c4b2d/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-instantapps/9.8.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="00d358528c5a8731a6e19bca910cbb3fd755ee31">
+        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-instantapps-9.8.0_eb7505391f66fb9e15f47dc1d12ecf68d6caf0c5/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-fitness/9.8.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="a7a04d6b7c01e569a285fa627cf64f5b05295906">
+        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-fitness-9.8.0_9c44ceb07f32ef13005f40f3d53ee3eb8974fb76/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.firebase/firebase-auth/9.8.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="15e59454416c6341bd3ed2533b585cd340682dd1">
+        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-auth-9.8.0_ff663a69ced249d5b6e01ee07f2be6317e825dce/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.firebase/firebase-auth-common/9.8.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="4438b1a7848a7c571122ba618aa1304514aabee6">
+        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-auth-common-9.8.0_44fcead6f1adc33e4423e46cf2a4608709f5acce/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-gcm/9.8.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="9dae58326f6f6a515022468cce56dd04ec3b9fdb">
+        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-gcm-9.8.0_e77dfa8149746c62f8315334455859470ab0d211/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.firebase/firebase-crash/9.8.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="b4671be3d1288bf4e5f527cd33e42909fbe4ecc6">
+        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-crash-9.8.0_d1a3b50f91e25313d8aab73d01b99e67a6e87569/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.android.support/palette-v7/24.0.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="734e80dffea7bd76c18ae256822a124c30d85850">
+        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-palette-v7-24.0.0_078888cd8add381a0192bd739aed8918bb650893/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.firebase/firebase-analytics-impl/9.8.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="190a642ba16d1421296a4d794606279b80039c59">
+        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-analytics-impl-9.8.0_63ee6a5d3f655b58ef8a421c363f5a6d219c58ae/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wearable/9.8.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="0b8e087da59c0b062c33f49a335e59f907086da2">
+        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-wearable-9.8.0_6e7be326d089430d12db39d8c9fcfe1fa6290fc7/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.android.support/multidex/1.0.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="6666dd525c3da197e7d07f4f23ef5fc7881a697b">
+        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-multidex-1.0.0_ea34bc01dea45da5bbd6b9e9fe8c31c084da530c/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-tasks/9.8.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="bf2e1838e4428616c1aa26edf43de72b5b99bf84">
+        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-tasks-9.8.0_d7772aa23d29ef773ddcede9ef863dbc020c972c/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="7e92aadd0697922316d1395c1887a23aebec640a">
+        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-base-9.8.0_9bd4744a147d1bfa2f5dae7d22b9854581956bf6/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-identity/9.8.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="cef85cfc7df40e29fbea58844dd4c1e7d0b15542">
+        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-identity-9.8.0_0dd44d42c07b10987a27a9c7919b1fe00cd4c509/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-clearcut/9.8.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="ee5304fd374e0b4ebf6b42d4037fbfb2c5336511">
+        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-clearcut-9.8.0_53d0496997cf965b011e57e044ab15644c15fe39/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-location/9.8.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="04bbbddf868aa02dd33f9e90d8f5d908c360f638">
+        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-location-9.8.0_0b6bd25cabbc46ef0bdecb395f2b019f19c2e469/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-tagmanager-api/9.8.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="266570862e5792ef3c51143a8b8593cf54fac68d">
+        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-tagmanager-api-9.8.0_f7072c94e9d84dc7d0872ae8d63b0ecd8ad9854d/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-auth/9.8.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="ca851be26ff89f5b32cc222cee98139fb3fac830">
+        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-auth-9.8.0_e0afcbbd11dd8a29c3c86bcb631fcd6da80b3d91/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-plus/9.8.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="3daa7a9c9009fd386872a84c177a76979bdcafd6">
+        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-plus-9.8.0_cfb693d2d7f9636dbace5ac41d37ccc676e0ddfd/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/24.0.0/jars/libs/internal_impl-24.0.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="b6763651ec29b4c95e7bbe63fc393ffcc8c4c2c5">
+        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.0.0_62561270e28e3a838667953da821f2b7818e83db/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.firebase/firebase-auth-module/9.8.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="3f8f779a22cbb4c4d0759467a4f1011bb5252970">
+        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-auth-module-9.8.0_412dfae43e8e91a799a5f2841e289dc989834690/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-cast-framework/9.8.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="055eed08c9cff50cac0db69c74c4d9ff7aef3d84">
+        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-cast-framework-9.8.0_4d1bd24e2c30759e6b2b35533a05dc472711f636/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.firebase/firebase-database/9.8.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="03df48d3713661d66ad024b1e406259a4c26fcac">
+        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-database-9.8.0_ef7f60e3bdb1711b371759c80f73a5e25e64b716/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-cast/9.8.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="74ac7cbcf0de4a88e59612dc3a9e3f9e71acb4ca">
+        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-cast-9.8.0_996ab7d0f45f1f5234ecfd5a712ed82204538fec/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appinvite/9.8.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="e56f31b23ddb067f95f01255295167db7c798612">
+        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-appinvite-9.8.0_dcded378ad0161d8ca0de72d437bae36807f7bc3/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
         jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wallet/9.8.0/jars/classes.jar"
         jumboMode="false"
         optimize="true"
@@ -93,24 +318,6 @@
     </item>
     <item
         is-multidex="true"
-        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-iid/9.8.0/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="85299bf1924dde0200109a58033c5ef84ecb6991">
-        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-iid-9.8.0_2d8f43f8d22925442bdabc2a1a60eed33e4c4b2d/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-instantapps/9.8.0/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="00d358528c5a8731a6e19bca910cbb3fd755ee31">
-        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-instantapps-9.8.0_eb7505391f66fb9e15f47dc1d12ecf68d6caf0c5/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.firebase/firebase-iid/9.8.0/jars/classes.jar"
         jumboMode="false"
         optimize="true"
@@ -129,15 +336,6 @@
     </item>
     <item
         is-multidex="true"
-        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-fitness/9.8.0/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="a7a04d6b7c01e569a285fa627cf64f5b05295906">
-        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-fitness-9.8.0_9c44ceb07f32ef13005f40f3d53ee3eb8974fb76/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-analytics/9.8.0/jars/classes.jar"
         jumboMode="false"
         optimize="true"
@@ -147,48 +345,12 @@
     </item>
     <item
         is-multidex="true"
-        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.firebase/firebase-auth/9.8.0/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="15e59454416c6341bd3ed2533b585cd340682dd1">
-        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-auth-9.8.0_ff663a69ced249d5b6e01ee07f2be6317e825dce/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/24.0.0/jars/classes.jar"
         jumboMode="false"
         optimize="true"
         revision="23.0.3"
         sha1="b327fbe2fad414bc38cf0ce8f7efe1a38f572837">
         <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-mediarouter-v7-24.0.0_00e40973ece3e6bf9779043c92e461aff0e9c03a/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.firebase/firebase-auth-common/9.8.0/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="4438b1a7848a7c571122ba618aa1304514aabee6">
-        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-auth-common-9.8.0_44fcead6f1adc33e4423e46cf2a4608709f5acce/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-gcm/9.8.0/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="9dae58326f6f6a515022468cce56dd04ec3b9fdb">
-        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-gcm-9.8.0_e77dfa8149746c62f8315334455859470ab0d211/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.firebase/firebase-crash/9.8.0/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="b4671be3d1288bf4e5f527cd33e42909fbe4ecc6">
-        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-crash-9.8.0_d1a3b50f91e25313d8aab73d01b99e67a6e87569/classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -228,15 +390,6 @@
     </item>
     <item
         is-multidex="true"
-        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.android.support/palette-v7/24.0.0/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="734e80dffea7bd76c18ae256822a124c30d85850">
-        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-palette-v7-24.0.0_078888cd8add381a0192bd739aed8918bb650893/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.firebase/firebase-database-connection/9.8.0/jars/classes.jar"
         jumboMode="false"
         optimize="true"
@@ -246,39 +399,12 @@
     </item>
     <item
         is-multidex="true"
-        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.firebase/firebase-analytics-impl/9.8.0/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="190a642ba16d1421296a4d794606279b80039c59">
-        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-analytics-impl-9.8.0_63ee6a5d3f655b58ef8a421c363f5a6d219c58ae/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.4.0/jars/classes.jar"
         jumboMode="false"
         optimize="true"
         revision="23.0.3"
         sha1="ec75036c3c52e451d0cde50a5aedaf5fd32354a0">
         <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-recyclerview-v7-23.4.0_ae8a6d6c1ef84bc96e05e805c129606bd1dbc774/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wearable/9.8.0/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="0b8e087da59c0b062c33f49a335e59f907086da2">
-        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-wearable-9.8.0_6e7be326d089430d12db39d8c9fcfe1fa6290fc7/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.android.support/multidex/1.0.0/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="6666dd525c3da197e7d07f4f23ef5fc7881a697b">
-        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-multidex-1.0.0_ea34bc01dea45da5bbd6b9e9fe8c31c084da530c/classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -309,15 +435,6 @@
     </item>
     <item
         is-multidex="true"
-        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-tasks/9.8.0/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="bf2e1838e4428616c1aa26edf43de72b5b99bf84">
-        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-tasks-9.8.0_d7772aa23d29ef773ddcede9ef863dbc020c972c/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.android.support/support-v4/24.0.0/jars/libs/internal_impl-24.0.0.jar"
         jumboMode="false"
         optimize="true"
@@ -336,24 +453,6 @@
     </item>
     <item
         is-multidex="true"
-        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.0/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="7e92aadd0697922316d1395c1887a23aebec640a">
-        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-base-9.8.0_9bd4744a147d1bfa2f5dae7d22b9854581956bf6/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-identity/9.8.0/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="cef85cfc7df40e29fbea58844dd4c1e7d0b15542">
-        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-identity-9.8.0_0dd44d42c07b10987a27a9c7919b1fe00cd4c509/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-analytics-impl/9.8.0/jars/classes.jar"
         jumboMode="false"
         optimize="true"
@@ -369,33 +468,6 @@
         revision="23.0.3"
         sha1="fbb3885c40e431cd2b0dc69c0cab2bf6d5da7b43">
         <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-games-9.8.0_11cac0c82996d26a31598ca0b0c0fd6aa25ec5ef/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-clearcut/9.8.0/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="ee5304fd374e0b4ebf6b42d4037fbfb2c5336511">
-        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-clearcut-9.8.0_53d0496997cf965b011e57e044ab15644c15fe39/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-location/9.8.0/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="04bbbddf868aa02dd33f9e90d8f5d908c360f638">
-        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-location-9.8.0_0b6bd25cabbc46ef0bdecb395f2b019f19c2e469/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-tagmanager-api/9.8.0/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="266570862e5792ef3c51143a8b8593cf54fac68d">
-        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-tagmanager-api-9.8.0_f7072c94e9d84dc7d0872ae8d63b0ecd8ad9854d/classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -426,48 +498,12 @@
     </item>
     <item
         is-multidex="true"
-        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-auth/9.8.0/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="ca851be26ff89f5b32cc222cee98139fb3fac830">
-        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-auth-9.8.0_e0afcbbd11dd8a29c3c86bcb631fcd6da80b3d91/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-plus/9.8.0/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="3daa7a9c9009fd386872a84c177a76979bdcafd6">
-        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-plus-9.8.0_cfb693d2d7f9636dbace5ac41d37ccc676e0ddfd/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/24.0.0/jars/libs/internal_impl-24.0.0.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="b6763651ec29b4c95e7bbe63fc393ffcc8c4c2c5">
-        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.0.0_62561270e28e3a838667953da821f2b7818e83db/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-safetynet/9.8.0/jars/classes.jar"
         jumboMode="false"
         optimize="true"
         revision="23.0.3"
         sha1="20a3c4e355150c15c13dd58045d43ad0c717d916">
         <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-safetynet-9.8.0_e7cc3ede7fe7f2fa0e7ddc25eae02667771cfb4c/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.firebase/firebase-auth-module/9.8.0/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="3f8f779a22cbb4c4d0759467a4f1011bb5252970">
-        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-auth-module-9.8.0_412dfae43e8e91a799a5f2841e289dc989834690/classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -486,15 +522,6 @@
         revision="23.0.3"
         sha1="9ff04cc3470178a44512624036751a803418c2ca">
         <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-analytics-9.8.0_49d69bd899b9621a0e430660bd7001ad32b15b34/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-cast-framework/9.8.0/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="055eed08c9cff50cac0db69c74c4d9ff7aef3d84">
-        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-cast-framework-9.8.0_4d1bd24e2c30759e6b2b35533a05dc472711f636/classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -525,39 +552,12 @@
     </item>
     <item
         is-multidex="true"
-        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.firebase/firebase-database/9.8.0/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="03df48d3713661d66ad024b1e406259a4c26fcac">
-        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-database-9.8.0_ef7f60e3bdb1711b371759c80f73a5e25e64b716/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.firebase/firebase-messaging/9.8.0/jars/classes.jar"
         jumboMode="false"
         optimize="true"
         revision="23.0.3"
         sha1="5ffe8867f51cfc726e9fb21db1e5b6962ebf25a0">
         <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-messaging-9.8.0_ac216e8b057347ac8926537ffc13444a6abb832c/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-cast/9.8.0/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="74ac7cbcf0de4a88e59612dc3a9e3f9e71acb4ca">
-        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-cast-9.8.0_996ab7d0f45f1f5234ecfd5a712ed82204538fec/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appinvite/9.8.0/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="e56f31b23ddb067f95f01255295167db7c798612">
-        <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-appinvite-9.8.0_dcded378ad0161d8ca0de72d437bae36807f7bc3/classes.dex" />
     </item>
 
 </items>

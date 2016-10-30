@@ -1,12 +1,15 @@
 package csci310.parkhere.ui;
 
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,7 +17,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.TimePicker;
+
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 
 import java.util.Calendar;
 
@@ -38,11 +48,16 @@ public class SearchFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private static final String TAG = ""; // EDIT/DELETE LATER!
-    Button btnStartDatePicker, btnStartTimePicker, btnEndDatePicker, btnEndTimePicker;
+    private static final String TAG = "!!!!!!!!!!!!!!! "; // EDIT/DELETE LATER!
+    Button _btn_add_address, btnStartDatePicker, btnStartTimePicker, btnEndDatePicker, btnEndTimePicker;
     EditText txtStartDate, txtStartTime, txtEndDate, txtEndTime;
+    TextView _addressText;
+
     private int startYear, startMonth, startDay, startHour, startMinute,
                     endYear, endMonth, endDay, endHour, endMinute;
+
+    private Calendar startDate = Calendar.getInstance();
+    private Calendar endDate = Calendar.getInstance();
 
     private OnFragmentInteractionListener mListener;
 
@@ -84,21 +99,23 @@ public class SearchFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_search, container, false);
 
-//        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
-//                getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-//        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-//            @Override
-//            public void onPlaceSelected(Place place) {
-//                // TODO: Get info about the selected place.
-//                Log.i(TAG, "Place: " + place.getName());
-//            }
-//
-//            @Override
-//            public void onError(Status status) {
-//                // TODO: Handle the error.
-//                Log.i(TAG, "An error occurred: " + status);
-//            }
-//        });
+        _addressText = (TextView)v.findViewById(R.id.addressText);
+        _btn_add_address = (Button)v.findViewById(R.id.btn_add_address);
+        _btn_add_address.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                try {
+                    int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
+                    Intent intent =
+                            new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+                                    .build(getActivity());
+                    startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
+                } catch (GooglePlayServicesRepairableException e) {
+                    // TODO: Handle the error.
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    // TODO: Handle the error.
+                }
+            }
+        });
         // Inflate the layout for this fragment
 
         btnStartDatePicker=(Button)v.findViewById(R.id.btn_start_date);
@@ -128,6 +145,7 @@ public class SearchFragment extends Fragment {
                                                   int monthOfYear, int dayOfMonth) {
 
                                 txtStartDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                                startDate.set(year, monthOfYear, dayOfMonth);
 
                             }
                         }, startYear, startMonth, startDay);
@@ -173,9 +191,11 @@ public class SearchFragment extends Fragment {
                                                   int monthOfYear, int dayOfMonth) {
 
                                 txtEndDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                                endDate.set(year, monthOfYear, dayOfMonth);
 
                             }
                         }, endYear, endMonth, endDay);
+                datePickerDialog.getDatePicker().setMinDate(startDate.getTimeInMillis());
                 datePickerDialog.show();
             }
         });
@@ -252,5 +272,24 @@ public class SearchFragment extends Fragment {
 //            }
 //        }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
+                Place place = PlaceAutocomplete.getPlace(getContext(), data);
+                Log.i(TAG, "Place: " + place.getName());
+
+                _addressText.setText(place.getAddress());
+
+            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                Status status = PlaceAutocomplete.getStatus(getContext(), data);
+                // TODO: Handle the error.
+                Log.i(TAG, status.getStatusMessage());
+
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
+        }
     }
 }

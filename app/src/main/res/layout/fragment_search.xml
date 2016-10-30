@@ -7,7 +7,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -34,11 +35,21 @@
                 android:layout_marginTop="4dp"
                 android:entries="@array/search_loctype_spinner"/>
 
-            <!--<fragment-->
-                <!--android:id="@+id/place_autocomplete_fragment"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment" />-->
+            <TextView
+                android:id="@+id/addressText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:text="Add address"
+                android:textAlignment="center"
+                android:textSize="@dimen/text_size"
+                android:textColor="@color/colorSubFont"/>
+            <Button
+                android:id="@+id/btn_add_address"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Add address"/>
 
             <LinearLayout
                 android:layout_width="match_parent"

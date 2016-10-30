@@ -41,7 +41,7 @@ public class PrivateProfileFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    ImageView privatProfileImage;
+    ImageView _privatProfileImage, _editLogo;
 
     public PrivateProfileFragment() {
         // Required empty public constructor
@@ -81,11 +81,21 @@ public class PrivateProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_private_profile, container, false);
-        privatProfileImage = (ImageView) v.findViewById(R.id.privatProfileImage);
+
+        _privatProfileImage = (ImageView) v.findViewById(R.id.privatProfileImage);
         Bitmap bm = BitmapFactory.decodeResource(getResources(),
                 R.mipmap.ic_default_profile_pic);
         Bitmap conv_bm = getRoundedBitmap(bm);
-        privatProfileImage.setImageBitmap(conv_bm);
+        _privatProfileImage.setImageBitmap(conv_bm);
+
+        _editLogo = (ImageView) v.findViewById(R.id.editLogo);
+        _editLogo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((RenterActivity)getActivity()).switchToEditProfileFrag();
+            }
+        });
+
         return v;
     }
 

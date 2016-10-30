@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -63,7 +62,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         _searchLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction = fm.beginTransaction();
                 fragmentTransaction.replace(R.id.fragContainer, searchFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
@@ -73,27 +72,12 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         _profilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction = fm.beginTransaction();
                 fragmentTransaction.replace(R.id.fragContainer, privateProfileFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }
         });
-
-        if(privateProfileFragment.getView() != null) {
-            Log.d("", "privateProfileFragment not null!!!!!!!!!!!!!!!!!");
-            _editLogo = (ImageView) privateProfileFragment.getView().findViewById(R.id.editLogo);
-            _editLogo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    fragmentTransaction.replace(R.id.fragContainer, editProfileFragment);
-                    fragmentTransaction.commit();
-                }
-            });
-        }else {
-            Log.d("", "privateProfileFragment null!!!!!!!!!!!!!!!!!");
-        }
-
     }
 
     @Override
@@ -121,5 +105,12 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 
     public void onFragmentInteraction(Uri uri){
         //you can leave it empty
+    }
+
+    public void switchToEditProfileFrag() {
+        fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(R.id.fragContainer, editProfileFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 }

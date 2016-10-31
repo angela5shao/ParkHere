@@ -30,7 +30,6 @@ public class RegisterRenterActivity extends Activity {
     private static final int REQUEST_SIGNUP = 0;
 
     ProgressDialog progressDialog;
-    AlertDialog _errorDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,13 +115,22 @@ public class RegisterRenterActivity extends Activity {
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onPause() {
         try {
             if (progressDialog != null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
             }
-            if(_errorDialog != null && _errorDialog.isShowing()) {
-                _errorDialog.dismiss();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        try {
+            if (progressDialog != null && progressDialog.isShowing()) {
+                progressDialog.dismiss();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -138,22 +146,9 @@ public class RegisterRenterActivity extends Activity {
 
 
     public void onRegisterFailed(Context c) {
+        Toast.makeText(getBaseContext(), "register fail", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(c, HomeActivity.class);
         startActivityForResult(intent, 0);
-
-        AlertDialog.Builder ErrorDailog = new AlertDialog.Builder(this);
-        ErrorDailog.setTitle("Register Error");
-        ErrorDailog.setMessage("Username has been taken");
-        ErrorDailog.setCancelable(true);
-        ErrorDailog.setNeutralButton(android.R.string.ok,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-
-        _errorDialog = ErrorDailog.create();
-        _errorDialog.show();
     }
 
 //    public boolean validate() {

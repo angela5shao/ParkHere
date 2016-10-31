@@ -30,9 +30,11 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.IOException;
 import java.util.Calendar;
 
 import csci310.parkhere.R;
+import csci310.parkhere.controller.ClientController;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -265,9 +267,13 @@ public class SearchFragment extends Fragment {
                 curr_dist = _distSpinner.getSelectedItem().toString();
                 curr_cartype = _cartypeSpinner.getSelectedItem().toString();
 
-//                ClientController clientController = ClientController.getInstance();
-//                clientController.search(curr_location, startMonth+"-"+startDay+"-"+startYear, startHour+"-"+startMinute,
-//                        endMonth+"-"+endDay+"-"+endYear, endHour+"-"+endMinute, curr_cartype, curr_dist);
+                ClientController clientController = ClientController.getInstance();
+                try {
+                    clientController.search(curr_location, startMonth+"-"+startDay+"-"+startYear, startHour+"-"+startMinute,
+                            endMonth+"-"+endDay+"-"+endYear, endHour+"-"+endMinute, curr_cartype, curr_dist);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 

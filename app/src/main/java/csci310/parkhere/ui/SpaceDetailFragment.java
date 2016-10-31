@@ -1,6 +1,5 @@
 package csci310.parkhere.ui;
 
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
@@ -12,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import com.imanoweb.calendarview.CalendarListener;
 import com.imanoweb.calendarview.CustomCalendarView;
@@ -162,22 +160,26 @@ public class SpaceDetailFragment extends Fragment {
                         curr_hour = c.get(Calendar.HOUR_OF_DAY);
                         curr_minute = c.get(Calendar.MINUTE);
 
-                        // Launch Time Picker Dialog
-                        TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
-                                new TimePickerDialog.OnTimeSetListener() {
-                                    @Override
-                                    public void onTimeSet(TimePicker view, int hourOfDay,
-                                                          int minute) {
-                                        Log.d("Selected time is ", hourOfDay + ":" + minute);
-                                        curr_hour = hourOfDay;
-                                        curr_minute = minute;
-                                        Log.d("Updated time is ", curr_hour + ":" + curr_minute);
+                                decorators.add(new DisabledColorDecorator());
+        calendarView.setDecorators(decorators);
+        calendarView.refreshCalendar(currentCalendar);
 
-                                        // Add to TwoEntryQueue<Time> currSelectedTime
-                                        currSelectedTime.add(new Time(curr_year,curr_month,curr_day,curr_hour,curr_minute,0));
-                                    }
-                                }, curr_hour, curr_minute, false);
-                        timePickerDialog.show();
+                        // Launch Time Picker Dialog
+//                        TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
+//                                new TimePickerDialog.OnTimeSetListener() {
+//                                    @Override
+//                                    public void onTimeSet(TimePicker view, int hourOfDay,
+//                                                          int minute) {
+//                                        Log.d("Selected time is ", hourOfDay + ":" + minute);
+//                                        curr_hour = hourOfDay;
+//                                        curr_minute = minute;
+//                                        Log.d("Updated time is ", curr_hour + ":" + curr_minute);
+//
+//                                        // Add to TwoEntryQueue<Time> currSelectedTime
+//                                        currSelectedTime.add(new Time(curr_year,curr_month,curr_day,curr_hour,curr_minute,0));
+//                                    }
+//                                }, curr_hour, curr_minute, false);
+//                        timePickerDialog.show();
                     }
                 }
             }
@@ -192,9 +194,9 @@ public class SpaceDetailFragment extends Fragment {
 
 
         //adding calendar day decorators
-        decorators.add(new DisabledColorDecorator());
-        calendarView.setDecorators(decorators);
-        calendarView.refreshCalendar(currentCalendar);
+//        decorators.add(new DisabledColorDecorator());
+//        calendarView.setDecorators(decorators);
+//        calendarView.refreshCalendar(currentCalendar);
 
         return v;
     }

@@ -37,7 +37,7 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 
     FragmentManager fm;
     FragmentTransaction fragmentTransaction;
-    Fragment spacesFragment, privateProfileFragment, addSpaceFragment;
+    Fragment spacesFragment, privateProfileFragment, addSpaceFragment, spaceDetailFragment;
     BraintreeFragment mBraintreeFragment;
 
     ClientController clientController;
@@ -66,8 +66,12 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 
 //        fragmentTransaction.add(R.id.fragContainer, spacesFragment).commit();
 
+//        getSupportFragmentManager().beginTransaction()
+//                .add(R.id.fragContainer, addSpaceFragment).commit();
+
+        spaceDetailFragment = new SpaceDetailFragment();
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragContainer, addSpaceFragment).commit();
+                .add(R.id.fragContainer, spaceDetailFragment).commit();
 
         _spaceLink.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,5 +1,7 @@
 package csci310.parkhere.ui;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,6 +15,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
+import com.braintreepayments.api.BraintreeFragment;
+import com.braintreepayments.api.BraintreePaymentActivity;
+import com.braintreepayments.api.exceptions.InvalidArgumentException;
+import com.braintreepayments.api.models.PaymentMethodNonce;
+
 import csci310.parkhere.R;
 
 /**
@@ -21,7 +28,7 @@ import csci310.parkhere.R;
 public class ProviderActivity extends FragmentActivity implements SpacesFragment.OnFragmentInteractionListener,
         SpaceDetailFragment.OnFragmentInteractionListener, PrivateProfileFragment.OnFragmentInteractionListener,
         ReservationDetailFragment.OnFragmentInteractionListener {
-    
+
     TextView _spaceLink;
     ImageView _profilePic;
 
@@ -29,6 +36,7 @@ public class ProviderActivity extends FragmentActivity implements SpacesFragment
     FragmentTransaction fragmentTransaction;
     Fragment spacesFragment;
     Fragment privateProfileFragment;
+    BraintreeFragment mBraintreeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +85,15 @@ public class ProviderActivity extends FragmentActivity implements SpacesFragment
                 }
             }
         });
+
+        // Initialize BraintreeFragment
+        try {
+            // TODO mAuthorization should be either a client token or tokenization key
+            mBraintreeFragment = BraintreeFragment.newInstance(this, mAuthorization);
+            // mBraintreeFragment is ready to use!
+        } catch (InvalidArgumentException e) {
+            // There was an issue with your authorization string.
+        }
     }
 
     @Override
@@ -84,6 +101,29 @@ public class ProviderActivity extends FragmentActivity implements SpacesFragment
         // Inflate the menu items for use in the action bar
         getMenuInflater().inflate(R.menu.provider_menu_ui, menu);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE) {
+            switch (resultCode) {
+                case Activity.RESULT_OK:
+                    PaymentMethodNonce paymentMethodNonce = data.getParcelableExtra(
+                            BraintreePaymentActivity.EXTRA_PAYMENT_METHOD_NONCE
+                    );
+                    String nonce = paymentMethodNonce.getNonce();
+                    // Send the nonce to your server
+                    break;
+                case BraintreePaymentActivity.BRAINTREE_RESULT_DEVELOPER_ERROR:
+                case BraintreePaymentActivity.BRAINTREE_RESULT_SERVER_ERROR:
+                case BraintreePaymentActivity.BRAINTREE_RESULT_SERVER_UNAVAILABLE:
+                    // handle errors here, a throwable may be available in
+                    // data.getSerializableExtra(BraintreePaymentActivity.EXTRA_ERROR_MESSAGE)
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     @Override

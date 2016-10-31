@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.braintreepayments.api.PaymentRequest;
+
 import csci310.parkhere.R;
 
 /**
@@ -105,5 +107,17 @@ public class SearchSpaceDetailFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    // For BrainTree payment
+    public void onBraintreeSubmit(View v) {
+//        ClientTokenRequest clientTokenRequest = new ClientTokenRequest()
+//                .customerId(aCustomerId);
+//        String clientToken = gateway.clientToken().generate(clientTokenRequest);
+        // TODO: request client token
+        String clientToken = "";
+        PaymentRequest paymentRequest = new PaymentRequest()
+                .clientToken(clientToken);
+        startActivityForResult(paymentRequest.getIntent(this), REQUEST_CODE);
     }
 }

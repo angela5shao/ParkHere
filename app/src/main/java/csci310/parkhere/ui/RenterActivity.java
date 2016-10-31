@@ -19,13 +19,14 @@ import csci310.parkhere.R;
  * Created by ivylinlaw on 10/17/16.
  */
 public class RenterActivity extends AppCompatActivity implements SearchFragment.OnFragmentInteractionListener,
-        PrivateProfileFragment.OnFragmentInteractionListener, EditProfileFragment.OnFragmentInteractionListener {
+        PrivateProfileFragment.OnFragmentInteractionListener, EditProfileFragment.OnFragmentInteractionListener,
+        DisplaySearchFragment.OnFragmentInteractionListener {
     LinearLayout _resLink, _searchLink;
     ImageView _profilePic;
     ImageView _editLogo;
     FragmentManager fm;
     FragmentTransaction fragmentTransaction;
-    Fragment searchFragment, privateProfileFragment, editProfileFragment;
+    Fragment searchFragment, privateProfileFragment, editProfileFragment, displaySearchFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +42,15 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         searchFragment = new SearchFragment();
         privateProfileFragment = new PrivateProfileFragment();
         editProfileFragment = new EditProfileFragment();
+        displaySearchFragment = new DisplaySearchFragment();
 
         _resLink = (LinearLayout)findViewById(R.id.resLink);
         _searchLink = (LinearLayout)findViewById(R.id.searchLink);
         _profilePic = (ImageView) findViewById(R.id.profilePic);
 
-        fragmentTransaction.add(R.id.fragContainer, searchFragment);
+//        fragmentTransaction.add(R.id.fragContainer, searchFragment);
+//        fragmentTransaction.commit();
+        fragmentTransaction.add(R.id.fragContainer, displaySearchFragment);
         fragmentTransaction.commit();
 
         _resLink.setOnClickListener(new View.OnClickListener() {

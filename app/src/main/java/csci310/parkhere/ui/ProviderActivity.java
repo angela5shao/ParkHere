@@ -18,7 +18,7 @@ import csci310.parkhere.R;
 /**
  * Created by ivylinlaw on 10/17/16.
  */
-public class ProviderActivity extends FragmentActivity implements SpacesFragment.OnFragmentInteractionListener, PrivateProfileFragment.OnFragmentInteractionListener {
+public class ProviderActivity extends FragmentActivity implements SpacesFragment.OnFragmentInteractionListener, SpaceDetailFragment.OnFragmentInteractionListener, PrivateProfileFragment.OnFragmentInteractionListener {
     TextView _spaceLink;
     ImageView _profilePic;
 
@@ -100,5 +100,24 @@ public class ProviderActivity extends FragmentActivity implements SpacesFragment
 
     public void onFragmentInteraction(Uri uri){
         //you can leave it empty
+    }
+
+    public void onSpaceSelected(long spaceID) {
+        System.out.println("ProviderActivity onSpaceSelected for: " + spaceID);
+        SpaceDetailFragment spaceDetailFragment = new SpaceDetailFragment();
+        Bundle args = new Bundle();
+        args.putLong("param1", spaceID);
+        spaceDetailFragment.setArguments(args);
+
+        try {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragContainer, spaceDetailFragment).commit();
+        } catch (Exception e) {
+            System.out.println("Spaces tab item exception");
+        }
+    }
+
+    public void onEditSpace(long spaceID) {
+
     }
 }

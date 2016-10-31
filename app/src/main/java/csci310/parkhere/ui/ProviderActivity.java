@@ -48,8 +48,8 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.provider_ui);
 
-        clientController = ClientController.getInstance();
-        clientController.setCurrentActivity(this);
+//        clientController = ClientController.getInstance();
+//        clientController.setCurrentActivity(this);
 
         Toolbar providerrToolbar = (Toolbar) findViewById(R.id.providerTabbar);
         setSupportActionBar(providerrToolbar);

@@ -1,5 +1,6 @@
 package csci310.parkhere.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -106,14 +107,19 @@ public class PrivateProfileFragment extends Fragment {
         _editLogo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((RenterActivity) getActivity()).switchToEditProfileFrag();
+                Activity ac = getActivity();
+                if(ac instanceof  RenterActivity)
+                    ((RenterActivity) getActivity()).switchToEditProfileFrag();
+//                else if(ac instanceof  ProviderActivity)
+//                    ((ProviderActivity) getActivity()).switchToEditProfileFrag();
+
             }
         });
 
         User user = controller.getUser();
         if(user != null)
         {
-            updateUserInfo(user.getUsername(), "", user.userLicense, user.userLicense);
+            updateUserInfo(user.getUsername(), "", user.userLicense, user.userPlate);
         }
 
         return v;

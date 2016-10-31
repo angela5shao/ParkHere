@@ -12,6 +12,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import csci310.parkhere.R;
+import csci310.parkhere.controller.ClientController;
+import resource.SearchResults;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,7 +37,7 @@ public class DisplaySearchFragment extends Fragment {
 
     ListView _searchresultList;
 //    ArrayList<ParkingSpot> searchResults;
-    String[] searchResults={"E","B","C","D"};
+    String[] searchResults={};
 
     public DisplaySearchFragment() {
         // Required empty public constructor
@@ -75,7 +77,18 @@ public class DisplaySearchFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_display_search, container, false);
 
         _searchresultList = (ListView) v.findViewById(R.id.searchresultList);
-        setSearchResultListview();
+
+        ClientController controller = ClientController.getInstance();
+        SearchResults result = controller.searchResults;
+
+        String[] resultList = new String[result.searchResultList.size()];
+
+        for(int i = 0; i < result.searchResultList.size(); i++)
+        {
+            resultList[i] = result.searchResultList.get(i).getDescription();
+        }
+
+        setSearchResultListview(resultList);
 
         _searchresultList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -121,8 +134,8 @@ public class DisplaySearchFragment extends Fragment {
         mListener = null;
     }
 
-    public void setSearchResultListview() {
-        _searchresultList.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, searchResults));
+    public void setSearchResultListview(String[] inSearchResults) {
+        _searchresultList.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, inSearchResults));
         DiplaySearchHelper.getListViewSize(_searchresultList);
     }
 

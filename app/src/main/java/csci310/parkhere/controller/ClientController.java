@@ -19,6 +19,7 @@ import resource.CarType;
 import resource.ParkingSpot;
 import resource.Reservation;
 import resource.Review;
+import resource.SearchResults;
 import resource.Time;
 import resource.TimeInterval;
 import resource.User;
@@ -39,8 +40,11 @@ public class ClientController {
 
     private static Activity currentActivity;
 
+    public SearchResults searchResults;
+
     public boolean registerFailed;
     public boolean loginFailed;
+    public boolean toDispaySearch;
 
 
     public ClientController() { // private constructor
@@ -55,7 +59,8 @@ public class ClientController {
 
         registerFailed = false;
         loginFailed = false;
-
+        toDispaySearch = false;
+        searchResults = null;
     }
 
     public void setCurrentActivity(Activity ac)
@@ -146,6 +151,12 @@ public class ClientController {
         else if(currentActivity instanceof RenterActivity) {
             RenterActivity ra = (RenterActivity)currentActivity;
 //            Log.d("UPDATEACTIVITY", "RenterActivity");
+
+            if(toDispaySearch)
+            {
+                ra.displaySearchResult(searchResults);
+                toDispaySearch = false;
+            }
 
             if(user != null)
             {

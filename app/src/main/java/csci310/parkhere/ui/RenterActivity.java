@@ -15,8 +15,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import java.util.ArrayList;
+
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
+import resource.ParkingSpot;
+import resource.SearchResults;
 import resource.User;
 
 /**
@@ -38,8 +42,8 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.renter_ui);
 
-//        clientController = ClientController.getInstance();
-//        clientController.setCurrentActivity(this);
+        clientController = ClientController.getInstance();
+        clientController.setCurrentActivity(this);
 
         Toolbar renterToolbar = (Toolbar) findViewById(R.id.renterTabbar);
         setSupportActionBar(renterToolbar);
@@ -57,10 +61,10 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         _searchLink = (LinearLayout)findViewById(R.id.searchLink);
         _profilePic = (ImageView) findViewById(R.id.profilePic);
 
-//        fragmentTransaction.add(R.id.fragContainer, searchFragment);
-//        fragmentTransaction.commit();
-        fragmentTransaction.add(R.id.fragContainer, displaySearchFragment);
+        fragmentTransaction.add(R.id.fragContainer, searchFragment);
         fragmentTransaction.commit();
+//        fragmentTransaction.add(R.id.fragContainer, displaySearchFragment);
+//        fragmentTransaction.commit();
 
         _resLink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,6 +147,30 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
                 return super.onOptionsItemSelected(item);
             }
 
+    }
+
+    public void displaySearchResult(SearchResults results) {
+        if(results == null)
+            return;
+
+
+        ArrayList<ParkingSpot> spotList = results.searchResultList;
+
+        String[] searchResults = new String[spotList.size()];
+        for(int i = 0; i < spotList.size(); i++)
+        {
+            searchResults[i] = spotList.get(i).getDescription();
+        }
+
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
+        if (fragment instanceof DisplaySearchFragment) {
+            ((DisplaySearchFragment) fragment).setSearchResultListview(searchResults);
+        }
+
+        fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(R.id.fragContainer, displaySearchFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     public void onFragmentInteraction(Uri uri){

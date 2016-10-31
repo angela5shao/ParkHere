@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import csci310.parkhere.R;
+import csci310.parkhere.controller.ClientController;
+import resource.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -82,6 +84,13 @@ public class EditProfileFragment extends Fragment {
 
         _btn_upload_image = (Button) v.findViewById(R.id.btn_upload_image);
         _btn_confirm = (Button) v.findViewById(R.id.btn_confirm);
+
+        ClientController controller = ClientController.getInstance();
+        User user = controller.getUser();
+        if(user != null)
+        {
+            updateUserInfo(user.getUsername(), "", user.userLicense, user.userPlate);
+        }
 
         return v;
     }

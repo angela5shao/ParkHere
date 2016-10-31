@@ -87,6 +87,10 @@ public class ClientCommunicator extends Thread{
                     } else if(key.equals("SEARCH_RESULT")){
                         SearchResults result = (SearchResults)value;
                         Log.d("Results", result.searchResultList.get(0).getStreetAddr());
+                        controller.toDispaySearch = true;
+                        controller.updateActivity();
+                        controller.searchResults = result;
+                        Log.d("SEARCH_RESULT", "Size "+ String.valueOf(result.searchResultList.size()));
                     }
                     controller.updateActivity();
                 }

@@ -3,8 +3,10 @@ package csci310.parkhere.ui;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -114,8 +116,23 @@ public class RegisterRenterActivity extends Activity {
         startActivityForResult(intent, 0);
     }
 
-    public void onRegisterFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+    public void onRegisterFailed(Context c) {
+        Intent intent = new Intent(c, HomeActivity.class);
+        startActivityForResult(intent, 0);
+
+        AlertDialog.Builder _erroeDailog = new AlertDialog.Builder(this);
+        _erroeDailog.setTitle("Register Error");
+        _erroeDailog.setMessage("Username has been taken");
+        _erroeDailog.setCancelable(true);
+        _erroeDailog.setNeutralButton(android.R.string.ok,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert11 = _erroeDailog.create();
+        alert11.show();
     }
 
 //    public boolean validate() {

@@ -94,6 +94,7 @@ public class LoginActivity extends Activity {
         progressDialog.show();
 
         // TODO: Implement your own authentication logic here.
+
         try {
             clientController.login(email, password);
         } catch(IOException e){
@@ -102,7 +103,6 @@ public class LoginActivity extends Activity {
         final View curr_v = v;
         new android.os.Handler().postDelayed(
                 new Runnable() {
-//                    private View v;
                     public void run() {
                         // On complete call either onLoginSuccess or onLoginFailed
                         onLoginSuccess(curr_v);

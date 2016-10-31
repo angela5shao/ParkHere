@@ -30,6 +30,7 @@ public class RegisterRenterActivity extends Activity {
     private static final int REQUEST_SIGNUP = 0;
 
     ProgressDialog progressDialog;
+    AlertDialog _errorDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +115,21 @@ public class RegisterRenterActivity extends Activity {
         moveTaskToBack(true);
     }
 
+    @Override
+    protected void onDestroy() {
+        try {
+            if (progressDialog != null && progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+            if(_errorDialog != null && _errorDialog.isShowing()) {
+                _errorDialog.dismiss();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.onDestroy();
+    }
+
     public void onRegisterSuccess(Context c) {
         progressDialog.dismiss();
         Intent intent = new Intent(c, RenterActivity.class);
@@ -125,19 +141,19 @@ public class RegisterRenterActivity extends Activity {
         Intent intent = new Intent(c, HomeActivity.class);
         startActivityForResult(intent, 0);
 
-        AlertDialog.Builder _erroeDailog = new AlertDialog.Builder(this);
-        _erroeDailog.setTitle("Register Error");
-        _erroeDailog.setMessage("Username has been taken");
-        _erroeDailog.setCancelable(true);
-        _erroeDailog.setNeutralButton(android.R.string.ok,
+        AlertDialog.Builder ErrorDailog = new AlertDialog.Builder(this);
+        ErrorDailog.setTitle("Register Error");
+        ErrorDailog.setMessage("Username has been taken");
+        ErrorDailog.setCancelable(true);
+        ErrorDailog.setNeutralButton(android.R.string.ok,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }
                 });
 
-        AlertDialog alert11 = _erroeDailog.create();
-        alert11.show();
+        _errorDialog = ErrorDailog.create();
+        _errorDialog.show();
     }
 
 //    public boolean validate() {

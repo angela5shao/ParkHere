@@ -22,7 +22,11 @@ public class ClientCommunicator extends Thread{
     private Socket socket;
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
+
+    int counter;
+
     public ClientCommunicator(){
+        counter = 0;
         try {
             socket = new Socket("104.236.143.142", 61129);
             oos = new ObjectOutputStream(socket.getOutputStream());
@@ -42,6 +46,8 @@ public class ClientCommunicator extends Thread{
         try {
             while(true) {
                 Object obj = ois.readObject();
+                counter++;
+                Log.d("Counter", String.valueOf(counter));
                 System.out.println("do receive the networkpackage");
                 if (obj instanceof NetworkPackage) {
                     NetworkPackage np = (NetworkPackage) obj;
@@ -56,11 +62,20 @@ public class ClientCommunicator extends Thread{
                     } else if(key.equals("LOF")){
 
                     } else if(key.equals("LOGIN")){
-
+                        User result = (User) value;
+                        Log.d("LOGIN", result.userName);
                     } else if(key.equals("REGISTER")){
+                        User result = (User) value;
+                        Log.d("LOGIN", result.userName);
 
+                    } else if(key.equals("LOGOUT")){
+
+                    } else if(key.equals("SEARCH_RESULT")){
+                        SearchResults result = (SearchResults)value;
+                        Log.d("Results", result.searchResultList.get(0).getStreetAddr());
                     }
                 }
+                oos.flush();
             }
         } catch (OptionalDataException e) {
             e.printStackTrace();

@@ -3,15 +3,19 @@ package csci310.parkhere.controller;
 import android.util.Log;
 import android.widget.EditText;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 import resource.CarType;
 import resource.ParkingSpot;
 import resource.Reservation;
 import resource.Review;
+import resource.Time;
 import resource.TimeInterval;
 import resource.User;
 
@@ -72,7 +76,7 @@ public class ClientController {
         entry.put("USERNAME", username);
         entry.put("PASSWORD", pw);
         entry.put("NAME", name);
-        entry.put("PHONE", Integer.parseInt(phone));
+        entry.put("PHONE", Long.parseLong(phone));
         entry.put("LICENSE", license);
         entry.put("PLATE", plate);
         boolean usertype_bool;
@@ -141,6 +145,23 @@ public class ClientController {
 
     }
 
+    public void search(LatLng location, String startDate, String startTime, String endDate, String endTime, String carType, String distance) throws IOException {
+        String[] time1 = startDate.split("-");
+        String[] time11 = startTime.split("-");
+        String[] time2 = endDate.split("-");
+        String[] time22 = endTime.split("-");
+        Log.d("time", time1[0] + " " + time1[1] + " "+time1[2]+ " "+ time11[0]+" "+time11[1]+ " "+time2[0] + " " + time2[1] + " "+time2[2]+ " "+ time22[0]+" "+time22[1]+ " " );
+        Time inStartTime = new Time(Integer.parseInt(time1[2]),Integer.parseInt(time1[0]), Integer.parseInt(time1[1]), Integer.parseInt(time11[1]), Integer.parseInt(time11[0]),0);
+        Time inEndTime = new Time(Integer.parseInt(time2[2]),Integer.parseInt(time2[0]), Integer.parseInt(time2[1]), Integer.parseInt(time22[1]), Integer.parseInt(time22[0]),0);
+        TimeInterval timeInterval = new TimeInterval(inStartTime, inEndTime);
+        HashMap<String, Serializable> entry = new HashMap<>();
+        ParkingSpot.Location current_location = new ParkingSpot.Location((int)location.latitude, (int)location.longitude);
+        entry.put("LOCATION", current_location);
+        entry.put("TIMEINTERVAL", timeInterval);
+        entry.put("CARTYPE", carType);
+        entry.put("DISTANCE", Integer.parseInt(distance.replaceAll("[\\D]", "")));
+        clientCommunicator.send("SEARCH", entry);
+    }
     public ArrayList<ParkingSpot> search(String address, int dist, CarType type, TimeInterval interval, int length) {
         return null;
     }

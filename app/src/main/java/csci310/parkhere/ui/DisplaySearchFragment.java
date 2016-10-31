@@ -75,8 +75,7 @@ public class DisplaySearchFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_display_search, container, false);
 
         _searchresultList = (ListView) v.findViewById(R.id.searchresultList);
-        _searchresultList.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, searchResults));
-        DiplaySearchHelper.getListViewSize(_searchresultList);
+        setSearchResultListview();
 
         _searchresultList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -120,6 +119,11 @@ public class DisplaySearchFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    public void setSearchResultListview() {
+        _searchresultList.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, searchResults));
+        DiplaySearchHelper.getListViewSize(_searchresultList);
     }
 
     /**

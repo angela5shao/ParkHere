@@ -1,5 +1,6 @@
 package csci310.parkhere.ui;
 
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
@@ -11,7 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.TimePicker;
 
 import com.imanoweb.calendarview.CalendarListener;
 import com.imanoweb.calendarview.CustomCalendarView;
@@ -22,10 +23,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
 import csci310.parkhere.R;
+import csci310.parkhere.resource.CalendarUtils;
+import csci310.parkhere.resource.TwoEntryQueue;
+import resource.Time;
+import resource.TimeInterval;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,6 +53,27 @@ public class SpaceDetailFragment extends Fragment {
 
     TextView _spacedetail_address;
     CustomCalendarView calendarView;
+    final String postedDateColor = "#c3c3c3";
+    final String selectedDateColor = "#3E50B4";
+
+    Calendar currentCalendar;
+    List<DayDecorator> decorators = new ArrayList<>();
+    int curr_year, curr_month, curr_day, curr_hour, curr_minute;
+    ArrayList<TimeInterval> currSpaceTimeIntervals = new ArrayList<TimeInterval>();
+
+    //*******************************************************************************
+    // FOR TESTING DELETE LATER!!!
+    // TimeInterval(Time start, Time end)
+    // Time (int year, int month, int dayOfMonth, int hourOfDay, int minute, int second)
+    Time start1 = new Time (2016, 9, 20, 0, 0, 0);
+    Time end1 = new Time (2016, 9, 25, 0, 0, 0);
+    TimeInterval interval1 = new TimeInterval(start1, end1);
+    //*******************************************************************************
+
+    // Store currSpaceTimeIntervals in GregorianCalendar in startTime, endTime order
+    ArrayList<GregorianCalendar> currSpaceTimeIntervalsGC = new ArrayList<GregorianCalendar>();
+    // Keep track of current selected time
+    TwoEntryQueue<Time> currSelectedTime = new TwoEntryQueue<Time>();
 
     private OnFragmentInteractionListener mListener;
 
@@ -88,13 +115,19 @@ public class SpaceDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_space_detail, container, false);
 
+        //*******************************************************************************
+        // FOR TESTING DELETE LATER!!!
+        currSpaceTimeIntervals.add(interval1);
+        updateCurrSpaceTimeIntervalsGC(currSpaceTimeIntervals);
+        //*******************************************************************************
+
         _spacedetail_address = (TextView)v.findViewById(R.id.spacedetail_address);
 
         //Initialize CustomCalendarView from layout
         calendarView = (CustomCalendarView) v.findViewById(R.id.calendar_view);
 
         //Initialize calendar with date
-        Calendar currentCalendar = Calendar.getInstance(Locale.getDefault());
+        currentCalendar = Calendar.getInstance(Locale.getDefault());
 
         //Show monday as first date of week
         calendarView.setFirstDayOfWeek(Calendar.MONDAY);
@@ -109,25 +142,56 @@ public class SpaceDetailFragment extends Fragment {
         calendarView.setCalendarListener(new CalendarListener() {
             @Override
             public void onDateSelected(Date date) {
-                if (!CalendarUtils.isPastDay(date)) {
-                    SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-                    Log.d("Selected date is ", df.format(date));
-//                    selectedDateTv.setText("Selected date is " + df.format(date));
-                } else {
-//                    selectedDateTv.setText("Selected date is disabled!");
+                for (int i=0; i<currSpaceTimeIntervalsGC.size(); i+=2) {
+                    Date startDate = new Date(currSpaceTimeIntervalsGC.get(i).getTimeInMillis());
+                    Date endDate = new Date(currSpaceTimeIntervalsGC.get(i + 1).getTimeInMillis());
+                    if (!CalendarUtils.isBetweenDay(date, startDate, endDate)) {
+                        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+                        Log.d("Selected date is ", df.format(date));
+                        //                    selectedDateTv.setText("Selected date is " + df.format(date));
+
+                        // Get selected Date in year, month, day
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTime(date);
+                        curr_year = cal.get(Calendar.YEAR);
+                        curr_month = cal.get(Calendar.MONTH);
+                        curr_day = cal.get(Calendar.DAY_OF_MONTH);
+
+                        // Get Current Time
+                        final Calendar c = Calendar.getInstance();
+                        curr_hour = c.get(Calendar.HOUR_OF_DAY);
+                        curr_minute = c.get(Calendar.MINUTE);
+
+                        // Launch Time Picker Dialog
+                        TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
+                                new TimePickerDialog.OnTimeSetListener() {
+                                    @Override
+                                    public void onTimeSet(TimePicker view, int hourOfDay,
+                                                          int minute) {
+                                        Log.d("Selected time is ", hourOfDay + ":" + minute);
+                                        curr_hour = hourOfDay;
+                                        curr_minute = minute;
+                                        Log.d("Updated time is ", curr_hour + ":" + curr_minute);
+
+                                        // Add to TwoEntryQueue<Time> currSelectedTime
+                                        currSelectedTime.add(new Time(curr_year,curr_month,curr_day,curr_hour,curr_minute,0));
+                                    }
+                                }, curr_hour, curr_minute, false);
+                        timePickerDialog.show();
+                    }
                 }
             }
 
             @Override
             public void onMonthChanged(Date date) {
                 SimpleDateFormat df = new SimpleDateFormat("MM-yyyy");
-                Toast.makeText(CalendarDayDecoratorActivity.this, df.format(date), Toast.LENGTH_SHORT).show();
+                Log.d("Selected month is ", df.format(date));
+//                Toast.makeText(CalendarDayDecoratorActivity.this, df.format(date), Toast.LENGTH_SHORT).show();
             }
         });
 
 
         //adding calendar day decorators
-        List<DayDecorator> decorators = new ArrayList<>();
         decorators.add(new DisabledColorDecorator());
         calendarView.setDecorators(decorators);
         calendarView.refreshCalendar(currentCalendar);
@@ -138,9 +202,13 @@ public class SpaceDetailFragment extends Fragment {
     private class DisabledColorDecorator implements DayDecorator {
         @Override
         public void decorate(DayView dayView) {
-            if (CalendarUtils.isPastDay(dayView.getDate())) {
-                int color = Color.parseColor("#a9afb9");
-                dayView.setBackgroundColor(color);
+            for (int i=0; i<currSpaceTimeIntervalsGC.size(); i+=2) {
+                Date startDate = new Date(currSpaceTimeIntervalsGC.get(i).getTimeInMillis());
+                Date endDate = new Date(currSpaceTimeIntervalsGC.get(i+1).getTimeInMillis());
+                if (CalendarUtils.isBetweenDay(dayView.getDate(), startDate, endDate)) {
+                    int color = Color.parseColor(postedDateColor);
+                    dayView.setBackgroundColor(color);
+                }
             }
         }
     }
@@ -195,4 +263,22 @@ public class SpaceDetailFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    // Add TimeInterval to currSpaceTimeIntervals
+    public void addToCurrSpaceTimeIntervals(TimeInterval newTimeInterval) {
+        currSpaceTimeIntervals.add(newTimeInterval);
+        updateCurrSpaceTimeIntervalsGC(currSpaceTimeIntervals);
+    }
+
+    //GregorianCalendar(int year, int month, int dayOfMonth, int hourOfDay, int minute)
+    public void updateCurrSpaceTimeIntervalsGC(ArrayList<TimeInterval> currSpaceTimeIntervals) {
+        currSpaceTimeIntervalsGC = new ArrayList<GregorianCalendar>();
+        for (TimeInterval timeInterv: currSpaceTimeIntervals) {
+            Time startTime = timeInterv.startTime;
+            Time endTime = timeInterv.endTime;
+            currSpaceTimeIntervalsGC.add(new GregorianCalendar(startTime.year, startTime.month,
+                                            startTime.dayOfMonth, startTime.hourOfDay, startTime.minute));
+            currSpaceTimeIntervalsGC.add(new GregorianCalendar(endTime.year, endTime.month,
+                                            endTime.dayOfMonth, endTime.hourOfDay, endTime.minute));
+        }
+    }
 }

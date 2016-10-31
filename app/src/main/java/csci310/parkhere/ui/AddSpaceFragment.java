@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -39,10 +40,11 @@ public class AddSpaceFragment extends Fragment {
     private String mParam2;
 
     Button _btn_add_address, _btn_upload_image, _btn_confirm;
+    Spinner _cartypeSpinner;
     EditText  _in_descrip;
     TextView _addressText;
 
-    private String description;
+    private String description, curr_cartype;
 
     private OnFragmentInteractionListener mListener;
 
@@ -84,6 +86,8 @@ public class AddSpaceFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_add_space, container, false);
 
         _addressText = (TextView)v.findViewById(R.id.addressText);
+        _cartypeSpinner = (Spinner)v.findViewById(R.id.cartypeSpinner);
+        curr_cartype = _cartypeSpinner.getSelectedItem().toString();
 
         _btn_add_address = (Button)v.findViewById(R.id.btn_add_address);
         _btn_add_address.setOnClickListener(new View.OnClickListener() {

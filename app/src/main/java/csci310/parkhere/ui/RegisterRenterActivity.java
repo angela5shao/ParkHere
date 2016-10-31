@@ -3,11 +3,8 @@ package csci310.parkhere.ui;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -56,8 +53,6 @@ public class RegisterRenterActivity extends Activity {
 //        clientController = (ClientController) intent.getSerializableExtra("CLIENT_CONTROLLER");
         clientController = ClientController.getInstance();
         clientController.setCurrentActivity(this);
-
-
 
         _nextButton.setOnClickListener(new View.OnClickListener() {
             @Override

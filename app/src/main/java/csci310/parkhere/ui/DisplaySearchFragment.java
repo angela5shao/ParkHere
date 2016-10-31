@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import csci310.parkhere.R;
@@ -35,8 +34,8 @@ public class DisplaySearchFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     ListView _searchresultList;
-    ListAdapter _searchresultListAdapter;
-    String[] searchResults;
+//    ArrayList<ParkingSpot> searchResults;
+    String[] searchResults={"E","B","C","D"};
 
     public DisplaySearchFragment() {
         // Required empty public constructor
@@ -76,20 +75,9 @@ public class DisplaySearchFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_display_search, container, false);
 
         _searchresultList = (ListView) v.findViewById(R.id.searchresultList);
+        _searchresultList.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, searchResults));
+        DiplaySearchHelper.getListViewSize(_searchresultList);
 
-        //***********************************************
-        searchResults = new String[] { "Android List View",
-                "Adapter implementation",
-                "Simple List View In Android",
-                "Create List View Android",
-                "Android Example",
-                "List View Source Code",
-                "List View Array Adapter",
-                "Android Example List View"
-        };
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, searchResults);
-        _searchresultList.setAdapter(adapter);
         _searchresultList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
@@ -106,8 +94,6 @@ public class DisplaySearchFragment extends Fragment {
 
         });
         //***********************************************
-
-        _searchresultListAdapter = _searchresultList.getAdapter();
 
         return v;
     }

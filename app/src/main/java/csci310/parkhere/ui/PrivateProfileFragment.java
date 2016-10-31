@@ -14,10 +14,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import csci310.parkhere.R;
 
@@ -42,6 +44,7 @@ public class PrivateProfileFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     ImageView _privatProfileImage, _editLogo;
+    TextView _usernameText, _pwText, _licenseIDText, _licenseplateText;
 
     public PrivateProfileFragment() {
         // Required empty public constructor
@@ -72,7 +75,6 @@ public class PrivateProfileFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
         setHasOptionsMenu(true);
     }
 
@@ -80,19 +82,25 @@ public class PrivateProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         View v = inflater.inflate(R.layout.fragment_private_profile, container, false);
 
         _privatProfileImage = (ImageView) v.findViewById(R.id.privatProfileImage);
+        _editLogo = (ImageView) v.findViewById(R.id.editLogo);
+        _usernameText = (TextView) v.findViewById(R.id.usernameText);
+        _pwText = (TextView) v.findViewById(R.id.pwText);
+        _licenseIDText = (TextView) v.findViewById(R.id.licenseIDText);
+        _licenseplateText = (TextView) v.findViewById(R.id.licenseplateText);
+
         Bitmap bm = BitmapFactory.decodeResource(getResources(),
                 R.mipmap.ic_default_profile_pic);
         Bitmap conv_bm = getRoundedBitmap(bm);
         _privatProfileImage.setImageBitmap(conv_bm);
 
-        _editLogo = (ImageView) v.findViewById(R.id.editLogo);
         _editLogo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((RenterActivity)getActivity()).switchToEditProfileFrag();
+                ((RenterActivity) getActivity()).switchToEditProfileFrag();
             }
         });
 
@@ -123,6 +131,13 @@ public class PrivateProfileFragment extends Fragment {
         mListener = null;
     }
 
+    public void updateUserInfo(String inUsername, String inPw, String inLicenseID, String inLicensePlate) {
+        _usernameText.setText(inUsername);
+        _pwText.setText(inPw);
+        _licenseIDText.setText(inLicenseID);
+        _licenseplateText.setText(inLicensePlate);
+    }
+
     // return edit ImageView for parent fragmaent
 //    public ImageView getEditLogo() {
 //        ImageView _editLogo = (ImageView) getActivity().findViewById(R.id.editLogo);
@@ -134,7 +149,7 @@ public class PrivateProfileFragment extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p/>
+     * <p>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
@@ -176,4 +191,3 @@ public class PrivateProfileFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 }
-

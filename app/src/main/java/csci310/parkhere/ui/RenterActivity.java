@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,24 +15,30 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import csci310.parkhere.R;
+import csci310.parkhere.controller.ClientController;
+import resource.User;
 
 /**
  * Created by ivylinlaw on 10/17/16.
  */
 public class RenterActivity extends AppCompatActivity implements SearchFragment.OnFragmentInteractionListener,
         PrivateProfileFragment.OnFragmentInteractionListener, EditProfileFragment.OnFragmentInteractionListener,
-        DisplaySearchFragment.OnFragmentInteractionListener {
+        DisplaySearchFragment.OnFragmentInteractionListener, ReservationsFragment.OnFragmentInteractionListener {
     LinearLayout _resLink, _searchLink;
     ImageView _profilePic;
     ImageView _editLogo;
     FragmentManager fm;
     FragmentTransaction fragmentTransaction;
-    Fragment searchFragment, privateProfileFragment, editProfileFragment, displaySearchFragment;
+    Fragment searchFragment, privateProfileFragment, editProfileFragment, displaySearchFragment, reservationsFragment;
+    ClientController clientController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.renter_ui);
+
+        clientController = ClientController.getInstance();
+        clientController.setCurrentActivity(this);
 
         Toolbar renterToolbar = (Toolbar) findViewById(R.id.renterTabbar);
         setSupportActionBar(renterToolbar);
@@ -43,6 +50,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         privateProfileFragment = new PrivateProfileFragment();
         editProfileFragment = new EditProfileFragment();
         displaySearchFragment = new DisplaySearchFragment();
+        reservationsFragment = new ReservationsFragment();
 
         _resLink = (LinearLayout)findViewById(R.id.resLink);
         _searchLink = (LinearLayout)findViewById(R.id.searchLink);
@@ -56,10 +64,10 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         _resLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//                fragmentTransaction.replace(R.id.fragContainer, );
-//                fragmentTransaction.addToBackStack(null);
-//                fragmentTransaction.commit();
+                fragmentTransaction = fm.beginTransaction();
+                fragmentTransaction.replace(R.id.fragContainer, reservationsFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
 
@@ -77,6 +85,19 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
             @Override
             public void onClick(View v) {
                 fragmentTransaction = fm.beginTransaction();
+
+                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
+                User user = clientController.getUser();
+                if(user == null)
+                    Log.d("PROFILE", "user is null");
+
+                if (fragment instanceof PrivateProfileFragment && user != null) {
+                    Log.d("@@@@@@@@@@@@@@ ", user.getUsername());
+                    Log.d("@@@@@@@@@@@@@@ ", user.userLicense);
+                    Log.d("@@@@@@@@@@@@@@ ", user.userPlate);
+                    ((PrivateProfileFragment) fragment).updateUserInfo(user.getUsername(), "", user.userLicense, user.userPlate);
+                }
+
                 fragmentTransaction.replace(R.id.fragContainer, privateProfileFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
@@ -113,8 +134,30 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 
     public void switchToEditProfileFrag() {
         fragmentTransaction = fm.beginTransaction();
+
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
+        User user = clientController.getUser();
+        if (fragment instanceof EditProfileFragment && user != null) {
+            Log.d("############## ", user.getUsername());
+            Log.d("############## ", user.userLicense);
+            Log.d("############## ", user.userPlate);
+            ((EditProfileFragment) fragment).updateUserInfo(user.getUsername(), "", user.userLicense, user.userPlate);
+        }
+
+
         fragmentTransaction.replace(R.id.fragContainer, editProfileFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+
+//    public void updateUserInfo(String inUsername, String inPw, String inLicenseID, String inLicensePlate) {
+//        // STILL NEED TO ADD PROFILE PIC
+//        privateProfileFragment.updateUserInfo(inUsername, inPw, inLicenseID, inLicensePlate);
+//        editProfileFragment.updateUserInfo(inUsername, inPw, inLicenseID, inLicensePlate);
+//    }
+
+    public void onReservationSelected(long reservationID) {
+        //
+    }
+
 }

@@ -7,6 +7,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import csci310.parkhere.R;
 
@@ -29,6 +32,10 @@ public class EditProfileFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    ImageView _privatProfileImage;
+    Button _btn_upload_image, _btn_confirm;
+    EditText _usernameText, _pwText, _licenseIDText, _licenseplateText;
 
     public EditProfileFragment() {
         // Required empty public constructor
@@ -65,7 +72,18 @@ public class EditProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit_profile, container, false);
+        View v = inflater.inflate(R.layout.fragment_edit_profile, container, false);
+
+        _privatProfileImage = (ImageView) v.findViewById(R.id.privatProfileImage);
+        _usernameText = (EditText) v.findViewById(R.id.usernameText);
+        _pwText = (EditText) v.findViewById(R.id.pwText);
+        _licenseIDText = (EditText) v.findViewById(R.id.licenseIDText);
+        _licenseplateText = (EditText) v.findViewById(R.id.licenseplateText);
+
+        _btn_upload_image = (Button) v.findViewById(R.id.btn_upload_image);
+        _btn_confirm = (Button) v.findViewById(R.id.btn_confirm);
+
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -105,5 +123,12 @@ public class EditProfileFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public void updateUserInfo(String inUsername, String inPw, String inLicenseID, String inLicensePlate) {
+        _usernameText.setHint(inUsername);
+        _pwText.setHint(inPw);
+        _licenseIDText.setHint(inLicenseID);
+        _licenseplateText.setHint(inLicensePlate);
     }
 }

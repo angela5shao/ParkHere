@@ -1,16 +1,24 @@
 package csci310.parkhere.controller;
 
+import android.app.Activity;
 import android.util.Log;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import csci310.parkhere.ui.LoginActivity;
+import csci310.parkhere.ui.RegisterProviderActivity;
+import csci310.parkhere.ui.RegisterRenterActivity;
+import csci310.parkhere.ui.RenterActivity;
 import resource.CarType;
 import resource.ParkingSpot;
 import resource.Reservation;
 import resource.Review;
+import resource.Time;
 import resource.TimeInterval;
 import resource.User;
 
@@ -23,26 +31,35 @@ public class ClientController {
     private ArrayList<ParkingSpot> parkingSpots;
     private ArrayList<Reservation> reservations;
     private ArrayList<Review> reviews;
-    private HashMap<String, Serializable> entry;
     public ClientCommunicator clientCommunicator;
 
     private static ClientController instance;
 
+
+    private static Activity currentActivity;
+
+    public boolean registerFailed;
+    public boolean loginFailed;
+
+
     public ClientController() { // private constructor
 
-        Log.d("&&&&&&&&&&&&&&&&& ", "waiting for the somthing wrong0");
-        Log.d("new Tag", "a new tag");
         user = null;
         parkingSpots = null;
         reservations = null;
         reviews = null;
-        entry = new HashMap<>();
-        Log.d("&&&&&&&&&&&&&&&&& ", "waiting for the somthing wrong1");
-        Log.d("&&&&&&&&&&&&&&&&& ", "waiting for the somthing else wrong1");
-        clientCommunicator = new ClientCommunicator();
+        clientCommunicator = new ClientCommunicator(this);
 
         instance = this;
 
+        registerFailed = false;
+        loginFailed = false;
+
+    }
+
+    public void setCurrentActivity(Activity ac)
+    {
+        currentActivity = ac;
     }
 
     public static ClientController getInstance() {
@@ -65,23 +82,19 @@ public class ClientController {
     public void setReviews(ArrayList<Review> rev) { reviews = rev; }
 
     // TODO: Functions for login, signup
-    public long login(String username, String pw) {
-        return 0;
+    public void login(String username, String pw) throws IOException {
+        HashMap<String, Serializable> entry = new HashMap<>();
+        entry.put("USERNAME", username);
+        entry.put("PASSWORD", pw);
+        clientCommunicator.send("LOGIN", entry);
     }
 
     public void register(String username, String pw, String phone, String license, String plate, String usertype, String name) throws IOException {
-        Log.v("############ ", username);
-        Log.v("############ ", pw);
-        Log.v("############ ", phone);
-        Log.v("############ ", license);
-        Log.v("############ ", plate);
-        Log.v("############ ", usertype);
-        Log.v("############ ", name);
-
+        HashMap<String, Serializable> entry = new HashMap<>();
         entry.put("USERNAME", username);
         entry.put("PASSWORD", pw);
         entry.put("NAME", name);
-        entry.put("PHONE", Integer.parseInt(phone));
+        entry.put("PHONE", Long.parseLong(phone));
         entry.put("LICENSE", license);
         entry.put("PLATE", plate);
         boolean usertype_bool;
@@ -92,6 +105,59 @@ public class ClientController {
         }
         entry.put("USERTYPE", usertype_bool);
         clientCommunicator.send("REGISTER", entry);
+    }
+
+
+    public void updateActivity()
+    {
+        if(currentActivity instanceof RegisterRenterActivity)
+        {
+            RegisterRenterActivity rra = (RegisterRenterActivity)currentActivity;
+            Log.d("UPDATEACTIVITY", "RegisterRenterActivity");
+
+            if(user == null)
+            {
+                rra.onRegisterFailed(rra.getApplicationContext());
+            }
+            else
+            {
+                rra.onRegisterSuccess(rra.getApplicationContext());
+            }
+        }
+        else if(currentActivity instanceof RegisterProviderActivity) {
+            RegisterProviderActivity rpa = (RegisterProviderActivity)currentActivity;
+            Log.d("UPDATEACTIVITY", "RegisterProviderActivity");
+
+            if(user == null)
+            {
+                rpa.onRegisterFailed(rpa.getApplicationContext());
+            }
+            else
+            {
+                rpa.onRegisterSuccess(rpa.getApplicationContext());
+            }
+        }
+        else if(currentActivity instanceof RenterActivity) {
+            RenterActivity ra = (RenterActivity)currentActivity;
+            Log.d("UPDATEACTIVITY", "RenterActivity");
+
+            if(user != null)
+            {
+//                ra.updateUserInfo(user.getUsername(), "", user.userLicense, user.userPlate);
+            }
+        }
+        else if(currentActivity instanceof LoginActivity)
+        {
+            LoginActivity la = (LoginActivity)currentActivity;
+            if(user == null)
+            {
+                la.onLoginFailed(la.getApplicationContext());
+            }
+            else
+            {
+                la.onLoginSuccess(la.getApplicationContext());
+            }
+        }
     }
 
     public User getProfile(long userID) {
@@ -150,6 +216,23 @@ public class ClientController {
 
     }
 
+    public void search(LatLng location, String startDate, String startTime, String endDate, String endTime, String carType, String distance) throws IOException {
+        String[] time1 = startDate.split("-");
+        String[] time11 = startTime.split("-");
+        String[] time2 = endDate.split("-");
+        String[] time22 = endTime.split("-");
+        Log.d("time", time1[0] + " " + time1[1] + " "+time1[2]+ " "+ time11[0]+" "+time11[1]+ " "+time2[0] + " " + time2[1] + " "+time2[2]+ " "+ time22[0]+" "+time22[1]+ " " );
+        Time inStartTime = new Time(Integer.parseInt(time1[2]),Integer.parseInt(time1[0]), Integer.parseInt(time1[1]), Integer.parseInt(time11[1]), Integer.parseInt(time11[0]),0);
+        Time inEndTime = new Time(Integer.parseInt(time2[2]),Integer.parseInt(time2[0]), Integer.parseInt(time2[1]), Integer.parseInt(time22[1]), Integer.parseInt(time22[0]),0);
+        TimeInterval timeInterval = new TimeInterval(inStartTime, inEndTime);
+        HashMap<String, Serializable> entry = new HashMap<>();
+        ParkingSpot.Location current_location = new ParkingSpot.Location((int)location.latitude, (int)location.longitude);
+        entry.put("LOCATION", current_location);
+        entry.put("TIMEINTERVAL", timeInterval);
+        entry.put("CARTYPE", carType);
+        entry.put("DISTANCE", Integer.parseInt(distance.replaceAll("[\\D]", "")));
+        clientCommunicator.send("SEARCH", entry);
+    }
     public ArrayList<ParkingSpot> search(String address, int dist, CarType type, TimeInterval interval, int length) {
         return null;
     }

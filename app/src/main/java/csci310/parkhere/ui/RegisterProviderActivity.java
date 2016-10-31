@@ -2,11 +2,13 @@ package csci310.parkhere.ui;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -21,6 +23,8 @@ public class RegisterProviderActivity extends Activity {
     EditText _liscenseIdText;
     String name, email, password, phonenum;
     ClientController clientController;
+
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +41,7 @@ public class RegisterProviderActivity extends Activity {
         phonenum = intent.getStringExtra("PHONE_NUM");
 
         clientController = ClientController.getInstance();
+        clientController.setCurrentActivity(this);
 
         _nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,7 +54,7 @@ public class RegisterProviderActivity extends Activity {
     private void register(View v) {
         String licenseID = _liscenseIdText.getText().toString();
 
-        final ProgressDialog progressDialog = new ProgressDialog(RegisterProviderActivity.this,
+        progressDialog = new ProgressDialog(RegisterProviderActivity.this,
                 R.style.AppTheme);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Registering...");
@@ -57,26 +62,57 @@ public class RegisterProviderActivity extends Activity {
 
         // TODO: Implement your own authentication logic here.
         try {
-            clientController.register(email, password, phonenum, licenseID, null, "provider", name);
+            clientController.register(email, password, phonenum, licenseID, "#######", "provider", name);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        final View curr_v = v;
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    //                    private View v;
-                    public void run() {
-                        // On complete call either onLoginSuccess or onLoginFailed
-                        onRegisterSuccess(curr_v);
-                        // onLoginFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
+//        new android.os.Handler().postDelayed(
+//                new Runnable() {
+//                    //                    private View v;
+//                    public void run() {
+//                        // On complete call either onLoginSuccess or onLoginFailed
+//                        onRegisterSuccess(curr_v);
+//                        // onLoginFailed();
+//                        progressDialog.dismiss();
+//                    }
+//                }, 3000);
     }
 
-    private void onRegisterSuccess(View v) {
-        Intent intent = new Intent(v.getContext(), RenterActivity.class);
+    @Override
+    protected void onPause() {
+        try {
+            if (progressDialog != null && progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        try {
+            if (progressDialog != null && progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.onDestroy();
+    }
+
+    public void onRegisterSuccess(Context c) {
+        progressDialog.dismiss();
+        Intent intent = new Intent(c, RenterActivity.class);
+        startActivityForResult(intent, 0);
+    }
+
+
+    public void onRegisterFailed(Context c) {
+        Toast.makeText(getBaseContext(), "register fail", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(c, HomeActivity.class);
         startActivityForResult(intent, 0);
     }
 }

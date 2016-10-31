@@ -1,0 +1,99 @@
+package server;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+
+import resource.User;
+public class AuthManager {
+	
+	private DatabaseManager DM;
+	private ServerCommunicator SC;
+	private String username;
+	private String userDomain;
+	private String name;
+	private long phoneNumber;
+	private String licenseID;
+	private boolean userType;
+	private String licensePlateNumber;
+	private long userID;
+	private User user;
+	private String password;
+	
+	public AuthManager(DatabaseManager DM, ServerCommunicator SC){
+		this.DM = DM;
+		this.SC = SC;
+	}	
+	public User register(HashMap<String, Object> hm){		
+		for(Map.Entry<String, Object> entry : hm.entrySet())
+		{
+			if(entry.getKey()=="USERNAME"){
+				username = (String)entry.getValue();
+			} 
+			else if(entry.getKey()=="NAME"){
+				name = (String)entry.getValue();
+			} else if(entry.getKey()=="PHONE"){
+				phoneNumber = (long)entry.getValue();
+			} else if(entry.getKey()=="LICENSE"){
+				licenseID = (String)entry.getValue();
+			} else if(entry.getKey()=="PLATE"){
+				licensePlateNumber = (String)entry.getValue();
+			} else if(entry.getKey()=="USERTYPE"){
+				userType = (boolean)entry.getValue();
+			} else if(entry.getKey()=="PASSWORD"){
+				password = (String)entry.getValue();
+			}
+		}
+		if(DM.checkExisted("Registered", username)){
+			user = new User(-1, username, userType);
+		}else {
+			userID = DM.register(username,name ,phoneNumber, licenseID ,userType, licensePlateNumber);
+			user = new User(userID, username, userType);
+		}
+		return user;
+	}
+	
+	public User login(HashMap<String, Object> hm) throws SQLException{
+		for(Map.Entry<String, Object> entry : hm.entrySet())
+		{
+			if(entry.getKey()=="USERNAME"){
+				username = (String)entry.getValue();
+			}
+			else if(entry.getKey()=="PASSWORD"){
+				password = (String)entry.getValue();
+			} 
+		}
+		if(DM.ifUserNameExists(username)){
+			userID = DM.login(username, password);
+			if(userID == -1){
+				user = new User(-1, username, userType);
+			}
+			else {
+				user = new User(userID, username, userType);
+			}
+		}
+		else{
+			user = new User(-1, username, userType);
+		}
+		return user;
+	}
+	
+	public boolean logout(HashMap<String, Object> hm){
+		for(Map.Entry<String, Object> entry : hm.entrySet())
+		{
+			if(entry.getKey()=="USERNAME"){
+				username = (String)entry.getValue();
+			} else if(entry.getKey()=="USERDOMAIN"){
+				userDomain = (String)entry.getValue();
+			} else if(entry.getKey()=="USERTYPE"){
+				userType = (boolean)entry.getValue();
+			} 
+		}
+		if(DM.logout(username, userType)){
+			return true;
+		}else{
+			return false;
+		}
+	}
+}
+
+

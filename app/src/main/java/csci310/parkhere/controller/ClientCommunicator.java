@@ -4,6 +4,7 @@ package csci310.parkhere.controller;
  * Created by angela02pd2014 on 10/16/16.
  */
 
+import android.os.Looper;
 import android.util.Log;
 
 import java.io.IOException;
@@ -49,6 +50,8 @@ public class ClientCommunicator extends Thread{
 
     public void run()
     {
+        Looper.prepare();
+
         try {
             while(true) {
                 Object obj = ois.readObject();
@@ -73,6 +76,7 @@ public class ClientCommunicator extends Thread{
                     } else if(key.equals("REGISTER")){
                         User result = (User) value;
                         Log.d("LOGIN", result.userName);
+                        controller.setUser(result);
 
                     } else if(key.equals("LOGOUT")){
 
@@ -80,6 +84,7 @@ public class ClientCommunicator extends Thread{
                         SearchResults result = (SearchResults)value;
                         Log.d("Results", result.searchResultList.get(0).getStreetAddr());
                     }
+                    controller.updateActivity();
                 }
                 oos.flush();
             }

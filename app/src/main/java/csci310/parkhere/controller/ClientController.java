@@ -103,10 +103,19 @@ public class ClientController {
 
     public void updateActivity()
     {
-        if(currentActivity instanceof HomeActivity)
+        if(currentActivity instanceof RegisterRenterActivity)
         {
-            RegisterRenterActivity ha = (RegisterRenterActivity)currentActivity;
-            ha.onReg
+            RegisterRenterActivity rra = (RegisterRenterActivity)currentActivity;
+            Log.d("UPDATEACTIVITY", "RegisterRenterActivity");
+
+            if(user == null)
+            {
+                rra.onRegisterFailed();
+            }
+            else
+            {
+                rra.onRegisterSuccess(rra.getApplicationContext());
+            }
         }
     }
 

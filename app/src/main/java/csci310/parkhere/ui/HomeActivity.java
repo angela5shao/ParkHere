@@ -42,7 +42,7 @@ public class HomeActivity extends Activity {
             @Override
             public void onClick(View v) {
                 myIntent = new Intent(v.getContext(), LoginActivity.class);
-                startActivityForResult(myIntent);
+                startActivity(myIntent);
             }
         });
 

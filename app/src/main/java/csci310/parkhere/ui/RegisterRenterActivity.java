@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +26,8 @@ public class RegisterRenterActivity extends Activity {
     String name, email, password, phonenum;
     ClientController clientController;
     private static final int REQUEST_SIGNUP = 0;
+
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +67,7 @@ public class RegisterRenterActivity extends Activity {
         String licenseID = _liscenseIdText.getText().toString();
         String licensePlate = _liscensePlateNumText.getText().toString();
 
-        final ProgressDialog progressDialog = new ProgressDialog(RegisterRenterActivity.this,
+        progressDialog = new ProgressDialog(RegisterRenterActivity.this,
                 R.style.AppTheme);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Registering...");
@@ -78,16 +81,16 @@ public class RegisterRenterActivity extends Activity {
         }
 
         final View curr_v = v;
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onLoginSuccess or onLoginFailed
-//                        onRegisterSuccess(curr_v);
-                            // onRegisterFailed();
-
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
+//        new android.os.Handler().postDelayed(
+//                new Runnable() {
+//                    public void run() {
+//                        // On complete call either onLoginSuccess or onLoginFailed
+////                        onRegisterSuccess(curr_v);
+//                            // onRegisterFailed();
+//
+//                        progressDialog.dismiss();
+//                    }
+//                }, 3000);
     }
 
     @Override
@@ -110,11 +113,14 @@ public class RegisterRenterActivity extends Activity {
     }
 
     public void onRegisterSuccess(Context c) {
+        progressDialog.dismiss();
         Intent intent = new Intent(c, RenterActivity.class);
         startActivityForResult(intent, 0);
     }
 
     public void onRegisterFailed() {
+        Log.d("RegisterFail", "On RegisterFailed");
+        progressDialog.dismiss();
         Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
     }
 

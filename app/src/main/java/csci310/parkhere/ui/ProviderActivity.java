@@ -48,8 +48,8 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.provider_ui);
 
-//        clientController = ClientController.getInstance();
-//        clientController.setCurrentActivity(this);
+        clientController = ClientController.getInstance();
+        clientController.setCurrentActivity(this);
 
         Toolbar providerrToolbar = (Toolbar) findViewById(R.id.providerTabbar);
         setSupportActionBar(providerrToolbar);
@@ -131,8 +131,13 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         return true;
     }
 
+
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode,resultCode,data);
         if (requestCode == 1) {
             switch (resultCode) {
                 case Activity.RESULT_OK:
@@ -172,7 +177,9 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         {
             Intent intent = new Intent(this, RenterActivity.class);
             startActivityForResult(intent, 0);
-            clientController.getUser().userType = false;
+            clientController.getUser().userType = true;
+
+            Log.d("SWITCH","Switch To Renter");
             return true;
         }
         else if(item.getItemId() == R.id.LogOut)

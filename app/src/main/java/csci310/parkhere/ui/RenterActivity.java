@@ -42,6 +42,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.renter_ui);
 
+
         clientController = ClientController.getInstance();
         clientController.setCurrentActivity(this);
 

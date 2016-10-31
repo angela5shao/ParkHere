@@ -2,6 +2,7 @@ package csci310.parkhere.ui;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -108,8 +109,8 @@ public class RegisterRenterActivity extends Activity {
         moveTaskToBack(true);
     }
 
-    public void onRegisterSuccess(View v) {
-        Intent intent = new Intent(v.getContext(), RenterActivity.class);
+    public void onRegisterSuccess(Context c) {
+        Intent intent = new Intent(c, RenterActivity.class);
         startActivityForResult(intent, 0);
     }
 

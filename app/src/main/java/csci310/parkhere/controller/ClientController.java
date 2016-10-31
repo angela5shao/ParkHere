@@ -110,7 +110,7 @@ public class ClientController {
 
             if(user == null)
             {
-                rra.onRegisterFailed();
+                rra.onRegisterFailed(rra.getApplicationContext());
             }
             else
             {

@@ -22,14 +22,16 @@ import resource.User;
  * Created by ivylinlaw on 10/17/16.
  */
 public class RenterActivity extends AppCompatActivity implements SearchFragment.OnFragmentInteractionListener,
-        PrivateProfileFragment.OnFragmentInteractionListener, EditProfileFragment.OnFragmentInteractionListener {
+        PrivateProfileFragment.OnFragmentInteractionListener, EditProfileFragment.OnFragmentInteractionListener,
+        ReservationsFragment.OnFragmentInteractionListener {
     LinearLayout _resLink, _searchLink;
     ImageView _profilePic;
     ImageView _editLogo;
     FragmentManager fm;
     FragmentTransaction fragmentTransaction;
-    Fragment searchFragment, privateProfileFragment, editProfileFragment;
+    Fragment searchFragment, privateProfileFragment, editProfileFragment, reservationsFragment;
     ClientController clientController;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         searchFragment = new SearchFragment();
         privateProfileFragment = new PrivateProfileFragment();
         editProfileFragment = new EditProfileFragment();
+        reservationsFragment = new ReservationsFragment();
 
         _resLink = (LinearLayout)findViewById(R.id.resLink);
         _searchLink = (LinearLayout)findViewById(R.id.searchLink);
@@ -59,10 +62,10 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         _resLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//                fragmentTransaction.replace(R.id.fragContainer, );
-//                fragmentTransaction.addToBackStack(null);
-//                fragmentTransaction.commit();
+                fragmentTransaction = fm.beginTransaction();
+                fragmentTransaction.replace(R.id.fragContainer, reservationsFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
 
@@ -150,5 +153,9 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 //        privateProfileFragment.updateUserInfo(inUsername, inPw, inLicenseID, inLicensePlate);
 //        editProfileFragment.updateUserInfo(inUsername, inPw, inLicenseID, inLicensePlate);
 //    }
+
+    public void onReservationSelected(long reservationID) {
+        //
+    }
 
 }

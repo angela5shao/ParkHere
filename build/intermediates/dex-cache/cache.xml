@@ -3,6 +3,7 @@
 
     <item
         is-multidex="true"
+<<<<<<< HEAD
         jar="/Users/ivylinlaw/ParkHere/app/build/intermediates/exploded-aar/com.google.firebase/firebase-storage/9.8.0/jars/classes.jar"
         jumboMode="false"
         optimize="true"
@@ -558,6 +559,50 @@
         revision="23.0.3"
         sha1="5ffe8867f51cfc726e9fb21db1e5b6962ebf25a0">
         <dex dex="/Users/ivylinlaw/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-messaging-9.8.0_ac216e8b057347ac8926537ffc13444a6abb832c/classes.dex" />
+=======
+        jar="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/exploded-aar/com.android.support/design/23.4.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="5326d9a850d491714fef8cbfaa9ea3416f0bf0d2">
+        <dex dex="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-design-23.4.0_e4569674b93e5a5d8c0eaae5db37084e5fdd2cac/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="8f36c837eb62ffb19cf18f8f40cef202164132d5">
+        <dex dex="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_70e03ca36666a7abcf1003c71b1d70ba2772bdd9/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.4.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="ec75036c3c52e451d0cde50a5aedaf5fd32354a0">
+        <dex dex="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-recyclerview-v7-23.4.0_77eff158578f7924596f76e7ed66f59576143a2b/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/libs/resource.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="a2cdf7baa923abb91743e812a66f57332c183ad0">
+        <dex dex="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/2/resource_6128e5b911f76f6e349adcb3cec240863be116e9/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/exploded-aar/com.android.support/multidex/1.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="6666dd525c3da197e7d07f4f23ef5fc7881a697b">
+        <dex dex="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-multidex-1.0.0_525f63e399d3ec828c1ca9c8ab4d6097771f4350/classes.dex" />
+>>>>>>> angela
     </item>
 
 </items>

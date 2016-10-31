@@ -89,6 +89,7 @@ public class ProviderActivity extends FragmentActivity implements SpacesFragment
         // Initialize BraintreeFragment
         try {
             // TODO mAuthorization should be either a client token or tokenization key
+            String mAuthorization = "client token";
             mBraintreeFragment = BraintreeFragment.newInstance(this, mAuthorization);
             // mBraintreeFragment is ready to use!
         } catch (InvalidArgumentException e) {
@@ -105,7 +106,7 @@ public class ProviderActivity extends FragmentActivity implements SpacesFragment
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CODE) {
+        if (requestCode == 1) {
             switch (resultCode) {
                 case Activity.RESULT_OK:
                     PaymentMethodNonce paymentMethodNonce = data.getParcelableExtra(
@@ -179,5 +180,9 @@ public class ProviderActivity extends FragmentActivity implements SpacesFragment
         } catch (Exception e) {
             System.out.println("Reservation item exception");
         }
+    }
+
+    public void onAddSpace(long spaceID) {
+
     }
 }

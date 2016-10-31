@@ -120,13 +120,14 @@ public class ReservationsFragment extends ListFragment implements AdapterView.On
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+        void onReservationSelected(long reservationID);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
                             long id) {
         // TODO: Call RenterActivity's onReservationSelected(long reservationID)
-//        mListener.onReservationSelected(00112233);
+        mListener.onReservationSelected((long)0011223312765);
         System.out.println("CLICKED on Reservation: " + position);
     }
 }

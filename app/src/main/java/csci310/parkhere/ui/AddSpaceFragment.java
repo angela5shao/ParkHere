@@ -8,19 +8,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.braintreepayments.api.PaymentRequest;
-
 import csci310.parkhere.R;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link SearchSpaceDetailFragment.OnFragmentInteractionListener} interface
+ * {@link AddSpaceFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link SearchSpaceDetailFragment#newInstance} factory method to
+ * Use the {@link AddSpaceFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SearchSpaceDetailFragment extends Fragment {
+public class AddSpaceFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -32,7 +30,7 @@ public class SearchSpaceDetailFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public SearchSpaceDetailFragment() {
+    public AddSpaceFragment() {
         // Required empty public constructor
     }
 
@@ -42,11 +40,11 @@ public class SearchSpaceDetailFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment SearchSpaceDetailFragment.
+     * @return A new instance of fragment AddSpaceFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SearchSpaceDetailFragment newInstance(String param1, String param2) {
-        SearchSpaceDetailFragment fragment = new SearchSpaceDetailFragment();
+    public static AddSpaceFragment newInstance(String param1, String param2) {
+        AddSpaceFragment fragment = new AddSpaceFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -67,7 +65,7 @@ public class SearchSpaceDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search_space_detail, container, false);
+        return inflater.inflate(R.layout.fragment_add_space, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -107,17 +105,5 @@ public class SearchSpaceDetailFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-
-    // For BrainTree payment
-    public void onBraintreeSubmit(View v) {
-//        ClientTokenRequest clientTokenRequest = new ClientTokenRequest()
-//                .customerId(aCustomerId);
-//        String clientToken = gateway.clientToken().generate(clientTokenRequest);
-        // TODO: request client token
-        String clientToken = "";
-        PaymentRequest paymentRequest = new PaymentRequest()
-                .clientToken(clientToken);
-        startActivityForResult(paymentRequest.getIntent(getActivity()), 1);
     }
 }

@@ -67,16 +67,6 @@ public class RegisterProviderActivity extends Activity {
             e.printStackTrace();
         }
 
-//        new android.os.Handler().postDelayed(
-//                new Runnable() {
-//                    //                    private View v;
-//                    public void run() {
-//                        // On complete call either onLoginSuccess or onLoginFailed
-//                        onRegisterSuccess(curr_v);
-//                        // onLoginFailed();
-//                        progressDialog.dismiss();
-//                    }
-//                }, 3000);
     }
 
     @Override
@@ -105,13 +95,14 @@ public class RegisterProviderActivity extends Activity {
 
     public void onRegisterSuccess(Context c) {
         progressDialog.dismiss();
-        Intent intent = new Intent(c, RenterActivity.class);
+        Intent intent = new Intent(c, ProviderActivity.class);
         startActivityForResult(intent, 0);
     }
 
 
     public void onRegisterFailed(Context c) {
-        Toast.makeText(getBaseContext(), "register fail", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getBaseContext(), "register fail", Toast.LENGTH_SHORT).show();
+        progressDialog.dismiss();
         Intent intent = new Intent(c, HomeActivity.class);
         startActivityForResult(intent, 0);
     }

@@ -45,11 +45,12 @@ public class HomeActivity extends Activity {
         {
             Log.d("Register failed", "FAILED");
             Toast.makeText(getApplicationContext(), "Register fail", Toast.LENGTH_SHORT).show();
+            clientController.registerFailed = false;
         }
         else if(clientController.loginFailed)
         {
             Toast.makeText(getApplicationContext(), "Login fail", Toast.LENGTH_SHORT).show();
-
+            clientController.loginFailed = false;
         }
 
 

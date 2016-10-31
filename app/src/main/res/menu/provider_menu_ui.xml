@@ -3,14 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.ProviderActivity">
 
-    <item android:id="@+id/profileLink"
+    <item android:id="@+id/RenterSwitch"
         android:orderInCategory="100"
         android:title="Switch to Renter"
         android:icon="@mipmap/ic_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <item android:id="@+id/reservationsLink"
+    <item android:id="@+id/LogOut"
         android:orderInCategory="200"
         android:title="Log Out"
         android:icon="@mipmap/ic_logout"

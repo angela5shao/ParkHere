@@ -1,5 +1,6 @@
 package csci310.parkhere.ui;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -116,16 +117,32 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
-        switch (item.getItemId()) {
-//            case R.id.action_search:
-//                openSearch();
+//        switch (item.getItemId()) {
+//            case R.id.ProviderSwitch:
+////                openSearch();
 //                return true;
 //            case R.id.action_compose:
 //                composeMessage();
 //                return true;
-            default:
+//            default:
+//                return super.onOptionsItemSelected(item);
+
+            if(item.getItemId() == R.id.ProviderSwitch) {
+                Intent intent = new Intent(this, ProviderActivity.class);
+                startActivityForResult(intent, 0);
+                clientController.getUser().userType = false;
+                return true;
+            }
+            else if(item.getItemId() == R.id.LogOut) {
+                Intent intent = new Intent(this, HomeActivity.class);
+                startActivityForResult(intent, 0);
+                ClientController.resetController();
+                return true;
+            }
+            else {
                 return super.onOptionsItemSelected(item);
-        }
+            }
+
     }
 
     public void onFragmentInteraction(Uri uri){

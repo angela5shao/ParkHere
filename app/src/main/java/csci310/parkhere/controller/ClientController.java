@@ -2,6 +2,7 @@ package csci310.parkhere.controller;
 
 import android.app.Activity;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -67,6 +68,11 @@ public class ClientController {
             instance = new ClientController();
         }
         return instance;
+    }
+
+    public static void resetController()
+    {
+            instance = null;
     }
 
     // Getters
@@ -139,7 +145,7 @@ public class ClientController {
         }
         else if(currentActivity instanceof RenterActivity) {
             RenterActivity ra = (RenterActivity)currentActivity;
-            Log.d("UPDATEACTIVITY", "RenterActivity");
+//            Log.d("UPDATEACTIVITY", "RenterActivity");
 
             if(user != null)
             {
@@ -226,6 +232,14 @@ public class ClientController {
         Time inEndTime = new Time(Integer.parseInt(time2[2]),Integer.parseInt(time2[0]), Integer.parseInt(time2[1]), Integer.parseInt(time22[1]), Integer.parseInt(time22[0]),0);
         TimeInterval timeInterval = new TimeInterval(inStartTime, inEndTime);
         HashMap<String, Serializable> entry = new HashMap<>();
+        if(location == null)
+        {
+            Toast.makeText(currentActivity.getApplicationContext(), "Please input search address", Toast.LENGTH_SHORT).show();
+
+            return;
+        }
+
+
         ParkingSpot.Location current_location = new ParkingSpot.Location((int)location.latitude, (int)location.longitude);
         entry.put("LOCATION", current_location);
         entry.put("TIMEINTERVAL", timeInterval);

@@ -22,6 +22,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import csci310.parkhere.R;
+import csci310.parkhere.controller.ClientController;
+import resource.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -85,6 +87,10 @@ public class PrivateProfileFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_private_profile, container, false);
 
+        ClientController controller = ClientController.getInstance();
+
+
+
         _privatProfileImage = (ImageView) v.findViewById(R.id.privatProfileImage);
         _editLogo = (ImageView) v.findViewById(R.id.editLogo);
         _usernameText = (TextView) v.findViewById(R.id.usernameText);
@@ -103,6 +109,12 @@ public class PrivateProfileFragment extends Fragment {
                 ((RenterActivity) getActivity()).switchToEditProfileFrag();
             }
         });
+
+        User user = controller.getUser();
+        if(user != null)
+        {
+            updateUserInfo(user.getUsername(), "", user.userLicense, user.userLicense);
+        }
 
         return v;
     }

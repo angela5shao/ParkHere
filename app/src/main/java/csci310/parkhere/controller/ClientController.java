@@ -2,18 +2,17 @@ package csci310.parkhere.controller;
 
 import android.app.Activity;
 import android.util.Log;
-import android.widget.EditText;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 
-import csci310.parkhere.ui.HomeActivity;
+import csci310.parkhere.ui.RegisterProviderActivity;
 import csci310.parkhere.ui.RegisterRenterActivity;
+import csci310.parkhere.ui.RenterActivity;
 import resource.CarType;
 import resource.ParkingSpot;
 import resource.Reservation;
@@ -115,6 +114,28 @@ public class ClientController {
             else
             {
                 rra.onRegisterSuccess(rra.getApplicationContext());
+            }
+        }
+        else if(currentActivity instanceof RegisterProviderActivity) {
+            RegisterProviderActivity rpa = (RegisterProviderActivity)currentActivity;
+            Log.d("UPDATEACTIVITY", "RegisterProviderActivity");
+
+            if(user == null)
+            {
+                rpa.onRegisterFailed(rpa.getApplicationContext());
+            }
+            else
+            {
+                rpa.onRegisterSuccess(rpa.getApplicationContext());
+            }
+        }
+        else if(currentActivity instanceof RenterActivity) {
+            RenterActivity ra = (RenterActivity)currentActivity;
+            Log.d("UPDATEACTIVITY", "RenterActivity");
+
+            if(user != null)
+            {
+                ra.updateUserInfo(user.getUsername(), "", user.userLicense, user.userPlate);
             }
         }
     }

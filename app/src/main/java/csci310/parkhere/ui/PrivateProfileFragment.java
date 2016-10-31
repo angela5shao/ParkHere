@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import csci310.parkhere.R;
 
@@ -42,6 +43,7 @@ public class PrivateProfileFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     ImageView _privatProfileImage, _editLogo;
+    TextView _usernameText, _pwText, _licenseIDText, _licenseplateText;
 
     public PrivateProfileFragment() {
         // Required empty public constructor
@@ -83,16 +85,21 @@ public class PrivateProfileFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_private_profile, container, false);
 
         _privatProfileImage = (ImageView) v.findViewById(R.id.privatProfileImage);
+        _editLogo = (ImageView) v.findViewById(R.id.editLogo);
+        _usernameText = (TextView) v.findViewById(R.id.usernameText);
+        _pwText = (TextView) v.findViewById(R.id.pwText);
+        _licenseIDText = (TextView) v.findViewById(R.id.licenseIDText);
+        _licenseplateText = (TextView) v.findViewById(R.id.licenseplateText);
+
         Bitmap bm = BitmapFactory.decodeResource(getResources(),
                 R.mipmap.ic_default_profile_pic);
         Bitmap conv_bm = getRoundedBitmap(bm);
         _privatProfileImage.setImageBitmap(conv_bm);
 
-        _editLogo = (ImageView) v.findViewById(R.id.editLogo);
         _editLogo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((RenterActivity)getActivity()).switchToEditProfileFrag();
+                ((RenterActivity) getActivity()).switchToEditProfileFrag();
             }
         });
 
@@ -121,6 +128,13 @@ public class PrivateProfileFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    public void updateUserInfo(String inUsername, String inPw, String inLicenseID, String inLicensePlate) {
+        _usernameText.setText(inUsername);
+        _pwText.setText(inPw);
+        _licenseIDText.setText(inLicenseID);
+        _licenseplateText.setText(inLicensePlate);
     }
 
     // return edit ImageView for parent fragmaent

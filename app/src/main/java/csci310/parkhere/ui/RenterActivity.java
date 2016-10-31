@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
+import resource.User;
 
 /**
  * Created by ivylinlaw on 10/17/16.
@@ -78,6 +79,12 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
             @Override
             public void onClick(View v) {
                 fragmentTransaction = fm.beginTransaction();
+
+                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
+                User user = clientController.getUser();
+                if (fragment instanceof PrivateProfileFragment && user != null)
+                    ((PrivateProfileFragment) fragment).updateUserInfo(user.getUsername(), "", user.userLicense, user.userPlate);
+
                 fragmentTransaction.replace(R.id.fragContainer, privateProfileFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
@@ -114,8 +121,22 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 
     public void switchToEditProfileFrag() {
         fragmentTransaction = fm.beginTransaction();
+
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
+        User user = clientController.getUser();
+        if (fragment instanceof EditProfileFragment && user != null)
+            ((EditProfileFragment) fragment).updateUserInfo(user.getUsername(), "", user.userLicense, user.userPlate);
+
+
         fragmentTransaction.replace(R.id.fragContainer, editProfileFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+
+//    public void updateUserInfo(String inUsername, String inPw, String inLicenseID, String inLicensePlate) {
+//        // STILL NEED TO ADD PROFILE PIC
+//        privateProfileFragment.updateUserInfo(inUsername, inPw, inLicenseID, inLicensePlate);
+//        editProfileFragment.updateUserInfo(inUsername, inPw, inLicenseID, inLicensePlate);
+//    }
+
 }

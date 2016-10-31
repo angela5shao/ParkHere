@@ -78,6 +78,7 @@ public class ClientCommunicator extends Thread{
                         controller.setUser(result);
                     } else if(key.equals("REGISTER")){
                         User result = (User) value;
+
                         Log.d("LOGIN", result.userName);
                         controller.setUser(result);
 

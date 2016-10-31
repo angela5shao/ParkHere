@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +22,9 @@ import com.braintreepayments.api.exceptions.InvalidArgumentException;
 import com.braintreepayments.api.models.PaymentMethodNonce;
 
 import csci310.parkhere.R;
+import csci310.parkhere.controller.ClientController;
 import resource.ParkingSpot;
+import resource.User;
 
 /**
  * Created by ivylinlaw on 10/17/16.
@@ -39,10 +42,16 @@ public class ProviderActivity extends FragmentActivity implements SpacesFragment
     Fragment privateProfileFragment;
     BraintreeFragment mBraintreeFragment;
 
+    ClientController clientController;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.provider_ui);
+
+        clientController = ClientController.getInstance();
+        clientController.setCurrentActivity(this);
 
         Toolbar providerrToolbar = (Toolbar) findViewById(R.id.providerTabbar);
         setActionBar(providerrToolbar);
@@ -77,13 +86,30 @@ public class ProviderActivity extends FragmentActivity implements SpacesFragment
         _profilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("Clicked on profile tab item");
-                try {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragContainer, privateProfileFragment).commit();
-                } catch (Exception e) {
-                    System.out.println("Profile tab item exception");
+//                System.out.println("Clicked on profile tab item");
+//                try {
+//                    getSupportFragmentManager().beginTransaction()
+//                            .replace(R.id.fragContainer, privateProfileFragment).commit();
+//                } catch (Exception e) {
+//                    System.out.println("Profile tab item exception");
+//                }
+                fragmentTransaction = fm.beginTransaction();
+
+                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
+                User user = clientController.getUser();
+                if(user == null)
+                    Log.d("PROFILE", "user is null");
+
+                if (fragment instanceof PrivateProfileFragment && user != null) {
+                    Log.d("@@@@@@@@@@@@@@ ", user.getUsername());
+                    Log.d("@@@@@@@@@@@@@@ ", user.userLicense);
+                    Log.d("@@@@@@@@@@@@@@ ", user.userPlate);
+                    ((PrivateProfileFragment) fragment).updateUserInfo(user.getUsername(), "", user.userLicense, user.userPlate);
                 }
+
+                fragmentTransaction.replace(R.id.fragContainer, privateProfileFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
 
@@ -131,15 +157,34 @@ public class ProviderActivity extends FragmentActivity implements SpacesFragment
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
-        switch (item.getItemId()) {
-//            case R.id.action_search:
-//                openSearch();
-//                return true;
-//            case R.id.action_compose:
-//                composeMessage();
-//                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+//        switch (item.getItemId()) {
+////            case R.id.action_search:
+////                openSearch();
+////                return true;
+////            case R.id.action_compose:
+////                composeMessage();
+////                return true;
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+
+        if(item.getItemId() == R.id.RenterSwitch)
+        {
+            Intent intent = new Intent(this, RenterActivity.class);
+            startActivityForResult(intent, 0);
+            clientController.getUser().userType = false;
+            return true;
+        }
+        else if(item.getItemId() == R.id.LogOut)
+        {
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivityForResult(intent, 0);
+            ClientController.resetController();
+            return true;
+        }
+        else
+        {
+            return super.onOptionsItemSelected(item);
         }
     }
 

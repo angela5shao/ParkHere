@@ -105,16 +105,7 @@ public class LoginActivity extends Activity {
         } catch(IOException e){
             e.printStackTrace();
         }
-//        final View curr_v = v;
-//        new android.os.Handler().postDelayed(
-//                new Runnable() {
-//                    public void run() {
-//                        // On complete call either onLoginSuccess or onLoginFailed
-//                        onLoginSuccess(getApplicationContext());
-//                        // onLoginFailed();
-//                        progressDialog.dismiss();
-//                    }
-//                }, 3000);
+
     }
 
     public boolean validate() {
@@ -125,11 +116,19 @@ public class LoginActivity extends Activity {
     public void onLoginSuccess(Context c) {
         progressDialog.dismiss();
 
-//        _loginButton.setEnabled(true);
         finish();
 
-        Intent myIntent = new Intent(c, RenterActivity.class);
-        startActivityForResult(myIntent, 0);
+
+        if(clientController.getUser().getType())
+        {
+            Intent myIntent = new Intent(c, RenterActivity.class);
+            startActivityForResult(myIntent, 0);
+        }
+        else
+        {
+            Intent myIntent = new Intent(c, ProviderActivity.class);
+            startActivityForResult(myIntent, 0);
+        }
     }
 
     public void onLoginFailed(Context c) {

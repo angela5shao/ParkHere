@@ -151,13 +151,6 @@ public class RegisterRenterActivity extends Activity {
 //        progressDialog.setMessage("Register failed");
         progressDialog.dismiss();
 
-
-
-//        progressDialog.dismiss();
-
-
-
-//        Toast.makeText(getBaseContext(), "register fail", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(c, HomeActivity.class);
         startActivityForResult(intent, 0);
     }

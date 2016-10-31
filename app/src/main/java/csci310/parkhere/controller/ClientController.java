@@ -30,7 +30,7 @@ public class ClientController {
     private static final long serialVersionUID = 1239123098533917283L;
 
     private User user;
-    private ArrayList<ParkingSpot> parkingSpots;
+    public ArrayList<ParkingSpot> parkingSpots;
     private ArrayList<Reservation> reservations;
     private ArrayList<Review> reviews;
     public ClientCommunicator clientCommunicator;
@@ -47,12 +47,12 @@ public class ClientController {
     public boolean toDispaySearch;
 
 
-    public ClientController() { // private constructor
+    private ClientController() { // private constructor
 
         user = null;
-        parkingSpots = null;
-        reservations = null;
-        reviews = null;
+        parkingSpots = new ArrayList<>();
+        reservations = new ArrayList<>();
+        reviews = new ArrayList<>();
         clientCommunicator = new ClientCommunicator(this);
 
         instance = this;
@@ -77,7 +77,7 @@ public class ClientController {
 
     public static void resetController()
     {
-            instance = null;
+//            instance = null;
     }
 
     // Getters
@@ -258,6 +258,22 @@ public class ClientController {
         entry.put("DISTANCE", Integer.parseInt(distance.replaceAll("[\\D]", "")));
         clientCommunicator.send("SEARCH", entry);
     }
+
+
+    public void addSpace(LatLng location, String streetAddress, String description)
+    {
+        if(location == null)
+            return;
+
+        ParkingSpot spot = new ParkingSpot(user.userID,null,location.latitude,location.longitude,streetAddress,description, "", 0 );
+        try {
+            clientCommunicator.send("ADD_PARKINGSPOT", spot);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     public ArrayList<ParkingSpot> search(String address, int dist, CarType type, TimeInterval interval, int length) {
         return null;
     }

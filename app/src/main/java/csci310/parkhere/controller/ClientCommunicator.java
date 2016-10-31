@@ -17,7 +17,10 @@ import java.util.HashMap;
 
 import resource.MyEntry;
 import resource.NetworkPackage;
+import resource.ParkingSpot;
 import resource.SearchResults;
+import resource.Time;
+import resource.TimeInterval;
 import resource.User;
 
 public class ClientCommunicator extends Thread{
@@ -91,6 +94,18 @@ public class ClientCommunicator extends Thread{
                         controller.updateActivity();
                         controller.searchResults = result;
                         Log.d("SEARCH_RESULT", "Size "+ String.valueOf(result.searchResultList.size()));
+                    } else if(key.equals("ADDSPACE")) {
+                        ParkingSpot spot = (ParkingSpot)value;
+                        Log.d("Result","add space " + String.valueOf(spot.getParkingSpotID()));
+
+                        controller.parkingSpots.add(spot);
+
+                        NetworkPackage NP = new NetworkPackage();
+                        HashMap<String, Serializable> map = new HashMap<>();
+                        map.put("PARKINGSPOTID", spot.getParkingSpotID());
+                        map.put("TIMEINTERVAL", new TimeInterval(new Time(2016,12,29,0,0,0), new Time(2017,1,1,0,0,0)));
+//                        NP.addEntry("ADDTIME", map);
+                        sendPackage(NP);
                     }
                     controller.updateActivity();
                 }
@@ -105,7 +120,7 @@ public class ClientCommunicator extends Thread{
         }
     }
 
-    public void send(String command, HashMap<String, Serializable> entry) throws IOException {
+    public void send(String command, Serializable entry) throws IOException {
         Log.v("send to server: ", command);
         NetworkPackage NP = new NetworkPackage();
         NP.addEntry(command, entry);
@@ -114,6 +129,12 @@ public class ClientCommunicator extends Thread{
             Log.d("oos","oos is null");
 
         oos.writeObject(NP);
+        oos.flush();
+    }
+
+
+    public void sendPackage(NetworkPackage np) throws IOException {
+        oos.writeObject(np);
         oos.flush();
     }
 }

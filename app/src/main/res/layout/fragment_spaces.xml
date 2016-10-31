@@ -20,6 +20,7 @@
         android:id="@+id/spaces_addbutton"
         android:background="@color/colorPrimary"
         android:textColor="@color/colorMainFont"
+        android:onClick="onAddSpaceClick"
         />
 
     <ListView

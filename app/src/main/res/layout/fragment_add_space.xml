@@ -8,6 +8,125 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:text="Add a new parking spot" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_gravity="center">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Address"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_weight="1"
+                    android:textAlignment="center"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@color/colorMainFont"
+                    android:background="@color/colorPrimary"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="[addr]"
+                    android:id="@+id/addspace_address"
+                    android:layout_alignBottom="@+id/username_label"
+                    android:layout_toRightOf="@+id/username_label"
+                    android:layout_toEndOf="@+id/username_label"
+                    android:layout_weight="1"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorMainFont"
+                    android:background="@color/colorAccent"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Start time"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_weight="1"
+                    android:textAlignment="center"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@color/colorMainFont"
+                    android:background="@color/colorPrimary"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="[time picker]"
+                    android:layout_alignBottom="@+id/pw_label"
+                    android:layout_toRightOf="@+id/pw_label"
+                    android:layout_toEndOf="@+id/pw_label"
+                    android:layout_weight="1"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorMainFont"
+                    android:background="@color/colorAccent"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="End time"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_weight="1"
+                    android:textAlignment="center"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@color/colorMainFont"
+                    android:background="@color/colorPrimary"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="[time picker]"
+                    android:layout_alignBottom="@+id/licenseID_label"
+                    android:layout_toRightOf="@+id/licenseID_label"
+                    android:layout_toEndOf="@+id/licenseID_label"
+                    android:layout_weight="1"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorMainFont"
+                    android:background="@color/colorAccent"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
 
 </FrameLayout>

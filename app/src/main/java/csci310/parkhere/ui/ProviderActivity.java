@@ -21,13 +21,14 @@ import com.braintreepayments.api.exceptions.InvalidArgumentException;
 import com.braintreepayments.api.models.PaymentMethodNonce;
 
 import csci310.parkhere.R;
+import resource.ParkingSpot;
 
 /**
  * Created by ivylinlaw on 10/17/16.
  */
 public class ProviderActivity extends FragmentActivity implements SpacesFragment.OnFragmentInteractionListener,
         SpaceDetailFragment.OnFragmentInteractionListener, PrivateProfileFragment.OnFragmentInteractionListener,
-        ReservationDetailFragment.OnFragmentInteractionListener {
+        ReservationDetailFragment.OnFragmentInteractionListener, AddSpaceFragment.OnFragmentInteractionListener {
 
     TextView _spaceLink;
     ImageView _profilePic;
@@ -182,7 +183,35 @@ public class ProviderActivity extends FragmentActivity implements SpacesFragment
         }
     }
 
-    public void onAddSpace(long spaceID) {
+    public void onAddSpace() {
+        System.out.println("SpacesFragment onAddSpace() called");
+        AddSpaceFragment addSpaceFragment = new AddSpaceFragment();
+        Bundle args = new Bundle();
+        args.putLong("param1", 012345);
+        addSpaceFragment.setArguments(args);
 
+        try {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragContainer, addSpaceFragment).commit();
+            System.out.println("onReservationSelected, replaced with reservationDetailFragment");
+        } catch (Exception e) {
+            System.out.println("Reservation item exception");
+        }
+    }
+
+    public void onAddSpaceClick(View v) {
+        System.out.println("SpacesFragment onAddSpace() called");
+        AddSpaceFragment addSpaceFragment = new AddSpaceFragment();
+        Bundle args = new Bundle();
+        args.putLong("param1", 012345);
+        addSpaceFragment.setArguments(args);
+
+        try {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragContainer, addSpaceFragment).commit();
+            System.out.println("onReservationSelected, replaced with reservationDetailFragment");
+        } catch (Exception e) {
+            System.out.println("Reservation item exception");
+        }
     }
 }

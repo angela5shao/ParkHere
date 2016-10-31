@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import csci310.parkhere.R;
+import resource.ParkingSpot;
 
 
 /**
@@ -43,7 +44,7 @@ public class SpacesFragment extends ListFragment implements AdapterView.OnItemCl
     public SpacesFragment() {
         // Required empty public constructor
 //        spacesListView = (ListView)rootView().findViewById(R.id.spaces_list);
-        addSpaceButton = (Button)getView().findViewById(R.id.spaces_addbutton);
+//        addSpaceButton = (Button)getView().findViewById(R.id.spaces_addbutton);
     }
 
     /**
@@ -71,13 +72,12 @@ public class SpacesFragment extends ListFragment implements AdapterView.OnItemCl
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        addSpaceButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                long spaceID = 13579;
-                mListener.onAddSpace(spaceID);
-            }
-        });
+//        addSpaceButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mListener.onAddSpace();
+//            }
+//        });
     }
 
     @Override
@@ -145,7 +145,7 @@ public class SpacesFragment extends ListFragment implements AdapterView.OnItemCl
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
         void onSpaceSelected(long spaceID);
-        void onAddSpace(long spaceID);
+        void onAddSpace();
     }
 
 
@@ -155,4 +155,6 @@ public class SpacesFragment extends ListFragment implements AdapterView.OnItemCl
         mListener.onSpaceSelected(123456789);
         System.out.println("CLICKED on Item: " + position);
     }
+
+
 }

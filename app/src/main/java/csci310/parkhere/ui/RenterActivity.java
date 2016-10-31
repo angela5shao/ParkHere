@@ -1,5 +1,7 @@
 package csci310.parkhere.ui;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,6 +15,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.braintreepayments.api.BraintreeFragment;
+import com.braintreepayments.api.BraintreePaymentActivity;
+import com.braintreepayments.api.models.PaymentMethodNonce;
+
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
 
@@ -20,13 +26,15 @@ import csci310.parkhere.controller.ClientController;
  * Created by ivylinlaw on 10/17/16.
  */
 public class RenterActivity extends AppCompatActivity implements SearchFragment.OnFragmentInteractionListener,
-        PrivateProfileFragment.OnFragmentInteractionListener, EditProfileFragment.OnFragmentInteractionListener {
+        PrivateProfileFragment.OnFragmentInteractionListener, EditProfileFragment.OnFragmentInteractionListener,
+        SearchSpaceDetailFragment.OnFragmentInteractionListener {
     LinearLayout _resLink, _searchLink;
     ImageView _profilePic;
     ImageView _editLogo;
     FragmentManager fm;
     FragmentTransaction fragmentTransaction;
-    Fragment searchFragment, privateProfileFragment, editProfileFragment;
+    Fragment searchFragment, privateProfileFragment, editProfileFragment, searchSpaceDetailFragment;
+    Fragment mBraintreeFragment;
     ClientController clientController;
 
     @Override
@@ -34,8 +42,8 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.renter_ui);
 
-        clientController = ClientController.getInstance();
-        clientController.setCurrentActivity(this);
+//        clientController = ClientController.getInstance();
+//        clientController.setCurrentActivity(this);
 
         Toolbar renterToolbar = (Toolbar) findViewById(R.id.renterTabbar);
         setSupportActionBar(renterToolbar);
@@ -46,13 +54,18 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         searchFragment = new SearchFragment();
         privateProfileFragment = new PrivateProfileFragment();
         editProfileFragment = new EditProfileFragment();
+        searchSpaceDetailFragment = new SearchSpaceDetailFragment();
+        mBraintreeFragment = BraintreeFragment.newInstance(this, mAuthorization);
 
         _resLink = (LinearLayout)findViewById(R.id.resLink);
         _searchLink = (LinearLayout)findViewById(R.id.searchLink);
         _profilePic = (ImageView) findViewById(R.id.profilePic);
 
-        fragmentTransaction.add(R.id.fragContainer, searchFragment);
+        fragmentTransaction.add(R.id.fragContainer, searchSpaceDetailFragment);
         fragmentTransaction.commit();
+
+//        fragmentTransaction.add(R.id.fragContainer, searchFragment);
+//        fragmentTransaction.commit();
 
         _resLink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,6 +118,28 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 //                return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE) {
+            switch (resultCode) {
+                case Activity.RESULT_OK:
+                    PaymentMethodNonce paymentMethodNonce = data.getParcelableExtra(
+                            BraintreePaymentActivity.EXTRA_PAYMENT_METHOD_NONCE
+                    );
+                    String nonce = paymentMethodNonce.getNonce();
+                    break;
+                case BraintreePaymentActivity.BRAINTREE_RESULT_DEVELOPER_ERROR:
+                case BraintreePaymentActivity.BRAINTREE_RESULT_SERVER_ERROR:
+                case BraintreePaymentActivity.BRAINTREE_RESULT_SERVER_UNAVAILABLE:
+                    // handle errors here, a throwable may be available in
+                    // data.getSerializableExtra(BraintreePaymentActivity.EXTRA_ERROR_MESSAGE)
+                    break;
+                default:
+                    break;
+            }
         }
     }
 

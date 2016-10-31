@@ -32,37 +32,47 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAzVdhdCUhLhk7nDT0mG4LxxARQPfxfP98" />
 
-        <activity
-            android:name=".ui.RenterActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".ui.ProviderActivity"
+                  android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!-- <activity android:name=".ui.HomeActivity"> -->
-        <!-- <intent-filter> -->
-        <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-        <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-        <!-- </intent-filter> -->
-        <!-- </activity> -->
-        <activity android:name=".ui.LoginActivity" />
-        <activity android:name=".ui.RegisterMainActivity" />
-        <activity android:name=".ui.RegisterRenterActivity" />
-        <activity android:name=".ui.RegisterProviderActivity" />
-        <!-- <activity android:name=".ui.RenterActivity" -->
-        <!-- android:theme="@style/AppTheme.NoActionBar"/> -->
-        <activity
-            android:name=".ui.ProviderActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+        
         <activity
             android:name=".ui.DisplaySearchActivity"
             android:label="@string/title_activity_display_search"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <!--<activity android:name=".ui.HomeActivity">-->
+
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        <!--</activity>-->
+        <activity android:name=".ui.LoginActivity"/>
+        <activity android:name=".ui.RegisterMainActivity"/>
+        <activity android:name=".ui.RegisterRenterActivity"/>
+        <activity android:name=".ui.RegisterProviderActivity"/>
+        <activity android:name=".ui.RenterActivity"
+                  android:theme="@style/AppTheme.NoActionBar"/>
+        <!--<activity android:name=".ui.ProviderActivity"-->
+                  <!--android:theme="@style/AppTheme.NoActionBar"/>-->
+
+        <!--<activity android:name="com.braintreepayments.api.BraintreeBrowserSwitchActivity"-->
+        <activity android:name="com.braintreepayments.api.BraintreeBrowserSwitchActivity"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="${applicationId}.braintree" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

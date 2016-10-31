@@ -1,5 +1,7 @@
 package csci310.parkhere.ui;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,19 +11,36 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toolbar;
+
+import com.braintreepayments.api.BraintreeFragment;
+import com.braintreepayments.api.BraintreePaymentActivity;
+import com.braintreepayments.api.PayPal;
+import com.braintreepayments.api.PaymentRequest;
+import com.braintreepayments.api.exceptions.InvalidArgumentException;
+import com.braintreepayments.api.models.PaymentMethodNonce;
+import com.braintreepayments.api.models.VenmoAccountNonce;
 
 import csci310.parkhere.R;
 
 /**
  * Created by ivylinlaw on 10/17/16.
  */
-public class ProviderActivity extends FragmentActivity implements SpacesFragment.OnFragmentInteractionListener {
+public class ProviderActivity extends FragmentActivity implements SpacesFragment.OnFragmentInteractionListener,
+        SpaceDetailFragment.OnFragmentInteractionListener, PrivateProfileFragment.OnFragmentInteractionListener,
+        ReservationDetailFragment.OnFragmentInteractionListener, SearchSpaceDetailFragment.OnFragmentInteractionListener {
+
     TextView _spaceLink;
+    ImageView _profilePic;
+
     FragmentManager fm;
     FragmentTransaction fragmentTransaction;
     Fragment spacesFragment;
+    Fragment privateProfileFragment;
+    BraintreeFragment mBraintreeFragment;
+    String mAuthorization = "clientToken";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,21 +51,53 @@ public class ProviderActivity extends FragmentActivity implements SpacesFragment
         setActionBar(providerrToolbar);
 //
         _spaceLink = (TextView)findViewById(R.id.spaceLink);
+        _profilePic = (ImageView)findViewById(R.id.profilePic);
 //
         fm = getSupportFragmentManager();
         fragmentTransaction = fm.beginTransaction();
-//        spacesFragment = fm.findFragmentById(R.id.fragment_spaces);
         spacesFragment = new SpacesFragment();
+        privateProfileFragment = new PrivateProfileFragment();
 
-        fragmentTransaction.add(R.id.spaceFragContainer, spacesFragment);
-        fragmentTransaction.commit();
+//        fragmentTransaction.add(R.id.fragContainer, spacesFragment).commit();
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragContainer, spacesFragment).commit();
+
+        // Initialize BraintreeFragment
+        try {
+            // TODO mAuthorization should be either a client token or tokenization key
+            mBraintreeFragment = BraintreeFragment.newInstance(this, mAuthorization);
+            // mBraintreeFragment is ready to use!
+        } catch (InvalidArgumentException e) {
+            // There was an issue with your authorization string.
+        }
 
         _spaceLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                System.out.println("Clicked on spaces tab item");
+                try {
+//                    fragmentTransaction.replace(R.id.fragContainer, spacesFragment)
+//                        .commit();
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragContainer, spacesFragment).commit();
+                } catch (Exception e) {
+                    System.out.println("Spaces tab item exception");
+                }
             }
         });
+        _profilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("Clicked on profile tab item");
+                try {
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragContainer, privateProfileFragment).commit();
+                } catch (Exception e) {
+                    System.out.println("Profile tab item exception");
+                }
+            }
+        });
+
     }
 
     @Override
@@ -54,6 +105,43 @@ public class ProviderActivity extends FragmentActivity implements SpacesFragment
         // Inflate the menu items for use in the action bar
         getMenuInflater().inflate(R.menu.provider_menu_ui, menu);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        System.out.println("*** ProviderActivity onActivityResult is called");
+//        super.onActivityResult(requestCode, resultCode, data);
+//        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.payment_fragment);
+//        if (fragment != null){
+//            fragment.onActivityResult(requestCode, resultCode, data);
+//        }
+
+        if (requestCode == 1) {
+            switch (resultCode) {
+                case Activity.RESULT_OK:
+                    PaymentMethodNonce paymentMethodNonce = data.getParcelableExtra(
+                            BraintreePaymentActivity.EXTRA_PAYMENT_METHOD_NONCE
+                    );
+                    String deviceData = data.getStringExtra(BraintreePaymentActivity.EXTRA_DEVICE_DATA);
+
+                    String nonce = paymentMethodNonce.getNonce();
+                    // Send the nonce to your server
+
+                    if(paymentMethodNonce instanceof VenmoAccountNonce) {
+                        VenmoAccountNonce venmoAccountNonce = (VenmoAccountNonce) paymentMethodNonce;
+                        String venmoUsername = venmoAccountNonce.getUsername();
+                    }
+                    break;
+                case BraintreePaymentActivity.BRAINTREE_RESULT_DEVELOPER_ERROR:
+                case BraintreePaymentActivity.BRAINTREE_RESULT_SERVER_ERROR:
+                case BraintreePaymentActivity.BRAINTREE_RESULT_SERVER_UNAVAILABLE:
+                    // handle errors here, a throwable may be available in
+                    // data.getSerializableExtra(BraintreePaymentActivity.EXTRA_ERROR_MESSAGE)
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     @Override
@@ -74,4 +162,69 @@ public class ProviderActivity extends FragmentActivity implements SpacesFragment
     public void onFragmentInteraction(Uri uri){
         //you can leave it empty
     }
+
+    public void onSpaceSelected(long spaceID) {
+        System.out.println("ProviderActivity onSpaceSelected for: " + spaceID);
+        SpaceDetailFragment spaceDetailFragment = new SpaceDetailFragment();
+        Bundle args = new Bundle();
+        args.putLong("param1", spaceID);
+        spaceDetailFragment.setArguments(args);
+
+        try {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragContainer, spaceDetailFragment).commit();
+            System.out.println("onSpaceSelected, replaced with sppaceDetailFragment");
+        } catch (Exception e) {
+            System.out.println("Spaces tab item exception");
+        }
+    }
+
+    public void onEditSpace(long spaceID) {
+
+    }
+
+    public void onReservationSelected(long reservationID) {
+        System.out.println("ProviderActivity onReservationSelected for: " + reservationID);
+        ReservationDetailFragment reservationDetailFragment = new ReservationDetailFragment();
+        Bundle args = new Bundle();
+        args.putLong("param1", reservationID);
+        reservationDetailFragment.setArguments(args);
+
+        try {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragContainer, reservationDetailFragment).commit();
+            System.out.println("onReservationSelected, replaced with reservationDetailFragment");
+            PayPal.authorizeAccount(mBraintreeFragment);
+        } catch (Exception e) {
+            System.out.println("Reservation item exception");
+        }
+
+//        SearchSpaceDetailFragment searchSpaceDetailFragment = new SearchSpaceDetailFragment();
+//        Bundle args = new Bundle();
+//        args.putLong("param1", reservationID);
+//        searchSpaceDetailFragment.setArguments(args);
+//
+//        try {
+//            getSupportFragmentManager().beginTransaction()
+//                    .replace(R.id.fragContainer, searchSpaceDetailFragment).commit();
+//            System.out.println("onReservationSelected, replaced with reservationDetailFragment");
+//            PayPal.authorizeAccount(mBraintreeFragment);
+//        } catch (Exception e) {
+//            System.out.println("Reservation item exception");
+//        }
+    }
+
+    // For BrainTree payment
+//    public void onBraintreeSubmit(View v) {
+////        ClientTokenRequest clientTokenRequest = new ClientTokenRequest()
+////                .customerId(aCustomerId);
+////        String clientToken = gateway.clientToken().generate(clientTokenRequest);
+//
+//        // TODO: request client token
+//        String clientToken = "eyJ2ZXJzaW9uIjoyLCJhdXRob3JpemF0aW9uRmluZ2VycHJpbnQiOiI0Y2ZjNmI4MWVlZjQ1YTA5YjM1ODQ2OWUyYWViZjI0Mjk1ZjE0MTJiZWI0M2Q3MDUxODBmMTI3NTNhNjk2M2NjfGNyZWF0ZWRfYXQ9MjAxNi0xMC0zMVQwNDo0OTo1Mi40MjA0NzgzNDMrMDAwMFx1MDAyNm1lcmNoYW50X2lkPTM0OHBrOWNnZjNiZ3l3MmJcdTAwMjZwdWJsaWNfa2V5PTJuMjQ3ZHY4OWJxOXZtcHIiLCJjb25maWdVcmwiOiJodHRwczovL2FwaS5zYW5kYm94LmJyYWludHJlZWdhdGV3YXkuY29tOjQ0My9tZXJjaGFudHMvMzQ4cGs5Y2dmM2JneXcyYi9jbGllbnRfYXBpL3YxL2NvbmZpZ3VyYXRpb24iLCJjaGFsbGVuZ2VzIjpbXSwiZW52aXJvbm1lbnQiOiJzYW5kYm94IiwiY2xpZW50QXBpVXJsIjoiaHR0cHM6Ly9hcGkuc2FuZGJveC5icmFpbnRyZWVnYXRld2F5LmNvbTo0NDMvbWVyY2hhbnRzLzM0OHBrOWNnZjNiZ3l3MmIvY2xpZW50X2FwaSIsImFzc2V0c1VybCI6Imh0dHBzOi8vYXNzZXRzLmJyYWludHJlZWdhdGV3YXkuY29tIiwiYXV0aFVybCI6Imh0dHBzOi8vYXV0aC52ZW5tby5zYW5kYm94LmJyYWludHJlZWdhdGV3YXkuY29tIiwiYW5hbHl0aWNzIjp7InVybCI6Imh0dHBzOi8vY2xpZW50LWFuYWx5dGljcy5zYW5kYm94LmJyYWludHJlZWdhdGV3YXkuY29tLzM0OHBrOWNnZjNiZ3l3MmIifSwidGhyZWVEU2VjdXJlRW5hYmxlZCI6dHJ1ZSwicGF5cGFsRW5hYmxlZCI6dHJ1ZSwicGF5cGFsIjp7ImRpc3BsYXlOYW1lIjoiQWNtZSBXaWRnZXRzLCBMdGQuIChTYW5kYm94KSIsImNsaWVudElkIjpudWxsLCJwcml2YWN5VXJsIjoiaHR0cDovL2V4YW1wbGUuY29tL3BwIiwidXNlckFncmVlbWVudFVybCI6Imh0dHA6Ly9leGFtcGxlLmNvbS90b3MiLCJiYXNlVXJsIjoiaHR0cHM6Ly9hc3NldHMuYnJhaW50cmVlZ2F0ZXdheS5jb20iLCJhc3NldHNVcmwiOiJodHRwczovL2NoZWNrb3V0LnBheXBhbC5jb20iLCJkaXJlY3RCYXNlVXJsIjpudWxsLCJhbGxvd0h0dHAiOnRydWUsImVudmlyb25tZW50Tm9OZXR3b3JrIjp0cnVlLCJlbnZpcm9ubWVudCI6Im9mZmxpbmUiLCJ1bnZldHRlZE1lcmNoYW50IjpmYWxzZSwiYnJhaW50cmVlQ2xpZW50SWQiOiJtYXN0ZXJjbGllbnQzIiwiYmlsbGluZ0FncmVlbWVudHNFbmFibGVkIjp0cnVlLCJtZXJjaGFudEFjY291bnRJZCI6ImFjbWV3aWRnZXRzbHRkc2FuZGJveCIsImN1cnJlbmN5SXNvQ29kZSI6IlVTRCJ9LCJjb2luYmFzZUVuYWJsZWQiOmZhbHNlLCJtZXJjaGFudElkIjoiMzQ4cGs5Y2dmM2JneXcyYiIsInZlbm1vIjoib2ZmIn0";
+//        PaymentRequest paymentRequest = new PaymentRequest()
+//                .clientToken(clientToken);
+//        startActivityForResult(paymentRequest.getIntent(this), 1);
+//
+//    }
 }

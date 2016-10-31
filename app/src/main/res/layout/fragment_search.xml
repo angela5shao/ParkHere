@@ -61,9 +61,11 @@
                 android:id="@+id/latlongSearchLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:visibility="gone">
                 <EditText
-                    android:layout_width="200dp"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/in_lat"
                     android:layout_marginTop="4dp"
@@ -73,7 +75,8 @@
                     android:hint="lattitude"
                     android:textColor="@color/colorSubFont"/>
                 <EditText
-                    android:layout_width="200dp"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/in_long"
                     android:layout_marginTop="4dp"

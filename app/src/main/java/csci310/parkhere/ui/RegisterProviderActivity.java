@@ -37,6 +37,7 @@ public class RegisterProviderActivity extends Activity {
         phonenum = intent.getStringExtra("PHONE_NUM");
 
         clientController = ClientController.getInstance();
+        clientController.setCurrentActivity(this);
 
         _nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,7 +58,7 @@ public class RegisterProviderActivity extends Activity {
 
         // TODO: Implement your own authentication logic here.
         try {
-            clientController.register(email, password, phonenum, licenseID, null, "provider", name);
+            clientController.register(email, password, phonenum, licenseID, "#######", "provider", name);
         } catch (IOException e) {
             e.printStackTrace();
         }

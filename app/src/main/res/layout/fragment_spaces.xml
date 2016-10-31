@@ -7,9 +7,17 @@
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:id="@+id/textview1"
+        android:id="@+id/spacesTitle_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Spaces fragment" >
+    </TextView>
+
+    <ListView
+        android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="hello_blank_fragment" />
+        android:textColor="#000000"
+        />
 
 </FrameLayout>

@@ -38,7 +38,9 @@ public class LoginActivity extends Activity {
         _loginButton=(Button)findViewById(R.id.loginButton);
         _signupLink=(TextView)findViewById(R.id.signupLink);
         _forgotPwLink=(TextView)findViewById(R.id.forgotPwLink);
+
         clientController = ClientController.getInstance();
+        clientController.setCurrentActivity(this);
 
         // Log in
         _loginButton.setOnClickListener(new View.OnClickListener() {

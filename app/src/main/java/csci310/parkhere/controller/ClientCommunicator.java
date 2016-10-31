@@ -13,7 +13,11 @@ import java.io.OptionalDataException;
 import java.io.Serializable;
 import java.net.Socket;
 import java.util.HashMap;
-import resource.*;
+
+import resource.MyEntry;
+import resource.NetworkPackage;
+import resource.SearchResults;
+import resource.User;
 
 public class ClientCommunicator extends Thread{
 

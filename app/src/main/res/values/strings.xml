@@ -5,6 +5,7 @@
     <string name="search_label">Search</string>
     <string name="private_profile_label">My profile</string>
     <string name="edit_profile_label">Edit profile</string>
+    <string name="addspace_label">Add space</string>
     <string name="private_profile_username_label">Username: </string>
     <string name="private_profile_pw_label">Password: </string>
     <string name="private_profile_licenesID_label">License ID: </string>

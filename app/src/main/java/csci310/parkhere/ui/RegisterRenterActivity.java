@@ -125,19 +125,19 @@ public class RegisterRenterActivity extends Activity {
         Intent intent = new Intent(c, HomeActivity.class);
         startActivityForResult(intent, 0);
 
-        AlertDialog.Builder _erroeDailog = new AlertDialog.Builder(this);
-        _erroeDailog.setTitle("Register Error");
-        _erroeDailog.setMessage("Username has been taken");
-        _erroeDailog.setCancelable(true);
-        _erroeDailog.setNeutralButton(android.R.string.ok,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-
-        AlertDialog alert11 = _erroeDailog.create();
-        alert11.show();
+//        AlertDialog.Builder _erroeDailog = new AlertDialog.Builder(this);
+//        _erroeDailog.setTitle("Register Error");
+//        _erroeDailog.setMessage("Username has been taken");
+//        _erroeDailog.setCancelable(true);
+//        _erroeDailog.setNeutralButton(android.R.string.ok,
+//                new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int id) {
+//                        dialog.cancel();
+//                    }
+//                });
+//
+//        AlertDialog alert11 = _erroeDailog.create();
+//        alert11.show();
     }
 
 //    public boolean validate() {

@@ -21,6 +21,12 @@
             <!--android:layout_width="wrap_content"-->
             <!--android:layout_height="wrap_content"-->
             <!--android:text="Detail text" />-->
+        <Button
+            android:id="@+id/searchspacedetail_reservebutton"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="Edit"
+            android:onClick="editSpace"/>
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

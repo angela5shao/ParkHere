@@ -120,6 +120,7 @@ public class SpaceDetailFragment extends ListFragment implements AdapterView.OnI
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
         void onReservationSelected(long spaceID);
+        void onEditSpace(long spaceID);
     }
 
     @Override
@@ -127,5 +128,9 @@ public class SpaceDetailFragment extends ListFragment implements AdapterView.OnI
                             long id) {
         mListener.onReservationSelected(123456789);
         System.out.println("CLICKED on Reservation: " + position);
+    }
+
+    public void editSpace() {
+        mListener.onEditSpace(123456789);
     }
 }

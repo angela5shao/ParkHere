@@ -3,30 +3,21 @@
 
     <item
         is-multidex="true"
-        jar="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/exploded-aar/com.android.support/design/23.4.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.3"
-        sha1="5326d9a850d491714fef8cbfaa9ea3416f0bf0d2">
-        <dex dex="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-design-23.4.0_e4569674b93e5a5d8c0eaae5db37084e5fdd2cac/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
         jumboMode="true"
         optimize="true"
         revision="23.0.3"
-        sha1="c00b8dd9757f6bd92c4c093a8ed3a5cdaeafc615">
+        sha1="0aed0afdbe616907162ec3d1c7ad8303b09ef225">
         <dex dex="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_70e03ca36666a7abcf1003c71b1d70ba2772bdd9/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.4.0/jars/classes.jar"
+        jar="/Users/angela02pd2014/.gradle/caches/modules-2/files-2.1/com.paypal.android.sdk/data-collector/2.3.11/9515fe4ad796758541c7a7a485d0d7019935adf4/data-collector-2.3.11.jar"
         jumboMode="true"
         optimize="true"
         revision="23.0.3"
-        sha1="ec75036c3c52e451d0cde50a5aedaf5fd32354a0">
-        <dex dex="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-recyclerview-v7-23.4.0_77eff158578f7924596f76e7ed66f59576143a2b/classes.dex" />
+        sha1="9515fe4ad796758541c7a7a485d0d7019935adf4">
+        <dex dex="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/data-collector-2.3.11_a0ef95f7df31d27ebb78aa7f7921044631ab44cd/classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -34,17 +25,53 @@
         jumboMode="true"
         optimize="true"
         revision="23.0.3"
-        sha1="a2cdf7baa923abb91743e812a66f57332c183ad0">
+        sha1="9d7ec4877f664b5b530a6eeb1265b4852df671b9">
         <dex dex="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/2/resource_6128e5b911f76f6e349adcb3cec240863be116e9/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/exploded-aar/com.android.support/multidex/1.0.0/jars/classes.jar"
+        jar="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/exploded-aar/com.braintreepayments.api/drop-in/2.3.8/jars/classes.jar"
         jumboMode="true"
         optimize="true"
         revision="23.0.3"
-        sha1="6666dd525c3da197e7d07f4f23ef5fc7881a697b">
-        <dex dex="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-multidex-1.0.0_525f63e399d3ec828c1ca9c8ab4d6097771f4350/classes.dex" />
+        sha1="bc5fc7133dda5289ad7922cf89828a4dbaf0246d">
+        <dex dex="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.braintreepayments.api-drop-in-2.3.8_a4d075070b8d5ba50c765353fcad975e69bf645b/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/exploded-aar/com.braintreepayments.api/core/2.3.11/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="cb9b8417cb2b5d959167ca9ae1c71cda20a4ac0e">
+        <dex dex="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.braintreepayments.api-core-2.3.11_3938f32050251e238af5dc09691f50dbe838fc64/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/exploded-aar/com.braintreepayments/card-form/2.3.2/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="8054ec1098052c14c7755bffce8da7b1da78ddf7">
+        <dex dex="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.braintreepayments-card-form-2.3.2_959794a31990d8e39bb3c5fd3c33607285ccf5bc/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/exploded-aar/com.paypal.android.sdk/paypal-one-touch/2.3.11/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="4dd31f68e48412380ea9237c4c1a6e0c874eb60a">
+        <dex dex="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.paypal.android.sdk-paypal-one-touch-2.3.11_3d4654b4eee897d277edc2c531ee16a92f001816/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/exploded-aar/com.braintreepayments.api/braintree/2.3.11/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="f192cffe2eda1a9d5d1d750243758727a30839f3">
+        <dex dex="/Users/angela02pd2014/Developer/AndroidStudioProjects/ParkHere/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.braintreepayments.api-braintree-2.3.11_4756807c73d1a161f2fc852e5d9ba19cf79ac5dd/classes.dex" />
     </item>
 
 </items>

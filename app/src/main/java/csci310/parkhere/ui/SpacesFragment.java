@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import csci310.parkhere.R;
+import resource.ParkingSpot;
 
 
 /**

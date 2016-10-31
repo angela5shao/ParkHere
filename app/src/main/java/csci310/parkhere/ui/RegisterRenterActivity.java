@@ -2,12 +2,17 @@ package csci310.parkhere.ui;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -22,6 +27,10 @@ public class RegisterRenterActivity extends Activity {
     EditText _liscenseIdText, _liscensePlateNumText;
     String name, email, password, phonenum;
     ClientController clientController;
+    private static final int REQUEST_SIGNUP = 0;
+
+    ProgressDialog progressDialog;
+    AlertDialog _errorDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +56,7 @@ public class RegisterRenterActivity extends Activity {
 
 //        clientController = (ClientController) intent.getSerializableExtra("CLIENT_CONTROLLER");
         clientController = ClientController.getInstance();
+        clientController.setCurrentActivity(this);
 
         _nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,7 +70,7 @@ public class RegisterRenterActivity extends Activity {
         String licenseID = _liscenseIdText.getText().toString();
         String licensePlate = _liscensePlateNumText.getText().toString();
 
-        final ProgressDialog progressDialog = new ProgressDialog(RegisterRenterActivity.this,
+        progressDialog = new ProgressDialog(RegisterRenterActivity.this,
                 R.style.AppTheme);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Registering...");
@@ -74,20 +84,98 @@ public class RegisterRenterActivity extends Activity {
         }
 
         final View curr_v = v;
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    //                    private View v;
-                    public void run() {
-                        // On complete call either onLoginSuccess or onLoginFailed
-                        onRegisterSuccess(curr_v);
-                        // onLoginFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
+//        new android.os.Handler().postDelayed(
+//                new Runnable() {
+//                    public void run() {
+//                        // On complete call either onLoginSuccess or onLoginFailed
+////                        onRegisterSuccess(curr_v);
+//                            // onRegisterFailed();
+//
+//                        progressDialog.dismiss();
+//                    }
+//                }, 3000);
     }
 
-    private void onRegisterSuccess(View v) {
-        Intent intent = new Intent(v.getContext(), RenterActivity.class);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == REQUEST_SIGNUP) {
+            if(resultCode == RESULT_OK) {
+                Toast.makeText(getBaseContext(), "Fragment Got it: " + requestCode + ", " + resultCode, Toast.LENGTH_SHORT).show();
+
+                // TODO: Implement successful signup logic here
+                // By default we just finish the Activity and log them in automatically
+                this.finish();
+            }
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Disable going back to the MainActivity
+        moveTaskToBack(true);
+    }
+
+    @Override
+    protected void onDestroy() {
+        try {
+            if (progressDialog != null && progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+            if(_errorDialog != null && _errorDialog.isShowing()) {
+                _errorDialog.dismiss();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.onDestroy();
+    }
+
+    public void onRegisterSuccess(Context c) {
+        progressDialog.dismiss();
+        Intent intent = new Intent(c, RenterActivity.class);
         startActivityForResult(intent, 0);
     }
+
+
+    public void onRegisterFailed(Context c) {
+        Intent intent = new Intent(c, HomeActivity.class);
+        startActivityForResult(intent, 0);
+
+        AlertDialog.Builder ErrorDailog = new AlertDialog.Builder(this);
+        ErrorDailog.setTitle("Register Error");
+        ErrorDailog.setMessage("Username has been taken");
+        ErrorDailog.setCancelable(true);
+        ErrorDailog.setNeutralButton(android.R.string.ok,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        _errorDialog = ErrorDailog.create();
+        _errorDialog.show();
+    }
+
+//    public boolean validate() {
+//        boolean valid = true;
+//
+//        String email = _emailText.getText().toString();
+//        String password = _passwordText.getText().toString();
+//
+//        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+//            _emailText.setError("enter a valid email address");
+//            valid = false;
+//        } else {
+//            _emailText.setError(null);
+//        }
+//
+//        if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
+//            _passwordText.setError("between 4 and 10 alphanumeric characters");
+//            valid = false;
+//        } else {
+//            _passwordText.setError(null);
+//        }
+//
+//        return valid;
+//    }
 }

@@ -35,13 +35,14 @@ public class HomeActivity extends Activity {
 
 
         clientController = new ClientController();
+        clientController.setCurrentActivity(this);
 
 
         _loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 myIntent = new Intent(v.getContext(), LoginActivity.class);
-                startActivityForResult(myIntent, 0);
+                startActivity(myIntent);
             }
         });
 

@@ -104,7 +104,7 @@ public class ClientCommunicator extends Thread{
                         HashMap<String, Serializable> map = new HashMap<>();
                         map.put("PARKINGSPOTID", spot.getParkingSpotID());
                         map.put("TIMEINTERVAL", new TimeInterval(new Time(2016,12,29,0,0,0), new Time(2017,1,1,0,0,0)));
-//                        NP.addEntry("ADDTIME", map);
+                        NP.addEntry("ADDTIME", map);
                         sendPackage(NP);
                     }
                     controller.updateActivity();

@@ -37,6 +37,7 @@ public class RegisterProviderActivity extends Activity {
         phonenum = intent.getStringExtra("PHONE_NUM");
 
         clientController = ClientController.getInstance();
+        clientController.setCurrentActivity(this);
 
         _nextButton.setOnClickListener(new View.OnClickListener() {
             @Override

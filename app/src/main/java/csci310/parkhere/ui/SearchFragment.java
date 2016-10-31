@@ -45,6 +45,8 @@ import csci310.parkhere.controller.ClientController;
  * create an instance of this fragment.
  */
 public class SearchFragment extends Fragment {
+    int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -133,7 +135,6 @@ public class SearchFragment extends Fragment {
         _btn_add_address.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 try {
-                    int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
                     Intent intent =
                             new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
                                     .build(getActivity());
@@ -331,7 +332,7 @@ public class SearchFragment extends Fragment {
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1) {
+        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 Place place = PlaceAutocomplete.getPlace(getContext(), data);
                 Log.i(TAG, "Place: " + place.getName());

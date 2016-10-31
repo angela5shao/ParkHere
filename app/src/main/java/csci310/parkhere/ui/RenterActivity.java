@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import csci310.parkhere.R;
+import csci310.parkhere.controller.ClientController;
 
 /**
  * Created by ivylinlaw on 10/17/16.
@@ -26,11 +27,15 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
     FragmentManager fm;
     FragmentTransaction fragmentTransaction;
     Fragment searchFragment, privateProfileFragment, editProfileFragment;
+    ClientController clientController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.renter_ui);
+
+        clientController = ClientController.getInstance();
+        clientController.setCurrentActivity(this);
 
         Toolbar renterToolbar = (Toolbar) findViewById(R.id.renterTabbar);
         setSupportActionBar(renterToolbar);

@@ -26,6 +26,7 @@ public class RegisterMainActivity extends Activity {
         setContentView(R.layout.register_main_ui);
 
         clientController = ClientController.getInstance();
+        clientController.setCurrentActivity(this);
 
         _nextButton=(Button)findViewById(R.id.nextButton);
         _nameText=(EditText)findViewById(R.id.nameText); // name

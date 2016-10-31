@@ -65,14 +65,17 @@ public class ClientCommunicator extends Thread{
                     Object value = entry.getValue();
                     System.out.println("Command Key: " + key);
                     if(key.equals("RF")){
-
+                        Log.d("CONTROLLER", "Set flag true");
+                        controller.registerFailed = true;
                     } else if(key.equals("LF")){
+                        controller.loginFailed = true;
 
                     } else if(key.equals("LOF")){
 
                     } else if(key.equals("LOGIN")){
                         User result = (User) value;
                         Log.d("LOGIN", result.userName);
+                        controller.setUser(result);
                     } else if(key.equals("REGISTER")){
                         User result = (User) value;
                         Log.d("LOGIN", result.userName);

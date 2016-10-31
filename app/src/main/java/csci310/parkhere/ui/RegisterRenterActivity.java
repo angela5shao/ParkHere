@@ -57,6 +57,8 @@ public class RegisterRenterActivity extends Activity {
         clientController = ClientController.getInstance();
         clientController.setCurrentActivity(this);
 
+
+
         _nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,7 +148,16 @@ public class RegisterRenterActivity extends Activity {
 
 
     public void onRegisterFailed(Context c) {
-        Toast.makeText(getBaseContext(), "register fail", Toast.LENGTH_SHORT).show();
+//        progressDialog.setMessage("Register failed");
+        progressDialog.dismiss();
+
+
+
+//        progressDialog.dismiss();
+
+
+
+//        Toast.makeText(getBaseContext(), "register fail", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(c, HomeActivity.class);
         startActivityForResult(intent, 0);
     }

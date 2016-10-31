@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import csci310.parkhere.ui.LoginActivity;
 import csci310.parkhere.ui.RegisterProviderActivity;
 import csci310.parkhere.ui.RegisterRenterActivity;
 import csci310.parkhere.ui.RenterActivity;
@@ -37,6 +38,10 @@ public class ClientController {
 
     private static Activity currentActivity;
 
+    public boolean registerFailed;
+    public boolean loginFailed;
+
+
     public ClientController() { // private constructor
 
         user = null;
@@ -46,6 +51,9 @@ public class ClientController {
         clientCommunicator = new ClientCommunicator(this);
 
         instance = this;
+
+        registerFailed = false;
+        loginFailed = false;
 
     }
 
@@ -135,7 +143,19 @@ public class ClientController {
 
             if(user != null)
             {
-                ra.updateUserInfo(user.getUsername(), "", user.userLicense, user.userPlate);
+//                ra.updateUserInfo(user.getUsername(), "", user.userLicense, user.userPlate);
+            }
+        }
+        else if(currentActivity instanceof LoginActivity)
+        {
+            LoginActivity la = (LoginActivity)currentActivity;
+            if(user == null)
+            {
+                la.onLoginFailed(la.getApplicationContext());
+            }
+            else
+            {
+                la.onLoginSuccess(la.getApplicationContext());
             }
         }
     }

@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
@@ -35,6 +36,9 @@ public class RegisterMainActivity extends Activity {
         _phoneText=(EditText)findViewById(R.id.phoneText); // phone number
 
         _usertypeSpinner = (Spinner) findViewById(R.id.usertypeSpinner);
+
+
+
 
         _nextButton.setOnClickListener(new View.OnClickListener() {
             @Override

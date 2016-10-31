@@ -83,6 +83,9 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 
                 Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
                 User user = clientController.getUser();
+                if(user == null)
+                    Log.d("PROFILE", "user is null");
+
                 if (fragment instanceof PrivateProfileFragment && user != null) {
                     Log.d("@@@@@@@@@@@@@@ ", user.getUsername());
                     Log.d("@@@@@@@@@@@@@@ ", user.userLicense);

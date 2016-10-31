@@ -1,17 +1,31 @@
 package csci310.parkhere.ui;
 
-import android.app.Activity;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toolbar;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import csci310.parkhere.R;
 
 /**
  * Created by ivylinlaw on 10/17/16.
  */
-public class RenterActivity extends Activity {
+public class RenterActivity extends AppCompatActivity implements SearchFragment.OnFragmentInteractionListener,
+        PrivateProfileFragment.OnFragmentInteractionListener, EditProfileFragment.OnFragmentInteractionListener {
+    LinearLayout _resLink, _searchLink;
+    ImageView _profilePic;
+    ImageView _editLogo;
+    FragmentManager fm;
+    FragmentTransaction fragmentTransaction;
+    Fragment searchFragment, privateProfileFragment, editProfileFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,7 +33,51 @@ public class RenterActivity extends Activity {
         setContentView(R.layout.renter_ui);
 
         Toolbar renterToolbar = (Toolbar) findViewById(R.id.renterTabbar);
-        setActionBar(renterToolbar);
+        setSupportActionBar(renterToolbar);
+
+        fm = getSupportFragmentManager();
+        fragmentTransaction = fm.beginTransaction();
+
+        searchFragment = new SearchFragment();
+        privateProfileFragment = new PrivateProfileFragment();
+        editProfileFragment = new EditProfileFragment();
+
+        _resLink = (LinearLayout)findViewById(R.id.resLink);
+        _searchLink = (LinearLayout)findViewById(R.id.searchLink);
+        _profilePic = (ImageView) findViewById(R.id.profilePic);
+
+        fragmentTransaction.add(R.id.fragContainer, searchFragment);
+        fragmentTransaction.commit();
+
+        _resLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//                fragmentTransaction.replace(R.id.fragContainer, );
+//                fragmentTransaction.addToBackStack(null);
+//                fragmentTransaction.commit();
+            }
+        });
+
+        _searchLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragmentTransaction = fm.beginTransaction();
+                fragmentTransaction.replace(R.id.fragContainer, searchFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
+
+        _profilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragmentTransaction = fm.beginTransaction();
+                fragmentTransaction.replace(R.id.fragContainer, privateProfileFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
     }
 
     @Override
@@ -43,5 +101,16 @@ public class RenterActivity extends Activity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void onFragmentInteraction(Uri uri){
+        //you can leave it empty
+    }
+
+    public void switchToEditProfileFrag() {
+        fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(R.id.fragContainer, editProfileFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 }

@@ -2,9 +2,33 @@
     <string name="app_name">ParkHere</string>
     <string name="login_signuplink"><u>No account yet? Sign up!</u></string>
     <string name="login_forgotpwlink"><u>Forgot password</u></string>
+    <string name="search_label">Search</string>
+    <string name="private_profile_label">My profile</string>
+    <string name="edit_profile_label">Edit profile</string>
+    <string name="private_profile_username_label">Username: </string>
+    <string name="private_profile_pw_label">Password: </string>
+    <string name="private_profile_licenesID_label">License ID: </string>
+    <string name="private_profile_licenesPlate_label">License plate #: </string>
     <string-array name="signup_usertype_spinner">
-        <item>Signup as Renter</item>
-        <item>Signup as Provider</item>
+        <item>Renter</item>
+        <item>Provider</item>
+    </string-array>
+    <string-array name="search_loctype_spinner">
+        <item>Search by address</item>
+        <item>Search by latitude, longitude</item>
+    </string-array>
+    <string-array name="search_dist_spinner">
+        <item>Within 1 mi</item>
+        <item>Within 2 mi</item>
+        <item>Within 3 mi</item>
+    </string-array>
+    <string-array name="search_cartype_spinner">
+        <item>Compact</item>
+        <item>Covered parking</item>
+        <item>Handicap</item>
+        <item>SUV</item>
+        <item>Truck</item>
+        <item>AnyCarType</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -21,4 +45,6 @@
         <item>Uranus</item>
         <item>Neptune</item>
     </string-array>
+
+    <string name="title_activity_main">MainActivity</string>
 </resources>

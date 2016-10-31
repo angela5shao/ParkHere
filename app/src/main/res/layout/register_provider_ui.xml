@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:fitsSystemWindows="true"
-    android:background="@color/colorDarkBackground">
+    android:background="@color/colorDarkBackground"
+    tools:context=".ui.RegisterProviderActivity">
 
     <LinearLayout
         android:orientation="vertical"
@@ -41,6 +43,7 @@
             android:focusable="true"
             android:textColorHighlight="#ff7eff15"
             android:textColorHint="@color/colorAccent"
+            android:textColor="@color/colorAccent"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp" />
 

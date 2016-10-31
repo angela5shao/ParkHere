@@ -4,9 +4,12 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 
 import csci310.parkhere.R;
 
@@ -18,7 +21,7 @@ import csci310.parkhere.R;
  * Use the {@link SpaceDetailFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SpaceDetailFragment extends Fragment {
+public class SpaceDetailFragment extends ListFragment implements AdapterView.OnItemClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -67,6 +70,18 @@ public class SpaceDetailFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_space_detail, container, false);
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+//        Bundle bundle = getArguments();
+//        if (bundle != null) {
+//            setText(bundle.getString("link"));
+//        }
+        ArrayAdapter adapter = ArrayAdapter.createFromResource(getActivity(), R.array.Planets, android.R.layout.simple_list_item_1);
+        setListAdapter(adapter);
+        getListView().setOnItemClickListener(this);
+    }
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -104,6 +119,13 @@ public class SpaceDetailFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-        void onEditSpace(long spaceID);
+        void onReservationSelected(long spaceID);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position,
+                            long id) {
+        mListener.onReservationSelected(123456789);
+        System.out.println("CLICKED on Reservation: " + position);
     }
 }

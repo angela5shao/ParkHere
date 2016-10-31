@@ -141,7 +141,6 @@ public class SpacesFragment extends ListFragment implements AdapterView.OnItemCl
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
                             long id) {
-//        Toast.makeText(getActivity(), "Item: " + position, Toast.LENGTH_SHORT).show();
         mListener.onSpaceSelected(123456789);
         System.out.println("CLICKED on Item: " + position);
     }

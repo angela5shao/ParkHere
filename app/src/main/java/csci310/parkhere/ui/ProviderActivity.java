@@ -18,7 +18,10 @@ import csci310.parkhere.R;
 /**
  * Created by ivylinlaw on 10/17/16.
  */
-public class ProviderActivity extends FragmentActivity implements SpacesFragment.OnFragmentInteractionListener, SpaceDetailFragment.OnFragmentInteractionListener, PrivateProfileFragment.OnFragmentInteractionListener {
+public class ProviderActivity extends FragmentActivity implements SpacesFragment.OnFragmentInteractionListener,
+        SpaceDetailFragment.OnFragmentInteractionListener, PrivateProfileFragment.OnFragmentInteractionListener,
+        ReservationDetailFragment.OnFragmentInteractionListener {
+    
     TextView _spaceLink;
     ImageView _profilePic;
 
@@ -32,8 +35,8 @@ public class ProviderActivity extends FragmentActivity implements SpacesFragment
         super.onCreate(savedInstanceState);
         setContentView(R.layout.provider_ui);
 
-        Toolbar renterToolbar = (Toolbar) findViewById(R.id.providerTabbar);
-        setActionBar(renterToolbar);
+        Toolbar providerrToolbar = (Toolbar) findViewById(R.id.providerTabbar);
+        setActionBar(providerrToolbar);
 //
         _spaceLink = (TextView)findViewById(R.id.spaceLink);
         _profilePic = (ImageView)findViewById(R.id.profilePic);
@@ -112,6 +115,7 @@ public class ProviderActivity extends FragmentActivity implements SpacesFragment
         try {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragContainer, spaceDetailFragment).commit();
+            System.out.println("onSpaceSelected, replaced with sppaceDetailFragment");
         } catch (Exception e) {
             System.out.println("Spaces tab item exception");
         }
@@ -119,5 +123,21 @@ public class ProviderActivity extends FragmentActivity implements SpacesFragment
 
     public void onEditSpace(long spaceID) {
 
+    }
+
+    public void onReservationSelected(long reservationID) {
+        System.out.println("ProviderActivity onReservationSelected for: " + reservationID);
+        ReservationDetailFragment reservationDetailFragment = new ReservationDetailFragment();
+        Bundle args = new Bundle();
+        args.putLong("param1", reservationID);
+        reservationDetailFragment.setArguments(args);
+
+        try {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragContainer, reservationDetailFragment).commit();
+            System.out.println("onReservationSelected, replaced with reservationDetailFragment");
+        } catch (Exception e) {
+            System.out.println("Reservation item exception");
+        }
     }
 }

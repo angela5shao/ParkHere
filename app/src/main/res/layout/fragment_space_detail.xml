@@ -4,15 +4,68 @@
     android:layout_height="match_parent"
     tools:context="csci310.parkhere.ui.SpaceDetailFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/title_detailfragment"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Space Detail Fragment" />
-    <TextView
-        android:id="@+id/text_detail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_gravity="center">
 
+        <TextView
+            android:id="@+id/title_detailfragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Space Detail Fragment Title" />
+        <!--<TextView-->
+            <!--android:id="@+id/text_detail"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Detail text" />-->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Address:"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_weight="1"
+                    android:textAlignment="center"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@color/colorMainFont"
+                    android:background="@color/colorPrimary"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="[address]"
+                    android:id="@+id/spacedetail_address"
+                    android:layout_alignBottom="@+id/licensePlate_label"
+                    android:layout_toRightOf="@+id/licensePlate_label"
+                    android:layout_toEndOf="@+id/licensePlate_label"
+                    android:layout_weight="1"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorMainFont"
+                    android:background="@color/colorAccent"/>
+            </LinearLayout>
+        </ScrollView>
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="#000000"
+            />
+    </LinearLayout>
 </FrameLayout>

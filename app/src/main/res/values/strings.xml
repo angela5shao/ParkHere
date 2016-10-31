@@ -47,4 +47,5 @@
     </string-array>
 
     <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_display_search">DisplaySearchActivity</string>
 </resources>

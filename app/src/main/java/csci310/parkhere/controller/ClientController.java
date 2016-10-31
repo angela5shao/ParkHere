@@ -1,5 +1,6 @@
 package csci310.parkhere.controller;
 
+import android.app.Activity;
 import android.util.Log;
 import android.widget.EditText;
 
@@ -11,6 +12,8 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 
+import csci310.parkhere.ui.HomeActivity;
+import csci310.parkhere.ui.RegisterRenterActivity;
 import resource.CarType;
 import resource.ParkingSpot;
 import resource.Reservation;
@@ -32,16 +35,24 @@ public class ClientController {
 
     private static ClientController instance;
 
+
+    private static Activity currentActivity;
+
     public ClientController() { // private constructor
 
         user = null;
         parkingSpots = null;
         reservations = null;
         reviews = null;
-        clientCommunicator = new ClientCommunicator();
+        clientCommunicator = new ClientCommunicator(this);
 
         instance = this;
 
+    }
+
+    public void setCurrentActivity(Activity ac)
+    {
+        currentActivity = ac;
     }
 
     public static ClientController getInstance() {
@@ -87,6 +98,16 @@ public class ClientController {
         }
         entry.put("USERTYPE", usertype_bool);
         clientCommunicator.send("REGISTER", entry);
+    }
+
+
+    public void updateActivity()
+    {
+        if(currentActivity instanceof HomeActivity)
+        {
+            RegisterRenterActivity ha = (RegisterRenterActivity)currentActivity;
+            ha.onReg
+        }
     }
 
     public User getProfile(long userID) {

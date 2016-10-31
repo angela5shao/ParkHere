@@ -22,11 +22,13 @@ public class ClientCommunicator extends Thread{
     private Socket socket;
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
+    private ClientController controller;
 
     int counter;
 
-    public ClientCommunicator(){
+    public ClientCommunicator(ClientController controller){
         counter = 0;
+        this.controller = controller;
         try {
             socket = new Socket("104.236.143.142", 61129);
             oos = new ObjectOutputStream(socket.getOutputStream());

@@ -5,16 +5,16 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
 import com.braintreepayments.api.BraintreeFragment;
 import com.braintreepayments.api.BraintreePaymentActivity;
@@ -23,13 +23,12 @@ import com.braintreepayments.api.models.PaymentMethodNonce;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
-import resource.ParkingSpot;
 import resource.User;
 
 /**
  * Created by ivylinlaw on 10/17/16.
  */
-public class ProviderActivity extends FragmentActivity implements SpacesFragment.OnFragmentInteractionListener,
+public class ProviderActivity extends AppCompatActivity implements SpacesFragment.OnFragmentInteractionListener,
         SpaceDetailFragment.OnFragmentInteractionListener, PrivateProfileFragment.OnFragmentInteractionListener,
         ReservationDetailFragment.OnFragmentInteractionListener, AddSpaceFragment.OnFragmentInteractionListener {
 
@@ -38,8 +37,7 @@ public class ProviderActivity extends FragmentActivity implements SpacesFragment
 
     FragmentManager fm;
     FragmentTransaction fragmentTransaction;
-    Fragment spacesFragment;
-    Fragment privateProfileFragment;
+    Fragment spacesFragment, privateProfileFragment, addSpaceFragment;
     BraintreeFragment mBraintreeFragment;
 
     ClientController clientController;
@@ -50,11 +48,11 @@ public class ProviderActivity extends FragmentActivity implements SpacesFragment
         super.onCreate(savedInstanceState);
         setContentView(R.layout.provider_ui);
 
-        clientController = ClientController.getInstance();
-        clientController.setCurrentActivity(this);
+//        clientController = ClientController.getInstance();
+//        clientController.setCurrentActivity(this);
 
         Toolbar providerrToolbar = (Toolbar) findViewById(R.id.providerTabbar);
-        setActionBar(providerrToolbar);
+        setSupportActionBar(providerrToolbar);
 //
         _spaceLink = (TextView)findViewById(R.id.spaceLink);
         _profilePic = (ImageView)findViewById(R.id.profilePic);
@@ -64,10 +62,12 @@ public class ProviderActivity extends FragmentActivity implements SpacesFragment
 //        spacesFragment = fm.findFragmentById(R.id.fragment_spaces);
         spacesFragment = new SpacesFragment();
         privateProfileFragment = new PrivateProfileFragment();
+        addSpaceFragment = new AddSpaceFragment();
 
 //        fragmentTransaction.add(R.id.fragContainer, spacesFragment).commit();
+
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragContainer, spacesFragment).commit();
+                .add(R.id.fragContainer, addSpaceFragment).commit();
 
         _spaceLink.setOnClickListener(new View.OnClickListener() {
             @Override

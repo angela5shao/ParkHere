@@ -136,7 +136,7 @@ public class DisplaySearchFragment extends Fragment {
 
     public void setSearchResultListview(String[] inSearchResults) {
         _searchresultList.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, inSearchResults));
-        DiplaySearchHelper.getListViewSize(_searchresultList);
+        DiplayListViewHelper.getListViewSize(_searchresultList);
     }
 
     /**

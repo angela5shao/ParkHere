@@ -88,7 +88,6 @@ public class PrivateProfileFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_private_profile, container, false);
 
-        ClientController controller = ClientController.getInstance();
 
 
 
@@ -116,10 +115,12 @@ public class PrivateProfileFragment extends Fragment {
             }
         });
 
+        ClientController controller = ClientController.getInstance();
+
         User user = controller.getUser();
         if(user != null)
         {
-            updateUserInfo(user.getUsername(), "", user.userLicense, user.userPlate);
+            updateUserInfo(user.userName, "", user.userLicense, user.userPlate);
         }
 
         return v;

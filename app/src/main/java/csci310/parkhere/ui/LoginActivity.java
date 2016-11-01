@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -119,7 +118,7 @@ public class LoginActivity extends Activity {
         finish();
 
 
-        if(clientController.getUser().getType())
+        if(clientController.getUser().userType)
         {
             Intent myIntent = new Intent(c, RenterActivity.class);
             startActivityForResult(myIntent, 0);

@@ -31,6 +31,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         PrivateProfileFragment.OnFragmentInteractionListener, EditProfileFragment.OnFragmentInteractionListener,
         DisplaySearchFragment.OnFragmentInteractionListener, ReservationsFragment.OnFragmentInteractionListener,
         SearchSpaceDetailFragment.OnFragmentInteractionListener {
+
     LinearLayout _resLink, _searchLink;
     ImageView _profilePic;
     ImageView _editLogo;
@@ -45,8 +46,8 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.renter_ui);
 
-        clientController = ClientController.getInstance();
-        clientController.setCurrentActivity(this);
+//        clientController = ClientController.getInstance();
+//        clientController.setCurrentActivity(this);
 
         Toolbar renterToolbar = (Toolbar) findViewById(R.id.renterTabbar);
         setSupportActionBar(renterToolbar);
@@ -66,8 +67,15 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 
         searchSpaceDetailFragment = new SearchSpaceDetailFragment();
 
-        fragmentTransaction.add(R.id.fragContainer, searchFragment);
+        //************************************************************************
+        fragmentTransaction.add(R.id.fragContainer, searchSpaceDetailFragment);
         fragmentTransaction.commit();
+        //************************************************************************
+
+//        fragmentTransaction.add(R.id.fragContainer, searchFragment);
+//        fragmentTransaction.commit();
+
+
 //        fragmentTransaction.add(R.id.fragContainer, displaySearchFragment);
 //        fragmentTransaction.commit();
 

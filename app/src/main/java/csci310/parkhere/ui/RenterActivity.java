@@ -1,5 +1,6 @@
 package csci310.parkhere.ui;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,31 +8,51 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import java.util.ArrayList;
+
 import csci310.parkhere.R;
+import csci310.parkhere.controller.ClientController;
+import resource.ParkingSpot;
+import resource.SearchResults;
+import resource.User;
 
 /**
  * Created by ivylinlaw on 10/17/16.
  */
 public class RenterActivity extends AppCompatActivity implements SearchFragment.OnFragmentInteractionListener,
         PrivateProfileFragment.OnFragmentInteractionListener, EditProfileFragment.OnFragmentInteractionListener,
+<<<<<<< HEAD
         ReservationsFragment.OnFragmentInteractionListener, ReservationDetailFragment.OnFragmentInteractionListener {
+=======
+        DisplaySearchFragment.OnFragmentInteractionListener, ReservationsFragment.OnFragmentInteractionListener {
+>>>>>>> 6f492afac3d274fc40cc85d93d8d608413014c8f
     LinearLayout _resLink, _searchLink;
     ImageView _profilePic;
     ImageView _editLogo;
     FragmentManager fm;
     FragmentTransaction fragmentTransaction;
+<<<<<<< HEAD
     Fragment searchFragment, privateProfileFragment, editProfileFragment, reservationsFragment, reservationDetailFragment;
+=======
+    Fragment searchFragment, privateProfileFragment, editProfileFragment, displaySearchFragment, reservationsFragment;
+    ClientController clientController;
+>>>>>>> 6f492afac3d274fc40cc85d93d8d608413014c8f
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.renter_ui);
+
+
+        clientController = ClientController.getInstance();
+        clientController.setCurrentActivity(this);
 
         Toolbar renterToolbar = (Toolbar) findViewById(R.id.renterTabbar);
         setSupportActionBar(renterToolbar);
@@ -42,6 +63,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         searchFragment = new SearchFragment();
         privateProfileFragment = new PrivateProfileFragment();
         editProfileFragment = new EditProfileFragment();
+        displaySearchFragment = new DisplaySearchFragment();
         reservationsFragment = new ReservationsFragment();
 
         _resLink = (LinearLayout)findViewById(R.id.resLink);
@@ -52,9 +74,13 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         reservationDetailFragment = new ReservationDetailFragment();
         fragmentTransaction.add(R.id.fragContainer, reservationDetailFragment);
         fragmentTransaction.commit();
+<<<<<<< HEAD
         //*****************************************************************
 
 //        fragmentTransaction.add(R.id.fragContainer, searchFragment);
+=======
+//        fragmentTransaction.add(R.id.fragContainer, displaySearchFragment);
+>>>>>>> 6f492afac3d274fc40cc85d93d8d608413014c8f
 //        fragmentTransaction.commit();
 
         _resLink.setOnClickListener(new View.OnClickListener() {
@@ -81,6 +107,19 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
             @Override
             public void onClick(View v) {
                 fragmentTransaction = fm.beginTransaction();
+
+                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
+                User user = clientController.getUser();
+                if(user == null)
+                    Log.d("PROFILE", "user is null");
+
+                if (fragment instanceof PrivateProfileFragment && user != null) {
+                    Log.d("@@@@@@@@@@@@@@ ", user.getUsername());
+                    Log.d("@@@@@@@@@@@@@@ ", user.userLicense);
+                    Log.d("@@@@@@@@@@@@@@ ", user.userPlate);
+                    ((PrivateProfileFragment) fragment).updateUserInfo(user.getUsername(), "", user.userLicense, user.userPlate);
+                }
+
                 fragmentTransaction.replace(R.id.fragContainer, privateProfileFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
@@ -99,16 +138,56 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
-        switch (item.getItemId()) {
-//            case R.id.action_search:
-//                openSearch();
+//        switch (item.getItemId()) {
+//            case R.id.ProviderSwitch:
+////                openSearch();
 //                return true;
 //            case R.id.action_compose:
 //                composeMessage();
 //                return true;
-            default:
+//            default:
+//                return super.onOptionsItemSelected(item);
+
+            if(item.getItemId() == R.id.ProviderSwitch) {
+                Intent intent = new Intent(this, ProviderActivity.class);
+                startActivityForResult(intent, 0);
+                clientController.getUser().userType = false;
+                return true;
+            }
+            else if(item.getItemId() == R.id.LogOut) {
+                Intent intent = new Intent(this, HomeActivity.class);
+                startActivityForResult(intent, 0);
+                ClientController.resetController();
+                return true;
+            }
+            else {
                 return super.onOptionsItemSelected(item);
+            }
+
+    }
+
+    public void displaySearchResult(SearchResults results) {
+        if(results == null)
+            return;
+
+
+        ArrayList<ParkingSpot> spotList = results.searchResultList;
+
+        String[] searchResults = new String[spotList.size()];
+        for(int i = 0; i < spotList.size(); i++)
+        {
+            searchResults[i] = spotList.get(i).getDescription();
         }
+
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
+        if (fragment instanceof DisplaySearchFragment) {
+            ((DisplaySearchFragment) fragment).setSearchResultListview(searchResults);
+        }
+
+        fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(R.id.fragContainer, displaySearchFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     public void onFragmentInteraction(Uri uri){
@@ -117,12 +196,30 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 
     public void switchToEditProfileFrag() {
         fragmentTransaction = fm.beginTransaction();
+
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
+        User user = clientController.getUser();
+        if (fragment instanceof EditProfileFragment && user != null) {
+            Log.d("############## ", user.getUsername());
+            Log.d("############## ", user.userLicense);
+            Log.d("############## ", user.userPlate);
+            ((EditProfileFragment) fragment).updateUserInfo(user.getUsername(), "", user.userLicense, user.userPlate);
+        }
+
+
         fragmentTransaction.replace(R.id.fragContainer, editProfileFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 
+//    public void updateUserInfo(String inUsername, String inPw, String inLicenseID, String inLicensePlate) {
+//        // STILL NEED TO ADD PROFILE PIC
+//        privateProfileFragment.updateUserInfo(inUsername, inPw, inLicenseID, inLicensePlate);
+//        editProfileFragment.updateUserInfo(inUsername, inPw, inLicenseID, inLicensePlate);
+//    }
+
     public void onReservationSelected(long reservationID) {
         //
     }
+
 }

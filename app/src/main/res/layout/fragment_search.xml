@@ -61,9 +61,11 @@
                 android:id="@+id/latlongSearchLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:visibility="gone">
                 <EditText
-                    android:layout_width="200dp"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/in_lat"
                     android:layout_marginTop="4dp"
@@ -73,7 +75,8 @@
                     android:hint="lattitude"
                     android:textColor="@color/colorSubFont"/>
                 <EditText
-                    android:layout_width="200dp"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/in_long"
                     android:layout_marginTop="4dp"
@@ -97,7 +100,8 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:hint="start date"
-                    android:textColor="@color/colorSubFont"/>
+                    android:textColor="@color/colorSubFont"
+                    android:editable="false"/>
 
                 <Button
                     android:layout_width="wrap_content"
@@ -123,7 +127,8 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:hint="start time"
-                    android:textColor="@color/colorSubFont"/>
+                    android:textColor="@color/colorSubFont"
+                    android:editable="false"/>
 
                 <Button
                     android:layout_width="wrap_content"
@@ -147,8 +152,9 @@
                     android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:hint="start date"
-                    android:textColor="@color/colorSubFont"/>
+                    android:hint="end date"
+                    android:textColor="@color/colorSubFont"
+                    android:editable="false"/>
 
                 <Button
                     android:layout_width="wrap_content"
@@ -174,7 +180,8 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:hint="end time"
-                    android:textColor="@color/colorSubFont"/>
+                    android:textColor="@color/colorSubFont"
+                    android:editable="false"/>
 
                 <Button
                     android:layout_width="wrap_content"

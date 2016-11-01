@@ -2,20 +2,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="csci310.parkhere.ui.SpaceDetailFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:layout_gravity="center">
-
-        <TextView
-            android:id="@+id/title_detailfragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Space Detail Fragment Title" />
+        android:orientation="vertical">
         <!--<TextView-->
             <!--android:id="@+id/text_detail"-->
             <!--android:layout_width="wrap_content"-->
@@ -23,49 +16,192 @@
             <!--android:text="Detail text" />-->
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp">
+            android:layout_height="wrap_content">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp">
-                <TextView
+                android:orientation="vertical">
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Address:"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_weight="1"
-                    android:textAlignment="center"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:textColor="@color/colorMainFont"
-                    android:background="@color/colorPrimary"/>
+                    android:orientation="vertical"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Address:"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_weight="1"
+                        android:textAlignment="center"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:textColor="@color/colorMainFont"
+                        android:background="@color/colorPrimary"/>
 
-                <TextView
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="[address]"
+                        android:id="@+id/spacedetail_address"
+                        android:layout_alignBottom="@+id/licensePlate_label"
+                        android:layout_toRightOf="@+id/licensePlate_label"
+                        android:layout_toEndOf="@+id/licensePlate_label"
+                        android:layout_weight="1"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorMainFont"
+                        android:background="@color/colorAccent"/>
+                </LinearLayout>
+
+                <com.imanoweb.calendarview.CustomCalendarView
+                    android:id="@+id/calendar_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="[address]"
-                    android:id="@+id/spacedetail_address"
-                    android:layout_alignBottom="@+id/licensePlate_label"
-                    android:layout_toRightOf="@+id/licensePlate_label"
-                    android:layout_toEndOf="@+id/licensePlate_label"
-                    android:layout_weight="1"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:textAlignment="center"
+                    android:background="@color/colorLightBackground"
+                    app:calendarBackgroundColor="@color/colorLightBackground"
+                    app:calendarTitleTextColor="@color/colorSubFont"
+                    app:currentDayOfMonthColor="@color/colorAccent"
+                    app:dayOfMonthTextColor="@color/colorSubFont"
+                    app:dayOfWeekTextColor="@color/colorSubFont"
+                    app:disabledDayBackgroundColor="@color/colorLightBackground"
+                    app:disabledDayTextColor="@color/colorPrimaryDark"
+                    app:selectedDayBackgroundColor="@color/colorPrimary"
+                    app:titleLayoutBackgroundColor="@color/colorLightBackground"
+                    app:weekLayoutBackgroundColor="@color/colorLightBackground"/>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:textColor="@color/colorMainFont"
-                    android:background="@color/colorAccent"/>
+                    android:id="@+id/btn_add_space"
+                    android:clickable="false"
+                    android:text="add space"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/addTimeForSpaceLayout"
+                    android:visibility="gone">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:id="@+id/in_start_date"
+                            android:layout_marginTop="4dp"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:hint="start date"
+                            android:textColor="@color/colorSubFont"
+                            android:editable="false"/>
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:id="@+id/in_start_time"
+                            android:layout_marginTop="6dp"
+                            android:layout_below="@+id/in_end_date"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:hint="start time"
+                            android:textColor="@color/colorSubFont"
+                            android:editable="false"/>
+
+                        <Button
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="SELECT START TIME"
+                            android:id="@+id/btn_start_time" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:id="@+id/in_end_date"
+                            android:layout_marginTop="4dp"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:hint="end date"
+                            android:textColor="@color/colorSubFont"
+                            android:editable="false"/>
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:id="@+id/in_end_time"
+                            android:layout_marginTop="6dp"
+                            android:layout_below="@+id/in_end_date"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:hint="end time"
+                            android:textColor="@color/colorSubFont"
+                            android:editable="false"/>
+
+                        <Button
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="SELECT END TIME"
+                            android:id="@+id/btn_end_time" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:id="@+id/in_price"
+                            android:layout_marginTop="4dp"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:hint="enter price ($/hr)"
+                            android:textColor="@color/colorSubFont"/>
+
+                        <Button
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+                            android:text="confirm"
+                            android:id="@+id/btn_add_confirm"
+                            android:background="@color/colorAccent"
+                            android:textColor="@color/colorMainFont"/>
+                        </LinearLayout>
+                </LinearLayout>
+
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:id="@+id/timeList"/>
             </LinearLayout>
         </ScrollView>
-        <ListView
-            android:id="@android:id/list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textColor="#000000"
-            />
+        <!--<ListView-->
+            <!--android:id="@android:id/list"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:textColor="#000000"-->
+            <!--/>-->
     </LinearLayout>
 </FrameLayout>

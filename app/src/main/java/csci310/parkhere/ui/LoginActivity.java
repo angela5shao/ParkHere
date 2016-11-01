@@ -2,6 +2,7 @@ package csci310.parkhere.ui;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,7 +12,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+
 import csci310.parkhere.R;
+import csci310.parkhere.controller.ClientController;
 
 /**
  * Created by ivylinlaw on 10/15/16.
@@ -20,8 +24,14 @@ public class LoginActivity extends Activity {
     private static final String TAG = "LoginActivity";
 
     Button _loginButton;
-    EditText email, password;
+
+    EditText _email, _password;
+    String email, password;
+
     TextView _signupLink, _forgotPwLink;
+    ClientController clientController;
+
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +41,9 @@ public class LoginActivity extends Activity {
         _loginButton=(Button)findViewById(R.id.loginButton);
         _signupLink=(TextView)findViewById(R.id.signupLink);
         _forgotPwLink=(TextView)findViewById(R.id.forgotPwLink);
+
+        clientController = ClientController.getInstance();
+        clientController.setCurrentActivity(this);
 
         // Log in
         _loginButton.setOnClickListener(new View.OnClickListener() {
@@ -67,17 +80,19 @@ public class LoginActivity extends Activity {
     public void login(View v) {
         Log.d(TAG, "Login");
 
-        email=(EditText)findViewById(R.id.emailText);
-        password=(EditText)findViewById(R.id.passwordText);
+        _email=(EditText)findViewById(R.id.emailText);
+        _password=(EditText)findViewById(R.id.passwordText);
+        email = _email.getText().toString();
+        password = _password.getText().toString();
 
         if (!validate()) {
-            onLoginFailed();
+            onLoginFailed(getApplicationContext());
             return;
         }
 
         _loginButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
+        progressDialog = new ProgressDialog(LoginActivity.this,
                 R.style.AppTheme);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
@@ -85,17 +100,12 @@ public class LoginActivity extends Activity {
 
         // TODO: Implement your own authentication logic here.
 
-        final View curr_v = v;
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-//                    private View v;
-                    public void run() {
-                        // On complete call either onLoginSuccess or onLoginFailed
-                        onLoginSuccess(curr_v);
-                        // onLoginFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
+        try {
+            clientController.login(email, password);
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+
     }
 
     public boolean validate() {
@@ -103,17 +113,30 @@ public class LoginActivity extends Activity {
         return true;
     }
 
-    public void onLoginSuccess(View v) {
-        _loginButton.setEnabled(true);
+    public void onLoginSuccess(Context c) {
+        progressDialog.dismiss();
+
         finish();
 
-        Intent myIntent = new Intent(v.getContext(), RenterActivity.class);
-        startActivityForResult(myIntent, 0);
+
+        if(clientController.getUser().getType())
+        {
+            Intent myIntent = new Intent(c, RenterActivity.class);
+            startActivityForResult(myIntent, 0);
+        }
+        else
+        {
+            Intent myIntent = new Intent(c, ProviderActivity.class);
+            startActivityForResult(myIntent, 0);
+        }
     }
 
-    public void onLoginFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
-        _loginButton.setEnabled(true);
+    public void onLoginFailed(Context c) {
+        progressDialog.dismiss();
+
+
+        Intent intent = new Intent(c, HomeActivity.class);
+        startActivityForResult(intent, 0);
     }
 }
 

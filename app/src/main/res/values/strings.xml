@@ -6,6 +6,7 @@
     <string name="res_label">Reservation</string>
     <string name="private_profile_label">My profile</string>
     <string name="edit_profile_label">Edit profile</string>
+    <string name="addspace_label">Add space</string>
     <string name="private_profile_username_label">Username: </string>
     <string name="private_profile_pw_label">Password: </string>
     <string name="private_profile_licenesID_label">License ID: </string>
@@ -30,6 +31,11 @@
         <item>SUV</item>
         <item>Truck</item>
         <item>AnyCarType</item>
+    </string-array>
+    <string-array name="cancel_policy_spinner">
+        <item>Free cancellation</item>
+        <item>10% penalty for cancellation</item>
+        <item>15% penalty for cancellation</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->

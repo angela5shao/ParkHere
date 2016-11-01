@@ -14,7 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 
 import com.braintreepayments.api.BraintreeFragment;
 import com.braintreepayments.api.BraintreePaymentActivity;
@@ -32,7 +32,7 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         SpaceDetailFragment.OnFragmentInteractionListener, PrivateProfileFragment.OnFragmentInteractionListener,
         ReservationDetailFragment.OnFragmentInteractionListener, AddSpaceFragment.OnFragmentInteractionListener {
 
-    TextView _spaceLink;
+    LinearLayout _spaceLink;
     ImageView _profilePic;
 
     FragmentManager fm;
@@ -54,7 +54,7 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         Toolbar providerrToolbar = (Toolbar) findViewById(R.id.providerTabbar);
         setSupportActionBar(providerrToolbar);
 //
-        _spaceLink = (TextView)findViewById(R.id.spaceLink);
+        _spaceLink = (LinearLayout)findViewById(R.id.spaceLink);
         _profilePic = (ImageView)findViewById(R.id.profilePic);
 //
         fm = getSupportFragmentManager();
@@ -64,14 +64,15 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         privateProfileFragment = new PrivateProfileFragment();
         addSpaceFragment = new AddSpaceFragment();
 
-//        fragmentTransaction.add(R.id.fragContainer, spacesFragment).commit();
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragContainer, spacesFragment).commit();
 
 //        getSupportFragmentManager().beginTransaction()
 //                .add(R.id.fragContainer, addSpaceFragment).commit();
 
         spaceDetailFragment = new SpaceDetailFragment();
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragContainer, spaceDetailFragment).commit();
+//        getSupportFragmentManager().beginTransaction()
+//                .add(R.id.fragContainer, spaceDetailFragment).commit();
 
         _spaceLink.setOnClickListener(new View.OnClickListener() {
             @Override

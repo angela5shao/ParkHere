@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +14,6 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import csci310.parkhere.R;
-import resource.ParkingSpot;
 
 
 /**
@@ -152,8 +150,8 @@ public class SpacesFragment extends ListFragment implements AdapterView.OnItemCl
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
                             long id) {
-        mListener.onSpaceSelected(123456789);
-        System.out.println("CLICKED on Item: " + position);
+//        mListener.onSpaceSelected(123456789);
+        System.out.println("CLICKED on Item: "+position);
     }
 
 

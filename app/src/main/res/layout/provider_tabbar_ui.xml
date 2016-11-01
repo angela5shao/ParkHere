@@ -26,7 +26,8 @@
 
             <LinearLayout android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="6"
+                android:id="@+id/spaceLink"
+                android:layout_weight="1"
                 android:layout_gravity="center">
                 <ImageView
                     android:src="@mipmap/ic_space"
@@ -36,7 +37,6 @@
                     android:layout_gravity="center"/>
 
                 <TextView
-                    android:id="@+id/spaceLink"
                     android:text="Spaces"
                     android:textColor="@color/colorMainFont"
                     android:orientation="horizontal"
@@ -44,6 +44,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"/>
             </LinearLayout>
+            <LinearLayout android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:layout_gravity="center"/>
         </LinearLayout>
     </FrameLayout>
 </android.support.v7.widget.Toolbar>

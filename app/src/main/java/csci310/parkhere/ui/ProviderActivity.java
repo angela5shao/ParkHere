@@ -66,6 +66,12 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         spacesFragment = new SpacesFragment();
         fragmentTransaction.add(R.id.fragContainer, spacesFragment).commit();
         ArrayList<ParkingSpot> parkingSpots = clientController.getSpaces(clientController.getUser().userID);
+
+        // TODO: Fix this; want to call setParkingSpot on spacesFragment
+        Fragment spcfragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
+        if (spcfragment instanceof SpacesFragment) {
+            ((SpacesFragment) spcfragment).setParkingSpots(parkingSpots);
+        }
 //        spacesFragment.setParkingSpots(parkingSpots);
 
         privateProfileFragment = new PrivateProfileFragment();
@@ -209,7 +215,7 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
     }
 
     public void onSpaceSelected(int spacePositionInList) {
-//        System.out.println("ProviderActivity onSpaceSelected for: " + spacePositionInList);
+        System.out.println("ProviderActivity onSpaceSelected for: " + spacePositionInList);
 
         // TODO: Get ParkingSpot given position in list
         if (clientController.parkingSpots.size() == 0) {
@@ -270,6 +276,20 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
             System.out.println("onReservationSelected, replaced with reservationDetailFragment");
         } catch (Exception e) {
             System.out.println("Reservation item exception");
+        }
+    }
+
+    public void returnToSpaces() {
+        Fragment spcfragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
+        if (spcfragment instanceof SpacesFragment) {
+            ((SpacesFragment) spcfragment).refresh();
+        }
+
+        try {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragContainer, spacesFragment).commit();
+        } catch (Exception e) {
+            System.out.println("Spaces tab item exception");
         }
     }
 }

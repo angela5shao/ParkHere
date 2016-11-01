@@ -17,6 +17,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import csci310.parkhere.R;
+import csci310.parkhere.controller.ClientController;
 import resource.ParkingSpot;
 
 
@@ -36,6 +37,7 @@ public class SpacesFragment extends ListFragment implements AdapterView.OnItemCl
     private ListView spacesListView;
     private Button addSpaceButton;
     private ArrayList<ParkingSpot> mParkingSpots;
+    private ArrayAdapter mAdapter;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -52,6 +54,13 @@ public class SpacesFragment extends ListFragment implements AdapterView.OnItemCl
 
     public void setParkingSpots(ArrayList<ParkingSpot> spots) {
         mParkingSpots = spots;
+    }
+
+    public void refresh() { // Called by ProviderActivity after adding a new spot
+        System.out.println("REFRESH SpacesFragment");
+        ClientController controller = ClientController.getInstance();
+        ArrayList<ParkingSpot> spaces = controller.parkingSpots;
+        mAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, spaces);
     }
 
     /**
@@ -90,8 +99,6 @@ public class SpacesFragment extends ListFragment implements AdapterView.OnItemCl
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Get list of my spaces
-
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_spaces, container, false);
     }
@@ -103,9 +110,15 @@ public class SpacesFragment extends ListFragment implements AdapterView.OnItemCl
 //        if (bundle != null) {
 //            setText(bundle.getString("link"));
 //        }
-        ArrayAdapter adapter = ArrayAdapter.createFromResource(getActivity(), R.array.Planets, android.R.layout.simple_list_item_1);
-        setListAdapter(adapter);
+
+        // Get & update list of my spaces
+        ClientController controller = ClientController.getInstance();
+        ArrayList<ParkingSpot> spaces = controller.parkingSpots;
+//        ArrayAdapter adapter = ArrayAdapter.createFromResource(getActivity(), R.array.Planets, android.R.layout.simple_list_item_1);
+        mAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, spaces);
+        setListAdapter(mAdapter);
         getListView().setOnItemClickListener(this);
+        System.out.println("GET SPACES in SpacesFragment");
     }
 
     // TODO: Rename method, update argument and hook method into UI event

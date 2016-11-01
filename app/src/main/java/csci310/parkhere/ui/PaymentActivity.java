@@ -51,7 +51,7 @@ public class PaymentActivity extends Activity {
     }
 
     // For BrainTree payment
-    public void onBraintreeSubmit(View v) {
+    public void onBraintreeSubmit() {
 //        ClientTokenRequest clientTokenRequest = new ClientTokenRequest()
 //                .customerId(aCustomerId);
 //        String clientToken = gateway.clientToken().generate(clientTokenRequest);
@@ -63,6 +63,21 @@ public class PaymentActivity extends Activity {
         startActivityForResult(paymentRequest.getIntent(this), REQUEST_CODE);
     }
 
+//    void postNonceToServer(String nonce) {
+//        AsyncHttpClient client = new AsyncHttpClient();
+//        RequestParams params = new RequestParams();
+//        params.put("payment_method_nonce", nonce);
+//        client.post("http://your-server/checkout", params,
+//                new AsyncHttpResponseHandler() {
+//                    // Your implementation here
+//                }
+//        );
+//    }
+
+    public void onPaymentMethodNonceCreated(PaymentMethodNonce paymentMethodNonce) {
+        // Send this nonce to your server
+        String nonce = paymentMethodNonce.getNonce();
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

@@ -32,21 +32,77 @@ tools:context="csci310.parkhere.ui.SpaceDetailFragment">
     <!--android:text="Detail text" />-->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp">
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="@string/res_label"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="36dp"
+                android:layout_marginBottom="12dp"
+                android:textAlignment="center"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Address:"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:textColor="@color/colorMainFont"
+                android:background="@color/colorPrimary"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="[address]"
+                android:id="@+id/spacedetail_address"
+                android:layout_weight="1"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:textAlignment="center"
+                android:textColor="@color/colorMainFont"
+                android:background="@color/colorAccent"/>
+
+            <!--<FrameLayout-->
+                <!--android:id="@+id/mapContainer"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_marginTop="12dp"-->
+                <!--android:layout_marginBottom="12dp"/>-->
+            <!--<com.google.android.gms.maps.MapView-->
+                <!--android:id="@+id/mapContainer"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="200dp"-->
+                <!--android:layout_marginTop="12dp"/>-->
+            <fragment
+                android:id="@+id/map"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="12dp"
+                class="com.google.android.gms.maps.SupportMapFragment"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="12dp">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Reservation:"
+                    android:text="Start time:"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
@@ -60,11 +116,8 @@ tools:context="csci310.parkhere.ui.SpaceDetailFragment">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="[reservation]"
-                    android:id="@+id/reservationdetail_detail"
-                    android:layout_alignBottom="@+id/licensePlate_label"
-                    android:layout_toRightOf="@+id/licensePlate_label"
-                    android:layout_toEndOf="@+id/licensePlate_label"
+                    android:text="[start time]"
+                    android:id="@+id/start_time_label"
                     android:layout_weight="1"
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
@@ -73,21 +126,71 @@ tools:context="csci310.parkhere.ui.SpaceDetailFragment">
                     android:background="@color/colorAccent"/>
             </LinearLayout>
 
-            <com.imanoweb.calendarview.CustomCalendarView
-                android:id="@+id/reservationdetail_calendar_view"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorLightBackground"
-                app:calendarBackgroundColor="@color/colorLightBackground"
-                app:calendarTitleTextColor="@color/colorSubFont"
-                app:currentDayOfMonthColor="@color/colorAccent"
-                app:dayOfMonthTextColor="@color/colorSubFont"
-                app:dayOfWeekTextColor="@color/colorSubFont"
-                app:disabledDayBackgroundColor="@color/colorLightBackground"
-                app:disabledDayTextColor="@color/colorPrimaryDark"
-                app:selectedDayBackgroundColor="@color/colorPrimary"
-                app:titleLayoutBackgroundColor="@color/colorLightBackground"
-                app:weekLayoutBackgroundColor="@color/colorLightBackground"/>
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="End time:"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_weight="1"
+                    android:textAlignment="center"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@color/colorMainFont"
+                    android:background="@color/colorPrimary"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="[end time]"
+                    android:id="@+id/end_time_label"
+                    android:layout_weight="1"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorMainFont"
+                    android:background="@color/colorAccent"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Renter:"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_weight="1"
+                    android:textAlignment="center"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@color/colorMainFont"
+                    android:background="@color/colorPrimary"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="[renter username]"
+                    android:id="@+id/renter_username_label"
+                    android:layout_weight="1"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorMainFont"
+                    android:background="@color/colorAccent"/>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
     <!--<ListView-->

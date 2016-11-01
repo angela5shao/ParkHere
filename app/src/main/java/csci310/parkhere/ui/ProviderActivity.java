@@ -14,7 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 
 import com.braintreepayments.api.BraintreeFragment;
 import com.braintreepayments.api.BraintreePaymentActivity;
@@ -35,7 +35,7 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         SpaceDetailFragment.OnFragmentInteractionListener, PrivateProfileFragment.OnFragmentInteractionListener,
         ReservationDetailFragment.OnFragmentInteractionListener, AddSpaceFragment.OnFragmentInteractionListener {
 
-    TextView _spaceLink;
+    LinearLayout _spaceLink;
     ImageView _profilePic;
 
     FragmentManager fm;
@@ -57,7 +57,7 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         Toolbar providerrToolbar = (Toolbar) findViewById(R.id.providerTabbar);
         setSupportActionBar(providerrToolbar);
 //
-        _spaceLink = (TextView)findViewById(R.id.spaceLink);
+        _spaceLink = (LinearLayout)findViewById(R.id.spaceLink);
         _profilePic = (ImageView)findViewById(R.id.profilePic);
 //
         fm = getSupportFragmentManager();
@@ -82,8 +82,8 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 //                .add(R.id.fragContainer, addSpaceFragment).commit();
 
         spaceDetailFragment = new SpaceDetailFragment();
-//        getSupportFragmentManager().beginTransaction()
-//                .add(R.id.fragContainer, spaceDetailFragment).commit();
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragContainer, spaceDetailFragment).commit();
 
         _spaceLink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,10 +117,10 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
                     Log.d("PROFILE", "user is null");
 
                 if (fragment instanceof PrivateProfileFragment && user != null) {
-                    Log.d("@@@@@@@@@@@@@@ ", user.getUsername());
+                    Log.d("@@@@@@@@@@@@@@ ", user.userName);
                     Log.d("@@@@@@@@@@@@@@ ", user.userLicense);
                     Log.d("@@@@@@@@@@@@@@ ", user.userPlate);
-                    ((PrivateProfileFragment) fragment).updateUserInfo(user.getUsername(), "", user.userLicense, user.userPlate);
+                    ((PrivateProfileFragment) fragment).updateUserInfo(user.userName, "", user.userLicense, user.userPlate);
                 }
 
                 fragmentTransaction.replace(R.id.fragContainer, privateProfileFragment);

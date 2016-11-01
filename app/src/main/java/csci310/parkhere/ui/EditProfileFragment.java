@@ -89,7 +89,7 @@ public class EditProfileFragment extends Fragment {
         User user = controller.getUser();
         if(user != null)
         {
-            updateUserInfo(user.getUsername(), "", user.userLicense, user.userPlate);
+            updateUserInfo(user.userName, "", user.userLicense, user.userPlate);
         }
 
         return v;

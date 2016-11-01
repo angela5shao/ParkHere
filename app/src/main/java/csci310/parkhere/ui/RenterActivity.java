@@ -20,13 +20,13 @@ import csci310.parkhere.R;
  */
 public class RenterActivity extends AppCompatActivity implements SearchFragment.OnFragmentInteractionListener,
         PrivateProfileFragment.OnFragmentInteractionListener, EditProfileFragment.OnFragmentInteractionListener,
-        ReservationsFragment.OnFragmentInteractionListener {
+        ReservationsFragment.OnFragmentInteractionListener, ReservationDetailFragment.OnFragmentInteractionListener {
     LinearLayout _resLink, _searchLink;
     ImageView _profilePic;
     ImageView _editLogo;
     FragmentManager fm;
     FragmentTransaction fragmentTransaction;
-    Fragment searchFragment, privateProfileFragment, editProfileFragment, reservationsFragment;
+    Fragment searchFragment, privateProfileFragment, editProfileFragment, reservationsFragment, reservationDetailFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +48,14 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         _searchLink = (LinearLayout)findViewById(R.id.searchLink);
         _profilePic = (ImageView) findViewById(R.id.profilePic);
 
-        fragmentTransaction.add(R.id.fragContainer, searchFragment);
+        //*****************************************************************
+        reservationDetailFragment = new ReservationDetailFragment();
+        fragmentTransaction.add(R.id.fragContainer, reservationDetailFragment);
         fragmentTransaction.commit();
+        //*****************************************************************
+
+//        fragmentTransaction.add(R.id.fragContainer, searchFragment);
+//        fragmentTransaction.commit();
 
         _resLink.setOnClickListener(new View.OnClickListener() {
             @Override

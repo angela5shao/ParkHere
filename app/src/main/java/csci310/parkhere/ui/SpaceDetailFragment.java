@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Locale;
 
 import csci310.parkhere.R;
+import csci310.parkhere.controller.ClientController;
 import csci310.parkhere.resource.CalendarUtils;
 import resource.ParkingSpot;
 import resource.Time;
@@ -76,14 +77,14 @@ public class SpaceDetailFragment extends Fragment {
     Date selectedStartDate;
     Date selectedEndDate;
 
-    //*******************************************************************************
-    // FOR TESTING DELETE LATER!!!
-    // TimeInterval(Time start, Time end)
-    // Time (int year, int month, int dayOfMonth, int hourOfDay, int minute, int second)
-    Time start1 = new Time (2016, 9, 20, 0, 0, 0);
-    Time end1 = new Time (2016, 9, 25, 0, 0, 0);
-    TimeInterval interval1 = new TimeInterval(start1, end1);
-    //*******************************************************************************
+//    //*******************************************************************************
+//    // FOR TESTING DELETE LATER!!!
+//    // TimeInterval(Time start, Time end)
+//    // Time (int year, int month, int dayOfMonth, int hourOfDay, int minute, int second)
+//    Time start1 = new Time (2016, 9, 20, 0, 0, 0);
+//    Time end1 = new Time (2016, 9, 25, 0, 0, 0);
+//    TimeInterval interval1 = new TimeInterval(start1, end1);
+//    //*******************************************************************************
 
 //    // Keep track of current selected time
 //    TwoEntryQueue<Time> currSelectedTime = new TwoEntryQueue<Time>();
@@ -132,12 +133,12 @@ public class SpaceDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_space_detail, container, false);
-
-        //*******************************************************************************
-        // FOR TESTING DELETE LATER!!!
-        postedSpaceTimeIntervals.add(interval1);
-        updatePostedSpaceTimeIntervalsGC(postedSpaceTimeIntervals);
-        //*******************************************************************************
+//
+//        //*******************************************************************************
+//        // FOR TESTING DELETE LATER!!!
+//        postedSpaceTimeIntervals.add(interval1);
+//        updatePostedSpaceTimeIntervalsGC(postedSpaceTimeIntervals);
+//        //*******************************************************************************
 
         _spacedetail_address = (TextView)v.findViewById(R.id.spacedetail_address);
 
@@ -211,6 +212,18 @@ public class SpaceDetailFragment extends Fragment {
 
         selectedStartDate = null;
         selectedEndDate = null;
+
+
+//        ********************************
+        ClientController controller = ClientController.getInstance();
+        controller.requestMyParkingSpotList();
+        thisParkingSpot = controller.parkingSpots.get(0);
+
+        controller.requestSpotTimeInterval(thisParkingSpot);
+        updatePostedSpaceTimeIntervalsGC(thisParkingSpot.getTimeIntervalList());
+//        ********************************
+
+
 
         //Handling custom calendar events
         calendarView.setCalendarListener(new CalendarListener() {
@@ -286,6 +299,7 @@ public class SpaceDetailFragment extends Fragment {
 
                String price =  _in_price.getText().toString();
                 // call client controller
+
 
                 _addTimeForSpaceLayout.setVisibility(View.GONE);
                 Toast.makeText(getContext(), "Add space requested", Toast.LENGTH_SHORT).show();

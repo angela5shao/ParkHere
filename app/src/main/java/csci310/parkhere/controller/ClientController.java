@@ -295,7 +295,7 @@ public class ClientController {
             return;
 
         NetworkPackage NP = new NetworkPackage();
-        NP.addEntry("FETCHRESERVATION", user.getID());
+        NP.addEntry("FETCHRESERVATION", user.userID);
         try {
             clientCommunicator.sendPackage(NP);
         } catch (IOException e) {
@@ -309,7 +309,7 @@ public class ClientController {
             return;
 
         NetworkPackage NP = new NetworkPackage();
-        NP.addEntry("FETCHPARKINGSPOT", user.getID());
+        NP.addEntry("FETCHPARKINGSPOT", user.userID);
         try {
             clientCommunicator.sendPackage(NP);
         } catch (IOException e) {
@@ -333,6 +333,18 @@ public class ClientController {
         }
     }
 
+
+    public void setSpotTimeInterval(long spotID, ArrayList<TimeInterval> intervals)
+    {
+        for(int i = 0; i < parkingSpots.size(); i++)
+        {
+            ParkingSpot spot = parkingSpots.get(i);
+            if(spot.getParkingSpotID() == spotID)
+            {
+                spot.setTimeIntervalList(intervals);
+            }
+        }
+    }
 
 
 

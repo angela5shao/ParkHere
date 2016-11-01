@@ -83,12 +83,6 @@ public class ClientCommunicator extends Thread{
                     } else if(key.equals("REGISTER")){
                         User result = (User) value;
 
-
-                        Log.d("REGISTER", result.userName + "NULL? " + (result == null));
-                        Log.d("REGISTER", result.userLicense + "NULL? " + (result == null));
-
-                        Log.d("REGISTER", result.userPlate + "NULL? " + (result == null));
-
                         controller.setUser(result);
 
                     } else if(key.equals("LOGOUT")){
@@ -110,6 +104,12 @@ public class ClientCommunicator extends Thread{
                     {
                         ArrayList<ParkingSpot> myParkingSpot = (ArrayList<ParkingSpot>)value;
                         controller.parkingSpots = myParkingSpot;
+                    } else if(key.equals("RESPONSEINTERVAL"))
+                    {
+                        HashMap<String, Serializable> map = (HashMap<String, Serializable>) value;
+                        ArrayList<TimeInterval> intervals = (ArrayList<TimeInterval>) map.get("TIMEINTERVAL");
+                        Long spotID = (Long)map.get("PARKINGSPOTID");
+                        controller.setSpotTimeInterval(spotID,intervals);
                     }
                     controller.updateActivity();
                 }

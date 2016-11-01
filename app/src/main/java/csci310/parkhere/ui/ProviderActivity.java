@@ -106,10 +106,10 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
                     Log.d("PROFILE", "user is null");
 
                 if (fragment instanceof PrivateProfileFragment && user != null) {
-                    Log.d("@@@@@@@@@@@@@@ ", user.getUsername());
+                    Log.d("@@@@@@@@@@@@@@ ", user.userName);
                     Log.d("@@@@@@@@@@@@@@ ", user.userLicense);
                     Log.d("@@@@@@@@@@@@@@ ", user.userPlate);
-                    ((PrivateProfileFragment) fragment).updateUserInfo(user.getUsername(), "", user.userLicense, user.userPlate);
+                    ((PrivateProfileFragment) fragment).updateUserInfo(user.userName, "", user.userLicense, user.userPlate);
                 }
 
                 fragmentTransaction.replace(R.id.fragContainer, privateProfileFragment);

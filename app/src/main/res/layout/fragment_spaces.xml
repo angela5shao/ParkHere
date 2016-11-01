@@ -13,6 +13,14 @@
         android:text="Spaces fragment" >
     </TextView>
 
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textColor="#FF0000"
+        />
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,14 +28,8 @@
         android:id="@+id/spaces_addbutton"
         android:background="@color/colorPrimary"
         android:textColor="@color/colorMainFont"
-        android:onClick="onAddSpaceClick"
-        />
+        android:onClick="onAddSpaceClick"/>
+        <!--android:gravity="bottom"-->
 
-    <ListView
-        android:id="@android:id/list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textColor="#000000"
-        />
 
 </FrameLayout>

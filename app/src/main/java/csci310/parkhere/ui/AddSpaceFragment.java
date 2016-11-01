@@ -130,7 +130,10 @@ public class AddSpaceFragment extends Fragment {
             public void onClick(View view) {
                 ClientController clientController = ClientController.getInstance();
                 clientController.addSpace(curr_location,_addressText.getText().toString(), _in_descrip.getText().toString() );
+                Log.d("ADDSPACE","add space");
 
+//                clientController.requestMyParkingSpotList();
+                ((ProviderActivity)getActivity()).showSpaceFragment();
             }
         });
 

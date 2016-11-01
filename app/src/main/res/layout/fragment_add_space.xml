@@ -101,7 +101,8 @@
                 android:paddingTop="12dp"
                 android:paddingBottom="12dp"
                 android:textColor="@color/colorMainFont"
-                android:background="@color/colorAccent"/>
+                android:background="@color/colorAccent"
+                />
 
         </LinearLayout>
     </ScrollView>

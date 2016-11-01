@@ -13,7 +13,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+
 import csci310.parkhere.R;
+import csci310.parkhere.controller.ClientController;
+import resource.ParkingSpot;
+
 
 
 /**
@@ -31,6 +36,8 @@ public class SpacesFragment extends ListFragment implements AdapterView.OnItemCl
     private static final String ARG_PARAM2 = "param2";
     private ListView spacesListView;
     private Button addSpaceButton;
+    private ArrayList<ParkingSpot> mParkingSpots;
+    private ArrayAdapter mAdapter;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -43,6 +50,22 @@ public class SpacesFragment extends ListFragment implements AdapterView.OnItemCl
         // Required empty public constructor
 //        spacesListView = (ListView)rootView().findViewById(R.id.spaces_list);
 //        addSpaceButton = (Button)getView().findViewById(R.id.spaces_addbutton);
+    }
+
+    public void setParkingSpots(ArrayList<ParkingSpot> spots) {
+        mParkingSpots = spots;
+        System.out.println("SETTING SPACES in SpacesFragment");
+    }
+
+    public void refresh() { // Called by ProviderActivity after adding a new spot
+        System.out.println("REFRESH SpacesFragment from controller");
+        ClientController controller = ClientController.getInstance();
+
+        if(!controller.providerToshowSpaces){
+            ArrayList<ParkingSpot> spaces = controller.parkingSpots;
+            mAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, spaces);
+        }
+
     }
 
     /**
@@ -81,8 +104,6 @@ public class SpacesFragment extends ListFragment implements AdapterView.OnItemCl
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Get list of my spaces
-
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_spaces, container, false);
     }
@@ -94,9 +115,48 @@ public class SpacesFragment extends ListFragment implements AdapterView.OnItemCl
 //        if (bundle != null) {
 //            setText(bundle.getString("link"));
 //        }
-        ArrayAdapter adapter = ArrayAdapter.createFromResource(getActivity(), R.array.Planets, android.R.layout.simple_list_item_1);
-        setListAdapter(adapter);
-        getListView().setOnItemClickListener(this);
+
+        // Get & update list of my spaces
+        ClientController controller = ClientController.getInstance();
+
+
+        if(!controller.providerToshowSpaces)
+        {
+            controller.setCurrentFragment(this);
+            ArrayList<ParkingSpot> spaces = controller.parkingSpots;
+//            mAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, spaces);
+
+
+            ArrayList<String> spacesAddr = new ArrayList<String>();
+
+            for (int i=0; i<spaces.size(); i++) {
+                spacesAddr.add(spaces.get(0).getStreetAddr());
+                System.out.println("SpacesFrag: create string array with: " + spaces.get(i).getStreetAddr());
+            }
+
+            mAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, spacesAddr);
+            setListAdapter(mAdapter);
+            getListView().setOnItemClickListener(this);
+            System.out.println("GET "+spaces.size()+" SPACES in SpacesFragment");
+        }
+//        ArrayList<ParkingSpot> spaces = controller.parkingSpots;
+
+//        System.out.println("GET SPACES in SpacesFragment");
+
+////        mAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.Planets, android.R.layout.simple_list_item_1);
+//        mAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, spacesAddr) {
+//            @Override
+//            public View getView(int position, View convertView, ViewGroup parent) {
+//                View view = super.getView(position, convertView, parent);
+//                TextView text = (TextView) view.findViewById(android.R.id.text1);
+//                text.setTextColor(Color.BLACK);
+//                return view;
+//            }
+//        }
+//        ;
+//        setListAdapter(mAdapter);
+//        getListView().setOnItemClickListener(this);
+//        System.out.println("GET "+spaces.size()+" SPACES in SpacesFragment");
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -142,17 +202,15 @@ public class SpacesFragment extends ListFragment implements AdapterView.OnItemCl
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-        void onSpaceSelected(long spaceID);
-        void onAddSpace();
+        void onSpaceSelected(int spacePositionInList);
     }
 
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
                             long id) {
-//        mListener.onSpaceSelected(123456789);
-        System.out.println("CLICKED on Item: "+position);
+        mListener.onSpaceSelected(position);
+        System.out.println("CLICKED on Item: " + position);
+
     }
-
-
 }

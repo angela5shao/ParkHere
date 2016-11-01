@@ -1,6 +1,7 @@
 package csci310.parkhere.controller;
 
 import android.app.Activity;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import csci310.parkhere.ui.LoginActivity;
+import csci310.parkhere.ui.ProviderActivity;
 import csci310.parkhere.ui.RegisterProviderActivity;
 import csci310.parkhere.ui.RegisterRenterActivity;
 import csci310.parkhere.ui.RenterActivity;
@@ -40,12 +42,18 @@ public class ClientController {
 
 
     private static Activity currentActivity;
+    private static Fragment currentFragment;
+
+    public int currentIndexofSpaces;
 
     public SearchResults searchResults;
 
     public boolean registerFailed;
     public boolean loginFailed;
     public boolean toDispaySearch;
+
+    public boolean providerToshowSpaces;
+    public boolean providerToshowSpacesDetail;
 
 
 
@@ -63,13 +71,17 @@ public class ClientController {
         registerFailed = false;
         loginFailed = false;
         toDispaySearch = false;
+        providerToshowSpaces = false;
+        providerToshowSpacesDetail = false;
         searchResults = null;
+        currentIndexofSpaces = -1;
     }
 
     public void setCurrentActivity(Activity ac)
     {
         currentActivity = ac;
     }
+    public void setCurrentFragment(Fragment fr) { currentFragment = fr;}
 
     public static ClientController getInstance() {
         if(instance == null) {
@@ -166,6 +178,22 @@ public class ClientController {
 //                ra.updateUserInfo(user.getUsername(), "", user.userLicense, user.userPlate);
             }
         }
+        else if(currentActivity instanceof ProviderActivity) {
+            ProviderActivity ra = (ProviderActivity)currentActivity;
+            if(providerToshowSpaces)
+            {
+                ra.showSpaceFragment();
+                providerToshowSpaces = false;
+            }
+
+            else if(providerToshowSpacesDetail)
+            {
+                ra.showSpaceDetailFragment();
+                providerToshowSpacesDetail = false;
+            }
+
+
+        }
         else if(currentActivity instanceof LoginActivity)
         {
             LoginActivity la = (LoginActivity)currentActivity;
@@ -191,10 +219,6 @@ public class ClientController {
     // TODO: Functions for provider
 //    public ArrayList<>
 
-    public ArrayList<ParkingSpot> getSpaces(long userID) {
-        return null;
-    }
-
     public boolean addSpace(TimeInterval interval, String address, long userID) {
         return false;
     }
@@ -212,9 +236,6 @@ public class ClientController {
     }
 
     // TODO: Functions for renter
-    public ArrayList<Reservation> getReservations(long userID) {
-        return null;
-    }
 
     public boolean editReservation(long resID) {
         return false;
@@ -224,8 +245,8 @@ public class ClientController {
         return false;
     }
 
-    public void getReservationDetail(long resID) {
-
+    public Reservation getReservationDetail(int position) {
+        return reservations.get(position);
     }
 
     public void submitReview(Review rev) {
@@ -346,6 +367,24 @@ public class ClientController {
         }
     }
 
+    public void requestAddTime(ParkingSpot spot, TimeInterval timeInterval, double price)
+    {
+        NetworkPackage NP = new NetworkPackage();
+        HashMap<String, Serializable> map = new HashMap<>();
+        map.put("PARKINGSPOTID", spot.getParkingSpotID());
+        map.put("TIMEINTERVAL", timeInterval);
+
+
+        System.out.println("Start:"+timeInterval.startTime);
+        System.out.println("End:" + timeInterval.endTime);
+        map.put("PRICE", price);
+        NP.addEntry("ADDTIME", map);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 }

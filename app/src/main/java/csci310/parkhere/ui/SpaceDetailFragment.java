@@ -54,6 +54,10 @@ public class SpaceDetailFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    // TODO: Rename and change types of parameters
+    private int mParam1;
+    private String mParam2;
+
     public ParkingSpot thisParkingSpot;
 
     TextView _spacedetail_address;
@@ -76,6 +80,10 @@ public class SpaceDetailFragment extends Fragment {
 
     Date selectedStartDate;
     Date selectedEndDate;
+
+
+    Time inputedStartTime;
+    Time inputedEndTime;
 
 //    //*******************************************************************************
 //    // FOR TESTING DELETE LATER!!!
@@ -109,10 +117,10 @@ public class SpaceDetailFragment extends Fragment {
      * @return A new instance of fragment SearchFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SpaceDetailFragment newInstance(String param1, String param2) {
+    public static SpaceDetailFragment newInstance(int param1, String param2) {
         SpaceDetailFragment fragment = new SpaceDetailFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putInt(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -133,12 +141,7 @@ public class SpaceDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_space_detail, container, false);
-//
-//        //*******************************************************************************
-//        // FOR TESTING DELETE LATER!!!
-//        postedSpaceTimeIntervals.add(interval1);
-//        updatePostedSpaceTimeIntervalsGC(postedSpaceTimeIntervals);
-//        //*******************************************************************************
+
 
         _spacedetail_address = (TextView)v.findViewById(R.id.spacedetail_address);
 
@@ -214,15 +217,8 @@ public class SpaceDetailFragment extends Fragment {
         selectedEndDate = null;
 
 
-//        ********************************
-        ClientController controller = ClientController.getInstance();
-        controller.requestMyParkingSpotList();
-        thisParkingSpot = controller.parkingSpots.get(0);
 
-        controller.requestSpotTimeInterval(thisParkingSpot);
-        updatePostedSpaceTimeIntervalsGC(thisParkingSpot.getTimeIntervalList());
-//        ********************************
-
+//        System.out.println("SpaceDetailFragment for spaceID: " + thisParkingSpot.getParkingSpotID());
 
 
         //Handling custom calendar events
@@ -256,6 +252,10 @@ public class SpaceDetailFragment extends Fragment {
 
                     cal.setTime(selectedEndDate);
                     Time timeEnd = new Time(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
+
+                    Log.d("time", timeStart.toString() + " " + timeEnd.toString());
+                    inputedStartTime = timeStart;
+                    inputedEndTime = timeEnd;
 
                     selectedStartDate = null;
                     selectedEndDate = null;
@@ -299,8 +299,14 @@ public class SpaceDetailFragment extends Fragment {
 
                String price =  _in_price.getText().toString();
                 // call client controller
+                ClientController controller = ClientController.getInstance();
 
+                System.out.println("BEFORE REQ Start:"+ inputedStartTime);
+                System.out.println("BEFORE REQ End:" + inputedEndTime);
 
+                controller.requestAddTime(thisParkingSpot, new TimeInterval(inputedStartTime, inputedEndTime),Integer.valueOf(_in_price.getText().toString()) );
+
+                Log.d("ADDTIME", "finish add time");
                 _addTimeForSpaceLayout.setVisibility(View.GONE);
                 Toast.makeText(getContext(), "Add space requested", Toast.LENGTH_SHORT).show();
             }

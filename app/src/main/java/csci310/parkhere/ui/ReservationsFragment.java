@@ -126,8 +126,7 @@ public class ReservationsFragment extends ListFragment implements AdapterView.On
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
                             long id) {
-        // TODO: Call RenterActivity's onReservationSelected(long reservationID)
-        mListener.onReservationSelected((long)0011223312765);
+        mListener.onReservationSelected(position);
         System.out.println("CLICKED on Reservation: " + position);
     }
 }

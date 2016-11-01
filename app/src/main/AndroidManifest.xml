@@ -30,7 +30,9 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAzVdhdCUhLhk7nDT0mG4LxxARQPfxfP98" />
+            android:value="AIzaSyC6y-duGaR0wOji4UOR4S1LUBn5rO1ach0" />
+        <!--AIzaSyAzVdhdCUhLhk7nDT0mG4LxxARQPfxfP98-->
+        <!--AIzaSyC6y-duGaR0wOji4UOR4S1LUBn5rO1ach0-->
 
         <!--<activity android:name=".ui.ProviderActivity"-->
                   <!--android:theme="@style/AppTheme.NoActionBar">-->

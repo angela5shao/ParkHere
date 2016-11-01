@@ -220,7 +220,7 @@ public class ClientController {
 //    public ArrayList<>
 
     public ArrayList<ParkingSpot> getSpaces(long userID) {
-        return null;
+        return parkingSpots;
     }
 
     public boolean addSpace(TimeInterval interval, String address, long userID) {

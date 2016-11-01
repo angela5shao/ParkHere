@@ -28,20 +28,21 @@ import resource.User;
  */
 public class RenterActivity extends AppCompatActivity implements SearchFragment.OnFragmentInteractionListener,
         PrivateProfileFragment.OnFragmentInteractionListener, EditProfileFragment.OnFragmentInteractionListener,
-        DisplaySearchFragment.OnFragmentInteractionListener, ReservationsFragment.OnFragmentInteractionListener {
+        DisplaySearchFragment.OnFragmentInteractionListener, ReservationsFragment.OnFragmentInteractionListener,
+        ReservationDetailFragment.OnFragmentInteractionListener {
+
     LinearLayout _resLink, _searchLink;
     ImageView _profilePic;
     ImageView _editLogo;
     FragmentManager fm;
     FragmentTransaction fragmentTransaction;
-    Fragment searchFragment, privateProfileFragment, editProfileFragment, displaySearchFragment, reservationsFragment;
+    Fragment searchFragment, privateProfileFragment, editProfileFragment, displaySearchFragment, reservationsFragment, reservationDetailFragment;
     ClientController clientController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.renter_ui);
-
 
         clientController = ClientController.getInstance();
         clientController.setCurrentActivity(this);
@@ -62,9 +63,14 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         _searchLink = (LinearLayout)findViewById(R.id.searchLink);
         _profilePic = (ImageView) findViewById(R.id.profilePic);
 
-        fragmentTransaction.add(R.id.fragContainer, searchFragment);
+        //*****************************************************************
+        reservationDetailFragment = new ReservationDetailFragment();
+        fragmentTransaction.add(R.id.fragContainer, reservationDetailFragment);
         fragmentTransaction.commit();
-//        fragmentTransaction.add(R.id.fragContainer, displaySearchFragment);
+        //*****************************************************************
+
+//        fragmentTransaction.add(R.id.fragContainer, searchFragment);
+
 //        fragmentTransaction.commit();
 
         _resLink.setOnClickListener(new View.OnClickListener() {

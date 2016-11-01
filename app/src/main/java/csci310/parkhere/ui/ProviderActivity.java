@@ -65,17 +65,19 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 //        spacesFragment = fm.findFragmentById(R.id.fragment_spaces);
         spacesFragment = new SpacesFragment();
         fragmentTransaction.add(R.id.fragContainer, spacesFragment).commit();
-        ArrayList<ParkingSpot> parkingSpots = clientController.getSpaces(clientController.getUser().userID);
+//        ArrayList<ParkingSpot> parkingSpots = clientController.getSpaces(clientController.getUser().userID);
 
-        // TODO: Fix this; want to call setParkingSpot on spacesFragment
-        Fragment spcfragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
-        if (spcfragment instanceof SpacesFragment) {
-            ((SpacesFragment) spcfragment).setParkingSpots(parkingSpots);
-        }
-//        spacesFragment.setParkingSpots(parkingSpots);
+//        // TODO: Fix this; want to call setParkingSpot on spacesFragment
+//        Fragment spcfragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
+//        if (spcfragment instanceof SpacesFragment) {
+//            parkingSpots.add(new ParkingSpot(clientController.getUser().userID, null, 0, 0, "Tuscany 101, 10 Figueroa", "", "90007", 0x0001));
+//            ((SpacesFragment) spcfragment).setParkingSpots(parkingSpots);
+//        }
+////        spacesFragment.setParkingSpots(parkingSpots);
 
         privateProfileFragment = new PrivateProfileFragment();
         addSpaceFragment = new AddSpaceFragment();
+
 
 
         spaceDetailFragment = new SpaceDetailFragment();
@@ -268,11 +270,11 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 
     }
 
-    public void onReservationSelected(long reservationID) {
-        System.out.println("ProviderActivity onReservationSelected for: " + reservationID);
+    public void onReservationSelected(int resPosition) {
+        System.out.println("ProviderActivity onReservationSelected for: " + resPosition);
         ReservationDetailFragment reservationDetailFragment = new ReservationDetailFragment();
         Bundle args = new Bundle();
-        args.putLong("param1", reservationID);
+        args.putInt("param1", resPosition);
         reservationDetailFragment.setArguments(args);
 
         try {

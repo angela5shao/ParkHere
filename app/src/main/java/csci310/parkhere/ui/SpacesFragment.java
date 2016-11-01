@@ -54,10 +54,11 @@ public class SpacesFragment extends ListFragment implements AdapterView.OnItemCl
 
     public void setParkingSpots(ArrayList<ParkingSpot> spots) {
         mParkingSpots = spots;
+        System.out.println("SETTING SPACES in SpacesFragment");
     }
 
     public void refresh() { // Called by ProviderActivity after adding a new spot
-        System.out.println("REFRESH SpacesFragment");
+        System.out.println("REFRESH SpacesFragment from controller");
         ClientController controller = ClientController.getInstance();
 
         if(!controller.providerToshowSpaces){
@@ -117,6 +118,7 @@ public class SpacesFragment extends ListFragment implements AdapterView.OnItemCl
 
         // Get & update list of my spaces
         ClientController controller = ClientController.getInstance();
+//<<<<<<< HEAD
 
         if(!controller.providerToshowSpaces)
         {
@@ -129,6 +131,23 @@ public class SpacesFragment extends ListFragment implements AdapterView.OnItemCl
 //        ArrayList<ParkingSpot> spaces = controller.parkingSpots;
 
         System.out.println("GET SPACES in SpacesFragment");
+//=======
+//        ArrayList<ParkingSpot> spaces = controller.parkingSpots;
+//        spaces.add(new ParkingSpot(controller.getUser().userID, null, 0, 0, "Tuscany 101, 10 Figueroa", "", "90007", 0x0001));
+//        spaces.add(new ParkingSpot(controller.getUser().userID, null, 0, 0, "USC SAL", "", "90007", 0x0004));
+//
+//        ArrayList<String> spacesAddr = new ArrayList<String>();
+//        for (int i=0; i<spaces.size(); i++) {
+//            spacesAddr.add(spaces.get(0).getStreetAddr());
+//            System.out.println("SpacesFrag: create string array with: " + spaces.get(i).getStreetAddr());
+//        }
+//
+////        mAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.Planets, android.R.layout.simple_list_item_1);
+//        mAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, spacesAddr);
+//        setListAdapter(mAdapter);
+//        getListView().setOnItemClickListener(this);
+//        System.out.println("GET "+spaces.size()+" SPACES in SpacesFragment");
+//>>>>>>> e7b14aff65f87e9d6951be59fc94761c344debbc
     }
 
     // TODO: Rename method, update argument and hook method into UI event

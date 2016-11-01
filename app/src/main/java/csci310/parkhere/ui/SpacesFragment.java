@@ -14,6 +14,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+
 import csci310.parkhere.R;
 import resource.ParkingSpot;
 
@@ -33,6 +35,7 @@ public class SpacesFragment extends ListFragment implements AdapterView.OnItemCl
     private static final String ARG_PARAM2 = "param2";
     private ListView spacesListView;
     private Button addSpaceButton;
+    private ArrayList<ParkingSpot> mParkingSpots;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -45,6 +48,10 @@ public class SpacesFragment extends ListFragment implements AdapterView.OnItemCl
         // Required empty public constructor
 //        spacesListView = (ListView)rootView().findViewById(R.id.spaces_list);
 //        addSpaceButton = (Button)getView().findViewById(R.id.spaces_addbutton);
+    }
+
+    public void setParkingSpots(ArrayList<ParkingSpot> spots) {
+        mParkingSpots = spots;
     }
 
     /**
@@ -144,17 +151,14 @@ public class SpacesFragment extends ListFragment implements AdapterView.OnItemCl
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-        void onSpaceSelected(long spaceID);
-        void onAddSpace();
+        void onSpaceSelected(int spacePositionInList);
     }
 
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
                             long id) {
-        mListener.onSpaceSelected(123456789);
+        mListener.onSpaceSelected(position);
         System.out.println("CLICKED on Item: " + position);
     }
-
-
 }

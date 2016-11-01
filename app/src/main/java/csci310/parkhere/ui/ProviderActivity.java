@@ -21,8 +21,11 @@ import com.braintreepayments.api.BraintreePaymentActivity;
 import com.braintreepayments.api.exceptions.InvalidArgumentException;
 import com.braintreepayments.api.models.PaymentMethodNonce;
 
+import java.util.ArrayList;
+
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
+import resource.ParkingSpot;
 import resource.User;
 
 /**
@@ -48,8 +51,8 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.provider_ui);
 
-//        clientController = ClientController.getInstance();
-//        clientController.setCurrentActivity(this);
+        clientController = ClientController.getInstance();
+        clientController.setCurrentActivity(this);
 
         Toolbar providerrToolbar = (Toolbar) findViewById(R.id.providerTabbar);
         setSupportActionBar(providerrToolbar);
@@ -61,13 +64,15 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         fragmentTransaction = fm.beginTransaction();
 //        spacesFragment = fm.findFragmentById(R.id.fragment_spaces);
         spacesFragment = new SpacesFragment();
+        fragmentTransaction.add(R.id.fragContainer, spacesFragment).commit();
+        ArrayList<ParkingSpot> parkingSpots = clientController.getSpaces(clientController.getUser().userID);
+//        spacesFragment.setParkingSpots(parkingSpots);
+
         privateProfileFragment = new PrivateProfileFragment();
         addSpaceFragment = new AddSpaceFragment();
 
-//        fragmentTransaction.add(R.id.fragContainer, spacesFragment).commit();
-
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragContainer, addSpaceFragment).commit();
+//        getSupportFragmentManager().beginTransaction()
+//                .add(R.id.fragContainer, addSpaceFragment).commit();
 
         spaceDetailFragment = new SpaceDetailFragment();
 //        getSupportFragmentManager().beginTransaction()
@@ -203,17 +208,29 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         //you can leave it empty
     }
 
-    public void onSpaceSelected(long spaceID) {
-        System.out.println("ProviderActivity onSpaceSelected for: " + spaceID);
+    public void onSpaceSelected(int spacePositionInList) {
+//        System.out.println("ProviderActivity onSpaceSelected for: " + spacePositionInList);
+
+        // TODO: Get ParkingSpot given position in list
+        if (clientController.parkingSpots.size() == 0) {
+            System.out.println("ProviderActivity: no spaces to select");
+            return;
+        }
+        ParkingSpot spotSelected = clientController.parkingSpots.get(spacePositionInList);
+        if (spotSelected == null) {
+            System.out.println("Selected parking spot is null");
+            return;
+        }
         SpaceDetailFragment spaceDetailFragment = new SpaceDetailFragment();
-        Bundle args = new Bundle();
-        args.putLong("param1", spaceID);
-        spaceDetailFragment.setArguments(args);
+        spaceDetailFragment.setThisParkingSpot(spotSelected);
+
+//        Bundle args = new Bundle();
+//        args.putInt("param1", spacePositionInList);
+//        spaceDetailFragment.setArguments(args);
 
         try {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragContainer, spaceDetailFragment).commit();
-            System.out.println("onSpaceSelected, replaced with sppaceDetailFragment");
         } catch (Exception e) {
             System.out.println("Spaces tab item exception");
         }
@@ -239,24 +256,9 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         }
     }
 
-    public void onAddSpace() {
-        System.out.println("SpacesFragment onAddSpace() called");
-        AddSpaceFragment addSpaceFragment = new AddSpaceFragment();
-        Bundle args = new Bundle();
-        args.putLong("param1", 012345);
-        addSpaceFragment.setArguments(args);
-
-        try {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragContainer, addSpaceFragment).commit();
-            System.out.println("onReservationSelected, replaced with reservationDetailFragment");
-        } catch (Exception e) {
-            System.out.println("Reservation item exception");
-        }
-    }
-
+    // Called by SpacesFragment's "add" button
     public void onAddSpaceClick(View v) {
-        System.out.println("SpacesFragment onAddSpace() called");
+        System.out.println("ProviderActivity onAddSpaceClick() called");
         AddSpaceFragment addSpaceFragment = new AddSpaceFragment();
         Bundle args = new Bundle();
         args.putLong("param1", 012345);

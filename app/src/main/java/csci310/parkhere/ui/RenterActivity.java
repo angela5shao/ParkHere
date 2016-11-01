@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
 import resource.ParkingSpot;
+import resource.Reservation;
 import resource.SearchResults;
 import resource.User;
 
@@ -65,7 +66,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 
         //*****************************************************************
         reservationDetailFragment = new ReservationDetailFragment();
-        fragmentTransaction.add(R.id.fragContainer, reservationDetailFragment);
+        fragmentTransaction.add(R.id.fragContainer, searchFragment);
         fragmentTransaction.commit();
         //*****************************************************************
 
@@ -208,8 +209,26 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 //        editProfileFragment.updateUserInfo(inUsername, inPw, inLicenseID, inLicensePlate);
 //    }
 
-    public void onReservationSelected(long reservationID) {
-        //
-    }
+    public void onReservationSelected(int resPosition) {
+        System.out.println("RenterActivity onReservationSelected for: " + resPosition);
 
+        if (clientController.reservations.size() == 0) {
+            System.out.println("RenterActivity: error - no reservations to select");
+            return;
+        }
+        Reservation selectedRes = clientController.reservations.get(resPosition);
+        if (selectedRes == null) {
+            System.out.println("Selected parking spot is null");
+            return;
+        }
+        ReservationDetailFragment resDetailfragment = new ReservationDetailFragment();
+        resDetailfragment.setReservation(selectedRes);
+
+        try {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragContainer, resDetailfragment).commit();
+        } catch (Exception e) {
+            System.out.println("RenterActivity onReservationSelected exception");
+        }
+    }
 }

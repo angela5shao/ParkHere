@@ -82,8 +82,8 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 //                .add(R.id.fragContainer, addSpaceFragment).commit();
 
         spaceDetailFragment = new SpaceDetailFragment();
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragContainer, spaceDetailFragment).commit();
+//        getSupportFragmentManager().beginTransaction()
+//                .add(R.id.fragContainer, spaceDetailFragment).commit();
 
         _spaceLink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -247,22 +247,6 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 
     }
 
-    public void onReservationSelected(int resPosition) {
-        System.out.println("ProviderActivity onReservationSelected for: " + resPosition);
-        ReservationDetailFragment reservationDetailFragment = new ReservationDetailFragment();
-        Bundle args = new Bundle();
-        args.putInt("param1", resPosition);
-        reservationDetailFragment.setArguments(args);
-
-        try {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragContainer, reservationDetailFragment).commit();
-            System.out.println("onReservationSelected, replaced with reservationDetailFragment");
-        } catch (Exception e) {
-            System.out.println("Reservation item exception");
-        }
-    }
-
     // Called by SpacesFragment's "add" button
     public void onAddSpaceClick(View v) {
         System.out.println("ProviderActivity onAddSpaceClick() called");
@@ -281,14 +265,16 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
     }
 
     public void returnToSpaces() {
-        Fragment spcfragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
-        if (spcfragment instanceof SpacesFragment) {
-            ((SpacesFragment) spcfragment).refresh();
-        }
 
         try {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragContainer, spacesFragment).commit();
+
+            Fragment spcfragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
+            if (spcfragment instanceof SpacesFragment) {
+                ((SpacesFragment) spcfragment).refresh();
+            }
+
         } catch (Exception e) {
             System.out.println("Spaces tab item exception");
         }

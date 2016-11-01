@@ -191,10 +191,6 @@ public class ClientController {
     // TODO: Functions for provider
 //    public ArrayList<>
 
-    public ArrayList<ParkingSpot> getSpaces(long userID) {
-        return parkingSpots;
-    }
-
     public boolean addSpace(TimeInterval interval, String address, long userID) {
         return false;
     }
@@ -212,9 +208,6 @@ public class ClientController {
     }
 
     // TODO: Functions for renter
-    public ArrayList<Reservation> getReservations(long userID) {
-        return null;
-    }
 
     public boolean editReservation(long resID) {
         return false;
@@ -224,8 +217,8 @@ public class ClientController {
         return false;
     }
 
-    public void getReservationDetail(long resID) {
-
+    public Reservation getReservationDetail(int position) {
+        return reservations.get(position);
     }
 
     public void submitReview(Review rev) {

@@ -19,6 +19,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import csci310.parkhere.R;
+import csci310.parkhere.controller.ClientController;
+import resource.Reservation;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,6 +45,7 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
     SupportMapFragment mMapView;
     private GoogleMap googleMap;
     CameraPosition cameraPosition;
+    private Reservation mReservation;
 
     TextView _spacedetail_address, _start_time_label, _end_time_label, _renter_username_label;
 
@@ -167,4 +170,6 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
         googleMap.animateCamera(CameraUpdateFactory
                 .newCameraPosition(cameraPosition));
     }
+
+    public void setReservation(Reservation r) { mReservation = r; System.out.println("ResDetailFrag: setRes"); }
 }

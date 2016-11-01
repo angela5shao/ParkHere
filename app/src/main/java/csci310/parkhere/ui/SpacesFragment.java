@@ -1,6 +1,7 @@
 package csci310.parkhere.ui;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -124,7 +126,16 @@ public class SpacesFragment extends ListFragment implements AdapterView.OnItemCl
         }
 
 //        mAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.Planets, android.R.layout.simple_list_item_1);
-        mAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, spacesAddr);
+        mAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, spacesAddr) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                TextView text = (TextView) view.findViewById(android.R.id.text1);
+                text.setTextColor(Color.BLACK);
+                return view;
+            }
+        }
+        ;
         setListAdapter(mAdapter);
         getListView().setOnItemClickListener(this);
         System.out.println("GET "+spaces.size()+" SPACES in SpacesFragment");

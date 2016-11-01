@@ -143,6 +143,20 @@ public class SpacesFragment extends ListFragment implements AdapterView.OnItemCl
 
 //        System.out.println("GET SPACES in SpacesFragment");
 
+////        mAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.Planets, android.R.layout.simple_list_item_1);
+//        mAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, spacesAddr) {
+//            @Override
+//            public View getView(int position, View convertView, ViewGroup parent) {
+//                View view = super.getView(position, convertView, parent);
+//                TextView text = (TextView) view.findViewById(android.R.id.text1);
+//                text.setTextColor(Color.BLACK);
+//                return view;
+//            }
+//        }
+//        ;
+//        setListAdapter(mAdapter);
+//        getListView().setOnItemClickListener(this);
+//        System.out.println("GET "+spaces.size()+" SPACES in SpacesFragment");
     }
 
     // TODO: Rename method, update argument and hook method into UI event

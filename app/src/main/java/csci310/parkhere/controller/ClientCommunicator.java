@@ -83,7 +83,12 @@ public class ClientCommunicator extends Thread{
                     } else if(key.equals("REGISTER")){
                         User result = (User) value;
 
-                        Log.d("LOGIN", result.userName);
+
+                        Log.d("REGISTER", result.userName + "NULL? " + (result == null));
+                        Log.d("REGISTER", result.userLicense + "NULL? " + (result == null));
+
+                        Log.d("REGISTER", result.userPlate + "NULL? " + (result == null));
+
                         controller.setUser(result);
 
                     } else if(key.equals("LOGOUT")){
@@ -101,12 +106,6 @@ public class ClientCommunicator extends Thread{
 
                         controller.parkingSpots.add(spot);
 
-//                        NetworkPackage NP = new NetworkPackage();
-//                        HashMap<String, Serializable> map = new HashMap<>();
-//                        map.put("PARKINGSPOTID", spot.getParkingSpotID());
-//                        map.put("TIMEINTERVAL", new TimeInterval(new Time(2016,12,29,0,0,0), new Time(2017,1,1,0,0,0)));
-//                        NP.addEntry("ADDTIME", map);
-//                        sendPackage(NP);
                     } else if(key.equals("RESPONSEPARKINGSPOT"))
                     {
                         ArrayList<ParkingSpot> myParkingSpot = (ArrayList<ParkingSpot>)value;
@@ -132,7 +131,6 @@ public class ClientCommunicator extends Thread{
 
         if(oos == null)
             Log.d("oos","oos is null");
-
         oos.writeObject(NP);
         oos.flush();
     }

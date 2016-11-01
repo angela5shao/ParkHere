@@ -32,8 +32,8 @@ public class ClientController {
 
     private User user;
     public ArrayList<ParkingSpot> parkingSpots;
-    private ArrayList<Reservation> reservations;
-    private ArrayList<Review> reviews;
+    public ArrayList<Reservation> reservations;
+    public ArrayList<Review> reviews;
     public ClientCommunicator clientCommunicator;
 
     private static ClientController instance;
@@ -225,6 +225,7 @@ public class ClientController {
     }
 
     public void getReservationDetail(long resID) {
+
     }
 
     public void submitReview(Review rev) {
@@ -276,9 +277,6 @@ public class ClientController {
     }
 
 
-//    public ArrayList<ParkingSpot> search(String address, int dist, CarType type, TimeInterval interval, int length) {
-//        return null;
-//    }
 
     public boolean book(long spaceID, long userID, TimeInterval interval) {
         return false;
@@ -289,26 +287,37 @@ public class ClientController {
     }
 
 
-    public void getMyReservationList()
+
+
+    public void requestMyReservationList()
     {
         if(user == null)
             return;
 
         NetworkPackage NP = new NetworkPackage();
         NP.addEntry("FETCHRESERVATION", user.getID());
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void getMyParkingSpotList()
+    public void requestMyParkingSpotList()
     {
         if(user == null)
             return;
 
         NetworkPackage NP = new NetworkPackage();
         NP.addEntry("FETCHPARKINGSPOT", user.getID());
-
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void getSpotTimeInterval(ParkingSpot spot)
+    public void requestSpotTimeInterval(ParkingSpot spot)
     {
         if(user == null && spot == null)
         {
@@ -323,5 +332,8 @@ public class ClientController {
             e.printStackTrace();
         }
     }
+
+
+
 
 }

@@ -80,16 +80,7 @@ public class RegisterRenterActivity extends Activity {
         }
 
         final View curr_v = v;
-//        new android.os.Handler().postDelayed(
-//                new Runnable() {
-//                    public void run() {
-//                        // On complete call either onLoginSuccess or onLoginFailed
-////                        onRegisterSuccess(curr_v);
-//                            // onRegisterFailed();
-//
-//                        progressDialog.dismiss();
-//                    }
-//                }, 3000);
+
     }
 
     @Override

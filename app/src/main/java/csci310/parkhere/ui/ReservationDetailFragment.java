@@ -98,6 +98,11 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
         _end_time_label=(TextView)v.findViewById(R.id.end_time_label);
         _renter_username_label=(TextView)v.findViewById(R.id.renter_username_label);
 
+        _spacedetail_address.setText(mReservation.getSpot().getStreetAddr());
+        _start_time_label.setText(mReservation.getReserveTimeInterval().startTime.toDateString());
+        _end_time_label.setText(mReservation.getReserveTimeInterval().endTime.toDateString());
+        _renter_username_label.setText(String.valueOf(mReservation.getRenterID()));
+
         mMapView = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map));
         mMapView.onCreate(savedInstanceState);
 

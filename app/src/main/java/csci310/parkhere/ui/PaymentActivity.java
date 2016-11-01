@@ -48,10 +48,16 @@ public class PaymentActivity extends Activity {
         } catch (InvalidArgumentException e) {
             e.printStackTrace();
         }
+
+//        CardBuilder cardBuilder = new CardBuilder()
+//                .cardNumber("4111111111111111")
+//                .expirationDate("09/2018");
+//
+//        Card.tokenize(braintreeFragment, cardBuilder);
     }
 
     // For BrainTree payment
-    public void onBraintreeSubmit() {
+    public void onBraintreeSubmit(View v) {
 //        ClientTokenRequest clientTokenRequest = new ClientTokenRequest()
 //                .customerId(aCustomerId);
 //        String clientToken = gateway.clientToken().generate(clientTokenRequest);
@@ -80,7 +86,7 @@ public class PaymentActivity extends Activity {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == REQUEST_CODE) {
@@ -91,6 +97,9 @@ public class PaymentActivity extends Activity {
                 );
                 String nonce = paymentMethodNonce.getNonce();
                 // Send the nonce to your server.
+
+                Intent intent = new Intent(getBaseContext(), RenterActivity.class);
+                startActivity(intent);
             }
             else {
                 Log.d("VT onActivityResult ", "!Activity.RESULT_OK");

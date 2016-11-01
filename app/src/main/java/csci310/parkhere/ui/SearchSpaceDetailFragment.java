@@ -1,12 +1,14 @@
 package csci310.parkhere.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import csci310.parkhere.R;
 
@@ -30,6 +32,8 @@ public class SearchSpaceDetailFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    Button _searchspacedetail_reservebutton;
 
     public SearchSpaceDetailFragment() {
         // Required empty public constructor
@@ -67,6 +71,14 @@ public class SearchSpaceDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_search_space_detail, container, false);
+
+        _searchspacedetail_reservebutton=(Button)mView.findViewById(R.id.searchspacedetail_reservebutton);
+        _searchspacedetail_reservebutton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), PaymentActivity.class);
+                startActivityForResult(intent, 11);
+            }
+        });
 
         return mView;
     }

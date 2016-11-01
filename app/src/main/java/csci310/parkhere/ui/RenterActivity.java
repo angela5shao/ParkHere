@@ -32,6 +32,8 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         DisplaySearchFragment.OnFragmentInteractionListener, ReservationsFragment.OnFragmentInteractionListener,
         SearchSpaceDetailFragment.OnFragmentInteractionListener {
 
+    int PAYMENT_REQUEST_CODE = 11;
+
     LinearLayout _resLink, _searchLink;
     ImageView _profilePic;
     ImageView _editLogo;
@@ -218,4 +220,22 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         //
     }
 
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        if (requestCode == PAYMENT_REQUEST_CODE) {
+//            if (resultCode == Activity.RESULT_OK) {
+//                Log.d("BT onActivityResult ", "Activity.RESULT_OK");
+//                PaymentMethodNonce paymentMethodNonce = data.getParcelableExtra(
+//                        BraintreePaymentActivity.EXTRA_PAYMENT_METHOD_NONCE
+//                );
+//                String nonce = paymentMethodNonce.getNonce();
+//                // Send the nonce to your server.
+//            }
+//            else {
+//                Log.d("VT onActivityResult ", "!Activity.RESULT_OK");
+//            }
+//        }
+//    }
 }

@@ -67,8 +67,8 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragContainer, spacesFragment).commit();
 
-//        getSupportFragmentManager().beginTransaction()
-//                .add(R.id.fragContainer, addSpaceFragment).commit();
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragContainer, addSpaceFragment).commit();
 
         spaceDetailFragment = new SpaceDetailFragment();
 //        getSupportFragmentManager().beginTransaction()

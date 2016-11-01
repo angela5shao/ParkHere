@@ -65,6 +65,8 @@ public class ClientCommunicator extends Thread{
                 if (obj instanceof NetworkPackage) {
                     NetworkPackage np = (NetworkPackage) obj;
                     MyEntry<String, Serializable> entry = np.getCommand();
+                    if(entry==null)
+                        Log.d("NULL", "NULL");
                     String key = entry.getKey();
                     Object value = entry.getValue();
                     System.out.println("Command Key: " + key);
@@ -102,7 +104,12 @@ public class ClientCommunicator extends Thread{
 //                        controller.requestMyParkingSpotList();
 //                        controller.providerToshowSpaces = true;
 
-                    } else if(key.equals("RESPONSEPARKINGSPOT"))
+                    } else if(key.equals("ADDTIME"))
+                    {
+                        Long newTimeID = (Long)value;;
+                        Log.d("ADDTIME", "Interval id" + newTimeID);
+                    }
+                    else if(key.equals("RESPONSEPARKINGSPOT"))
                     {
                         ArrayList<ParkingSpot> myParkingSpot = (ArrayList<ParkingSpot>)value;
                         controller.parkingSpots = myParkingSpot;

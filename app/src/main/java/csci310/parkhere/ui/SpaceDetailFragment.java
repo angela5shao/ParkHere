@@ -253,6 +253,7 @@ public class SpaceDetailFragment extends Fragment {
                     cal.setTime(selectedEndDate);
                     Time timeEnd = new Time(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
 
+                    Log.d("time", timeStart.toString() + " " + timeEnd.toString());
                     inputedStartTime = timeStart;
                     inputedEndTime = timeEnd;
 
@@ -299,7 +300,11 @@ public class SpaceDetailFragment extends Fragment {
                String price =  _in_price.getText().toString();
                 // call client controller
                 ClientController controller = ClientController.getInstance();
-                controller.requestAddTime(thisParkingSpot, new TimeInterval(inputedStartTime, inputedStartTime),Integer.valueOf(_in_price.getText().toString()) );
+
+                System.out.println("BEFORE REQ Start:"+ inputedStartTime);
+                System.out.println("BEFORE REQ End:" + inputedEndTime);
+
+                controller.requestAddTime(thisParkingSpot, new TimeInterval(inputedStartTime, inputedEndTime),Integer.valueOf(_in_price.getText().toString()) );
 
                 Log.d("ADDTIME", "finish add time");
                 _addTimeForSpaceLayout.setVisibility(View.GONE);

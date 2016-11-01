@@ -373,6 +373,10 @@ public class ClientController {
         HashMap<String, Serializable> map = new HashMap<>();
         map.put("PARKINGSPOTID", spot.getParkingSpotID());
         map.put("TIMEINTERVAL", timeInterval);
+
+
+        System.out.println("Start:"+timeInterval.startTime);
+        System.out.println("End:" + timeInterval.endTime);
         map.put("PRICE", price);
         NP.addEntry("ADDTIME", map);
         try {

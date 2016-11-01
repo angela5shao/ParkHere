@@ -214,15 +214,15 @@ public class SpaceDetailFragment extends Fragment {
 
 
 //        ********************************
-        ClientController controller = ClientController.getInstance();
-        controller.requestMyParkingSpotList();
-        thisParkingSpot = controller.parkingSpots.get(0);
-
-        controller.requestSpotTimeInterval(thisParkingSpot);
-        updatePostedSpaceTimeIntervalsGC(thisParkingSpot.getTimeIntervalList());
+//        ClientController controller = ClientController.getInstance();
+//        controller.requestMyParkingSpotList();
+//        thisParkingSpot = controller.parkingSpots.get(0);
+//
+//        controller.requestSpotTimeInterval(thisParkingSpot);
+//        updatePostedSpaceTimeIntervalsGC(thisParkingSpot.getTimeIntervalList());
 //        ********************************
 
-        System.out.println("SpaceDetailFragment for spaceID: " + thisParkingSpot.getParkingSpotID());
+//        System.out.println("SpaceDetailFragment for spaceID: " + thisParkingSpot.getParkingSpotID());
 
 
         //Handling custom calendar events

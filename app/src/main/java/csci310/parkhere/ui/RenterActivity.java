@@ -98,10 +98,10 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
                     Log.d("PROFILE", "user is null");
 
                 if (fragment instanceof PrivateProfileFragment && user != null) {
-                    Log.d("@@@@@@@@@@@@@@ ", user.getUsername());
+                    Log.d("@@@@@@@@@@@@@@ ", user.userName);
                     Log.d("@@@@@@@@@@@@@@ ", user.userLicense);
                     Log.d("@@@@@@@@@@@@@@ ", user.userPlate);
-                    ((PrivateProfileFragment) fragment).updateUserInfo(user.getUsername(), "", user.userLicense, user.userPlate);
+                    ((PrivateProfileFragment) fragment).updateUserInfo(user.userName, "", user.userLicense, user.userPlate);
                 }
 
                 fragmentTransaction.replace(R.id.fragContainer, privateProfileFragment);
@@ -184,10 +184,10 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
         User user = clientController.getUser();
         if (fragment instanceof EditProfileFragment && user != null) {
-            Log.d("############## ", user.getUsername());
+            Log.d("############## ", user.userName);
             Log.d("############## ", user.userLicense);
             Log.d("############## ", user.userPlate);
-            ((EditProfileFragment) fragment).updateUserInfo(user.getUsername(), "", user.userLicense, user.userPlate);
+            ((EditProfileFragment) fragment).updateUserInfo(user.userName, "", user.userLicense, user.userPlate);
         }
 
 

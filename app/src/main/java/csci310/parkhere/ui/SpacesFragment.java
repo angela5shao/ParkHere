@@ -59,8 +59,12 @@ public class SpacesFragment extends ListFragment implements AdapterView.OnItemCl
     public void refresh() { // Called by ProviderActivity after adding a new spot
         System.out.println("REFRESH SpacesFragment");
         ClientController controller = ClientController.getInstance();
-        ArrayList<ParkingSpot> spaces = controller.parkingSpots;
-        mAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, spaces);
+
+        if(!controller.providerToshowSpaces){
+            ArrayList<ParkingSpot> spaces = controller.parkingSpots;
+            mAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, spaces);
+        }
+
     }
 
     /**
@@ -113,11 +117,17 @@ public class SpacesFragment extends ListFragment implements AdapterView.OnItemCl
 
         // Get & update list of my spaces
         ClientController controller = ClientController.getInstance();
-        ArrayList<ParkingSpot> spaces = controller.parkingSpots;
-//        ArrayAdapter adapter = ArrayAdapter.createFromResource(getActivity(), R.array.Planets, android.R.layout.simple_list_item_1);
-        mAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, spaces);
-        setListAdapter(mAdapter);
-        getListView().setOnItemClickListener(this);
+
+        if(!controller.providerToshowSpaces)
+        {
+            controller.setCurrentFragment(this);
+            ArrayList<ParkingSpot> spaces = controller.parkingSpots;
+            mAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, spaces);
+            setListAdapter(mAdapter);
+            getListView().setOnItemClickListener(this);
+        }
+//        ArrayList<ParkingSpot> spaces = controller.parkingSpots;
+
         System.out.println("GET SPACES in SpacesFragment");
     }
 

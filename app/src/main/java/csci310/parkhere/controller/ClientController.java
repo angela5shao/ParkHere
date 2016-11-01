@@ -1,6 +1,7 @@
 package csci310.parkhere.controller;
 
 import android.app.Activity;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import csci310.parkhere.ui.LoginActivity;
+import csci310.parkhere.ui.ProviderActivity;
 import csci310.parkhere.ui.RegisterProviderActivity;
 import csci310.parkhere.ui.RegisterRenterActivity;
 import csci310.parkhere.ui.RenterActivity;
@@ -40,12 +42,18 @@ public class ClientController {
 
 
     private static Activity currentActivity;
+    private static Fragment currentFragment;
+
+    public int currentIndexofSpaces;
 
     public SearchResults searchResults;
 
     public boolean registerFailed;
     public boolean loginFailed;
     public boolean toDispaySearch;
+
+    public boolean providerToshowSpaces;
+    public boolean providerToshowSpacesDetail;
 
 
 
@@ -63,13 +71,17 @@ public class ClientController {
         registerFailed = false;
         loginFailed = false;
         toDispaySearch = false;
+        providerToshowSpaces = false;
+        providerToshowSpacesDetail = false;
         searchResults = null;
+        currentIndexofSpaces = -1;
     }
 
     public void setCurrentActivity(Activity ac)
     {
         currentActivity = ac;
     }
+    public void setCurrentFragment(Fragment fr) { currentFragment = fr;}
 
     public static ClientController getInstance() {
         if(instance == null) {
@@ -165,6 +177,22 @@ public class ClientController {
             {
 //                ra.updateUserInfo(user.getUsername(), "", user.userLicense, user.userPlate);
             }
+        }
+        else if(currentActivity instanceof ProviderActivity) {
+            ProviderActivity ra = (ProviderActivity)currentActivity;
+            if(providerToshowSpaces)
+            {
+                ra.showSpaceFragment();
+                providerToshowSpaces = false;
+            }
+
+            else if(providerToshowSpacesDetail)
+            {
+                ra.showSpaceDetailFragment();
+                providerToshowSpacesDetail = false;
+            }
+
+
         }
         else if(currentActivity instanceof LoginActivity)
         {

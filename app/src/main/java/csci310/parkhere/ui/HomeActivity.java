@@ -7,6 +7,7 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientCommunicator;
@@ -34,8 +35,24 @@ public class HomeActivity extends Activity {
         StrictMode.setThreadPolicy(policy);
 
 
-        clientController = new ClientController();
+        clientController = ClientController.getInstance();
         clientController.setCurrentActivity(this);
+
+
+        Log.d("HOMEAC", "Oncreate");
+
+        if(clientController.registerFailed)
+        {
+            Log.d("Register failed", "FAILED");
+            Toast.makeText(getApplicationContext(), "Register fail", Toast.LENGTH_SHORT).show();
+            clientController.registerFailed = false;
+        }
+        else if(clientController.loginFailed)
+        {
+            Toast.makeText(getApplicationContext(), "Login fail", Toast.LENGTH_SHORT).show();
+            clientController.loginFailed = false;
+        }
+
 
 
         _loginButton.setOnClickListener(new View.OnClickListener() {

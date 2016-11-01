@@ -5,62 +5,76 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toolbar;
+import android.widget.LinearLayout;
 
 import com.braintreepayments.api.BraintreeFragment;
 import com.braintreepayments.api.BraintreePaymentActivity;
 import com.braintreepayments.api.PayPal;
-import com.braintreepayments.api.PaymentRequest;
 import com.braintreepayments.api.exceptions.InvalidArgumentException;
 import com.braintreepayments.api.models.PaymentMethodNonce;
 import com.braintreepayments.api.models.VenmoAccountNonce;
 
 import csci310.parkhere.R;
+import csci310.parkhere.controller.ClientController;
+import resource.User;
 
 /**
  * Created by ivylinlaw on 10/17/16.
  */
-public class ProviderActivity extends FragmentActivity implements SpacesFragment.OnFragmentInteractionListener,
+public class ProviderActivity extends AppCompatActivity implements SpacesFragment.OnFragmentInteractionListener,
         SpaceDetailFragment.OnFragmentInteractionListener, PrivateProfileFragment.OnFragmentInteractionListener,
-        ReservationDetailFragment.OnFragmentInteractionListener, SearchSpaceDetailFragment.OnFragmentInteractionListener {
+        ReservationDetailFragment.OnFragmentInteractionListener, AddSpaceFragment.OnFragmentInteractionListener {
 
-    TextView _spaceLink;
+    LinearLayout _spaceLink;
     ImageView _profilePic;
 
     FragmentManager fm;
     FragmentTransaction fragmentTransaction;
-    Fragment spacesFragment;
-    Fragment privateProfileFragment;
+    Fragment spacesFragment, privateProfileFragment, addSpaceFragment, spaceDetailFragment;
     BraintreeFragment mBraintreeFragment;
     String mAuthorization = "clientToken";
+
+    ClientController clientController;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.provider_ui);
 
+        clientController = ClientController.getInstance();
+        clientController.setCurrentActivity(this);
+
         Toolbar providerrToolbar = (Toolbar) findViewById(R.id.providerTabbar);
-        setActionBar(providerrToolbar);
+        setSupportActionBar(providerrToolbar);
 //
-        _spaceLink = (TextView)findViewById(R.id.spaceLink);
+        _spaceLink = (LinearLayout)findViewById(R.id.spaceLink);
         _profilePic = (ImageView)findViewById(R.id.profilePic);
 //
         fm = getSupportFragmentManager();
         fragmentTransaction = fm.beginTransaction();
         spacesFragment = new SpacesFragment();
         privateProfileFragment = new PrivateProfileFragment();
+        addSpaceFragment = new AddSpaceFragment();
 
-//        fragmentTransaction.add(R.id.fragContainer, spacesFragment).commit();
+//        getSupportFragmentManager().beginTransaction()
+//                .add(R.id.fragContainer, spacesFragment).commit();
+
+//        getSupportFragmentManager().beginTransaction()
+//                .add(R.id.fragContainer, addSpaceFragment).commit();
+
+        spaceDetailFragment = new SpaceDetailFragment();
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragContainer, spacesFragment).commit();
+                .add(R.id.fragContainer, spaceDetailFragment).commit();
 
         // Initialize BraintreeFragment
         try {
@@ -88,16 +102,42 @@ public class ProviderActivity extends FragmentActivity implements SpacesFragment
         _profilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("Clicked on profile tab item");
-                try {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragContainer, privateProfileFragment).commit();
-                } catch (Exception e) {
-                    System.out.println("Profile tab item exception");
+//                System.out.println("Clicked on profile tab item");
+//                try {
+//                    getSupportFragmentManager().beginTransaction()
+//                            .replace(R.id.fragContainer, privateProfileFragment).commit();
+//                } catch (Exception e) {
+//                    System.out.println("Profile tab item exception");
+//                }
+                fragmentTransaction = fm.beginTransaction();
+
+                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
+                User user = clientController.getUser();
+                if(user == null)
+                    Log.d("PROFILE", "user is null");
+
+                if (fragment instanceof PrivateProfileFragment && user != null) {
+                    Log.d("@@@@@@@@@@@@@@ ", user.userName);
+                    Log.d("@@@@@@@@@@@@@@ ", user.userLicense);
+                    Log.d("@@@@@@@@@@@@@@ ", user.userPlate);
+                    ((PrivateProfileFragment) fragment).updateUserInfo(user.userName, "", user.userLicense, user.userPlate);
                 }
+
+                fragmentTransaction.replace(R.id.fragContainer, privateProfileFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
 
+        // Initialize BraintreeFragment
+        try {
+            // TODO mAuthorization should be either a client token or tokenization key
+            String mAuthorization = "client token";
+            mBraintreeFragment = BraintreeFragment.newInstance(this, mAuthorization);
+            // mBraintreeFragment is ready to use!
+        } catch (InvalidArgumentException e) {
+            // There was an issue with your authorization string.
+        }
     }
 
     @Override
@@ -107,15 +147,12 @@ public class ProviderActivity extends FragmentActivity implements SpacesFragment
         return true;
     }
 
+
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        System.out.println("*** ProviderActivity onActivityResult is called");
-//        super.onActivityResult(requestCode, resultCode, data);
-//        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.payment_fragment);
-//        if (fragment != null){
-//            fragment.onActivityResult(requestCode, resultCode, data);
-//        }
-
+        super.onActivityResult(requestCode,resultCode,data);
         if (requestCode == 1) {
             switch (resultCode) {
                 case Activity.RESULT_OK:
@@ -147,15 +184,36 @@ public class ProviderActivity extends FragmentActivity implements SpacesFragment
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
-        switch (item.getItemId()) {
-//            case R.id.action_search:
-//                openSearch();
-//                return true;
-//            case R.id.action_compose:
-//                composeMessage();
-//                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+//        switch (item.getItemId()) {
+////            case R.id.action_search:
+////                openSearch();
+////                return true;
+////            case R.id.action_compose:
+////                composeMessage();
+////                return true;
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+
+        if(item.getItemId() == R.id.RenterSwitch)
+        {
+            Intent intent = new Intent(this, RenterActivity.class);
+            startActivityForResult(intent, 0);
+            clientController.getUser().userType = true;
+
+            Log.d("SWITCH","Switch To Renter");
+            return true;
+        }
+        else if(item.getItemId() == R.id.LogOut)
+        {
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivityForResult(intent, 0);
+            ClientController.resetController();
+            return true;
+        }
+        else
+        {
+            return super.onOptionsItemSelected(item);
         }
     }
 
@@ -227,4 +285,36 @@ public class ProviderActivity extends FragmentActivity implements SpacesFragment
 //        startActivityForResult(paymentRequest.getIntent(this), 1);
 //
 //    }
+
+    public void onAddSpace() {
+        System.out.println("SpacesFragment onAddSpace() called");
+        AddSpaceFragment addSpaceFragment = new AddSpaceFragment();
+        Bundle args = new Bundle();
+        args.putLong("param1", 012345);
+        addSpaceFragment.setArguments(args);
+
+        try {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragContainer, addSpaceFragment).commit();
+            System.out.println("onReservationSelected, replaced with reservationDetailFragment");
+        } catch (Exception e) {
+            System.out.println("Reservation item exception");
+        }
+    }
+
+    public void onAddSpaceClick(View v) {
+        System.out.println("SpacesFragment onAddSpace() called");
+        AddSpaceFragment addSpaceFragment = new AddSpaceFragment();
+        Bundle args = new Bundle();
+        args.putLong("param1", 012345);
+        addSpaceFragment.setArguments(args);
+
+        try {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragContainer, addSpaceFragment).commit();
+            System.out.println("onReservationSelected, replaced with reservationDetailFragment");
+        } catch (Exception e) {
+            System.out.println("Reservation item exception");
+        }
+    }
 }

@@ -4,17 +4,16 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import csci310.parkhere.R;
-import resource.ParkingSpot;
 
 
 /**
@@ -31,6 +30,7 @@ public class SpacesFragment extends ListFragment implements AdapterView.OnItemCl
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private ListView spacesListView;
+    private Button addSpaceButton;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -42,6 +42,7 @@ public class SpacesFragment extends ListFragment implements AdapterView.OnItemCl
     public SpacesFragment() {
         // Required empty public constructor
 //        spacesListView = (ListView)rootView().findViewById(R.id.spaces_list);
+//        addSpaceButton = (Button)getView().findViewById(R.id.spaces_addbutton);
     }
 
     /**
@@ -69,6 +70,12 @@ public class SpacesFragment extends ListFragment implements AdapterView.OnItemCl
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+//        addSpaceButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mListener.onAddSpace();
+//            }
+//        });
     }
 
     @Override
@@ -136,13 +143,16 @@ public class SpacesFragment extends ListFragment implements AdapterView.OnItemCl
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
         void onSpaceSelected(long spaceID);
+        void onAddSpace();
     }
 
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
                             long id) {
-        mListener.onSpaceSelected(123456789);
-        System.out.println("CLICKED on Item: " + position);
+//        mListener.onSpaceSelected(123456789);
+        System.out.println("CLICKED on Item: "+position);
     }
+
+
 }

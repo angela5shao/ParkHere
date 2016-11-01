@@ -3,11 +3,8 @@ package csci310.parkhere.ui;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -30,7 +27,6 @@ public class RegisterRenterActivity extends Activity {
     private static final int REQUEST_SIGNUP = 0;
 
     ProgressDialog progressDialog;
-    AlertDialog _errorDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,16 +80,7 @@ public class RegisterRenterActivity extends Activity {
         }
 
         final View curr_v = v;
-//        new android.os.Handler().postDelayed(
-//                new Runnable() {
-//                    public void run() {
-//                        // On complete call either onLoginSuccess or onLoginFailed
-////                        onRegisterSuccess(curr_v);
-//                            // onRegisterFailed();
-//
-//                        progressDialog.dismiss();
-//                    }
-//                }, 3000);
+
     }
 
     @Override
@@ -116,13 +103,22 @@ public class RegisterRenterActivity extends Activity {
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onPause() {
         try {
             if (progressDialog != null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
             }
-            if(_errorDialog != null && _errorDialog.isShowing()) {
-                _errorDialog.dismiss();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        try {
+            if (progressDialog != null && progressDialog.isShowing()) {
+                progressDialog.dismiss();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -138,22 +134,11 @@ public class RegisterRenterActivity extends Activity {
 
 
     public void onRegisterFailed(Context c) {
+//        progressDialog.setMessage("Register failed");
+        progressDialog.dismiss();
+
         Intent intent = new Intent(c, HomeActivity.class);
         startActivityForResult(intent, 0);
-
-        AlertDialog.Builder ErrorDailog = new AlertDialog.Builder(this);
-        ErrorDailog.setTitle("Register Error");
-        ErrorDailog.setMessage("Username has been taken");
-        ErrorDailog.setCancelable(true);
-        ErrorDailog.setNeutralButton(android.R.string.ok,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-
-        _errorDialog = ErrorDailog.create();
-        _errorDialog.show();
     }
 
 //    public boolean validate() {

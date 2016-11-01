@@ -332,6 +332,7 @@ public class SearchFragment extends Fragment {
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("AUTOCOMPLETE", "SEARCH");
         if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 Place place = PlaceAutocomplete.getPlace(getContext(), data);
@@ -340,6 +341,7 @@ public class SearchFragment extends Fragment {
 
                 _addressText.setText(place.getAddress());
                 curr_location = place.getLatLng();
+
 
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(getContext(), data);

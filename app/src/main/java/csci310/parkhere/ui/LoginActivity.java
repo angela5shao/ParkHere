@@ -2,6 +2,7 @@ package csci310.parkhere.ui;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,6 +30,8 @@ public class LoginActivity extends Activity {
 
     TextView _signupLink, _forgotPwLink;
     ClientController clientController;
+
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,13 +86,13 @@ public class LoginActivity extends Activity {
         password = _password.getText().toString();
 
         if (!validate()) {
-            onLoginFailed();
+            onLoginFailed(getApplicationContext());
             return;
         }
 
         _loginButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
+        progressDialog = new ProgressDialog(LoginActivity.this,
                 R.style.AppTheme);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
@@ -102,16 +105,7 @@ public class LoginActivity extends Activity {
         } catch(IOException e){
             e.printStackTrace();
         }
-        final View curr_v = v;
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onLoginSuccess or onLoginFailed
-                        onLoginSuccess(curr_v);
-                        // onLoginFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
+
     }
 
     public boolean validate() {
@@ -119,17 +113,30 @@ public class LoginActivity extends Activity {
         return true;
     }
 
-    public void onLoginSuccess(View v) {
-        _loginButton.setEnabled(true);
+    public void onLoginSuccess(Context c) {
+        progressDialog.dismiss();
+
         finish();
 
-        Intent myIntent = new Intent(v.getContext(), RenterActivity.class);
-        startActivityForResult(myIntent, 0);
+
+        if(clientController.getUser().getType())
+        {
+            Intent myIntent = new Intent(c, RenterActivity.class);
+            startActivityForResult(myIntent, 0);
+        }
+        else
+        {
+            Intent myIntent = new Intent(c, ProviderActivity.class);
+            startActivityForResult(myIntent, 0);
+        }
     }
 
-    public void onLoginFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
-        _loginButton.setEnabled(true);
+    public void onLoginFailed(Context c) {
+        progressDialog.dismiss();
+
+
+        Intent intent = new Intent(c, HomeActivity.class);
+        startActivityForResult(intent, 0);
     }
 }
 

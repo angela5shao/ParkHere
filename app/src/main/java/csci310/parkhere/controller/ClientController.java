@@ -2,22 +2,25 @@ package csci310.parkhere.controller;
 
 import android.app.Activity;
 import android.util.Log;
-import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 
-import csci310.parkhere.ui.HomeActivity;
+import csci310.parkhere.ui.LoginActivity;
+import csci310.parkhere.ui.RegisterProviderActivity;
 import csci310.parkhere.ui.RegisterRenterActivity;
+import csci310.parkhere.ui.RenterActivity;
 import resource.CarType;
+import resource.NetworkPackage;
 import resource.ParkingSpot;
 import resource.Reservation;
 import resource.Review;
+import resource.SearchResults;
 import resource.Time;
 import resource.TimeInterval;
 import resource.User;
@@ -28,9 +31,9 @@ public class ClientController {
     private static final long serialVersionUID = 1239123098533917283L;
 
     private User user;
-    private ArrayList<ParkingSpot> parkingSpots;
-    private ArrayList<Reservation> reservations;
-    private ArrayList<Review> reviews;
+    public ArrayList<ParkingSpot> parkingSpots;
+    public ArrayList<Reservation> reservations;
+    public ArrayList<Review> reviews;
     public ClientCommunicator clientCommunicator;
 
     private static ClientController instance;
@@ -38,16 +41,29 @@ public class ClientController {
 
     private static Activity currentActivity;
 
-    public ClientController() { // private constructor
+    public SearchResults searchResults;
+
+    public boolean registerFailed;
+    public boolean loginFailed;
+    public boolean toDispaySearch;
+
+
+
+
+    private ClientController() { // private constructor
 
         user = null;
-        parkingSpots = null;
-        reservations = null;
-        reviews = null;
+        parkingSpots = new ArrayList<>();
+        reservations = new ArrayList<>();
+        reviews = new ArrayList<>();
         clientCommunicator = new ClientCommunicator(this);
 
         instance = this;
 
+        registerFailed = false;
+        loginFailed = false;
+        toDispaySearch = false;
+        searchResults = null;
     }
 
     public void setCurrentActivity(Activity ac)
@@ -60,6 +76,11 @@ public class ClientController {
             instance = new ClientController();
         }
         return instance;
+    }
+
+    public static void resetController()
+    {
+//            instance = null;
     }
 
     // Getters
@@ -117,6 +138,46 @@ public class ClientController {
                 rra.onRegisterSuccess(rra.getApplicationContext());
             }
         }
+        else if(currentActivity instanceof RegisterProviderActivity) {
+            RegisterProviderActivity rpa = (RegisterProviderActivity)currentActivity;
+            Log.d("UPDATEACTIVITY", "RegisterProviderActivity");
+
+            if(user == null)
+            {
+                rpa.onRegisterFailed(rpa.getApplicationContext());
+            }
+            else
+            {
+                rpa.onRegisterSuccess(rpa.getApplicationContext());
+            }
+        }
+        else if(currentActivity instanceof RenterActivity) {
+            RenterActivity ra = (RenterActivity)currentActivity;
+//            Log.d("UPDATEACTIVITY", "RenterActivity");
+
+            if(toDispaySearch)
+            {
+                ra.displaySearchResult(searchResults);
+                toDispaySearch = false;
+            }
+
+            if(user != null)
+            {
+//                ra.updateUserInfo(user.getUsername(), "", user.userLicense, user.userPlate);
+            }
+        }
+        else if(currentActivity instanceof LoginActivity)
+        {
+            LoginActivity la = (LoginActivity)currentActivity;
+            if(user == null)
+            {
+                la.onLoginFailed(la.getApplicationContext());
+            }
+            else
+            {
+                la.onLoginSuccess(la.getApplicationContext());
+            }
+        }
     }
 
     public User getProfile(long userID) {
@@ -163,8 +224,8 @@ public class ClientController {
         return false;
     }
 
-    public Reservation getReservationDetail(long resID) {
-        return null;
+    public void getReservationDetail(long resID) {
+
     }
 
     public void submitReview(Review rev) {
@@ -185,6 +246,14 @@ public class ClientController {
         Time inEndTime = new Time(Integer.parseInt(time2[2]),Integer.parseInt(time2[0]), Integer.parseInt(time2[1]), Integer.parseInt(time22[1]), Integer.parseInt(time22[0]),0);
         TimeInterval timeInterval = new TimeInterval(inStartTime, inEndTime);
         HashMap<String, Serializable> entry = new HashMap<>();
+        if(location == null)
+        {
+            Toast.makeText(currentActivity.getApplicationContext(), "Please input search address", Toast.LENGTH_SHORT).show();
+
+            return;
+        }
+
+
         ParkingSpot.Location current_location = new ParkingSpot.Location((int)location.latitude, (int)location.longitude);
         entry.put("LOCATION", current_location);
         entry.put("TIMEINTERVAL", timeInterval);
@@ -192,9 +261,22 @@ public class ClientController {
         entry.put("DISTANCE", Integer.parseInt(distance.replaceAll("[\\D]", "")));
         clientCommunicator.send("SEARCH", entry);
     }
-    public ArrayList<ParkingSpot> search(String address, int dist, CarType type, TimeInterval interval, int length) {
-        return null;
+
+
+    public void addSpace(LatLng location, String streetAddress, String description)
+    {
+        if(location == null)
+            return;
+
+        ParkingSpot spot = new ParkingSpot(user.userID,null,location.latitude,location.longitude,streetAddress,description, "", 0 );
+        try {
+            clientCommunicator.send("ADD_PARKINGSPOT", spot);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
+
 
     public boolean book(long spaceID, long userID, TimeInterval interval) {
         return false;
@@ -203,4 +285,67 @@ public class ClientController {
     public void loadPay(String method) {
 
     }
+
+
+
+
+    public void requestMyReservationList()
+    {
+        if(user == null)
+            return;
+
+        NetworkPackage NP = new NetworkPackage();
+        NP.addEntry("FETCHRESERVATION", user.userID);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void requestMyParkingSpotList()
+    {
+        if(user == null)
+            return;
+
+        NetworkPackage NP = new NetworkPackage();
+        NP.addEntry("FETCHPARKINGSPOT", user.userID);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void requestSpotTimeInterval(ParkingSpot spot)
+    {
+        if(user == null && spot == null)
+        {
+            return;
+        }
+
+        NetworkPackage NP = new NetworkPackage();
+        NP.addEntry("FETCHTIMEINTERVAL", spot.getParkingSpotID());
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void setSpotTimeInterval(long spotID, ArrayList<TimeInterval> intervals)
+    {
+        for(int i = 0; i < parkingSpots.size(); i++)
+        {
+            ParkingSpot spot = parkingSpots.get(i);
+            if(spot.getParkingSpotID() == spotID)
+            {
+                spot.setTimeIntervalList(intervals);
+            }
+        }
+    }
+
+
+
 }

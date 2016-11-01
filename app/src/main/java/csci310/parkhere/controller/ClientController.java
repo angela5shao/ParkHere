@@ -16,6 +16,7 @@ import csci310.parkhere.ui.RegisterProviderActivity;
 import csci310.parkhere.ui.RegisterRenterActivity;
 import csci310.parkhere.ui.RenterActivity;
 import resource.CarType;
+import resource.NetworkPackage;
 import resource.ParkingSpot;
 import resource.Reservation;
 import resource.Review;
@@ -45,6 +46,8 @@ public class ClientController {
     public boolean registerFailed;
     public boolean loginFailed;
     public boolean toDispaySearch;
+
+
 
 
     private ClientController() { // private constructor
@@ -221,8 +224,7 @@ public class ClientController {
         return false;
     }
 
-    public Reservation getReservationDetail(long resID) {
-        return null;
+    public void getReservationDetail(long resID) {
     }
 
     public void submitReview(Review rev) {
@@ -274,9 +276,9 @@ public class ClientController {
     }
 
 
-    public ArrayList<ParkingSpot> search(String address, int dist, CarType type, TimeInterval interval, int length) {
-        return null;
-    }
+//    public ArrayList<ParkingSpot> search(String address, int dist, CarType type, TimeInterval interval, int length) {
+//        return null;
+//    }
 
     public boolean book(long spaceID, long userID, TimeInterval interval) {
         return false;
@@ -285,4 +287,41 @@ public class ClientController {
     public void loadPay(String method) {
 
     }
+
+
+    public void getMyReservationList()
+    {
+        if(user == null)
+            return;
+
+        NetworkPackage NP = new NetworkPackage();
+        NP.addEntry("FETCHRESERVATION", user.getID());
+    }
+
+    public void getMyParkingSpotList()
+    {
+        if(user == null)
+            return;
+
+        NetworkPackage NP = new NetworkPackage();
+        NP.addEntry("FETCHPARKINGSPOT", user.getID());
+
+    }
+
+    public void getSpotTimeInterval(ParkingSpot spot)
+    {
+        if(user == null && spot == null)
+        {
+            return;
+        }
+
+        NetworkPackage NP = new NetworkPackage();
+        NP.addEntry("FETCHTIMEINTERVAL", spot.getParkingSpotID());
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

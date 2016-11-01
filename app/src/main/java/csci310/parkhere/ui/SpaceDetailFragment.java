@@ -28,6 +28,7 @@ import java.util.Locale;
 import csci310.parkhere.R;
 import csci310.parkhere.resource.CalendarUtils;
 import csci310.parkhere.resource.TwoEntryQueue;
+import resource.ParkingSpot;
 import resource.Time;
 import resource.TimeInterval;
 
@@ -49,6 +50,8 @@ public class SpaceDetailFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    public ParkingSpot thisParkingSpot;
+
     TextView _spacedetail_address;
     CustomCalendarView calendarView;
     final String postedDateColor = "#c3c3c3";
@@ -59,13 +62,17 @@ public class SpaceDetailFragment extends Fragment {
     int curr_year, curr_month, curr_day, curr_hour, curr_minute;
     ArrayList<TimeInterval> currSpaceTimeIntervals = new ArrayList<TimeInterval>();
 
+
+    Date selectedStartDate;
+    Date selectedEndDate;
+
     //*******************************************************************************
     // FOR TESTING DELETE LATER!!!
     // TimeInterval(Time start, Time end)
     // Time (int year, int month, int dayOfMonth, int hourOfDay, int minute, int second)
-    Time start1 = new Time (2016, 9, 20, 0, 0, 0);
-    Time end1 = new Time (2016, 9, 25, 0, 0, 0);
-    TimeInterval interval1 = new TimeInterval(start1, end1);
+//    Time start1 = new Time (2016, 9, 20, 0, 0, 0);
+//    Time end1 = new Time (2016, 9, 25, 0, 0, 0);
+//    TimeInterval interval1 = new TimeInterval(start1, end1);
     //*******************************************************************************
 
     // Store currSpaceTimeIntervals in GregorianCalendar in startTime, endTime order
@@ -100,10 +107,10 @@ public class SpaceDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+//        if (getArguments() != null) {
+//            mParam1 = getArguments().getString(ARG_PARAM1);
+//            mParam2 = getArguments().getString(ARG_PARAM2);
+//        }
 
         setHasOptionsMenu(true);
     }
@@ -115,8 +122,8 @@ public class SpaceDetailFragment extends Fragment {
 
         //*******************************************************************************
         // FOR TESTING DELETE LATER!!!
-        currSpaceTimeIntervals.add(interval1);
-        updateCurrSpaceTimeIntervalsGC(currSpaceTimeIntervals);
+//        currSpaceTimeIntervals.add(interval1);
+//        updateCurrSpaceTimeIntervalsGC(currSpaceTimeIntervals);
         //*******************************************************************************
 
         _spacedetail_address = (TextView)v.findViewById(R.id.spacedetail_address);
@@ -136,52 +143,102 @@ public class SpaceDetailFragment extends Fragment {
         //call refreshCalendar to update calendar the view
         calendarView.refreshCalendar(currentCalendar);
 
+
+        selectedStartDate = null;
+        selectedEndDate = null;
+
         //Handling custom calendar events
         calendarView.setCalendarListener(new CalendarListener() {
             @Override
             public void onDateSelected(Date date) {
-                for (int i=0; i<currSpaceTimeIntervalsGC.size(); i+=2) {
-                    Date startDate = new Date(currSpaceTimeIntervalsGC.get(i).getTimeInMillis());
-                    Date endDate = new Date(currSpaceTimeIntervalsGC.get(i + 1).getTimeInMillis());
-                    if (!CalendarUtils.isBetweenDay(date, startDate, endDate)) {
-                        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-                        Log.d("Selected date is ", df.format(date));
-                        //                    selectedDateTv.setText("Selected date is " + df.format(date));
-
-                        // Get selected Date in year, month, day
-                        Calendar cal = Calendar.getInstance();
-                        cal.setTime(date);
-                        curr_year = cal.get(Calendar.YEAR);
-                        curr_month = cal.get(Calendar.MONTH);
-                        curr_day = cal.get(Calendar.DAY_OF_MONTH);
-
-                        // Get Current Time
-                        final Calendar c = Calendar.getInstance();
-                        curr_hour = c.get(Calendar.HOUR_OF_DAY);
-                        curr_minute = c.get(Calendar.MINUTE);
-
-                                decorators.add(new DisabledColorDecorator());
-        calendarView.setDecorators(decorators);
-        calendarView.refreshCalendar(currentCalendar);
-
-                        // Launch Time Picker Dialog
-//                        TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
-//                                new TimePickerDialog.OnTimeSetListener() {
-//                                    @Override
-//                                    public void onTimeSet(TimePicker view, int hourOfDay,
-//                                                          int minute) {
-//                                        Log.d("Selected time is ", hourOfDay + ":" + minute);
-//                                        curr_hour = hourOfDay;
-//                                        curr_minute = minute;
-//                                        Log.d("Updated time is ", curr_hour + ":" + curr_minute);
-//
-//                                        // Add to TwoEntryQueue<Time> currSelectedTime
-//                                        currSelectedTime.add(new Time(curr_year,curr_month,curr_day,curr_hour,curr_minute,0));
-//                                    }
-//                                }, curr_hour, curr_minute, false);
-//                        timePickerDialog.show();
-                    }
+                if(selectedStartDate == null)
+                {
+                    selectedStartDate = date;
+                    decorators.clear();
+                    calendarView.setDecorators(decorators);
+                    calendarView.refreshCalendar(currentCalendar);
+                    currSpaceTimeIntervals.clear();
+                    currSpaceTimeIntervalsGC.clear();
+                    return;
                 }
+
+                if(selectedStartDate.compareTo(date) >= 0)
+                {
+                    selectedStartDate = date;
+                }
+                else
+                {
+                    selectedEndDate = date;
+//                    return;
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(selectedStartDate);
+                    Time timeStart = new Time( cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
+
+                    cal.setTime(selectedEndDate);
+                    Time timeEnd = new Time( cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
+
+                    selectedStartDate = null;
+                    selectedEndDate = null;
+
+
+                    TimeInterval timeInterval = new TimeInterval(timeStart, timeEnd);
+                    currSpaceTimeIntervals.add(timeInterval);
+                    updateCurrSpaceTimeIntervalsGC(currSpaceTimeIntervals);
+
+
+                    decorators.add(new DisabledColorDecorator());
+                    calendarView.setDecorators(decorators);
+                    calendarView.refreshCalendar(currentCalendar);
+                }
+
+
+//
+
+
+
+
+//                for (int i=0; i<currSpaceTimeIntervalsGC.size(); i+=2) {
+//                    Date startDate = new Date(currSpaceTimeIntervalsGC.get(i).getTimeInMillis());
+//                    Date endDate = new Date(currSpaceTimeIntervalsGC.get(i + 1).getTimeInMillis());
+//                    if (!CalendarUtils.isBetweenDay(date, startDate, endDate)) {
+//                        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+//                        Log.d("Selected date is ", df.format(date));
+//                        //                    selectedDateTv.setText("Selected date is " + df.format(date));
+//
+//                        // Get selected Date in year, month, day
+//                        Calendar cal = Calendar.getInstance();
+//                        cal.setTime(date);
+//                        curr_year = cal.get(Calendar.YEAR);
+//                        curr_month = cal.get(Calendar.MONTH);
+//                        curr_day = cal.get(Calendar.DAY_OF_MONTH);
+//
+//                        // Get Current Time
+//                        final Calendar c = Calendar.getInstance();
+//                        curr_hour = c.get(Calendar.HOUR_OF_DAY);
+//                        curr_minute = c.get(Calendar.MINUTE);
+//
+//                        decorators.add(new DisabledColorDecorator());
+//                        calendarView.setDecorators(decorators);
+//                        calendarView.refreshCalendar(currentCalendar);
+//
+//                        // Launch Time Picker Dialog
+////                        TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
+////                                new TimePickerDialog.OnTimeSetListener() {
+////                                    @Override
+////                                    public void onTimeSet(TimePicker view, int hourOfDay,
+////                                                          int minute) {
+////                                        Log.d("Selected time is ", hourOfDay + ":" + minute);
+////                                        curr_hour = hourOfDay;
+////                                        curr_minute = minute;
+////                                        Log.d("Updated time is ", curr_hour + ":" + curr_minute);
+////
+////                                        // Add to TwoEntryQueue<Time> currSelectedTime
+////                                        currSelectedTime.add(new Time(curr_year,curr_month,curr_day,curr_hour,curr_minute,0));
+////                                    }
+////                                }, curr_hour, curr_minute, false);
+////                        timePickerDialog.show();
+//                    }
+//                }
             }
 
             @Override
@@ -283,4 +340,10 @@ public class SpaceDetailFragment extends Fragment {
                                             endTime.dayOfMonth, endTime.hourOfDay, endTime.minute));
         }
     }
+
+    public void setThisParkingSpot(ParkingSpot s)
+    {
+        thisParkingSpot =s;
+    }
+
 }

@@ -374,6 +374,20 @@ public class ClientController {
         }
     }
 
+    public void requestAddTime(ParkingSpot spot, TimeInterval timeInterval, double price)
+    {
+        NetworkPackage NP = new NetworkPackage();
+        HashMap<String, Serializable> map = new HashMap<>();
+        map.put("PARKINGSPOTID", spot.getParkingSpotID());
+        map.put("TIMEINTERVAL", timeInterval);
+        map.put("PRICE", price);
+        NP.addEntry("ADDTIME", map);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 }

@@ -81,6 +81,10 @@ public class SpaceDetailFragment extends Fragment {
     Date selectedStartDate;
     Date selectedEndDate;
 
+
+    Time inputedStartTime;
+    Time inputedEndTime;
+
 //    //*******************************************************************************
 //    // FOR TESTING DELETE LATER!!!
 //    // TimeInterval(Time start, Time end)
@@ -249,6 +253,9 @@ public class SpaceDetailFragment extends Fragment {
                     cal.setTime(selectedEndDate);
                     Time timeEnd = new Time(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
 
+                    inputedStartTime = timeStart;
+                    inputedEndTime = timeEnd;
+
                     selectedStartDate = null;
                     selectedEndDate = null;
 
@@ -291,8 +298,10 @@ public class SpaceDetailFragment extends Fragment {
 
                String price =  _in_price.getText().toString();
                 // call client controller
+                ClientController controller = ClientController.getInstance();
+                controller.requestAddTime(thisParkingSpot, new TimeInterval(inputedStartTime, inputedStartTime),Integer.valueOf(_in_price.getText().toString()) );
 
-
+                Log.d("ADDTIME", "finish add time");
                 _addTimeForSpaceLayout.setVisibility(View.GONE);
                 Toast.makeText(getContext(), "Add space requested", Toast.LENGTH_SHORT).show();
             }

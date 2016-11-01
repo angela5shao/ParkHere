@@ -64,15 +64,15 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         privateProfileFragment = new PrivateProfileFragment();
         addSpaceFragment = new AddSpaceFragment();
 
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragContainer, spacesFragment).commit();
+//        getSupportFragmentManager().beginTransaction()
+//                .add(R.id.fragContainer, spacesFragment).commit();
 
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragContainer, addSpaceFragment).commit();
+//        getSupportFragmentManager().beginTransaction()
+//                .add(R.id.fragContainer, addSpaceFragment).commit();
 
         spaceDetailFragment = new SpaceDetailFragment();
-//        getSupportFragmentManager().beginTransaction()
-//                .add(R.id.fragContainer, spaceDetailFragment).commit();
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragContainer, spaceDetailFragment).commit();
 
         _spaceLink.setOnClickListener(new View.OnClickListener() {
             @Override

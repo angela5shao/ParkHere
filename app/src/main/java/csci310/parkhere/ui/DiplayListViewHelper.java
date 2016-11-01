@@ -9,7 +9,7 @@ import android.widget.ListView;
 /**
  * Created by ivylinlaw on 10/31/16.
  */
-public class DiplaySearchHelper {
+public class DiplayListViewHelper {
     public static void getListViewSize(ListView myListView) {
         ListAdapter myListAdapter = myListView.getAdapter();
         if (myListAdapter == null) {

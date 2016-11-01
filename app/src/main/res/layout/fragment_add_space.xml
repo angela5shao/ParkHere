@@ -67,6 +67,18 @@
                 android:layout_margin="4dp"
                 android:entries="@array/search_cartype_spinner"/>
 
+            <Spinner
+                android:id="@+id/cancelPolicySpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorAccent"
+                android:popupBackground="@color/colorAccent"
+                android:spinnerMode="dropdown"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:layout_margin="4dp"
+                android:entries="@array/cancel_policy_spinner"/>
+
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

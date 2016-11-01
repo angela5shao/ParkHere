@@ -1,9 +1,6 @@
 package csci310.parkhere.ui;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
-
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -28,7 +25,6 @@ import com.google.android.gms.maps.model.LatLng;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
-import resource.ParkingSpot;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,7 +47,7 @@ public class AddSpaceFragment extends Fragment {
     private String mParam2;
 
     Button _btn_add_address, _btn_upload_image, _btn_confirm;
-    Spinner _cartypeSpinner;
+    Spinner _cartypeSpinner, _cancelPolicySpinner;
     EditText  _in_descrip;
     TextView _addressText;
 
@@ -101,6 +97,8 @@ public class AddSpaceFragment extends Fragment {
 
         _addressText = (TextView)v.findViewById(R.id.addressText);
         _cartypeSpinner = (Spinner)v.findViewById(R.id.cartypeSpinner);
+        _cancelPolicySpinner = (Spinner)v.findViewById(R.id.cancelPolicySpinner);
+
         curr_cartype = _cartypeSpinner.getSelectedItem().toString();
 
         _btn_add_address = (Button)v.findViewById(R.id.btn_add_address);

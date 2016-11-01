@@ -64,7 +64,7 @@ public class CalendarUtils {
 
     // Customize function !!!
     public static boolean isBetweenDay(Date date, Date startDate, Date endDate) {
-        return startDate.compareTo(date) * date.compareTo(endDate) > 0;
+        return startDate.compareTo(date) * date.compareTo(endDate) >= 0;
     }
 
     public static boolean isBetweenDay(Date date, Time startTime, Time endTime) {
@@ -74,7 +74,7 @@ public class CalendarUtils {
                 endTime.dayOfMonth, endTime.hourOfDay, endTime.minute);
         Date startDate = new Date(start.getTimeInMillis());
         Date endDate = new Date(end.getTimeInMillis());
-        return startDate.compareTo(date) * date.compareTo(endDate) > 0;
+        return startDate.compareTo(date) * date.compareTo(endDate) >= 0;
     }
 
 }

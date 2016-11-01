@@ -31,6 +31,11 @@
         <item>Truck</item>
         <item>AnyCarType</item>
     </string-array>
+    <string-array name="cancel_policy_spinner">
+        <item>Free cancellation</item>
+        <item>10% penalty for cancellation</item>
+        <item>15% penalty for cancellation</item>
+    </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

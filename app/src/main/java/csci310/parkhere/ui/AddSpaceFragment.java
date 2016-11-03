@@ -136,7 +136,7 @@ public class AddSpaceFragment extends Fragment {
                 addSpaceTask = new ProviderAddSpaceTask(_addressText.getText().toString(),
                         _in_descrip.getText().toString(),
                         _cartypeSpinner.getSelectedItem().toString(),
-                        _cancelPolicySpinner.getSelectedItem().toString());
+                        _cancelPolicySpinner.getSelectedItemPosition());
                 addSpaceTask.execute((Void) null);
             }
         });
@@ -223,9 +223,9 @@ public class AddSpaceFragment extends Fragment {
         private final String mAddressText;
         private final String mDescrip;
         private final String mCarType;
-        private final String mCancelPolicy;
+        private final int mCancelPolicy;
 
-        ProviderAddSpaceTask(String inAddressText, String inDescrip, String inCarType, String inCancelPolicy){
+        ProviderAddSpaceTask(String inAddressText, String inDescrip, String inCarType, int inCancelPolicy){
             mAddressText = inAddressText;
             mDescrip = inDescrip;
             mCarType = inCarType;

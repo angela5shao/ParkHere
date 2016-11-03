@@ -12,7 +12,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import csci310.parkhere.resource.CarType;
+import resource.CarType;
 import resource.NetworkPackage;
 import resource.ParkingSpot;
 import resource.Reservation;
@@ -301,13 +301,13 @@ public class ClientController {
     }
 
 
-    public void addSpace(LatLng location, String streetAddress, String description, String carType, String cancelPolicy)
+    public void addSpace(LatLng location, String streetAddress, String description, String carType, int cancelPolicy)
     {
         if(location == null)
             return;
 
-        int mCarType = new CarType(carType);
-        ParkingSpot spot = new ParkingSpot(user.userID,null,location.latitude,location.longitude,streetAddress,description, "",mCarType, ,);
+        int mCarType = new CarType(carType).findNum();
+        ParkingSpot spot = new ParkingSpot(user.userID,null,location.latitude,location.longitude,streetAddress,description, "",mCarType,cancelPolicy);
         //public ParkingSpot(long userID, ArrayList<TimeInterval> time, double lat, double lon, String streetAddr, String description, String zipcode, int cartype) {
         try {
             clientCommunicator.send("ADD_PARKINGSPOT", spot);

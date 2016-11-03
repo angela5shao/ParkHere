@@ -8,8 +8,6 @@ import android.view.View;
 
 import com.braintreepayments.api.BraintreeFragment;
 import com.braintreepayments.api.BraintreePaymentActivity;
-import com.braintreepayments.api.PayPal;
-import com.braintreepayments.api.PaymentButton;
 import com.braintreepayments.api.PaymentRequest;
 import com.braintreepayments.api.exceptions.InvalidArgumentException;
 import com.braintreepayments.api.models.PaymentMethodNonce;
@@ -38,17 +36,17 @@ public class PaymentActivity extends Activity {
         PaymentRequest paymentRequest = new PaymentRequest()
                 .clientToken(clientToken);
 
-        try {
-            PaymentButton paymentButton = PaymentButton.newInstance(this, R.id.payment_button_container, paymentRequest);
-            paymentButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    PayPal.authorizeAccount(braintreeFragment);
-                }
-            });
-        } catch (InvalidArgumentException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            PaymentButton paymentButton = PaymentButton.newInstance(this, R.id.payment_button_container, paymentRequest);
+//            paymentButton.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    PayPal.authorizeAccount(braintreeFragment);
+//                }
+//            });
+//        } catch (InvalidArgumentException e) {
+//            e.printStackTrace();
+//        }
 
 //        CardBuilder cardBuilder = new CardBuilder()
 //                .cardNumber("4111111111111111")

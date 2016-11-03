@@ -1,8 +1,6 @@
 package csci310.parkhere.ui;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -25,7 +23,6 @@ import com.braintreepayments.api.exceptions.InvalidArgumentException;
 import com.braintreepayments.api.models.PaymentMethodNonce;
 import com.braintreepayments.api.models.VenmoAccountNonce;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -386,6 +383,16 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
                 return myTimeIntervals;
             }
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<TimeInterval> myTimeIntervals) {
+            Bundle args = new Bundle();
+            //_spacedetail_address
+//            args.putStringArrayList("",);
+            spaceDetailFragment = new SpaceDetailFragment();
+            spaceDetailFragment.setArguments(args);
+            fm.beginTransaction().add(R.id.fragContainer, spaceDetailFragment).commit();
         }
     }
 }

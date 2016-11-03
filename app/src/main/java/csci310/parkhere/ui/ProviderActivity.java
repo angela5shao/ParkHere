@@ -62,7 +62,9 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         fragmentTransaction = fm.beginTransaction();
 //        spacesFragment = fm.findFragmentById(R.id.fragment_spaces);
         spacesFragment = new SpacesFragment();
+
         fragmentTransaction.add(R.id.fragContainer, spacesFragment).commit();
+
 //        ArrayList<ParkingSpot> parkingSpots = clientController.getSpaces(clientController.getUser().userID);
 
 //        // TODO: Fix this; want to call setParkingSpot on spacesFragment
@@ -79,8 +81,11 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 
 
         spaceDetailFragment = new SpaceDetailFragment();
+        //************************************************************
+        // COMMENT OUT AFTER TESTING
 //        getSupportFragmentManager().beginTransaction()
 //                .add(R.id.fragContainer, spaceDetailFragment).commit();
+        //************************************************************
 
         _spaceLink.setOnClickListener(new View.OnClickListener() {
             @Override

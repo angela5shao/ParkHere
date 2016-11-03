@@ -81,7 +81,7 @@ public class SpaceDetailFragment extends Fragment {
     Date selectedStartDate;
     Date selectedEndDate;
 
-
+    SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
     Time inputedStartTime;
     Time inputedEndTime;
 
@@ -227,7 +227,7 @@ public class SpaceDetailFragment extends Fragment {
             public void onDateSelected(Date date) {
                 if (selectedStartDate == null) {
                     selectedStartDate = date;
-                    _in_start_date.setText(selectedStartDate.toString());
+                    _in_start_date.setText(dateFormat.format(selectedStartDate));
 
                     decorators.clear();
                     decorators.add(new DisabledColorDecorator());
@@ -241,10 +241,10 @@ public class SpaceDetailFragment extends Fragment {
 
                 if (selectedStartDate.compareTo(date) >= 0) {
                     selectedStartDate = date;
-                    _in_start_date.setText(selectedStartDate.toString());
+                    _in_start_date.setText(dateFormat.format(selectedStartDate));
                 } else {
                     selectedEndDate = date;
-                    _in_end_date.setText(selectedEndDate.toString());
+                    _in_end_date.setText(dateFormat.format(selectedEndDate));
 
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(selectedStartDate);
@@ -325,11 +325,11 @@ public class SpaceDetailFragment extends Fragment {
     private class PostedColorDecorator implements DayDecorator {
         @Override
         public void decorate(DayView dayView) {
+            int color = Color.parseColor(postedDateColor);
             for (int i=0; i<postedSpaceTimeIntervalsGC.size(); i+=2) {
                 Date startDate = new Date(postedSpaceTimeIntervalsGC.get(i).getTimeInMillis());
                 Date endDate = new Date(postedSpaceTimeIntervalsGC.get(i+1).getTimeInMillis());
                 if (CalendarUtils.isBetweenDay(dayView.getDate(), startDate, endDate)) {
-                    int color = Color.parseColor(postedDateColor);
                     dayView.setTextColor(color);
                 }
             }
@@ -339,11 +339,12 @@ public class SpaceDetailFragment extends Fragment {
     private class SelectedColorDecorator implements DayDecorator {
         @Override
         public void decorate(DayView dayView) {
+            int color = Color.parseColor(selectedDateColor);
             for (int i=0; i<currSpaceTimeIntervalsGC.size(); i+=2) {
                 Date startDate = new Date(currSpaceTimeIntervalsGC.get(i).getTimeInMillis());
                 Date endDate = new Date(currSpaceTimeIntervalsGC.get(i+1).getTimeInMillis());
+
                 if (CalendarUtils.isBetweenDay(dayView.getDate(), startDate, endDate)) {
-                    int color = Color.parseColor(selectedDateColor);
                     dayView.setBackgroundColor(color);
                     dayView.setTextColor(Color.parseColor("#FFFFFF"));
                 }

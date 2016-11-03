@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -19,8 +20,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import csci310.parkhere.R;
-import csci310.parkhere.controller.ClientController;
-import resource.Reservation;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,16 +44,17 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
     SupportMapFragment mMapView;
     private GoogleMap googleMap;
     CameraPosition cameraPosition;
-    private Reservation mReservation;
 
     TextView _spacedetail_address, _start_time_label, _end_time_label, _renter_username_label;
+    Button _btn_cancel;
 
-    //*****************************************************************
-    // latitude and longitude
-    // NEED TO UPDATE
-    private double curr_lat = 13.0294278;
-    private double curr_long = 80.24667829999999;
-    //*****************************************************************
+    // latitude and longitude (default as USC)
+    private double curr_lat = 34.0224;
+    private double curr_long = 118.2851;
+    private String address = "[address]";
+    private String start_time = "[start time]";
+    private String end_time = "[end time]";
+    private String renter_username = "[renter username]";
 
     public ReservationDetailFragment() {
         // Required empty public constructor
@@ -81,7 +81,16 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
+
+        // Get data from parent activity/fragment
+        Bundle b = getArguments();
+        if (b != null) {
+            curr_lat = b.getDouble("LAT");
+            curr_long = b.getDouble("LONG");
+            address = b.getString("ADDRESS");
+            start_time = b.getString("START_TIME");
+            end_time = b.getString("END_TIME");
+            renter_username = b.getString("RENTER");
         }
     }
 
@@ -95,6 +104,12 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
         _start_time_label=(TextView)v.findViewById(R.id.start_time_label);
         _end_time_label=(TextView)v.findViewById(R.id.end_time_label);
         _renter_username_label=(TextView)v.findViewById(R.id.renter_username_label);
+        _btn_cancel=(Button)v.findViewById(R.id.btn_cancel);
+
+        _spacedetail_address.setText(address);
+        _start_time_label.setText(start_time);
+        _end_time_label.setText(end_time);
+        _renter_username_label.setText(renter_username);
 
         mMapView = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map));
         mMapView.onCreate(savedInstanceState);
@@ -116,7 +131,15 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
 //        googleMap.addMarker(marker);
 
         cameraPosition = new CameraPosition.Builder()
-                .target(new LatLng(13.0294278, 80.24667829999999)).zoom(12).build();
+                .target(new LatLng(curr_lat, curr_long)).zoom(12).build();
+
+        _btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // call Client Controller for cancelling reservaiton
+                
+            }
+        });
 
         return v;
     }
@@ -169,5 +192,27 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
                 .newCameraPosition(cameraPosition));
     }
 
-    public void setReservation(Reservation r) { mReservation = r; System.out.println("ResDetailFrag: setRes"); }
+    // Update reservation information
+    public void setReservation(String in_address, String in_start_time, String in_end_time,
+                               String in_renter_username, double in_lat, double in_long) {
+        address = in_address;
+        start_time = in_start_time;
+        end_time = in_end_time;
+        renter_username = in_renter_username;
+        _spacedetail_address.setText(address);
+        _start_time_label.setText(start_time);
+        _end_time_label.setText(end_time);
+        _renter_username_label.setText(renter_username);
+
+        curr_lat = in_lat;
+        curr_long = in_long;
+        cameraPosition = new CameraPosition.Builder()
+                .target(new LatLng(curr_lat, curr_long)).zoom(12).build();
+        if(googleMap != null) {
+            googleMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(curr_lat, curr_long)));
+            googleMap.animateCamera(CameraUpdateFactory
+                    .newCameraPosition(cameraPosition));
+        }
+    }
 }

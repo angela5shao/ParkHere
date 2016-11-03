@@ -64,7 +64,18 @@ public class CalendarUtils {
 
     // Customize function !!!
     public static boolean isBetweenDay(Date date, Date startDate, Date endDate) {
-        return startDate.compareTo(date) * date.compareTo(endDate) >= 0;
+        int compare = startDate.compareTo(date) * date.compareTo(endDate);
+
+        Calendar endCal = Calendar.getInstance();
+        endCal.setTime(endDate);
+        Calendar dateCal = Calendar.getInstance();
+        dateCal.setTime(date);
+        boolean ifEndDate = ((endCal.get(Calendar.YEAR)==dateCal.get(Calendar.YEAR)) &&
+                (endCal.get(Calendar.MONTH)==dateCal.get(Calendar.MONTH)) &&
+                (endCal.get(Calendar.DAY_OF_MONTH)==dateCal.get(Calendar.DAY_OF_MONTH)));
+
+        if(compare >=0 || ifEndDate) return true;
+        return false;
     }
 
     public static boolean isBetweenDay(Date date, Time startTime, Time endTime) {
@@ -74,7 +85,19 @@ public class CalendarUtils {
                 endTime.dayOfMonth, endTime.hourOfDay, endTime.minute);
         Date startDate = new Date(start.getTimeInMillis());
         Date endDate = new Date(end.getTimeInMillis());
-        return startDate.compareTo(date) * date.compareTo(endDate) >= 0;
+
+        int compare = startDate.compareTo(date) * date.compareTo(endDate);
+
+        Calendar endCal = Calendar.getInstance();
+        endCal.setTime(endDate);
+        Calendar dateCal = Calendar.getInstance();
+        dateCal.setTime(date);
+        boolean ifEndDate = ((endCal.get(Calendar.YEAR)==dateCal.get(Calendar.YEAR)) &&
+                (endCal.get(Calendar.MONTH)==dateCal.get(Calendar.MONTH)) &&
+                (endCal.get(Calendar.DAY_OF_MONTH)==dateCal.get(Calendar.DAY_OF_MONTH)));
+
+        if(compare >=0 || ifEndDate) return true;
+        return false;
     }
 
 }

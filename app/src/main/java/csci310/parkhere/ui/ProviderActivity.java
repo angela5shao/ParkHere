@@ -64,7 +64,9 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         fm = getSupportFragmentManager();
         fragmentTransaction = fm.beginTransaction();
         spacesFragment = new SpacesFragment();
+
         fragmentTransaction.add(R.id.fragContainer, spacesFragment).commit();
+
 //        ArrayList<ParkingSpot> parkingSpots = clientController.getSpaces(clientController.getUser().userID);
 
 //        // TODO: Fix this; want to call setParkingSpot on spacesFragment
@@ -81,8 +83,11 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 
 
         spaceDetailFragment = new SpaceDetailFragment();
+        //************************************************************
+        // COMMENT OUT AFTER TESTING
 //        getSupportFragmentManager().beginTransaction()
 //                .add(R.id.fragContainer, spaceDetailFragment).commit();
+        //************************************************************
 
         // Initialize BraintreeFragment
         try {

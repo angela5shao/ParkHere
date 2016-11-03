@@ -18,7 +18,6 @@ import android.widget.LinearLayout;
 
 import com.braintreepayments.api.BraintreeFragment;
 import com.braintreepayments.api.BraintreePaymentActivity;
-import com.braintreepayments.api.PayPal;
 import com.braintreepayments.api.exceptions.InvalidArgumentException;
 import com.braintreepayments.api.models.PaymentMethodNonce;
 import com.braintreepayments.api.models.VenmoAccountNonce;
@@ -287,28 +286,6 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
     }
 
     public void onEditSpace(long spaceID) {
-//        try {
-//            getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.fragContainer, reservationDetailFragment).commit();
-//            System.out.println("onReservationSelected, replaced with reservationDetailFragment");
-//            PayPal.authorizeAccount(mBraintreeFragment);
-//        } catch (Exception e) {
-//            System.out.println("Reservation item exception");
-//        }
-
-//        SearchSpaceDetailFragment searchSpaceDetailFragment = new SearchSpaceDetailFragment();
-//        Bundle args = new Bundle();
-//        args.putLong("param1", reservationID);
-//        searchSpaceDetailFragment.setArguments(args);
-//
-//        try {
-//            getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.fragContainer, searchSpaceDetailFragment).commit();
-//            System.out.println("onReservationSelected, replaced with reservationDetailFragment");
-//            PayPal.authorizeAccount(mBraintreeFragment);
-//        } catch (Exception e) {
-//            System.out.println("Reservation item exception");
-//        }
     }
 
     // Called by SpacesFragment's "add" button

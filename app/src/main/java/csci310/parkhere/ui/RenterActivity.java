@@ -50,7 +50,6 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.renter_ui);
 
-
         clientController = ClientController.getInstance();
         clientController.setCurrentActivity(this);
 
@@ -65,16 +64,20 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         editProfileFragment = new EditProfileFragment();
         displaySearchFragment = new DisplaySearchFragment();
         reservationsFragment = new ReservationsFragment();
+        searchSpaceDetailFragment = new SearchSpaceDetailFragment();
 
         _resLink = (LinearLayout)findViewById(R.id.resLink);
         _searchLink = (LinearLayout)findViewById(R.id.searchLink);
         _profilePic = (ImageView) findViewById(R.id.profilePic);
 
-        searchSpaceDetailFragment = new SearchSpaceDetailFragment();
-        reservationDetailFragment = new ReservationDetailFragment();
 
+
+        //*****************************************************************
+        reservationDetailFragment = new ReservationDetailFragment();
         fragmentTransaction.add(R.id.fragContainer, searchFragment);
         fragmentTransaction.commit();
+
+        //*****************************************************************
 
         _resLink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -213,26 +216,6 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 
     public void onReservationSelected(int resPosition) {
         System.out.println("RenterActivity onReservationSelected for: " + resPosition);
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if (requestCode == PAYMENT_REQUEST_CODE) {
-//            if (resultCode == Activity.RESULT_OK) {
-//                Log.d("BT onActivityResult ", "Activity.RESULT_OK");
-//                PaymentMethodNonce paymentMethodNonce = data.getParcelableExtra(
-//                        BraintreePaymentActivity.EXTRA_PAYMENT_METHOD_NONCE
-//                );
-//                String nonce = paymentMethodNonce.getNonce();
-//                // Send the nonce to your server.
-//            }
-//            else {
-//                Log.d("VT onActivityResult ", "!Activity.RESULT_OK");
-//            }
-//        }
-//    }
-
         if (clientController.reservations.size() == 0) {
             System.out.println("RenterActivity: error - no reservations to select");
             return;
@@ -243,7 +226,13 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
             return;
         }
         ReservationDetailFragment resDetailfragment = new ReservationDetailFragment();
-        resDetailfragment.setReservation(selectedRes);
+        //setReservation(String in_address, String in_start_time, String in_end_time, String in_renter_username, double in_lat, double in_long)
+        resDetailfragment.setReservation(selectedRes.getSpot().getStreetAddr(),
+                                            selectedRes.getReserveTimeInterval().startTime.toString(),
+                                            selectedRes.getReserveTimeInterval().endTime.toString(),
+                                            Long.toString(selectedRes.getSpot().getOwner()),
+                                            selectedRes.getSpot().getLat(),
+                                            selectedRes.getSpot().getLon());
 
         try {
             getSupportFragmentManager().beginTransaction()

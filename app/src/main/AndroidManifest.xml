@@ -32,7 +32,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyC6y-duGaR0wOji4UOR4S1LUBn5rO1ach0" />
 
-
         <!--<activity-->
             <!--android:name=".ui.PaymentActivity">-->
             <!--<intent-filter>-->
@@ -47,6 +46,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
              </intent-filter>
          </activity>
+
 
         <activity
             android:name=".ui.DisplaySearchActivity"

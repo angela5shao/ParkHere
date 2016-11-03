@@ -11,7 +11,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
+import java.util.ArrayList;
+
 import csci310.parkhere.R;
+import csci310.parkhere.controller.ClientController;
+import resource.ParkingSpot;
+import resource.Reservation;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,6 +37,7 @@ public class ReservationsFragment extends ListFragment implements AdapterView.On
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private ArrayAdapter mAdapter;
 
     public ReservationsFragment() {
         // Required empty public constructor
@@ -81,6 +87,16 @@ public class ReservationsFragment extends ListFragment implements AdapterView.On
         ArrayAdapter adapter = ArrayAdapter.createFromResource(getActivity(), R.array.Planets, android.R.layout.simple_list_item_1);
         setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
+
+        ClientController controller = ClientController.getInstance();
+        ArrayList<Reservation> reservations = controller.reservations;
+        ParkingSpot spot = new ParkingSpot(controller.getUser().userID, null, 0, 0, "Tuscany 101, 10 Figueroa", "", "90007", 0x0001);
+        reservations.add(new Reservation(0123, controller.getUser().userID, 789, spot, null, 50.00, false));
+        reservations.add(new Reservation(0123, controller.getUser().userID, 789, spot, null, 75.00, false));
+
+        mAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, reservations);
+        setListAdapter(mAdapter);
+        getListView().setOnItemClickListener(this);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -120,14 +136,13 @@ public class ReservationsFragment extends ListFragment implements AdapterView.On
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-        void onReservationSelected(long reservationID);
+        void onReservationSelected(int resPosition);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
                             long id) {
-        // TODO: Call RenterActivity's onReservationSelected(long reservationID)
-        mListener.onReservationSelected((long)0011223312765);
+        mListener.onReservationSelected(position);
         System.out.println("CLICKED on Reservation: " + position);
     }
 }

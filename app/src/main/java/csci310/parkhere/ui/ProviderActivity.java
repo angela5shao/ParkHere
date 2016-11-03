@@ -18,13 +18,13 @@ import android.widget.LinearLayout;
 
 import com.braintreepayments.api.BraintreeFragment;
 import com.braintreepayments.api.BraintreePaymentActivity;
-import com.braintreepayments.api.PayPal;
 import com.braintreepayments.api.exceptions.InvalidArgumentException;
 import com.braintreepayments.api.models.PaymentMethodNonce;
 import com.braintreepayments.api.models.VenmoAccountNonce;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
+import resource.ParkingSpot;
 import resource.User;
 
 /**
@@ -63,18 +63,30 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         fm = getSupportFragmentManager();
         fragmentTransaction = fm.beginTransaction();
         spacesFragment = new SpacesFragment();
+
+        fragmentTransaction.add(R.id.fragContainer, spacesFragment).commit();
+
+//        ArrayList<ParkingSpot> parkingSpots = clientController.getSpaces(clientController.getUser().userID);
+
+//        // TODO: Fix this; want to call setParkingSpot on spacesFragment
+//        Fragment spcfragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
+//        if (spcfragment instanceof SpacesFragment) {
+//            parkingSpots.add(new ParkingSpot(clientController.getUser().userID, null, 0, 0, "Tuscany 101, 10 Figueroa", "", "90007", 0x0001));
+//            ((SpacesFragment) spcfragment).setParkingSpots(parkingSpots);
+//        }
+////        spacesFragment.setParkingSpots(parkingSpots);
+
         privateProfileFragment = new PrivateProfileFragment();
         addSpaceFragment = new AddSpaceFragment();
 
-//        getSupportFragmentManager().beginTransaction()
-//                .add(R.id.fragContainer, spacesFragment).commit();
 
-//        getSupportFragmentManager().beginTransaction()
-//                .add(R.id.fragContainer, addSpaceFragment).commit();
 
         spaceDetailFragment = new SpaceDetailFragment();
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragContainer, spaceDetailFragment).commit();
+        //************************************************************
+        // COMMENT OUT AFTER TESTING
+//        getSupportFragmentManager().beginTransaction()
+//                .add(R.id.fragContainer, spaceDetailFragment).commit();
+        //************************************************************
 
         // Initialize BraintreeFragment
         try {
@@ -92,8 +104,10 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
                 try {
 //                    fragmentTransaction.replace(R.id.fragContainer, spacesFragment)
 //                        .commit();
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragContainer, spacesFragment).commit();
+//                    getSupportFragmentManager().beginTransaction()
+//                            .replace(R.id.fragContainer, spacesFragment).commit();
+                    clientController.requestMyParkingSpotList();
+                    clientController.providerToshowSpaces = true;
                 } catch (Exception e) {
                     System.out.println("Spaces tab item exception");
                 }
@@ -140,6 +154,42 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         }
     }
 
+    public void showSpaceFragment()
+    {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragContainer, spacesFragment).commit();
+    }
+
+
+    public void showSpaceDetailFragment()
+    {
+        // TODO: Get ParkingSpot given position in list
+        if (clientController.parkingSpots.size() == 0) {
+            System.out.println("ProviderActivity: no spaces to select");
+            return;
+        }
+        ParkingSpot spotSelected = clientController.parkingSpots.get(clientController.currentIndexofSpaces);
+        if (spotSelected == null) {
+            System.out.println("Selected parking spot is null");
+            return;
+        }
+        SpaceDetailFragment spaceDetailFragment = new SpaceDetailFragment();
+        spaceDetailFragment.setThisParkingSpot(spotSelected);
+
+
+        System.out.print("Show space detail " + spotSelected.getDescription());
+
+//        Bundle args = new Bundle();
+//        args.putInt("param1", spacePositionInList);
+//        spaceDetailFragment.setArguments(args);
+
+        try {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragContainer, spaceDetailFragment).commit();
+        } catch (Exception e) {
+            System.out.println("Spaces tab item exception");
+        }
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu items for use in the action bar
@@ -221,89 +271,27 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         //you can leave it empty
     }
 
-    public void onSpaceSelected(long spaceID) {
-        System.out.println("ProviderActivity onSpaceSelected for: " + spaceID);
-        SpaceDetailFragment spaceDetailFragment = new SpaceDetailFragment();
-        Bundle args = new Bundle();
-        args.putLong("param1", spaceID);
-        spaceDetailFragment.setArguments(args);
+    public void onSpaceSelected(int spacePositionInList) {
+        if(spacePositionInList < 0 || clientController.parkingSpots == null ||spacePositionInList >= clientController.parkingSpots.size())
+            return;
 
-        try {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragContainer, spaceDetailFragment).commit();
-            System.out.println("onSpaceSelected, replaced with sppaceDetailFragment");
-        } catch (Exception e) {
-            System.out.println("Spaces tab item exception");
-        }
+        System.out.println("ProviderActivity onSpaceSelected for: " + spacePositionInList);
+
+        clientController.providerToshowSpacesDetail = true;
+
+        clientController.currentIndexofSpaces = spacePositionInList;
+        clientController.requestSpotTimeInterval(clientController.parkingSpots.get(spacePositionInList));
+
+
     }
 
     public void onEditSpace(long spaceID) {
 
     }
 
-    public void onReservationSelected(long reservationID) {
-        System.out.println("ProviderActivity onReservationSelected for: " + reservationID);
-        ReservationDetailFragment reservationDetailFragment = new ReservationDetailFragment();
-        Bundle args = new Bundle();
-        args.putLong("param1", reservationID);
-        reservationDetailFragment.setArguments(args);
-
-        try {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragContainer, reservationDetailFragment).commit();
-            System.out.println("onReservationSelected, replaced with reservationDetailFragment");
-            PayPal.authorizeAccount(mBraintreeFragment);
-        } catch (Exception e) {
-            System.out.println("Reservation item exception");
-        }
-
-//        SearchSpaceDetailFragment searchSpaceDetailFragment = new SearchSpaceDetailFragment();
-//        Bundle args = new Bundle();
-//        args.putLong("param1", reservationID);
-//        searchSpaceDetailFragment.setArguments(args);
-//
-//        try {
-//            getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.fragContainer, searchSpaceDetailFragment).commit();
-//            System.out.println("onReservationSelected, replaced with reservationDetailFragment");
-//            PayPal.authorizeAccount(mBraintreeFragment);
-//        } catch (Exception e) {
-//            System.out.println("Reservation item exception");
-//        }
-    }
-
-    // For BrainTree payment
-//    public void onBraintreeSubmit(View v) {
-////        ClientTokenRequest clientTokenRequest = new ClientTokenRequest()
-////                .customerId(aCustomerId);
-////        String clientToken = gateway.clientToken().generate(clientTokenRequest);
-//
-//        // TODO: request client token
-//        String clientToken = "eyJ2ZXJzaW9uIjoyLCJhdXRob3JpemF0aW9uRmluZ2VycHJpbnQiOiI0Y2ZjNmI4MWVlZjQ1YTA5YjM1ODQ2OWUyYWViZjI0Mjk1ZjE0MTJiZWI0M2Q3MDUxODBmMTI3NTNhNjk2M2NjfGNyZWF0ZWRfYXQ9MjAxNi0xMC0zMVQwNDo0OTo1Mi40MjA0NzgzNDMrMDAwMFx1MDAyNm1lcmNoYW50X2lkPTM0OHBrOWNnZjNiZ3l3MmJcdTAwMjZwdWJsaWNfa2V5PTJuMjQ3ZHY4OWJxOXZtcHIiLCJjb25maWdVcmwiOiJodHRwczovL2FwaS5zYW5kYm94LmJyYWludHJlZWdhdGV3YXkuY29tOjQ0My9tZXJjaGFudHMvMzQ4cGs5Y2dmM2JneXcyYi9jbGllbnRfYXBpL3YxL2NvbmZpZ3VyYXRpb24iLCJjaGFsbGVuZ2VzIjpbXSwiZW52aXJvbm1lbnQiOiJzYW5kYm94IiwiY2xpZW50QXBpVXJsIjoiaHR0cHM6Ly9hcGkuc2FuZGJveC5icmFpbnRyZWVnYXRld2F5LmNvbTo0NDMvbWVyY2hhbnRzLzM0OHBrOWNnZjNiZ3l3MmIvY2xpZW50X2FwaSIsImFzc2V0c1VybCI6Imh0dHBzOi8vYXNzZXRzLmJyYWludHJlZWdhdGV3YXkuY29tIiwiYXV0aFVybCI6Imh0dHBzOi8vYXV0aC52ZW5tby5zYW5kYm94LmJyYWludHJlZWdhdGV3YXkuY29tIiwiYW5hbHl0aWNzIjp7InVybCI6Imh0dHBzOi8vY2xpZW50LWFuYWx5dGljcy5zYW5kYm94LmJyYWludHJlZWdhdGV3YXkuY29tLzM0OHBrOWNnZjNiZ3l3MmIifSwidGhyZWVEU2VjdXJlRW5hYmxlZCI6dHJ1ZSwicGF5cGFsRW5hYmxlZCI6dHJ1ZSwicGF5cGFsIjp7ImRpc3BsYXlOYW1lIjoiQWNtZSBXaWRnZXRzLCBMdGQuIChTYW5kYm94KSIsImNsaWVudElkIjpudWxsLCJwcml2YWN5VXJsIjoiaHR0cDovL2V4YW1wbGUuY29tL3BwIiwidXNlckFncmVlbWVudFVybCI6Imh0dHA6Ly9leGFtcGxlLmNvbS90b3MiLCJiYXNlVXJsIjoiaHR0cHM6Ly9hc3NldHMuYnJhaW50cmVlZ2F0ZXdheS5jb20iLCJhc3NldHNVcmwiOiJodHRwczovL2NoZWNrb3V0LnBheXBhbC5jb20iLCJkaXJlY3RCYXNlVXJsIjpudWxsLCJhbGxvd0h0dHAiOnRydWUsImVudmlyb25tZW50Tm9OZXR3b3JrIjp0cnVlLCJlbnZpcm9ubWVudCI6Im9mZmxpbmUiLCJ1bnZldHRlZE1lcmNoYW50IjpmYWxzZSwiYnJhaW50cmVlQ2xpZW50SWQiOiJtYXN0ZXJjbGllbnQzIiwiYmlsbGluZ0FncmVlbWVudHNFbmFibGVkIjp0cnVlLCJtZXJjaGFudEFjY291bnRJZCI6ImFjbWV3aWRnZXRzbHRkc2FuZGJveCIsImN1cnJlbmN5SXNvQ29kZSI6IlVTRCJ9LCJjb2luYmFzZUVuYWJsZWQiOmZhbHNlLCJtZXJjaGFudElkIjoiMzQ4cGs5Y2dmM2JneXcyYiIsInZlbm1vIjoib2ZmIn0";
-//        PaymentRequest paymentRequest = new PaymentRequest()
-//                .clientToken(clientToken);
-//        startActivityForResult(paymentRequest.getIntent(this), 1);
-//
-//    }
-
-    public void onAddSpace() {
-        System.out.println("SpacesFragment onAddSpace() called");
-        AddSpaceFragment addSpaceFragment = new AddSpaceFragment();
-        Bundle args = new Bundle();
-        args.putLong("param1", 012345);
-        addSpaceFragment.setArguments(args);
-
-        try {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragContainer, addSpaceFragment).commit();
-            System.out.println("onReservationSelected, replaced with reservationDetailFragment");
-        } catch (Exception e) {
-            System.out.println("Reservation item exception");
-        }
-    }
-
+    // Called by SpacesFragment's "add" button
     public void onAddSpaceClick(View v) {
-        System.out.println("SpacesFragment onAddSpace() called");
+        System.out.println("ProviderActivity onAddSpaceClick() called");
         AddSpaceFragment addSpaceFragment = new AddSpaceFragment();
         Bundle args = new Bundle();
         args.putLong("param1", 012345);
@@ -316,5 +304,25 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         } catch (Exception e) {
             System.out.println("Reservation item exception");
         }
+    }
+
+    public void returnToSpaces() {
+        clientController.requestMyParkingSpotList();
+        clientController.providerToshowSpaces = true;
+
+
+        try {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragContainer, spacesFragment).commit();
+
+            Fragment spcfragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
+            if (spcfragment instanceof SpacesFragment) {
+                ((SpacesFragment) spcfragment).refresh();
+            }
+
+        } catch (Exception e) {
+            System.out.println("Spaces tab item exception");
+        }
+
     }
 }

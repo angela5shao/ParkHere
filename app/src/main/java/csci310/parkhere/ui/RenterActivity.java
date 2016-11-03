@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
 import resource.ParkingSpot;
+import resource.Reservation;
 import resource.SearchResults;
 import resource.User;
 
@@ -30,7 +31,7 @@ import resource.User;
 public class RenterActivity extends AppCompatActivity implements SearchFragment.OnFragmentInteractionListener,
         PrivateProfileFragment.OnFragmentInteractionListener, EditProfileFragment.OnFragmentInteractionListener,
         DisplaySearchFragment.OnFragmentInteractionListener, ReservationsFragment.OnFragmentInteractionListener,
-        SearchSpaceDetailFragment.OnFragmentInteractionListener {
+        SearchSpaceDetailFragment.OnFragmentInteractionListener, ReservationDetailFragment.OnFragmentInteractionListener {
 
     int PAYMENT_REQUEST_CODE = 11;
 
@@ -39,8 +40,10 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
     ImageView _editLogo;
     FragmentManager fm;
     FragmentTransaction fragmentTransaction;
+
     Fragment searchFragment, privateProfileFragment, editProfileFragment, displaySearchFragment,
-            reservationsFragment, searchSpaceDetailFragment;
+            reservationsFragment, searchSpaceDetailFragment, reservationDetailFragment;
+
     ClientController clientController;
 
     @Override
@@ -48,8 +51,8 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.renter_ui);
 
-//        clientController = ClientController.getInstance();
-//        clientController.setCurrentActivity(this);
+        clientController = ClientController.getInstance();
+        clientController.setCurrentActivity(this);
 
         Toolbar renterToolbar = (Toolbar) findViewById(R.id.renterTabbar);
         setSupportActionBar(renterToolbar);
@@ -62,24 +65,19 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         editProfileFragment = new EditProfileFragment();
         displaySearchFragment = new DisplaySearchFragment();
         reservationsFragment = new ReservationsFragment();
+        searchSpaceDetailFragment = new SearchSpaceDetailFragment();
 
         _resLink = (LinearLayout)findViewById(R.id.resLink);
         _searchLink = (LinearLayout)findViewById(R.id.searchLink);
         _profilePic = (ImageView) findViewById(R.id.profilePic);
 
-        searchSpaceDetailFragment = new SearchSpaceDetailFragment();
 
-        //************************************************************************
-        fragmentTransaction.add(R.id.fragContainer, searchSpaceDetailFragment);
+        //*****************************************************************
+        reservationDetailFragment = new ReservationDetailFragment();
+        fragmentTransaction.add(R.id.fragContainer, searchFragment);
         fragmentTransaction.commit();
-        //************************************************************************
+        //*****************************************************************
 
-//        fragmentTransaction.add(R.id.fragContainer, searchFragment);
-//        fragmentTransaction.commit();
-
-
-//        fragmentTransaction.add(R.id.fragContainer, displaySearchFragment);
-//        fragmentTransaction.commit();
 
         _resLink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -216,26 +214,26 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 //        editProfileFragment.updateUserInfo(inUsername, inPw, inLicenseID, inLicensePlate);
 //    }
 
-    public void onReservationSelected(long reservationID) {
-        //
-    }
+    public void onReservationSelected(int resPosition) {
+        System.out.println("RenterActivity onReservationSelected for: " + resPosition);
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if (requestCode == PAYMENT_REQUEST_CODE) {
-//            if (resultCode == Activity.RESULT_OK) {
-//                Log.d("BT onActivityResult ", "Activity.RESULT_OK");
-//                PaymentMethodNonce paymentMethodNonce = data.getParcelableExtra(
-//                        BraintreePaymentActivity.EXTRA_PAYMENT_METHOD_NONCE
-//                );
-//                String nonce = paymentMethodNonce.getNonce();
-//                // Send the nonce to your server.
-//            }
-//            else {
-//                Log.d("VT onActivityResult ", "!Activity.RESULT_OK");
-//            }
-//        }
-//    }
+        if (clientController.reservations.size() == 0) {
+            System.out.println("RenterActivity: error - no reservations to select");
+            return;
+        }
+        Reservation selectedRes = clientController.reservations.get(resPosition);
+        if (selectedRes == null) {
+            System.out.println("Selected parking spot is null");
+            return;
+        }
+        ReservationDetailFragment resDetailfragment = new ReservationDetailFragment();
+        resDetailfragment.setReservation(selectedRes);
+
+        try {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragContainer, resDetailfragment).commit();
+        } catch (Exception e) {
+            System.out.println("RenterActivity onReservationSelected exception");
+        }
+    }
 }

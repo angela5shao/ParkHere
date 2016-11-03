@@ -99,17 +99,22 @@ public class ClientCommunicator extends Thread{
                         Log.d("Result","add space " + String.valueOf(spot.getParkingSpotID()));
 
                         controller.parkingSpots.add(spot);
+//                        controller.requestMyParkingSpotList();
+//                        controller.providerToshowSpaces = true;
 
                     } else if(key.equals("RESPONSEPARKINGSPOT"))
                     {
                         ArrayList<ParkingSpot> myParkingSpot = (ArrayList<ParkingSpot>)value;
                         controller.parkingSpots = myParkingSpot;
+                        Log.d("RESPONSEPARKINGSPOT","Receive list of parkingspot" + myParkingSpot.size());
+
                     } else if(key.equals("RESPONSEINTERVAL"))
                     {
                         HashMap<String, Serializable> map = (HashMap<String, Serializable>) value;
                         ArrayList<TimeInterval> intervals = (ArrayList<TimeInterval>) map.get("TIMEINTERVAL");
                         Long spotID = (Long)map.get("PARKINGSPOTID");
                         controller.setSpotTimeInterval(spotID,intervals);
+                        Log.d("RESPONSEINTERVAL","Receive list of interval" + intervals.size());
                     }
                     controller.updateActivity();
                 }

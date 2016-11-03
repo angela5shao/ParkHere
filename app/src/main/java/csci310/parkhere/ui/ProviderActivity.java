@@ -356,6 +356,8 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         protected void onPostExecute(ArrayList<ParkingSpot> list) {
             clientController.providerToshowSpaces = true;
             clientController.parkingSpots = list;
+
+            //
         }
 
     }

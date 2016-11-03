@@ -12,11 +12,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import csci310.parkhere.ui.LoginActivity;
-import csci310.parkhere.ui.ProviderActivity;
-import csci310.parkhere.ui.RegisterProviderActivity;
-import csci310.parkhere.ui.RegisterRenterActivity;
-import csci310.parkhere.ui.RenterActivity;
+import csci310.parkhere.resource.CarType;
 import resource.NetworkPackage;
 import resource.ParkingSpot;
 import resource.Reservation;
@@ -305,12 +301,14 @@ public class ClientController {
     }
 
 
-    public void addSpace(LatLng location, String streetAddress, String description)
+    public void addSpace(LatLng location, String streetAddress, String description, String carType, String cancelPolicy)
     {
         if(location == null)
             return;
 
-        ParkingSpot spot = new ParkingSpot(user.userID,null,location.latitude,location.longitude,streetAddress,description, "", 0 );
+        int mCarType = new CarType(carType);
+        ParkingSpot spot = new ParkingSpot(user.userID,null,location.latitude,location.longitude,streetAddress,description, "",mCarType, ,);
+        //public ParkingSpot(long userID, ArrayList<TimeInterval> time, double lat, double lon, String streetAddr, String description, String zipcode, int cartype) {
         try {
             clientCommunicator.send("ADD_PARKINGSPOT", spot);
         } catch (IOException e) {

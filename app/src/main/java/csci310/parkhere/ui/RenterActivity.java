@@ -71,7 +71,6 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         _searchLink = (LinearLayout)findViewById(R.id.searchLink);
         _profilePic = (ImageView) findViewById(R.id.profilePic);
 
-
         //*****************************************************************
         reservationDetailFragment = new ReservationDetailFragment();
         fragmentTransaction.add(R.id.fragContainer, searchFragment);

@@ -155,6 +155,16 @@ tools:context="csci310.parkhere.ui.SpaceDetailFragment">
             </LinearLayout>
 
             <Button
+                android:id="@+id/btn_report"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="24dp"
+                android:text="@string/report_label"
+                android:textColor="@color/colorMainFont"
+                android:padding="12dp" />
+
+            <Button
                 android:id="@+id/btn_cancel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

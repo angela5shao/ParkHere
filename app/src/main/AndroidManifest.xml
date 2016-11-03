@@ -33,21 +33,13 @@
             android:value="AIzaSyC6y-duGaR0wOji4UOR4S1LUBn5rO1ach0" />
 
         <activity
-            android:name=".ui.PaymentActivity">
+            android:name=".ui.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-- <activity android:name=".ui.HomeActivity"> -->
-        <!-- <intent-filter> -->
-        <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-        <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-        <!-- </intent-filter> -->
-        <!-- </activity> -->
 
         <activity
             android:name=".ui.DisplaySearchActivity"
@@ -62,7 +54,7 @@
         <activity
             android:name=".ui.ProviderActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <!--<activity android:name=".ui.PaymentActivity"></activity>-->
+        <activity android:name=".ui.PaymentActivity"></activity>
         
         <activity
             android:name="com.braintreepayments.api.BraintreeBrowserSwitchActivity"

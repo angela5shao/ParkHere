@@ -226,13 +226,20 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
             return;
         }
         ReservationDetailFragment resDetailfragment = new ReservationDetailFragment();
-        //setReservation(String in_address, String in_start_time, String in_end_time, String in_renter_username, double in_lat, double in_long)
-        resDetailfragment.setReservation(selectedRes.getSpot().getStreetAddr(),
-                                            selectedRes.getReserveTimeInterval().startTime.toString(),
-                                            selectedRes.getReserveTimeInterval().endTime.toString(),
-                                            Long.toString(selectedRes.getSpot().getOwner()),
-                                            selectedRes.getSpot().getLat(),
-                                            selectedRes.getSpot().getLon());
+        Bundle args = new Bundle();
+        args.putDouble("LAT", selectedRes.getSpot().getLat());
+        args.putDouble("LONG", selectedRes.getSpot().getLon());
+        args.putString("ADDRESS", selectedRes.getSpot().getStreetAddr());
+        args.putString("START_TIME", selectedRes.getReserveTimeInterval().endTime.toString());
+        args.putString("END_TIME", selectedRes.getReserveTimeInterval().endTime.toString());
+        args.putString("RENTER", Long.toString(selectedRes.getSpot().getOwner()));
+
+//        resDetailfragment.setReservation(selectedRes.getSpot().getStreetAddr(),
+//                                            selectedRes.getReserveTimeInterval().endTime.toString(),
+//                                            selectedRes.getReserveTimeInterval().endTime.toString(),
+//                                            Long.toString(selectedRes.getSpot().getOwner()),
+//                                            selectedRes.getSpot().getLat(),
+//                                            selectedRes.getSpot().getLon());
 
         try {
             getSupportFragmentManager().beginTransaction()

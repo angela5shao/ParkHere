@@ -227,7 +227,13 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
             return;
         }
         ReservationDetailFragment resDetailfragment = new ReservationDetailFragment();
-        resDetailfragment.setReservation(selectedRes);
+        //setReservation(String in_address, String in_start_time, String in_end_time, String in_renter_username, double in_lat, double in_long)
+        resDetailfragment.setReservation(selectedRes.getSpot().getStreetAddr(),
+                                            selectedRes.getReserveTimeInterval().startTime.toString(),
+                                            selectedRes.getReserveTimeInterval().endTime.toString(),
+                                            Long.toString(selectedRes.getSpot().getOwner()),
+                                            selectedRes.getSpot().getLat(),
+                                            selectedRes.getSpot().getLon());
 
         try {
             getSupportFragmentManager().beginTransaction()

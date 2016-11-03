@@ -2,6 +2,7 @@
     <string name="app_name">ParkHere</string>
     <string name="login_signuplink"><u>No account yet? Sign up!</u></string>
     <string name="login_forgotpwlink"><u>Forgot password</u></string>
+    <string name="cancel_label">Cancel</string>
     <string name="search_label">Search</string>
     <string name="res_label">Reservation</string>
     <string name="private_profile_label">My profile</string>

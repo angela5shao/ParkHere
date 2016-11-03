@@ -134,6 +134,7 @@ public class ClientController {
         clientCommunicator.send("REGISTER", entry);
     }
 
+    //new Functions
     public void updateReceived(NetworkPackage NP){
         received = true;
         this.NP = NP;
@@ -150,7 +151,7 @@ public class ClientController {
         }
         return NP;
     }
-
+    //new functions for the AsyncTask
 //    public void updateActivity()
 //    {
 //        if(currentActivity instanceof RegisterRenterActivity)
@@ -258,8 +259,24 @@ public class ClientController {
         return false;
     }
 
-    public boolean cancelReservation(long resID) {
-        return false;
+    public void ProviderCancel (long resID){
+        NetworkPackage NP = new NetworkPackage();
+        NP.addEntry("PROVIDERCANCEL", resID);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void RenterCancel (long resID) {
+        NetworkPackage NP = new NetworkPackage();
+        NP.addEntry("RENTERCANCEL", resID);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public Reservation getReservationDetail(int position) {
@@ -405,5 +422,14 @@ public class ClientController {
         }
     }
 
+    public void logout(boolean userType) {
+        NetworkPackage NP = new NetworkPackage();
+        NP.addEntry("LOGOUT", userType);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

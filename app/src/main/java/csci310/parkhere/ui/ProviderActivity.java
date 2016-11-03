@@ -25,6 +25,7 @@ import com.braintreepayments.api.models.VenmoAccountNonce;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
@@ -354,6 +355,7 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         @Override
         protected void onPostExecute(ArrayList<ParkingSpot> list) {
             clientController.providerToshowSpaces = true;
+            clientController.parkingSpots = list;
         }
 
     }
@@ -379,7 +381,10 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
             String key = entry.getKey();
             Object value = entry.getValue();
             if(key.equals("RESPONSEINTERVAL")){
-                ArrayList<TimeInterval> myTimeIntervals = (ArrayList<TimeInterval>)value;
+                HashMap<String, Serializable> map = (HashMap<String, Serializable>) value;
+                ArrayList<TimeInterval> myTimeIntervals = (ArrayList<TimeInterval>) map.get("TIMEINTERVAL");
+                Long spotID = (Long)map.get("PARKINGSPOTID");
+                clientController.setSpotTimeInterval(spotID,myTimeIntervals);
                 return myTimeIntervals;
             }
             return null;

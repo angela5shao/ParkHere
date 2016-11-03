@@ -17,7 +17,6 @@ import csci310.parkhere.ui.ProviderActivity;
 import csci310.parkhere.ui.RegisterProviderActivity;
 import csci310.parkhere.ui.RegisterRenterActivity;
 import csci310.parkhere.ui.RenterActivity;
-import resource.CarType;
 import resource.NetworkPackage;
 import resource.ParkingSpot;
 import resource.Reservation;
@@ -54,9 +53,10 @@ public class ClientController {
 
     public boolean providerToshowSpaces;
     public boolean providerToshowSpacesDetail;
-
-
-
+    //new
+    private boolean received;
+    private NetworkPackage NP;
+    //
 
     private ClientController() { // private constructor
 
@@ -75,6 +75,10 @@ public class ClientController {
         providerToshowSpacesDetail = false;
         searchResults = null;
         currentIndexofSpaces = -1;
+        //new
+        received = false;
+        NP = null;
+        //
     }
 
     public void setCurrentActivity(Activity ac)
@@ -109,6 +113,7 @@ public class ClientController {
 
     // TODO: Functions for login, signup
     public void login(String username, String pw) throws IOException {
+        cancelReceived();
         HashMap<String, Serializable> entry = new HashMap<>();
         entry.put("USERNAME", username);
         entry.put("PASSWORD", pw);
@@ -133,80 +138,96 @@ public class ClientController {
         clientCommunicator.send("REGISTER", entry);
     }
 
-
-    public void updateActivity()
-    {
-        if(currentActivity instanceof RegisterRenterActivity)
-        {
-            RegisterRenterActivity rra = (RegisterRenterActivity)currentActivity;
-            Log.d("UPDATEACTIVITY", "RegisterRenterActivity");
-
-            if(user == null)
-            {
-                rra.onRegisterFailed(rra.getApplicationContext());
-            }
-            else
-            {
-                rra.onRegisterSuccess(rra.getApplicationContext());
-            }
-        }
-        else if(currentActivity instanceof RegisterProviderActivity) {
-            RegisterProviderActivity rpa = (RegisterProviderActivity)currentActivity;
-            Log.d("UPDATEACTIVITY", "RegisterProviderActivity");
-
-            if(user == null)
-            {
-                rpa.onRegisterFailed(rpa.getApplicationContext());
-            }
-            else
-            {
-                rpa.onRegisterSuccess(rpa.getApplicationContext());
-            }
-        }
-        else if(currentActivity instanceof RenterActivity) {
-            RenterActivity ra = (RenterActivity)currentActivity;
-//            Log.d("UPDATEACTIVITY", "RenterActivity");
-
-            if(toDispaySearch)
-            {
-                ra.displaySearchResult(searchResults);
-                toDispaySearch = false;
-            }
-
-            if(user != null)
-            {
-//                ra.updateUserInfo(user.getUsername(), "", user.userLicense, user.userPlate);
-            }
-        }
-        else if(currentActivity instanceof ProviderActivity) {
-            ProviderActivity ra = (ProviderActivity)currentActivity;
-            if(providerToshowSpaces)
-            {
-                ra.showSpaceFragment();
-                providerToshowSpaces = false;
-            }
-
-            else if(providerToshowSpacesDetail)
-            {
-                ra.showSpaceDetailFragment();
-                providerToshowSpacesDetail = false;
-            }
-
-
-        }
-        else if(currentActivity instanceof LoginActivity)
-        {
-            LoginActivity la = (LoginActivity)currentActivity;
-            if(user == null)
-            {
-                la.onLoginFailed(la.getApplicationContext());
-            }
-            else
-            {
-                la.onLoginSuccess(la.getApplicationContext());
-            }
-        }
+    public void updateReceived(NetworkPackage NP){
+        received = true;
+        this.NP = NP;
     }
+
+    public void cancelReceived(){
+        received = false;
+        NP = null;
+    }
+
+    public NetworkPackage checkReceived(){
+        while(received == false ){
+
+        }
+        return NP;
+    }
+
+//    public void updateActivity()
+//    {
+//        if(currentActivity instanceof RegisterRenterActivity)
+//        {
+//            RegisterRenterActivity rra = (RegisterRenterActivity)currentActivity;
+//            Log.d("UPDATEACTIVITY", "RegisterRenterActivity");
+//
+//            if(user == null)
+//            {
+//                rra.onRegisterFailed(rra.getApplicationContext());
+//            }
+//            else
+//            {
+//                rra.onRegisterSuccess(rra.getApplicationContext());
+//            }
+//        }
+//        else if(currentActivity instanceof RegisterProviderActivity) {
+//            RegisterProviderActivity rpa = (RegisterProviderActivity)currentActivity;
+//            Log.d("UPDATEACTIVITY", "RegisterProviderActivity");
+//
+//            if(user == null)
+//            {
+//                rpa.onRegisterFailed(rpa.getApplicationContext());
+//            }
+//            else
+//            {
+//                rpa.onRegisterSuccess(rpa.getApplicationContext());
+//            }
+//        }
+//        else if(currentActivity instanceof RenterActivity) {
+//            RenterActivity ra = (RenterActivity)currentActivity;
+////            Log.d("UPDATEACTIVITY", "RenterActivity");
+//
+//            if(toDispaySearch)
+//            {
+//                ra.displaySearchResult(searchResults);
+//                toDispaySearch = false;
+//            }
+//
+//            if(user != null)
+//            {
+////                ra.updateUserInfo(user.getUsername(), "", user.userLicense, user.userPlate);
+//            }
+//        }
+//        else if(currentActivity instanceof ProviderActivity) {
+//            ProviderActivity ra = (ProviderActivity)currentActivity;
+//            if(providerToshowSpaces)
+//            {
+//                ra.showSpaceFragment();
+//                providerToshowSpaces = false;
+//            }
+//
+//            else if(providerToshowSpacesDetail)
+//            {
+//                ra.showSpaceDetailFragment();
+//                providerToshowSpacesDetail = false;
+//            }
+//
+//
+//        }
+//        else if(currentActivity instanceof LoginActivity)
+//        {
+//            LoginActivity la = (LoginActivity)currentActivity;
+//            if(user == null)
+//            {
+//                la.onLoginFailed(la.getApplicationContext());
+//            }
+//            else
+//            {
+//                la.onLoginSuccess(la.getApplicationContext());
+//            }
+//        }
+//    }
 
     public User getProfile(long userID) {
         return null;

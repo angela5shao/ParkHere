@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import csci310.parkhere.R;
-import csci310.parkhere.controller.ClientCommunicator;
+import csci310.parkhere.controller.ClientCommunicator1;
 import csci310.parkhere.controller.ClientController;
 
 public class HomeActivity extends Activity {
@@ -18,7 +18,7 @@ public class HomeActivity extends Activity {
     ClientController clientController;
     Intent myIntent;
 
-    public static ClientCommunicator clientCommunicator;
+    public static ClientCommunicator1 clientCommunicator;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +28,7 @@ public class HomeActivity extends Activity {
         _registerButton=(Button)findViewById(R.id.registerButton);
         _guestButton=(Button)findViewById(R.id.guestButton);
 
+        Log.v("HomeActivity", "start");
         Log.v("HomeActivity", "start");
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();

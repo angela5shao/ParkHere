@@ -1,8 +1,11 @@
 package csci310.parkhere.ui;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -22,9 +25,16 @@ import com.braintreepayments.api.exceptions.InvalidArgumentException;
 import com.braintreepayments.api.models.PaymentMethodNonce;
 import com.braintreepayments.api.models.VenmoAccountNonce;
 
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
+import resource.MyEntry;
+import resource.NetworkPackage;
 import resource.ParkingSpot;
+import resource.TimeInterval;
 import resource.User;
 
 /**
@@ -44,8 +54,8 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
     String mAuthorization = "clientToken";
 
     ClientController clientController;
-
-
+    requestParkingSpotListTask RPTask = null;
+    requestSpotTimeIntervalTask RSTTask = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,8 +116,8 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 //                        .commit();
 //                    getSupportFragmentManager().beginTransaction()
 //                            .replace(R.id.fragContainer, spacesFragment).commit();
-                    clientController.requestMyParkingSpotList();
-                    clientController.providerToshowSpaces = true;
+                    RPTask = new requestParkingSpotListTask();
+                    RPTask.execute((Void) null);
                 } catch (Exception e) {
                     System.out.println("Spaces tab item exception");
                 }
@@ -156,6 +166,7 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 
     public void showSpaceFragment()
     {
+        spacesFragment = new SpacesFragment();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragContainer, spacesFragment).commit();
     }
@@ -277,11 +288,10 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 
         System.out.println("ProviderActivity onSpaceSelected for: " + spacePositionInList);
 
-        clientController.providerToshowSpacesDetail = true;
-
         clientController.currentIndexofSpaces = spacePositionInList;
-        clientController.requestSpotTimeInterval(clientController.parkingSpots.get(spacePositionInList));
 
+        RSTTask = new requestSpotTimeIntervalTask(clientController.parkingSpots.get(spacePositionInList));
+        RSTTask.execute((Void) null);
 
     }
 
@@ -323,5 +333,59 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
             System.out.println("Spaces tab item exception");
         }
 
+    }
+
+    private class requestParkingSpotListTask extends AsyncTask<Void, Void, ArrayList<ParkingSpot>> {
+
+        requestParkingSpotListTask(){
+            doInBackground((Void) null);
+
+        }
+        @Override
+        protected ArrayList<ParkingSpot> doInBackground(Void... params ){
+            clientController.requestMyParkingSpotList();
+            NetworkPackage NP = clientController.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if(key.equals("RESPONSEPARKINGSPOT")){
+                ArrayList<ParkingSpot> myParkingSpot = (ArrayList<ParkingSpot>)value;
+                return myParkingSpot;
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(ArrayList<ParkingSpot> list) {
+            clientController.providerToshowSpaces = true;
+        }
+
+    }
+
+    private class requestSpotTimeIntervalTask extends AsyncTask<Void, Void, ArrayList<TimeInterval>>{
+        ParkingSpot parkingSpot;
+
+        requestSpotTimeIntervalTask(ParkingSpot parkingSpot){
+            this.parkingSpot = parkingSpot;
+            doInBackground((Void) null);
+        }
+
+        @Override
+        protected void onPreExecute(){
+            clientController.providerToshowSpacesDetail = true;
+        }
+
+        @Override
+        protected ArrayList<TimeInterval> doInBackground(Void... params ){
+            clientController.requestSpotTimeInterval(parkingSpot);
+            NetworkPackage NP = clientController.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if(key.equals("RESPONSEINTERVAL")){
+                ArrayList<TimeInterval> myTimeIntervals = (ArrayList<TimeInterval>)value;
+                return myTimeIntervals;
+            }
+            return null;
+        }
     }
 }

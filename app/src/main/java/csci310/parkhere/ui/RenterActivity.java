@@ -24,20 +24,25 @@ import resource.Reservation;
 import resource.SearchResults;
 import resource.User;
 
+
 /**
  * Created by ivylinlaw on 10/17/16.
  */
 public class RenterActivity extends AppCompatActivity implements SearchFragment.OnFragmentInteractionListener,
         PrivateProfileFragment.OnFragmentInteractionListener, EditProfileFragment.OnFragmentInteractionListener,
         DisplaySearchFragment.OnFragmentInteractionListener, ReservationsFragment.OnFragmentInteractionListener,
-        ReservationDetailFragment.OnFragmentInteractionListener {
+        SearchSpaceDetailFragment.OnFragmentInteractionListener, ReservationDetailFragment.OnFragmentInteractionListener {
+
+    int PAYMENT_REQUEST_CODE = 11;
 
     LinearLayout _resLink, _searchLink;
     ImageView _profilePic;
     ImageView _editLogo;
     FragmentManager fm;
     FragmentTransaction fragmentTransaction;
-    Fragment searchFragment, privateProfileFragment, editProfileFragment, displaySearchFragment, reservationsFragment, reservationDetailFragment;
+    Fragment searchFragment, privateProfileFragment, editProfileFragment, displaySearchFragment,
+            reservationsFragment, searchSpaceDetailFragment, reservationDetailFragment;
+
     ClientController clientController;
 
     @Override
@@ -59,20 +64,20 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         editProfileFragment = new EditProfileFragment();
         displaySearchFragment = new DisplaySearchFragment();
         reservationsFragment = new ReservationsFragment();
+        searchSpaceDetailFragment = new SearchSpaceDetailFragment();
 
         _resLink = (LinearLayout)findViewById(R.id.resLink);
         _searchLink = (LinearLayout)findViewById(R.id.searchLink);
         _profilePic = (ImageView) findViewById(R.id.profilePic);
 
+
+
         //*****************************************************************
         reservationDetailFragment = new ReservationDetailFragment();
         fragmentTransaction.add(R.id.fragContainer, searchFragment);
         fragmentTransaction.commit();
+
         //*****************************************************************
-
-//        fragmentTransaction.add(R.id.fragContainer, searchFragment);
-
-//        fragmentTransaction.commit();
 
         _resLink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -211,7 +216,6 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 
     public void onReservationSelected(int resPosition) {
         System.out.println("RenterActivity onReservationSelected for: " + resPosition);
-
         if (clientController.reservations.size() == 0) {
             System.out.println("RenterActivity: error - no reservations to select");
             return;
@@ -222,7 +226,13 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
             return;
         }
         ReservationDetailFragment resDetailfragment = new ReservationDetailFragment();
-        resDetailfragment.setReservation(selectedRes);
+        //setReservation(String in_address, String in_start_time, String in_end_time, String in_renter_username, double in_lat, double in_long)
+        resDetailfragment.setReservation(selectedRes.getSpot().getStreetAddr(),
+                                            selectedRes.getReserveTimeInterval().startTime.toString(),
+                                            selectedRes.getReserveTimeInterval().endTime.toString(),
+                                            Long.toString(selectedRes.getSpot().getOwner()),
+                                            selectedRes.getSpot().getLat(),
+                                            selectedRes.getSpot().getLon());
 
         try {
             getSupportFragmentManager().beginTransaction()

@@ -81,6 +81,10 @@ public class SpaceDetailFragment extends Fragment {
     Date selectedStartDate;
     Date selectedEndDate;
 
+    SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    Time inputedStartTime;
+    Time inputedEndTime;
+
 //    //*******************************************************************************
 //    // FOR TESTING DELETE LATER!!!
 //    // TimeInterval(Time start, Time end)
@@ -137,13 +141,7 @@ public class SpaceDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_space_detail, container, false);
-//        System.out.println("SpaceDetailFragment for spaceID: " + thisParkingSpot.getParkingSpotID());
 
-        //*******************************************************************************
-        // FOR TESTING DELETE LATER!!!
-//        currSpaceTimeIntervals.add(interval1);
-//        updateCurrSpaceTimeIntervalsGC(currSpaceTimeIntervals);
-        //*******************************************************************************
 
         _spacedetail_address = (TextView)v.findViewById(R.id.spacedetail_address);
 
@@ -218,16 +216,9 @@ public class SpaceDetailFragment extends Fragment {
         selectedStartDate = null;
         selectedEndDate = null;
 
-//
-////        ********************************
-//        ClientController controller = ClientController.getInstance();
-//        controller.requestMyParkingSpotList();
-//        thisParkingSpot = controller.parkingSpots.get(0);
-//
-//        controller.requestSpotTimeInterval(thisParkingSpot);
-//        updatePostedSpaceTimeIntervalsGC(thisParkingSpot.getTimeIntervalList());
-////        ********************************
 
+
+//        System.out.println("SpaceDetailFragment for spaceID: " + thisParkingSpot.getParkingSpotID());
 
 
         //Handling custom calendar events
@@ -236,7 +227,7 @@ public class SpaceDetailFragment extends Fragment {
             public void onDateSelected(Date date) {
                 if (selectedStartDate == null) {
                     selectedStartDate = date;
-                    _in_start_date.setText(selectedStartDate.toString());
+                    _in_start_date.setText(dateFormat.format(selectedStartDate));
 
                     decorators.clear();
                     decorators.add(new DisabledColorDecorator());
@@ -250,10 +241,10 @@ public class SpaceDetailFragment extends Fragment {
 
                 if (selectedStartDate.compareTo(date) >= 0) {
                     selectedStartDate = date;
-                    _in_start_date.setText(selectedStartDate.toString());
+                    _in_start_date.setText(dateFormat.format(selectedStartDate));
                 } else {
                     selectedEndDate = date;
-                    _in_end_date.setText(selectedEndDate.toString());
+                    _in_end_date.setText(dateFormat.format(selectedEndDate));
 
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(selectedStartDate);
@@ -261,6 +252,10 @@ public class SpaceDetailFragment extends Fragment {
 
                     cal.setTime(selectedEndDate);
                     Time timeEnd = new Time(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
+
+                    Log.d("time", timeStart.toString() + " " + timeEnd.toString());
+                    inputedStartTime = timeStart;
+                    inputedEndTime = timeEnd;
 
                     selectedStartDate = null;
                     selectedEndDate = null;
@@ -304,8 +299,14 @@ public class SpaceDetailFragment extends Fragment {
 
                String price =  _in_price.getText().toString();
                 // call client controller
+                ClientController controller = ClientController.getInstance();
 
+                System.out.println("BEFORE REQ Start:"+ inputedStartTime);
+                System.out.println("BEFORE REQ End:" + inputedEndTime);
 
+                controller.requestAddTime(thisParkingSpot, new TimeInterval(inputedStartTime, inputedEndTime),Integer.valueOf(_in_price.getText().toString()) );
+
+                Log.d("ADDTIME", "finish add time");
                 _addTimeForSpaceLayout.setVisibility(View.GONE);
                 Toast.makeText(getContext(), "Add space requested", Toast.LENGTH_SHORT).show();
             }
@@ -329,11 +330,11 @@ public class SpaceDetailFragment extends Fragment {
     private class PostedColorDecorator implements DayDecorator {
         @Override
         public void decorate(DayView dayView) {
+            int color = Color.parseColor(postedDateColor);
             for (int i=0; i<postedSpaceTimeIntervalsGC.size(); i+=2) {
                 Date startDate = new Date(postedSpaceTimeIntervalsGC.get(i).getTimeInMillis());
                 Date endDate = new Date(postedSpaceTimeIntervalsGC.get(i+1).getTimeInMillis());
                 if (CalendarUtils.isBetweenDay(dayView.getDate(), startDate, endDate)) {
-                    int color = Color.parseColor(postedDateColor);
                     dayView.setTextColor(color);
                 }
             }
@@ -343,11 +344,12 @@ public class SpaceDetailFragment extends Fragment {
     private class SelectedColorDecorator implements DayDecorator {
         @Override
         public void decorate(DayView dayView) {
+            int color = Color.parseColor(selectedDateColor);
             for (int i=0; i<currSpaceTimeIntervalsGC.size(); i+=2) {
                 Date startDate = new Date(currSpaceTimeIntervalsGC.get(i).getTimeInMillis());
                 Date endDate = new Date(currSpaceTimeIntervalsGC.get(i+1).getTimeInMillis());
+
                 if (CalendarUtils.isBetweenDay(dayView.getDate(), startDate, endDate)) {
-                    int color = Color.parseColor(selectedDateColor);
                     dayView.setBackgroundColor(color);
                     dayView.setTextColor(Color.parseColor("#FFFFFF"));
                 }
@@ -441,5 +443,4 @@ public class SpaceDetailFragment extends Fragment {
     {
         thisParkingSpot =s;
     }
-
 }

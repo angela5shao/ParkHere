@@ -90,7 +90,7 @@ public class ReservationsFragment extends ListFragment implements AdapterView.On
 
         ClientController controller = ClientController.getInstance();
         ArrayList<Reservation> reservations = controller.reservations;
-        ParkingSpot spot = new ParkingSpot(controller.getUser().userID, null, 0, 0, "Tuscany 101, 10 Figueroa", "", "90007", 0x0001);
+        ParkingSpot spot = new ParkingSpot(controller.getUser().userID, null, 0, 0, "Tuscany 101, 10 Figueroa", "", "90007", 0x0001,0);
         reservations.add(new Reservation(0123, controller.getUser().userID, 789, spot, null, 50.00, false));
         reservations.add(new Reservation(0123, controller.getUser().userID, 789, spot, null, 75.00, false));
 

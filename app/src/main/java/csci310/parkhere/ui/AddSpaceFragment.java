@@ -1,9 +1,11 @@
 package csci310.parkhere.ui;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -15,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -23,8 +26,13 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.Serializable;
+
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
+import resource.MyEntry;
+import resource.NetworkPackage;
+import resource.ParkingSpot;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,8 +59,8 @@ public class AddSpaceFragment extends Fragment {
     EditText  _in_descrip;
     TextView _addressText;
 
-    private String description, curr_cartype;
-
+    ProgressDialog progressDialog;
+    ProviderAddSpaceTask addSpaceTask = null;
 
     public  LatLng curr_location;
 
@@ -99,8 +107,6 @@ public class AddSpaceFragment extends Fragment {
         _cartypeSpinner = (Spinner)v.findViewById(R.id.cartypeSpinner);
         _cancelPolicySpinner = (Spinner)v.findViewById(R.id.cancelPolicySpinner);
 
-        curr_cartype = _cartypeSpinner.getSelectedItem().toString();
-
         _btn_add_address = (Button)v.findViewById(R.id.btn_add_address);
         _btn_add_address.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -123,20 +129,20 @@ public class AddSpaceFragment extends Fragment {
         // Inflate the layout for this fragment
 
         _in_descrip = (EditText)v.findViewById(R.id.in_descrip);
-        description = _in_descrip.getText().toString();
 
         _btn_confirm=(Button)v.findViewById(R.id.btn_confirm);
         _btn_confirm.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                ClientController clientController = ClientController.getInstance();
-                clientController.addSpace(curr_location,_addressText.getText().toString(), _in_descrip.getText().toString() );
-                Log.d("ADDSPACE","add space");
+                addSpaceTask = new ProviderAddSpaceTask(_addressText.getText().toString(),
+                        _in_descrip.getText().toString(),
+                        _cartypeSpinner.getSelectedItem().toString(),
+                        _cancelPolicySpinner.getSelectedItemPosition());
+                addSpaceTask.execute((Void) null);
             }
         });
 
         return v;
     }
-
 
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -211,5 +217,68 @@ public class AddSpaceFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private class ProviderAddSpaceTask extends AsyncTask<Void, Void, Boolean> {
+        private final String mAddressText;
+        private final String mDescrip;
+        private final String mCarType;
+        private final int mCancelPolicy;
+
+        ProviderAddSpaceTask(String inAddressText, String inDescrip, String inCarType, int inCancelPolicy){
+            mAddressText = inAddressText;
+            mDescrip = inDescrip;
+            mCarType = inCarType;
+            mCancelPolicy = inCancelPolicy;
+            doInBackground((Void) null);
+
+            System.out.println(mAddressText);
+            System.out.println(mDescrip);
+            System.out.println(mCarType);
+            System.out.println(mCancelPolicy);
+        }
+        @Override
+        protected void onPreExecute(){
+            //Display a progress dialog
+            progressDialog = new ProgressDialog(getContext(),
+                    R.style.AppTheme);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Adding...");
+            progressDialog.show();
+        }
+        @Override
+        protected Boolean doInBackground(Void... params){
+            ClientController clientController = ClientController.getInstance();
+            clientController.addSpace(curr_location, mAddressText, mDescrip, mCarType, mCancelPolicy);
+            Log.d("ADDSPACE", "add space");
+
+            NetworkPackage NP = clientController.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Object value = entry.getValue();
+
+            if(key.equals("ADDSPACE")) {
+                ParkingSpot spot = (ParkingSpot) value;
+                Log.d("Result", "add space " + String.valueOf(spot.getParkingSpotID()));
+
+                clientController.parkingSpots.add(spot);
+
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        @Override
+        protected void onPostExecute(Boolean success) {
+            if(success) {
+                ((ProviderActivity)getActivity()).showSpaceFragment();
+            } else{
+                progressDialog.dismiss();
+                Toast.makeText(getContext(), "Error on add space! Please try again.", Toast.LENGTH_SHORT).show();
+                // back to add space?
+            }
+        }
+
     }
 }

@@ -137,7 +137,7 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
             @Override
             public void onClick(View v) {
                 // call Client Controller for cancelling reservaiton
-                
+
             }
         });
 

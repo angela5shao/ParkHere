@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -61,12 +60,6 @@ public class RegisterProviderActivity extends Activity {
     private void register(View v) {
         String licenseID = _liscenseIdText.getText().toString();
 
-        progressDialog = new ProgressDialog(RegisterProviderActivity.this,
-                R.style.AppTheme);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Registering...");
-        progressDialog.show();
-
         // TODO: Implement your own authentication logic here.
         RegTask = new UserRegisterTask(email, password, phonenum, licenseID,"#######", "provider", name);
         RegTask.execute((Void) null);
@@ -96,26 +89,33 @@ public class RegisterProviderActivity extends Activity {
         super.onDestroy();
     }
 
-
-
-
-    public class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
+    private class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
         private final String mUsername;
         private final String mPassword;
         private final String mlicenseID;
+        private final String mphonenum;
         private final String mplatenum;
         private final String mcat;
         private final String mname;
-        private boolean authenticationStatus = true;
 
         UserRegisterTask(String email, String password, String phonenum, String licenseID, String platenum, String cat, String name){
             mUsername = email;
             mPassword = password;
-            mlicenseID = phonenum ;
-            mplatenum = licenseID;
+            mlicenseID = licenseID;
+            mphonenum = phonenum ;
+            mplatenum = platenum;
             mcat = cat;
             mname = name;
             doInBackground((Void) null);
+        }
+        @Override
+        protected void onPreExecute(){
+            //Display a progress dialog
+            progressDialog = new ProgressDialog(RegisterProviderActivity.this,
+                    R.style.AppTheme);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Registering...");
+            progressDialog.show();
         }
         @Override
         protected Boolean doInBackground(Void... params ){

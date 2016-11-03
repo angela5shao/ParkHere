@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,9 +13,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
+import resource.MyEntry;
+import resource.NetworkPackage;
+import resource.User;
 
 /**
  * Created by ivylinlaw on 10/29/16.
@@ -27,6 +32,7 @@ public class RegisterRenterActivity extends Activity {
     private static final int REQUEST_SIGNUP = 0;
 
     ProgressDialog progressDialog;
+    UserRegisterTask RegTask = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,21 +72,8 @@ public class RegisterRenterActivity extends Activity {
         String licenseID = _liscenseIdText.getText().toString();
         String licensePlate = _liscensePlateNumText.getText().toString();
 
-        progressDialog = new ProgressDialog(RegisterRenterActivity.this,
-                R.style.AppTheme);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Registering...");
-        progressDialog.show();
-
-        // TODO: Implement your own authentication logic here.
-        try {
-            clientController.register(email, password, phonenum, licenseID, licensePlate, "renter", name);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        final View curr_v = v;
-
+        RegTask = new UserRegisterTask(email, password, phonenum, licenseID,"#######", "provider", name);
+        RegTask.execute((Void) null);
     }
 
     @Override
@@ -141,26 +134,70 @@ public class RegisterRenterActivity extends Activity {
         startActivityForResult(intent, 0);
     }
 
-//    public boolean validate() {
-//        boolean valid = true;
-//
-//        String email = _emailText.getText().toString();
-//        String password = _passwordText.getText().toString();
-//
-//        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-//            _emailText.setError("enter a valid email address");
-//            valid = false;
-//        } else {
-//            _emailText.setError(null);
-//        }
-//
-//        if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
-//            _passwordText.setError("between 4 and 10 alphanumeric characters");
-//            valid = false;
-//        } else {
-//            _passwordText.setError(null);
-//        }
-//
-//        return valid;
-//    }
+    private class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
+        private final String mUsername;
+        private final String mPassword;
+        private final String mlicenseID;
+        private final String mphonenum;
+        private final String mplatenum;
+        private final String mcat;
+        private final String mname;
+
+        UserRegisterTask(String email, String password, String phonenum, String licenseID, String platenum, String cat, String name){
+            mUsername = email;
+            mPassword = password;
+            mlicenseID = licenseID;
+            mphonenum = phonenum ;
+            mplatenum = platenum;
+            mcat = cat;
+            mname = name;
+            doInBackground((Void) null);
+        }
+        @Override
+        protected void onPreExecute(){
+            //Display a progress dialog
+            progressDialog = new ProgressDialog(RegisterRenterActivity.this,
+                    R.style.AppTheme);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Registering...");
+            progressDialog.show();
+        }
+        @Override
+        protected Boolean doInBackground(Void... params ){
+            try {
+                clientController.register(mUsername, mPassword, phonenum, mlicenseID, mplatenum, mcat, mname);
+                NetworkPackage NP = clientController.checkReceived();
+                MyEntry<String, Serializable> entry = NP.getCommand();
+                String key = entry.getKey();
+                Object value = entry.getValue();
+                if(key.equals("RF")){
+                    return false;
+                } else if(key.equals("REGISTER")){
+                    User result = (User) value;
+                    Log.d("REGISTER", result.userName);
+                    clientController.setUser(result);
+                    return true;
+                } else{
+                    return false;
+                }
+            } catch (IOException e) {
+                return false;
+            }
+        }
+        @Override
+        protected void onPostExecute(Boolean success) {
+            Context c = getBaseContext();
+            if(success) {
+                Log.d("LOGIN TEST 1", "yeah");
+                progressDialog.dismiss();
+                Intent intent = new Intent(c, ProviderActivity.class);
+                startActivityForResult(intent, 0);
+            } else{
+                progressDialog.dismiss();
+                Intent intent = new Intent(c, HomeActivity.class);
+                startActivityForResult(intent, 0);
+            }
+        }
+
+    }
 }

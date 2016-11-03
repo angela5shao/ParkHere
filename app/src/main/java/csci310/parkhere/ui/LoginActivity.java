@@ -4,15 +4,13 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Network;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.os.AsyncTask;
-
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -82,7 +80,8 @@ public class LoginActivity extends Activity {
             }
         });
     }
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean>{
+
+    private class UserLoginTask extends AsyncTask<Void, Void, Boolean>{
         private final String mUsername;
         private final String mPassword;
         private boolean authenticationStatus = true;
@@ -93,6 +92,15 @@ public class LoginActivity extends Activity {
             doInBackground((Void) null);
             System.out.println(mUsername);
             System.out.println(mPassword);
+        }
+        @Override
+        protected void onPreExecute(){
+            //Display a progress dialog
+            progressDialog = new ProgressDialog(LoginActivity.this,
+                    R.style.AppTheme);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Authenticating...");
+            progressDialog.show();
         }
         @Override
         protected Boolean doInBackground(Void... params ){
@@ -140,11 +148,6 @@ public class LoginActivity extends Activity {
     }
 
 
-
-
-
-
-
     public void login(View v) {
         Log.d(TAG, "Login");
 
@@ -154,12 +157,6 @@ public class LoginActivity extends Activity {
         password = _password.getText().toString();
 
         _loginButton.setEnabled(false);
-
-        progressDialog = new ProgressDialog(LoginActivity.this,
-                R.style.AppTheme);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating...");
-        progressDialog.show();
 
         // TODO: Implement your own authentication logic here.
 

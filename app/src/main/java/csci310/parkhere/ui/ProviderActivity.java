@@ -164,6 +164,7 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 
     public void showSpaceFragment()
     {
+        Log.d("show or not", "true");
         spacesFragment = new SpacesFragment();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragContainer, spacesFragment).commit();
@@ -347,7 +348,9 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
             String key = entry.getKey();
             Object value = entry.getValue();
             if(key.equals("RESPONSEPARKINGSPOT")){
+                Log.d("ResponsePakringSpot", "yes");
                 ArrayList<ParkingSpot> myParkingSpot = (ArrayList<ParkingSpot>)value;
+                Log.d("ResponsePakringSpot", "yes"+ myParkingSpot.size());
                 return myParkingSpot;
             }
             return null;
@@ -356,6 +359,8 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         protected void onPostExecute(ArrayList<ParkingSpot> list) {
             clientController.providerToshowSpaces = true;
             clientController.parkingSpots = list;
+            Log.d("CheckrequestParkingSpotListTask", " 1");
+            showSpaceFragment();
         }
 
     }

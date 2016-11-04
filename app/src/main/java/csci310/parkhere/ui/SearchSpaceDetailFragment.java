@@ -30,13 +30,19 @@ import resource.TimeInterval;
 public class SearchSpaceDetailFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM1 = "position";
     private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM3 = "param3";
+    private static final String ARG_PARAM4 = "param4";
+    private static final String ARG_PARAM5 = "param5";
     View mView;
 
     // TODO: Rename and change types of parameters
     private int mPosition;
     private String mParam2;
+    private String mParam3;
+    private String mParam4;
+    private String mParam5;
 
     private ParkingSpot mParkingSpot;
 
@@ -82,6 +88,9 @@ public class SearchSpaceDetailFragment extends Fragment {
         if (getArguments() != null) {
             mPosition = getArguments().getInt(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+            mParam3 = getArguments().getString(ARG_PARAM3);
+            mParam4 = getArguments().getString(ARG_PARAM4);
+            mParam5 = getArguments().getString(ARG_PARAM5);
         }
     }
 
@@ -94,6 +103,7 @@ public class SearchSpaceDetailFragment extends Fragment {
         _searchspacedetail_reservebutton=(Button)mView.findViewById(R.id.searchspacedetail_reservebutton);
         _searchspacedetail_reservebutton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+                // Pass search start/end time to
                 Intent intent = new Intent(getContext(), PaymentActivity.class);
                 startActivityForResult(intent, 11);
             }

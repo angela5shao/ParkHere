@@ -180,7 +180,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 
     }
 
-    public void displaySearchResult(SearchResults results) {
+    public void displaySearchResult(SearchResults results, String startDate, String startTime, String endDate, String endTime) {
         if(results == null)
             return;
 
@@ -194,7 +194,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         }
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
         if (fragment instanceof DisplaySearchFragment) {
-            ((DisplaySearchFragment) fragment).setSearchResultListview(searchResults);
+            ((DisplaySearchFragment) fragment).setSearchResultListview(searchResults, startDate, startTime, endDate, endTime);
         }
 
         fragmentTransaction = fm.beginTransaction();
@@ -307,10 +307,14 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
     }
 
     // Implements DisplaySearchFragment
-    public void onSearchSpaceSelected(int position) {
+    public void onSearchSpaceSelected(int position, String startDate, String startTime, String endDate, String endTime) {
         // Pass position in searchResultList to searchSpaceDetailFragment
         Bundle bundle = new Bundle();
         bundle.putInt("position", position);
+        bundle.putString("param2", startDate);
+        bundle.putString("param3", startTime);
+        bundle.putString("param4", endDate);
+        bundle.putString("param5", endTime);
         searchSpaceDetailFragment.setArguments(bundle);
 
         fragmentTransaction.replace(R.id.fragContainer, searchSpaceDetailFragment);

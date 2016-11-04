@@ -26,12 +26,17 @@ import resource.SearchResults;
 public class DisplaySearchFragment extends Fragment implements AdapterView.OnItemClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "position";
+    private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private static String mStartDate;
+    private static String mStartTime;
+    private static String mEndDate;
+    private static String mEndTime;
 
     private OnFragmentInteractionListener mListener;
 
@@ -89,7 +94,7 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
             resultList[i] = result.searchResultList.get(i).getDescription();
         }
 
-        setSearchResultListview(resultList);
+//        setSearchResultListview(resultList);
 
         _searchresultList.setOnItemClickListener(this);
 //        _searchresultList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -136,9 +141,14 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
         mListener = null;
     }
 
-    public void setSearchResultListview(String[] inSearchResults) {
+    public void setSearchResultListview(String[] inSearchResults, String startDate, String startTime, String endDate, String endTime) {
         _searchresultList.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, inSearchResults));
         DiplayListViewHelper.getListViewSize(_searchresultList);
+
+        mStartDate = startDate;
+        mStartTime = startTime;
+        mEndDate = endDate;
+        mEndTime = endTime;
     }
 
     /**
@@ -154,12 +164,12 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-        void onSearchSpaceSelected(int position);
+        void onSearchSpaceSelected(int position, String mStartDate, String mStartTime, String mEndDate, String mEndTime);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
                             long id) {
-        mListener.onSearchSpaceSelected(position);
+        mListener.onSearchSpaceSelected(position, mStartDate, mStartTime, mEndDate, mEndTime);
     }
 }

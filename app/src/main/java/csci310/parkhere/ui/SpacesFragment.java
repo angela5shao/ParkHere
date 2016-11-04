@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
 import resource.ParkingSpot;
-
+import resource.TimeInterval;
 
 
 /**
@@ -42,6 +42,7 @@ public class SpacesFragment extends ListFragment implements AdapterView.OnItemCl
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
 
 //    private OnSpaceSelectedListener mCallback;
     private OnFragmentInteractionListener mListener;

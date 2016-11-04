@@ -10,7 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import java.util.ArrayList;
+
 import csci310.parkhere.R;
+import resource.TimeInterval;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,6 +33,16 @@ public class SearchSpaceDetailFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private String mUsername;
+    private ArrayList<TimeInterval> mTimeIntervals;
+    private String mAddress;
+    private String mDescription;
+    private String mZipcode;
+    private Integer mCarType;
+    private boolean mStatus;
+    private int mCancelPolicy;
+    private double mPrice;
 
     private OnFragmentInteractionListener mListener;
 

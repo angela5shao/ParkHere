@@ -36,11 +36,11 @@ public class CustomSpacesListAdapter extends ArrayAdapter {
         LayoutInflater inflater = context.getLayoutInflater();
         View rowView = inflater.inflate(R.layout.fragment_reservations, null, true);
 
-        TextView txtTitle = (TextView) rowView.findViewById(R.id.reservations_address);
+//        TextView txtTitle = (TextView) rowView.findViewById(R.id.reservations_address);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
 //        TextView extratxt = (TextView) rowView.findViewById(R.id.textView1);
 
-        txtTitle.setText(itemname.get(position));
+//        txtTitle.setText(itemname.get(position));
 //        imageView.setImageResource(imgid[position]);
 //        extratxt.setText("Reserved by: "+rentername.get(position));
         return rowView;

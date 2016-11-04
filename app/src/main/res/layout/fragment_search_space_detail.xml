@@ -1,3 +1,276 @@
+<!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--tools:context="csci310.parkhere.ui.SearchSpaceDetailFragment">-->
+
+    <!--&lt;!&ndash; TODO: Update blank fragment layout &ndash;&gt;-->
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" />-->
+
+    <!--<ScrollView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="12dp">-->
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="vertical"-->
+            <!--android:gravity="center"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:layout_marginBottom="8dp">-->
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="vertical"-->
+                <!--android:layout_marginTop="12dp">-->
+                <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Address:"-->
+                    <!--android:layout_alignParentTop="true"-->
+                    <!--android:layout_alignParentLeft="true"-->
+                    <!--android:layout_alignParentStart="true"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:textAlignment="center"-->
+                    <!--android:paddingTop="8dp"-->
+                    <!--android:paddingBottom="8dp"-->
+                    <!--android:textColor="@color/colorMainFont"-->
+                    <!--android:background="@color/colorPrimary"/>-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="[address]"-->
+                    <!--android:id="@+id/searchspacedetail_address"-->
+                    <!--android:layout_alignBottom="@+id/username_label"-->
+                    <!--android:layout_toRightOf="@+id/username_label"-->
+                    <!--android:layout_toEndOf="@+id/username_label"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:paddingTop="8dp"-->
+                    <!--android:paddingBottom="8dp"-->
+                    <!--android:textAlignment="center"-->
+                    <!--android:textColor="@color/colorMainFont"-->
+                    <!--android:background="@color/colorAccent"/>-->
+            <!--</LinearLayout>-->
+
+            <!--<fragment-->
+                <!--android:id="@+id/map"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="200dp"-->
+                <!--class="com.google.android.gms.maps.SupportMapFragment"/>-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal">-->
+                <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Distance:"-->
+                    <!--android:layout_alignParentTop="true"-->
+                    <!--android:layout_alignParentLeft="true"-->
+                    <!--android:layout_alignParentStart="true"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:textAlignment="center"-->
+                    <!--android:paddingTop="8dp"-->
+                    <!--android:paddingBottom="8dp"-->
+                    <!--android:textColor="@color/colorMainFont"-->
+                    <!--android:background="@color/colorPrimary"/>-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="[distance]"-->
+                    <!--android:id="@+id/searchspacedetail_distance"-->
+                    <!--android:layout_alignBottom="@+id/username_label"-->
+                    <!--android:layout_toRightOf="@+id/username_label"-->
+                    <!--android:layout_toEndOf="@+id/username_label"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:paddingTop="8dp"-->
+                    <!--android:paddingBottom="8dp"-->
+                    <!--android:textAlignment="center"-->
+                    <!--android:textColor="@color/colorMainFont"-->
+                    <!--android:background="@color/colorAccent"/>-->
+            <!--</LinearLayout>-->
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal">-->
+                <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Price:"-->
+                    <!--android:layout_alignParentTop="true"-->
+                    <!--android:layout_alignParentLeft="true"-->
+                    <!--android:layout_alignParentStart="true"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:textAlignment="center"-->
+                    <!--android:paddingTop="8dp"-->
+                    <!--android:paddingBottom="8dp"-->
+                    <!--android:textColor="@color/colorMainFont"-->
+                    <!--android:background="@color/colorPrimary"/>-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="[price]"-->
+                    <!--android:id="@+id/searchspacedetail_price"-->
+                    <!--android:layout_alignBottom="@+id/username_label"-->
+                    <!--android:layout_toRightOf="@+id/username_label"-->
+                    <!--android:layout_toEndOf="@+id/username_label"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:paddingTop="8dp"-->
+                    <!--android:paddingBottom="8dp"-->
+                    <!--android:textAlignment="center"-->
+                    <!--android:textColor="@color/colorMainFont"-->
+                    <!--android:background="@color/colorAccent"/>-->
+            <!--</LinearLayout>-->
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal">-->
+                <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Rating:"-->
+                    <!--android:layout_alignParentTop="true"-->
+                    <!--android:layout_alignParentLeft="true"-->
+                    <!--android:layout_alignParentStart="true"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:textAlignment="center"-->
+                    <!--android:paddingTop="8dp"-->
+                    <!--android:paddingBottom="8dp"-->
+                    <!--android:textColor="@color/colorMainFont"-->
+                    <!--android:background="@color/colorPrimary"/>-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="[rating]"-->
+                    <!--android:id="@+id/searchspacedetail_rating"-->
+                    <!--android:layout_alignBottom="@+id/username_label"-->
+                    <!--android:layout_toRightOf="@+id/username_label"-->
+                    <!--android:layout_toEndOf="@+id/username_label"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:paddingTop="8dp"-->
+                    <!--android:paddingBottom="8dp"-->
+                    <!--android:textAlignment="center"-->
+                    <!--android:textColor="@color/colorMainFont"-->
+                    <!--android:background="@color/colorAccent"/>-->
+            <!--</LinearLayout>-->
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal">-->
+                <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Provider's name:"-->
+                    <!--android:layout_alignParentTop="true"-->
+                    <!--android:layout_alignParentLeft="true"-->
+                    <!--android:layout_alignParentStart="true"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:textAlignment="center"-->
+                    <!--android:paddingTop="8dp"-->
+                    <!--android:paddingBottom="8dp"-->
+                    <!--android:textColor="@color/colorMainFont"-->
+                    <!--android:background="@color/colorPrimary"/>-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="[provider's name]"-->
+                    <!--android:id="@+id/searchspacedetail_providername"-->
+                    <!--android:layout_alignBottom="@+id/username_label"-->
+                    <!--android:layout_toRightOf="@+id/username_label"-->
+                    <!--android:layout_toEndOf="@+id/username_label"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:paddingTop="8dp"-->
+                    <!--android:paddingBottom="8dp"-->
+                    <!--android:textAlignment="center"-->
+                    <!--android:textColor="@color/colorMainFont"-->
+                    <!--android:background="@color/colorAccent"/>-->
+            <!--</LinearLayout>-->
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal">-->
+                <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Start time:"-->
+                    <!--android:layout_alignParentTop="true"-->
+                    <!--android:layout_alignParentLeft="true"-->
+                    <!--android:layout_alignParentStart="true"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:textAlignment="center"-->
+                    <!--android:paddingTop="8dp"-->
+                    <!--android:paddingBottom="8dp"-->
+                    <!--android:textColor="@color/colorMainFont"-->
+                    <!--android:background="@color/colorPrimary"/>-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="[start time]"-->
+                    <!--android:id="@+id/searchspacedetail_starttime"-->
+                    <!--android:layout_alignBottom="@+id/username_label"-->
+                    <!--android:layout_toRightOf="@+id/username_label"-->
+                    <!--android:layout_toEndOf="@+id/username_label"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:paddingTop="8dp"-->
+                    <!--android:paddingBottom="8dp"-->
+                    <!--android:textAlignment="center"-->
+                    <!--android:textColor="@color/colorMainFont"-->
+                    <!--android:background="@color/colorAccent"/>-->
+            <!--</LinearLayout>-->
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal">-->
+                <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="End time:"-->
+                    <!--android:layout_alignParentTop="true"-->
+                    <!--android:layout_alignParentLeft="true"-->
+                    <!--android:layout_alignParentStart="true"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:textAlignment="center"-->
+                    <!--android:paddingTop="8dp"-->
+                    <!--android:paddingBottom="8dp"-->
+                    <!--android:textColor="@color/colorMainFont"-->
+                    <!--android:background="@color/colorPrimary"/>-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="[address]"-->
+                    <!--android:id="@+id/searchspacedetail_endtime"-->
+                    <!--android:layout_alignBottom="@+id/username_label"-->
+                    <!--android:layout_toRightOf="@+id/username_label"-->
+                    <!--android:layout_toEndOf="@+id/username_label"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:paddingTop="8dp"-->
+                    <!--android:paddingBottom="8dp"-->
+                    <!--android:textAlignment="center"-->
+                    <!--android:textColor="@color/colorMainFont"-->
+                    <!--android:background="@color/colorAccent"/>-->
+            <!--</LinearLayout>-->
+
+            <!--<Button-->
+                <!--android:id="@+id/searchspacedetail_reservebutton"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:text="Reserve" />-->
+
+        <!--</LinearLayout>-->
+    <!--</ScrollView>-->
+
+<!--</FrameLayout>-->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -248,8 +521,74 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="[address]"
+                    android:text="[end time]"
                     android:id="@+id/searchspacedetail_endtime"
+                    android:layout_alignBottom="@+id/username_label"
+                    android:layout_toRightOf="@+id/username_label"
+                    android:layout_toEndOf="@+id/username_label"
+                    android:layout_weight="1"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorMainFont"
+                    android:background="@color/colorAccent"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Car type:"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_weight="1"
+                    android:textAlignment="center"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@color/colorMainFont"
+                    android:background="@color/colorPrimary"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="[car type]"
+                    android:id="@+id/searchspacedetail_cartype"
+                    android:layout_alignBottom="@+id/username_label"
+                    android:layout_toRightOf="@+id/username_label"
+                    android:layout_toEndOf="@+id/username_label"
+                    android:layout_weight="1"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorMainFont"
+                    android:background="@color/colorAccent"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Cancellation Policy:"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_weight="1"
+                    android:textAlignment="center"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@color/colorMainFont"
+                    android:background="@color/colorPrimary"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="[cancellation policy]"
+                    android:id="@+id/searchspacedetail_cancelpolicy"
                     android:layout_alignBottom="@+id/username_label"
                     android:layout_toRightOf="@+id/username_label"
                     android:layout_toEndOf="@+id/username_label"

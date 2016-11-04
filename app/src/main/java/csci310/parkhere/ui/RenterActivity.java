@@ -169,7 +169,31 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 
     }
 
-    public void displaySearchResult(SearchResults results) {
+//    public void displaySearchResult(SearchResults results) {
+//        if(results == null)
+//            return;
+//
+//
+//        ArrayList<ParkingSpot> spotList = results.searchResultList;
+//
+//        String[] searchResults = new String[spotList.size()];
+//        for(int i = 0; i < spotList.size(); i++)
+//        {
+//            searchResults[i] = spotList.get(i).getDescription();
+//        }
+//
+//        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
+//        if (fragment instanceof DisplaySearchFragment) {
+//            ((DisplaySearchFragment) fragment).setSearchResultListview(searchResults);
+//        }
+//
+//        fragmentTransaction = fm.beginTransaction();
+//        fragmentTransaction.replace(R.id.fragContainer, displaySearchFragment);
+//        fragmentTransaction.addToBackStack(null);
+//        fragmentTransaction.commit();
+//    }
+
+    public void displaySearchResult(SearchResults results, String startDate, String startTime, String endDate, String endTime) {
         if(results == null)
             return;
 
@@ -181,10 +205,9 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         {
             searchResults[i] = spotList.get(i).getDescription();
         }
-
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
         if (fragment instanceof DisplaySearchFragment) {
-            ((DisplaySearchFragment) fragment).setSearchResultListview(searchResults);
+            ((DisplaySearchFragment) fragment).setSearchResultListview(searchResults, startDate, startTime, endDate, endTime);
         }
 
         fragmentTransaction = fm.beginTransaction();
@@ -254,5 +277,21 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         } catch (Exception e) {
             System.out.println("RenterActivity onReservationSelected exception");
         }
+    }
+
+    // Implements DisplaySearchFragment
+    public void onSearchSpaceSelected(int position, String startDate, String startTime, String endDate, String endTime) {
+        // Pass position in searchResultList to searchSpaceDetailFragment
+        Bundle bundle = new Bundle();
+        bundle.putInt("position", position);
+        bundle.putString("param2", startDate);
+        bundle.putString("param3", startTime);
+        bundle.putString("param4", endDate);
+        bundle.putString("param5", endTime);
+        searchSpaceDetailFragment.setArguments(bundle);
+
+        fragmentTransaction.replace(R.id.fragContainer, searchSpaceDetailFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 }

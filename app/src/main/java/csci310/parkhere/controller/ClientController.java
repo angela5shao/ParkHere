@@ -465,4 +465,18 @@ public class ClientController {
         }
     }
 
+    public void renterReserve(long userID, long parkingSpotID, TimeInterval timeInterval){
+        NetworkPackage NP = new NetworkPackage();
+        HashMap<String, Serializable> map = new HashMap<String, Serializable>();
+        map.put("PARKINGSPOTID", parkingSpotID);
+        map.put("RENTERID", userID);
+        map.put("TIMEINTERVAL", timeInterval);
+        NP.addEntry("RESERVE", map);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

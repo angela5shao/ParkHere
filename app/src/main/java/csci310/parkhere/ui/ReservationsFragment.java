@@ -68,6 +68,14 @@ public class ReservationsFragment extends ListFragment implements AdapterView.On
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+//        Bundle
+//        curr_lat = b.getDouble("LAT");
+//        curr_long = b.getDouble("LONG");
+//        address = b.getString("ADDRESS");
+//        start_time = b.getString("START_TIME");
+//        end_time = b.getString("END_TIME");
+//        renter_username = b.getString("RENTER");
     }
 
     @Override

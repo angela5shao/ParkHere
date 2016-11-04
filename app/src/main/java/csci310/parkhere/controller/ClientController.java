@@ -358,8 +358,13 @@ public class ClientController {
         return false;
     }
 
-    public void loadPay(String method) {
-
+    public void postPaymentNonceToServer(String paymentMethodNonce)
+    {
+        try {
+            clientCommunicator.send("PAYMENT_SUCCESS", paymentMethodNonce);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

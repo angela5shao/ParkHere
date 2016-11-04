@@ -423,7 +423,7 @@ public class SearchFragment extends Fragment {
 
             if(key.equals("SEARCH_RESULT")) {
                 SearchResults result = (SearchResults) value;
-                Log.d("Results", result.searchResultList.get(0).getStreetAddr());
+//                Log.d("Results", result.searchResultList.get(0).getStreetAddr());
                 clientController.toDispaySearch = true;
                 //controller.updateActivity();
                 clientController.searchResults = result;

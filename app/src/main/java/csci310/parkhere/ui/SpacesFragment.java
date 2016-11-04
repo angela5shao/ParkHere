@@ -120,7 +120,7 @@ public class SpacesFragment extends ListFragment implements AdapterView.OnItemCl
         ClientController controller = ClientController.getInstance();
 
 
-        if(!controller.providerToshowSpaces)
+//        if(!controller.providerToshowSpaces)
         {
             controller.setCurrentFragment(this);
             ArrayList<ParkingSpot> spaces = controller.parkingSpots;
@@ -130,7 +130,7 @@ public class SpacesFragment extends ListFragment implements AdapterView.OnItemCl
             ArrayList<String> spacesAddr = new ArrayList<String>();
 
             for (int i=0; i<spaces.size(); i++) {
-                spacesAddr.add(spaces.get(0).getStreetAddr());
+                spacesAddr.add(spaces.get(i).getStreetAddr());
                 System.out.println("SpacesFrag: create string array with: " + spaces.get(i).getStreetAddr());
             }
 

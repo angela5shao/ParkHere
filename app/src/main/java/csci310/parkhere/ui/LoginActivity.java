@@ -100,7 +100,16 @@ public class LoginActivity extends Activity {
             try {
                 clientController.login(email, password);
                 NetworkPackage NP = clientController.checkReceived();
+
+                if(NP == null)
+                {
+                    Log.d("DOINBACKGROUND", "null");
+                }
                 MyEntry<String, Serializable> entry = NP.getCommand();
+
+
+
+
                 String key = entry.getKey();
                 Object value = entry.getValue();
                 if(key.equals("LF")){

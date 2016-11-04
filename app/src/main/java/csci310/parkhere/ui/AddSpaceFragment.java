@@ -272,6 +272,8 @@ public class AddSpaceFragment extends Fragment {
         @Override
         protected void onPostExecute(Boolean success) {
             if(success) {
+                Log.d("ONPOSTEXECUTE", "success");
+                progressDialog.dismiss();
                 ((ProviderActivity)getActivity()).showSpaceFragment();
             } else{
                 progressDialog.dismiss();

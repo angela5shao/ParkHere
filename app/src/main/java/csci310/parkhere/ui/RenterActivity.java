@@ -308,7 +308,12 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 
     // Implements DisplaySearchFragment
     public void onSearchSpaceSelected(int position) {
-        fragmentTransaction.replace(R.id.fragContainer, reservationsFragment);
+        // Pass position in searchResultList to searchSpaceDetailFragment
+        Bundle bundle = new Bundle();
+        bundle.putInt("position", position);
+        searchSpaceDetailFragment.setArguments(bundle);
+
+        fragmentTransaction.replace(R.id.fragContainer, searchSpaceDetailFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

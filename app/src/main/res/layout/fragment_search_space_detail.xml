@@ -248,7 +248,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="[address]"
+                    android:text="[end time]"
                     android:id="@+id/searchspacedetail_endtime"
                     android:layout_alignBottom="@+id/username_label"
                     android:layout_toRightOf="@+id/username_label"

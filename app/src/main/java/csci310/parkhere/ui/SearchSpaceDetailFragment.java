@@ -9,10 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import csci310.parkhere.R;
+import csci310.parkhere.controller.ClientController;
+import resource.ParkingSpot;
 import resource.TimeInterval;
 
 /**
@@ -31,18 +34,20 @@ public class SearchSpaceDetailFragment extends Fragment {
     View mView;
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
+    private int mPosition;
     private String mParam2;
 
-    private String mProvidername;
-    private ArrayList<TimeInterval> mTimeIntervals;
-    private String mAddress;
-    private String mDescription;
-//    private String mZipcode;
-    private Integer mCarType;
-    private boolean mStatus;
-    private int mCancelPolicy;
-    private double mPrice;
+    private ParkingSpot mParkingSpot;
+
+//    private String mProvidername;
+//    private ArrayList<TimeInterval> mTimeIntervals;
+//    private String mAddress;
+//    private String mDescription;
+////    private String mZipcode;
+//    private Integer mCarType;
+//    private boolean mStatus;
+//    private int mCancelPolicy;
+//    private double mPrice;
 
     private OnFragmentInteractionListener mListener;
 
@@ -61,10 +66,10 @@ public class SearchSpaceDetailFragment extends Fragment {
      * @return A new instance of fragment SearchSpaceDetailFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SearchSpaceDetailFragment newInstance(String param1, String param2) {
+    public static SearchSpaceDetailFragment newInstance(int param1, String param2) {
         SearchSpaceDetailFragment fragment = new SearchSpaceDetailFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putInt(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -74,10 +79,8 @@ public class SearchSpaceDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            mPosition = getArguments().getInt(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
-
-
         }
     }
 
@@ -94,6 +97,14 @@ public class SearchSpaceDetailFragment extends Fragment {
                 startActivityForResult(intent, 11);
             }
         });
+
+        // Get ParkingSpot from controller
+        ClientController controller = ClientController.getInstance();
+        mParkingSpot = controller.searchResults.searchResultList.get(mPosition);
+
+        // Populate fields with data
+        TextView text = (TextView) mView.findViewById(R.id.searchspacedetail_address);
+        text.setText(mParkingSpot.getStreetAddr());
 
         return mView;
     }

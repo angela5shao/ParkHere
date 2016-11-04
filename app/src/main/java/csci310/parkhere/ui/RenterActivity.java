@@ -68,10 +68,9 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         reservationsFragment = new ReservationsFragment();
         searchSpaceDetailFragment = new SearchSpaceDetailFragment();
 
-        _resLink = (LinearLayout)findViewById(R.id.resLink);
-        _searchLink = (LinearLayout)findViewById(R.id.searchLink);
+        _resLink = (LinearLayout) findViewById(R.id.resLink);
+        _searchLink = (LinearLayout) findViewById(R.id.searchLink);
         _profilePic = (ImageView) findViewById(R.id.profilePic);
-
 
 
         //*****************************************************************
@@ -112,7 +111,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 
                 Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
                 User user = clientController.getUser();
-                if(user == null)
+                if (user == null)
                     Log.d("PROFILE", "user is null");
 
                 if (fragment instanceof PrivateProfileFragment && user != null) {
@@ -157,40 +156,60 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 //            default:
 //                return super.onOptionsItemSelected(item);
 
-            if(item.getItemId() == R.id.ProviderSwitch) {
-                Intent intent = new Intent(this, ProviderActivity.class);
-                startActivityForResult(intent, 0);
-                clientController.getUser().userType = false;
-                return true;
-            }
-            else if(item.getItemId() == R.id.LogOut) {
-                Intent intent = new Intent(this, HomeActivity.class);
-                startActivityForResult(intent, 0);
-                ClientController.resetController();
-                return true;
-            }
-            else {
-                return super.onOptionsItemSelected(item);
-            }
+        if (item.getItemId() == R.id.ProviderSwitch) {
+            Intent intent = new Intent(this, ProviderActivity.class);
+            startActivityForResult(intent, 0);
+            clientController.getUser().userType = false;
+            return true;
+        } else if (item.getItemId() == R.id.LogOut) {
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivityForResult(intent, 0);
+            ClientController.resetController();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
 
     }
 
-    public void displaySearchResult(SearchResults results) {
-        if(results == null)
+//    public void displaySearchResult(SearchResults results) {
+//        if(results == null)
+//            return;
+//
+//
+//        ArrayList<ParkingSpot> spotList = results.searchResultList;
+//
+//        String[] searchResults = new String[spotList.size()];
+//        for(int i = 0; i < spotList.size(); i++)
+//        {
+//            searchResults[i] = spotList.get(i).getDescription();
+//        }
+//
+//        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
+//        if (fragment instanceof DisplaySearchFragment) {
+//            ((DisplaySearchFragment) fragment).setSearchResultListview(searchResults);
+//        }
+//
+//        fragmentTransaction = fm.beginTransaction();
+//        fragmentTransaction.replace(R.id.fragContainer, displaySearchFragment);
+//        fragmentTransaction.addToBackStack(null);
+//        fragmentTransaction.commit();
+//    }
+
+    public void displaySearchResult(SearchResults results, String startDate, String startTime, String endDate, String endTime) {
+        if (results == null)
             return;
 
 
         ArrayList<ParkingSpot> spotList = results.searchResultList;
 
         String[] searchResults = new String[spotList.size()];
-        for(int i = 0; i < spotList.size(); i++)
-        {
+        for (int i = 0; i < spotList.size(); i++) {
             searchResults[i] = spotList.get(i).getDescription();
         }
-
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
         if (fragment instanceof DisplaySearchFragment) {
-            ((DisplaySearchFragment) fragment).setSearchResultListview(searchResults);
+            ((DisplaySearchFragment) fragment).setSearchResultListview(searchResults, startDate, startTime, endDate, endTime);
         }
 
         fragmentTransaction = fm.beginTransaction();
@@ -199,8 +218,24 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         fragmentTransaction.commit();
     }
 
-    public void onFragmentInteraction(Uri uri){
+    public void onFragmentInteraction(Uri uri) {
         //you can leave it empty
+    }
+
+    @Override
+    public void onSearchSpaceSelected(int position, String startDate, String startTime, String endDate, String endTime) {
+        // Pass position in searchResultList to searchSpaceDetailFragment
+        Bundle bundle = new Bundle();
+        bundle.putInt("position", position);
+        bundle.putString("param2", startDate);
+        bundle.putString("param3", startTime);
+        bundle.putString("param4", endDate);
+        bundle.putString("param5", endTime);
+        searchSpaceDetailFragment.setArguments(bundle);
+
+        fragmentTransaction.replace(R.id.fragContainer, searchSpaceDetailFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     public void switchToEditProfileFrag() {
@@ -262,10 +297,9 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         }
     }
 
-
     private class RequestReservationsTask extends AsyncTask<Void, Void, ArrayList<Reservation>> {
 
-        RequestReservationsTask(){
+        RequestReservationsTask() {
             doInBackground((Void) null);
         }
 
@@ -275,13 +309,13 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 //        }
 
         @Override
-        protected ArrayList<Reservation> doInBackground(Void... params ){
+        protected ArrayList<Reservation> doInBackground(Void... params) {
             clientController.requestMyReservationList();
             NetworkPackage NP = clientController.checkReceived();
             MyEntry<String, Serializable> entry = NP.getCommand();
             String key = entry.getKey();
             Object value = entry.getValue();
-            if(key.equals("RESERVATIONLIST")){
+            if (key.equals("RESERVATIONLIST")) {
 //                HashMap<String, Serializable> map = (HashMap<String, Serializable>) value;
 //                ArrayList<TimeInterval> myTimeIntervals = (ArrayList<TimeInterval>) map.get("TIMEINTERVAL");
 //                Long spotID = (Long)map.get("PARKINGSPOTID");
@@ -298,11 +332,27 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 
         @Override
         protected void onPostExecute(ArrayList<Reservation> list) {
-            if(list!=null){
+            if (list != null) {
                 clientController.reservations = list;
-            } else{
+            } else {
                 //Toast.makeText(this, "Error on make reservation! Please try again.", Toast.LENGTH_SHORT).show();
             }
+        }
+
+        // Implements DisplaySearchFragment
+        public void onSearchSpaceSelected(int position, String startDate, String startTime, String endDate, String endTime) {
+            // Pass position in searchResultList to searchSpaceDetailFragment
+            Bundle bundle = new Bundle();
+            bundle.putInt("position", position);
+            bundle.putString("param2", startDate);
+            bundle.putString("param3", startTime);
+            bundle.putString("param4", endDate);
+            bundle.putString("param5", endTime);
+            searchSpaceDetailFragment.setArguments(bundle);
+
+            fragmentTransaction.replace(R.id.fragContainer, searchSpaceDetailFragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
         }
     }
 }

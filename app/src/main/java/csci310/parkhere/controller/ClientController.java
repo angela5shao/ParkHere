@@ -10,6 +10,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import resource.CarType;
@@ -291,6 +292,8 @@ public class ClientController {
 
     }
 
+
+    // Search functions
     public void search(LatLng location, String startDate, String startTime, String endDate, String endTime, String carType, String distance) throws IOException {
         String[] time1 = startDate.split("-");
         String[] time11 = startTime.split("-");
@@ -315,6 +318,22 @@ public class ClientController {
         entry.put("CARTYPE", carType);
         entry.put("DISTANCE", Integer.parseInt(distance.replaceAll("[\\D]", "")));
         clientCommunicator.send("SEARCH", entry);
+    }
+
+
+    public ArrayList<ParkingSpot> sortByPrice(ArrayList<ParkingSpot> spots) {
+        Collections.sort(spots, new ParkingSpotPriceComparator());
+        return spots;
+    }
+
+    public ArrayList<ParkingSpot> sortBySpotRating(ArrayList<ParkingSpot> spots) {
+        Collections.sort(spots, new ParkingSpotRatingComparator());
+        return spots;
+    }
+
+    public ArrayList<ParkingSpot> sortByProviderRating(ArrayList<ParkingSpot> spots) {
+        Collections.sort(spots, new ParkingSpotRatingComparator());
+        return spots;
     }
 
 

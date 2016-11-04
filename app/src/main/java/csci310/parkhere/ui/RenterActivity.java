@@ -2,6 +2,7 @@ package csci310.parkhere.ui;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,10 +16,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
+import resource.MyEntry;
+import resource.NetworkPackage;
 import resource.ParkingSpot;
 import resource.Reservation;
 import resource.SearchResults;
@@ -81,6 +85,14 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         _resLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                RequestReservationsTask RRT = new RequestReservationsTask();
+                RRT.execute((Void) null);
+//                clientController.requestMyReservationList();
+              //  reservationsFragment._reservationList =
+                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
+                if (fragment instanceof ReservationsFragment) {
+                    ((ReservationsFragment) fragment)._reservationList = clientController.getReservations();
+                }
                 fragmentTransaction = fm.beginTransaction();
                 fragmentTransaction.replace(R.id.fragContainer, reservationsFragment);
                 fragmentTransaction.addToBackStack(null);
@@ -180,7 +192,6 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         {
             searchResults[i] = spotList.get(i).getDescription();
         }
-
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
         if (fragment instanceof DisplaySearchFragment) {
             ((DisplaySearchFragment) fragment).setSearchResultListview(searchResults);
@@ -252,6 +263,46 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
                     .replace(R.id.fragContainer, resDetailfragment).commit();
         } catch (Exception e) {
             System.out.println("RenterActivity onReservationSelected exception");
+        }
+    }
+
+    private class RequestReservationsTask extends AsyncTask<Void, Void, ArrayList<Reservation>> {
+
+        RequestReservationsTask(){
+            doInBackground((Void) null);
+        }
+
+//        @Override
+//        protected void onPreExecute(){
+//            clientController.providerToshowSpacesDetail = true;
+//        }
+
+        @Override
+        protected ArrayList<Reservation> doInBackground(Void... params ){
+            clientController.requestMyReservationList();
+            NetworkPackage NP = clientController.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if(key.equals("RESERVATIONLIST")){
+//                HashMap<String, Serializable> map = (HashMap<String, Serializable>) value;
+//                ArrayList<TimeInterval> myTimeIntervals = (ArrayList<TimeInterval>) map.get("TIMEINTERVAL");
+//                Long spotID = (Long)map.get("PARKINGSPOTID");
+//                clientController.setSpotTimeInterval(spotID,myTimeIntervals);
+                ArrayList<Reservation> list = (ArrayList<Reservation>) value;
+                return list;
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Reservation> list) {
+            if(list!=null){
+                clientController.reservations = list;
+            } else{
+                //Toast.makeText(this, "Error on make reservation! Please try again.", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

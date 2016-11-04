@@ -35,7 +35,7 @@ public class ReservationsFragment extends ListFragment implements AdapterView.On
 
     String [] resultList;
     ListView _myreservationList;
-    ArrayList<Reservation> _reservationList;
+    public ArrayList<Reservation> _reservationList;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;

@@ -54,13 +54,6 @@ public class LoginActivity extends Activity {
             @Override
             public void onClick(View v) {
                 login(v);
-//                if(email.getText().toString().equals("admin") &&
-//                        password.getText().toString().equals("admin")) {
-//                    Toast.makeText(getApplicationContext(), "Redirecting...", Toast.LENGTH_SHORT).show();
-//                }
-//                else{
-//                    Toast.makeText(getApplicationContext(), "Wrong Credentials",Toast.LENGTH_SHORT).show();
-//                }
             }
         });
 

@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -52,7 +53,7 @@ import resource.SearchResults;
  * Use the {@link SearchFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SearchFragment extends Fragment {
+public class SearchFragment extends ListFragment implements AdapterView.OnItemClickListener {
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -324,6 +325,15 @@ public class SearchFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    // For AdapterView.OnItemClickListener
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position,
+                            long id) {
+//        mListener.onSpaceSelected(position);
+        System.out.println("CLICKED on Search: " + position);
+
     }
 
     @Override

@@ -234,6 +234,7 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 //                return super.onOptionsItemSelected(item);
 //        }
 
+        System.out.println("ProviderActivity onOptionsItemSelected");
         if(item.getItemId() == R.id.RenterSwitch)
         {
             Intent intent = new Intent(this, RenterActivity.class);

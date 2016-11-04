@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -53,7 +52,7 @@ import resource.SearchResults;
  * Use the {@link SearchFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SearchFragment extends ListFragment implements AdapterView.OnItemClickListener {
+public class SearchFragment extends Fragment {
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -327,15 +326,6 @@ public class SearchFragment extends ListFragment implements AdapterView.OnItemCl
         void onFragmentInteraction(Uri uri);
     }
 
-    // For AdapterView.OnItemClickListener
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position,
-                            long id) {
-//        mListener.onSpaceSelected(position);
-        System.out.println("CLICKED on Search: " + position);
-
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 //        switch (item.getItemId()) {
@@ -417,6 +407,8 @@ public class SearchFragment extends ListFragment implements AdapterView.OnItemCl
             MyEntry<String, Serializable> entry = NP.getCommand();
             String key = entry.getKey();
             Object value = entry.getValue();
+
+            System.out.println("SearchFrag doInBackground");
 
             if(key.equals("SEARCH_RESULT")) {
                 SearchResults result = (SearchResults) value;

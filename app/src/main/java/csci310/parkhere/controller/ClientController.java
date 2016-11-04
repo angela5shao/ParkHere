@@ -300,6 +300,10 @@ public class ClientController {
         Log.d("time", time1[0] + " " + time1[1] + " "+time1[2]+ " "+ time11[0]+" "+time11[1]+ " "+time2[0] + " " + time2[1] + " "+time2[2]+ " "+ time22[0]+" "+time22[1]+ " " );
         Time inStartTime = new Time(Integer.parseInt(time1[2]),Integer.parseInt(time1[0]), Integer.parseInt(time1[1]), Integer.parseInt(time11[1]), Integer.parseInt(time11[0]),0);
         Time inEndTime = new Time(Integer.parseInt(time2[2]),Integer.parseInt(time2[0]), Integer.parseInt(time2[1]), Integer.parseInt(time22[1]), Integer.parseInt(time22[0]),0);
+//        inStartTime.month -=;
+//        inEndTime.month -=1;
+
+
         TimeInterval timeInterval = new TimeInterval(inStartTime, inEndTime);
         HashMap<String, Serializable> entry = new HashMap<>();
         if(location == null)
@@ -310,7 +314,7 @@ public class ClientController {
         }
 
 
-        ParkingSpot.Location current_location = new ParkingSpot.Location((int)location.latitude, (int)location.longitude);
+        ParkingSpot.Location current_location = new ParkingSpot.Location(location.longitude, location.latitude);
         entry.put("LOCATION", current_location);
         entry.put("TIMEINTERVAL", timeInterval);
         entry.put("CARTYPE", carType);
@@ -427,8 +431,8 @@ public class ClientController {
 
     public void requestAddTime(ParkingSpot spot, Time startTime, Time endTime, double price)
     {
-        startTime.month +=1;
-        endTime.month += 1;
+//        startTime.month +=1;
+//        endTime.month += 1;
 
         TimeInterval timeInterval = new TimeInterval(startTime, endTime);
 

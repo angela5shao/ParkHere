@@ -260,7 +260,7 @@ public class ClientController {
         return false;
     }
 
-    public void ProviderCancel (long resID){
+    public void ProviderCancel(long resID) {
         NetworkPackage NP = new NetworkPackage();
         NP.addEntry("PROVIDERCANCEL", resID);
         try {

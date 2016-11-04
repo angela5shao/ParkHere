@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
 import resource.ParkingSpot;
+import resource.Time;
 import resource.TimeInterval;
 
 /**
@@ -103,8 +104,11 @@ public class SearchSpaceDetailFragment extends Fragment {
         mParkingSpot = controller.searchResults.searchResultList.get(mPosition);
 
         // Populate fields with data
-        TextView text = (TextView) mView.findViewById(R.id.searchspacedetail_address);
-        text.setText(mParkingSpot.getStreetAddr());
+        ((TextView) mView.findViewById(R.id.searchspacedetail_address)).setText(mParkingSpot.getStreetAddr());
+        ((TextView) mView.findViewById(R.id.searchspacedetail_price)).setText(new Double(mParkingSpot.search_price).toString());
+//        ((TextView) mView.findViewById(R.id.searchspacedetail_rating)).setText(new Double(mParkingSpot.rating).toString());
+        Time sTime = mParkingSpot.getTimeIntervalList().get(0).startTime;
+        ((TextView) mView.findViewById(R.id.searchspacedetail_starttime)).setText(sTime);
 
         return mView;
     }

@@ -273,6 +273,7 @@ public class AddSpaceFragment extends Fragment {
         protected void onPostExecute(Boolean success) {
             if(success) {
                 ((ProviderActivity)getActivity()).showSpaceFragment();
+                progressDialog.dismiss();
             } else{
                 progressDialog.dismiss();
                 Toast.makeText(getContext(), "Error on add space! Please try again.", Toast.LENGTH_SHORT).show();

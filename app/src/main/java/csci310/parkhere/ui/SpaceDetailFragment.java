@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -74,6 +75,7 @@ public class SpaceDetailFragment extends Fragment {
     Calendar currentCalendar;
     List<DayDecorator> decorators = new ArrayList<>();
     int curr_year, curr_month, curr_day, curr_hour, curr_minute;
+    long curr_selected_time_id;
     String address = "";
 
     ArrayList<TimeInterval> currSpaceTimeIntervals = new ArrayList<TimeInterval>();
@@ -100,13 +102,14 @@ public class SpaceDetailFragment extends Fragment {
 //    TimeInterval interval1 = new TimeInterval(start1, end1);
 //    //*******************************************************************************
 
-    Button _btn_add_space, _btn_start_time, _btn_end_time, _btn_add_confirm;
+    Button _btn_add_space, _btn_start_time, _btn_end_time, _btn_add_confirm, _btn_delete_time;
     LinearLayout _addTimeForSpaceLayout;
     EditText _in_start_date, _in_start_time, _in_end_date, _in_end_time, _in_price;
     ListView _timeList;
 
     ProgressDialog progressDialog;
     AddTimeForSpaceTask AddSpaceTask = null;
+    DeleteTimeForSpaceTask DeleteTimeTask = null;
 
     private OnFragmentInteractionListener mListener;
 
@@ -294,11 +297,10 @@ public class SpaceDetailFragment extends Fragment {
                     calendarView.refreshCalendar(currentCalendar);
                 }
 
-                if(!currSpaceTimeIntervals.isEmpty()) {
+                if (!currSpaceTimeIntervals.isEmpty()) {
                     Log.d("btn_add_space", ".setClickable(true)");
                     _btn_add_space.setClickable(true);
-                }
-                else {
+                } else {
                     Log.d("btn_add_space", ".setClickable(false)");
                     _btn_add_space.setClickable(false);
                 }
@@ -326,6 +328,23 @@ public class SpaceDetailFragment extends Fragment {
         });
 
         _timeList = (ListView) v.findViewById(R.id.timeList);
+        _timeList.setClickable(true);
+        _btn_delete_time = (Button) v.findViewById(R.id.btn_delete_time);
+
+        _timeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
+                _btn_delete_time.setVisibility(View.VISIBLE);
+                curr_selected_time_id = id;
+            }
+        });
+        _btn_delete_time.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                DeleteTimeTask = new DeleteTimeForSpaceTask(curr_selected_time_id);
+                DeleteTimeTask.execute((Void) null);
+            }
+        });
 
         return v;
     }
@@ -508,15 +527,72 @@ public class SpaceDetailFragment extends Fragment {
         @Override
         protected void onPostExecute(Boolean success) {
             if(success) {
-                // Back to SpacesFragment
-                ((ProviderActivity)getActivity()).showSpaceFragment();
-
                 Log.d("ADDTIME", "finish add time");
                 Toast.makeText(getContext(), "Added space!", Toast.LENGTH_SHORT).show();
+
+                // Back to SpacesFragment
+                ((ProviderActivity)getActivity()).showSpaceFragment();
+                progressDialog.dismiss();
 
             } else{
                 progressDialog.dismiss();
                 Toast.makeText(getContext(), "Add space failed! Please try agina.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private class DeleteTimeForSpaceTask extends AsyncTask<Void, Void, Boolean> {
+        private final long mTimeID;
+
+        DeleteTimeForSpaceTask(long time_id){
+            mTimeID = time_id;
+            doInBackground((Void) null);
+            System.out.println(mTimeID);
+        }
+        @Override
+        protected void onPreExecute(){
+            //Display a progress dialog
+            progressDialog = new ProgressDialog(getContext(), R.style.AppTheme);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Deleting...");
+            progressDialog.show();
+        }
+        @Override
+        protected Boolean doInBackground(Void... params ){
+            // call client controller
+            ClientController controller = ClientController.getInstance();
+            System.out.println("DELETE TIME ID: "+ curr_selected_time_id);
+            controller.ProviderCancel(curr_selected_time_id);
+
+            NetworkPackage NP = controller.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if(key.equals("CANCELTIME")) {
+                return true;
+            }
+            else if(key.equals("CANCELTIMEFAIL")) {
+                return false;
+            }
+            else {
+                return false;
+            }
+        }
+        @Override
+        protected void onPostExecute(Boolean success) {
+            if(success) {
+                _btn_delete_time.setVisibility(View.GONE);
+                Log.d("DELETETIME", "finish delete time");
+                Toast.makeText(getContext(), "Deleted!", Toast.LENGTH_SHORT).show();
+
+                // Back to SpacesFragment
+                ((ProviderActivity)getActivity()).showSpaceFragment();
+
+                progressDialog.dismiss();
+
+            } else{
+                progressDialog.dismiss();
+                Toast.makeText(getContext(), "Delete space failed! Please try agian.", Toast.LENGTH_SHORT).show();
             }
         }
     }

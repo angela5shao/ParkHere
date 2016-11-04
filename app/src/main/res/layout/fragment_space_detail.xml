@@ -14,6 +14,12 @@
             <!--android:layout_width="wrap_content"-->
             <!--android:layout_height="wrap_content"-->
             <!--android:text="Detail text" />-->
+        <Button
+            android:id="@+id/searchspacedetail_reservebutton"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="Edit"
+            android:onClick="editSpace"/>
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -79,7 +85,7 @@
                     android:textColor="@color/colorMainFont"
                     android:id="@+id/btn_add_space"
                     android:clickable="false"
-                    android:text="add space"/>
+                    android:text="add time"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"

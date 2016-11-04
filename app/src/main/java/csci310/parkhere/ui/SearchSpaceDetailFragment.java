@@ -1,14 +1,14 @@
 package csci310.parkhere.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.braintreepayments.api.PaymentRequest;
+import android.widget.Button;
 
 import csci310.parkhere.R;
 
@@ -25,12 +25,15 @@ public class SearchSpaceDetailFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    View mView;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    Button _searchspacedetail_reservebutton;
 
     public SearchSpaceDetailFragment() {
         // Required empty public constructor
@@ -67,7 +70,17 @@ public class SearchSpaceDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search_space_detail, container, false);
+        mView = inflater.inflate(R.layout.fragment_search_space_detail, container, false);
+
+        _searchspacedetail_reservebutton=(Button)mView.findViewById(R.id.searchspacedetail_reservebutton);
+        _searchspacedetail_reservebutton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), PaymentActivity.class);
+                startActivityForResult(intent, 11);
+            }
+        });
+
+        return mView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -107,17 +120,5 @@ public class SearchSpaceDetailFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-
-    // For BrainTree payment
-    public void onBraintreeSubmit(View v) {
-//        ClientTokenRequest clientTokenRequest = new ClientTokenRequest()
-//                .customerId(aCustomerId);
-//        String clientToken = gateway.clientToken().generate(clientTokenRequest);
-        // TODO: request client token
-        String clientToken = "";
-        PaymentRequest paymentRequest = new PaymentRequest()
-                .clientToken(clientToken);
-        startActivityForResult(paymentRequest.getIntent(getActivity()), 1);
     }
 }

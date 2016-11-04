@@ -66,7 +66,6 @@ tools:context="csci310.parkhere.ui.SpaceDetailFragment">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="[address]"
                 android:id="@+id/spacedetail_address"
                 android:layout_weight="1"
                 android:paddingTop="8dp"
@@ -75,30 +74,16 @@ tools:context="csci310.parkhere.ui.SpaceDetailFragment">
                 android:textColor="@color/colorMainFont"
                 android:background="@color/colorAccent"/>
 
-            <!--<FrameLayout-->
-                <!--android:id="@+id/mapContainer"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_marginTop="12dp"-->
-                <!--android:layout_marginBottom="12dp"/>-->
-            <!--<com.google.android.gms.maps.MapView-->
-                <!--android:id="@+id/mapContainer"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="200dp"-->
-                <!--android:layout_marginTop="12dp"/>-->
             <fragment
                 android:id="@+id/map"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:layout_marginTop="12dp"
                 class="com.google.android.gms.maps.SupportMapFragment"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp">
+                android:orientation="horizontal">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -116,7 +101,6 @@ tools:context="csci310.parkhere.ui.SpaceDetailFragment">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="[start time]"
                     android:id="@+id/start_time_label"
                     android:layout_weight="1"
                     android:paddingTop="8dp"
@@ -129,9 +113,7 @@ tools:context="csci310.parkhere.ui.SpaceDetailFragment">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp">
+                android:orientation="horizontal">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -149,7 +131,6 @@ tools:context="csci310.parkhere.ui.SpaceDetailFragment">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="[end time]"
                     android:id="@+id/end_time_label"
                     android:layout_weight="1"
                     android:paddingTop="8dp"
@@ -162,9 +143,7 @@ tools:context="csci310.parkhere.ui.SpaceDetailFragment">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp">
+                android:orientation="horizontal">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -182,7 +161,6 @@ tools:context="csci310.parkhere.ui.SpaceDetailFragment">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="[renter username]"
                     android:id="@+id/renter_username_label"
                     android:layout_weight="1"
                     android:paddingTop="8dp"
@@ -191,13 +169,17 @@ tools:context="csci310.parkhere.ui.SpaceDetailFragment">
                     android:textColor="@color/colorMainFont"
                     android:background="@color/colorAccent"/>
             </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_cancel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="24dp"
+                android:text="@string/cancel_label"
+                android:textColor="@color/colorMainFont"
+                android:padding="12dp" />
         </LinearLayout>
     </ScrollView>
-    <!--<ListView-->
-    <!--android:id="@android:id/list"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:textColor="#000000"-->
-    <!--/>-->
 </LinearLayout>
 </FrameLayout>

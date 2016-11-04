@@ -20,6 +20,7 @@ import com.braintreepayments.api.BraintreeFragment;
 import com.braintreepayments.api.BraintreePaymentActivity;
 import com.braintreepayments.api.exceptions.InvalidArgumentException;
 import com.braintreepayments.api.models.PaymentMethodNonce;
+import com.braintreepayments.api.models.VenmoAccountNonce;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
@@ -40,6 +41,7 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
     FragmentTransaction fragmentTransaction;
     Fragment spacesFragment, privateProfileFragment, addSpaceFragment, spaceDetailFragment;
     BraintreeFragment mBraintreeFragment;
+    String mAuthorization = "clientToken";
 
     ClientController clientController;
 
@@ -60,9 +62,10 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 //
         fm = getSupportFragmentManager();
         fragmentTransaction = fm.beginTransaction();
-//        spacesFragment = fm.findFragmentById(R.id.fragment_spaces);
         spacesFragment = new SpacesFragment();
+
         fragmentTransaction.add(R.id.fragContainer, spacesFragment).commit();
+
 //        ArrayList<ParkingSpot> parkingSpots = clientController.getSpaces(clientController.getUser().userID);
 
 //        // TODO: Fix this; want to call setParkingSpot on spacesFragment
@@ -79,8 +82,20 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 
 
         spaceDetailFragment = new SpaceDetailFragment();
+        //************************************************************
+        // COMMENT OUT AFTER TESTING
 //        getSupportFragmentManager().beginTransaction()
 //                .add(R.id.fragContainer, spaceDetailFragment).commit();
+        //************************************************************
+
+        // Initialize BraintreeFragment
+        try {
+            // TODO mAuthorization should be either a client token or tokenization key
+            mBraintreeFragment = BraintreeFragment.newInstance(this, mAuthorization);
+            // mBraintreeFragment is ready to use!
+        } catch (InvalidArgumentException e) {
+            // There was an issue with your authorization string.
+        }
 
         _spaceLink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,7 +202,6 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         super.onActivityResult(requestCode,resultCode,data);
         if (requestCode == 1) {
             switch (resultCode) {
@@ -195,8 +209,15 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
                     PaymentMethodNonce paymentMethodNonce = data.getParcelableExtra(
                             BraintreePaymentActivity.EXTRA_PAYMENT_METHOD_NONCE
                     );
+                    String deviceData = data.getStringExtra(BraintreePaymentActivity.EXTRA_DEVICE_DATA);
+
                     String nonce = paymentMethodNonce.getNonce();
                     // Send the nonce to your server
+
+                    if(paymentMethodNonce instanceof VenmoAccountNonce) {
+                        VenmoAccountNonce venmoAccountNonce = (VenmoAccountNonce) paymentMethodNonce;
+                        String venmoUsername = venmoAccountNonce.getUsername();
+                    }
                     break;
                 case BraintreePaymentActivity.BRAINTREE_RESULT_DEVELOPER_ERROR:
                 case BraintreePaymentActivity.BRAINTREE_RESULT_SERVER_ERROR:

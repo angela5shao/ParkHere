@@ -110,6 +110,17 @@ public class ReservationsFragment extends ListFragment implements AdapterView.On
         reservations.add(new Reservation(0123, controller.getUser().userID, 789, spot, timeInterval1, 50.00, false));
         reservations.add(new Reservation(0123, controller.getUser().userID, 789, spot, timeInterval2, 75.00, false));
 
+        ArrayList<String> listString = new ArrayList<>();
+        for(int i = 0 ; i < reservations.size(); i++)
+        {
+            ParkingSpot spotInlist = reservations.get(i).getSpot();
+            Time startTIme = reservations.get(i).getReserveTimeInterval().startTime;
+            Time endTime = reservations.get(i).getReserveTimeInterval().endTime;
+
+            listString.add(spotInlist.getStreetAddr() + " Time: " + startTIme.toString() + "-" + endTime.toString());
+        }
+
+
         mAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, reservations);
         setListAdapter(mAdapter);
         getListView().setOnItemClickListener(this);

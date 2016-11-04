@@ -23,7 +23,7 @@ import resource.SearchResults;
  * Use the {@link DisplaySearchFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DisplaySearchFragment extends Fragment {
+public class DisplaySearchFragment extends Fragment implements AdapterView.OnItemClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -78,6 +78,7 @@ public class DisplaySearchFragment extends Fragment {
 
         _searchresultList = (ListView) v.findViewById(R.id.searchresultList);
 
+        // Get list of search results
         ClientController controller = ClientController.getInstance();
         SearchResults result = controller.searchResults;
 
@@ -90,21 +91,22 @@ public class DisplaySearchFragment extends Fragment {
 
         setSearchResultListview(resultList);
 
-        _searchresultList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-//                // ListView Clicked item index
-//                int itemPosition     = position;
-//                // ListView Clicked item value
-//                String  itemValue    = (String) listView.getItemAtPosition(position);
-//                // Show Alert
-//                Toast.makeText(getApplicationContext(),
-//                        "Position :" + itemPosition + "  ListItem : " + itemValue, Toast.LENGTH_LONG)
-//                        .show();
-            }
-
-        });
+        _searchresultList.setOnItemClickListener(this);
+//        _searchresultList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view,
+//                                    int position, long id) {
+////                // ListView Clicked item index
+////                int itemPosition     = position;
+////                // ListView Clicked item value
+////                String  itemValue    = (String) listView.getItemAtPosition(position);
+////                // Show Alert
+////                Toast.makeText(getApplicationContext(),
+////                        "Position :" + itemPosition + "  ListItem : " + itemValue, Toast.LENGTH_LONG)
+////                        .show();
+//            }
+//
+//        });
         //***********************************************
 
         return v;
@@ -152,5 +154,12 @@ public class DisplaySearchFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+        void onSearchSpaceSelected(int position);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position,
+                            long id) {
+        mListener.onSearchSpaceSelected(position);
     }
 }

@@ -305,4 +305,11 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
             }
         }
     }
+
+    // Implements DisplaySearchFragment
+    public void onSearchSpaceSelected(int position) {
+        fragmentTransaction.replace(R.id.fragContainer, reservationsFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
 }

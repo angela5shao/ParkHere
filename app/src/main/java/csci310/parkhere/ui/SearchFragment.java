@@ -278,9 +278,17 @@ public class SearchFragment extends Fragment {
                 curr_cartype = _cartypeSpinner.getSelectedItem().toString();
 
                 ClientController clientController = ClientController.getInstance();
-                SSTask = new SearchSpaceTask(curr_location, startMonth+"-"+startDay+"-"+startYear, startHour+"-"+startMinute,
-                        endMonth+"-"+endDay+"-"+endYear, endHour+"-"+endMinute, curr_cartype, curr_dist);
+                // SearchSpaceTask(LatLng location, String startDate, String startTime, String endDate, String endTime, String carType, String distance){
+
+                SSTask = new SearchSpaceTask(curr_location,
+                        startMonth+"-"+startDay+"-"+startYear,
+                        startHour+"-"+startMinute,
+                        endMonth+"-"+endDay+"-"+endYear,
+                        endHour+"-"+endMinute,
+                        curr_cartype,
+                        curr_dist);
                 SSTask.execute((Void)null);
+                System.out.println("SearchFrag: btn_confirm clicked");
             }
         });
 
@@ -403,12 +411,15 @@ public class SearchFragment extends Fragment {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            System.out.println("SearchFrag doInBackground 0");
             NetworkPackage NP = clientController.checkReceived();
+            System.out.println("SearchFrag doInBackground 5");
             MyEntry<String, Serializable> entry = NP.getCommand();
+            System.out.println("SearchFrag doInBackground 10");
             String key = entry.getKey();
             Object value = entry.getValue();
 
-            System.out.println("SearchFrag doInBackground");
+            System.out.println("SearchFrag doInBackground 15");
 
             if(key.equals("SEARCH_RESULT")) {
                 SearchResults result = (SearchResults) value;

@@ -425,12 +425,19 @@ public class ClientController {
         }
     }
 
-    public void requestAddTime(ParkingSpot spot, TimeInterval timeInterval, double price)
+    public void requestAddTime(ParkingSpot spot, Time startTime, Time endTime, double price)
     {
+        startTime.month +=1;
+        endTime.month += 1;
+
+        TimeInterval timeInterval = new TimeInterval(startTime, endTime);
+
+
         NetworkPackage NP = new NetworkPackage();
         HashMap<String, Serializable> map = new HashMap<>();
         map.put("PARKINGSPOTID", spot.getParkingSpotID());
         map.put("TIMEINTERVAL", timeInterval);
+
 
 
         System.out.println("Start:"+timeInterval.startTime);

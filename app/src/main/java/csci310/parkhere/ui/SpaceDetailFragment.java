@@ -261,6 +261,7 @@ public class SpaceDetailFragment extends Fragment {
                     decorators.add(new DisabledColorDecorator());
                     decorators.add(new PostedColorDecorator());
                     calendarView.setDecorators(decorators);
+                    currentCalendar.setTime(selectedStartDate);
                     calendarView.refreshCalendar(currentCalendar);
                     currSpaceTimeIntervals.clear();
                     currSpaceTimeIntervalsGC.clear();
@@ -276,10 +277,10 @@ public class SpaceDetailFragment extends Fragment {
 
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(selectedStartDate);
-                    Time timeStart = new Time(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH)+1, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
+                    Time timeStart = new Time(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
 
                     cal.setTime(selectedEndDate);
-                    Time timeEnd = new Time(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH)+1, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
+                    Time timeEnd = new Time(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
 
 //                    Log.d("time", selectedStartDate.toString() + " " + selectedEndDate.toString());
                     Log.d("Month", String.valueOf(cal.get(Calendar.MONTH)) + " " + selectedEndDate.toString());
@@ -288,8 +289,7 @@ public class SpaceDetailFragment extends Fragment {
                     inputedStartTime = timeStart;
                     inputedEndTime = timeEnd;
 
-                    selectedStartDate = null;
-                    selectedEndDate = null;
+
 
                     TimeInterval timeInterval = new TimeInterval(timeStart, timeEnd);
                     currSpaceTimeIntervals.add(timeInterval);
@@ -297,7 +297,11 @@ public class SpaceDetailFragment extends Fragment {
 
                     decorators.add(new SelectedColorDecorator());
                     calendarView.setDecorators(decorators);
+                    currentCalendar.setTime(selectedEndDate);
                     calendarView.refreshCalendar(currentCalendar);
+
+                    selectedStartDate = null;
+                    selectedEndDate = null;
                 }
 
                 if (!currSpaceTimeIntervals.isEmpty()) {
@@ -515,7 +519,7 @@ public class SpaceDetailFragment extends Fragment {
             System.out.println("BEFORE REQ End:" + inputedEndTime);
             Log.d("ADDSPACE", String.valueOf(thisParkingSpot.getParkingSpotID()));
 
-            controller.requestAddTime(thisParkingSpot, new TimeInterval(inputedStartTime, inputedEndTime), Integer.valueOf(mPrice));
+            controller.requestAddTime(thisParkingSpot, inputedStartTime, inputedEndTime, Integer.valueOf(mPrice));
 
             NetworkPackage NP = controller.checkReceived();
             MyEntry<String, Serializable> entry = NP.getCommand();

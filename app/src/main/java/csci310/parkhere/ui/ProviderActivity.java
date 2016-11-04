@@ -32,6 +32,7 @@ import csci310.parkhere.controller.ClientController;
 import resource.MyEntry;
 import resource.NetworkPackage;
 import resource.ParkingSpot;
+import resource.Time;
 import resource.TimeInterval;
 import resource.User;
 
@@ -87,14 +88,7 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         privateProfileFragment = new PrivateProfileFragment();
         addSpaceFragment = new AddSpaceFragment();
 
-
-
         spaceDetailFragment = new SpaceDetailFragment();
-        //************************************************************
-        // COMMENT OUT AFTER TESTING
-//        getSupportFragmentManager().beginTransaction()
-//                .add(R.id.fragContainer, spaceDetailFragment).commit();
-        //************************************************************
 
         // Initialize BraintreeFragment
         try {
@@ -150,16 +144,6 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
                 fragmentTransaction.commit();
             }
         });
-
-        // Initialize BraintreeFragment
-        try {
-            // TODO mAuthorization should be either a client token or tokenization key
-            String mAuthorization = "client token";
-            mBraintreeFragment = BraintreeFragment.newInstance(this, mAuthorization);
-            // mBraintreeFragment is ready to use!
-        } catch (InvalidArgumentException e) {
-            // There was an issue with your authorization string.
-        }
     }
 
     public void showSpaceFragment()
@@ -183,15 +167,10 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
             System.out.println("Selected parking spot is null");
             return;
         }
-        SpaceDetailFragment spaceDetailFragment = new SpaceDetailFragment();
-        spaceDetailFragment.setThisParkingSpot(spotSelected);
 
-
+        spaceDetailFragment = new SpaceDetailFragment();
         System.out.print("Show space detail " + spotSelected.getDescription());
 
-//        Bundle args = new Bundle();
-//        args.putInt("param1", spacePositionInList);
-//        spaceDetailFragment.setArguments(args);
 
         try {
             getSupportFragmentManager().beginTransaction()
@@ -212,7 +191,7 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode,resultCode,data);
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             switch (resultCode) {
                 case Activity.RESULT_OK:
@@ -366,7 +345,8 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
     }
 
     private class requestSpotTimeIntervalTask extends AsyncTask<Void, Void, ArrayList<TimeInterval>>{
-        ParkingSpot parkingSpot;
+        private ParkingSpot parkingSpot;
+        private ArrayList<TimeInterval> myTimeIntervals;
 
         requestSpotTimeIntervalTask(ParkingSpot parkingSpot){
             this.parkingSpot = parkingSpot;
@@ -387,7 +367,7 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
             Object value = entry.getValue();
             if(key.equals("RESPONSEINTERVAL")){
                 HashMap<String, Serializable> map = (HashMap<String, Serializable>) value;
-                ArrayList<TimeInterval> myTimeIntervals = (ArrayList<TimeInterval>) map.get("TIMEINTERVAL");
+                myTimeIntervals = (ArrayList<TimeInterval>) map.get("TIMEINTERVAL");
                 Long spotID = (Long)map.get("PARKINGSPOTID");
                 clientController.setSpotTimeInterval(spotID,myTimeIntervals);
                 return myTimeIntervals;
@@ -397,9 +377,45 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 
         @Override
         protected void onPostExecute(ArrayList<TimeInterval> myTimeIntervals) {
+            ArrayList<Integer> inStartYear = new ArrayList<Integer>();
+            ArrayList<Integer> inStartMonth = new ArrayList<Integer>();
+            ArrayList<Integer> inStartDay = new ArrayList<Integer>();
+            ArrayList<Integer> inStartHour = new ArrayList<Integer>();
+            ArrayList<Integer> inStartMin = new ArrayList<Integer>();
+            ArrayList<Integer> inEndYear = new ArrayList<Integer>();
+            ArrayList<Integer> inEndMonth = new ArrayList<Integer>();
+            ArrayList<Integer> inEndDay = new ArrayList<Integer>();
+            ArrayList<Integer> inEndHour = new ArrayList<Integer>();
+            ArrayList<Integer> inEndMin = new ArrayList<Integer>();
+            for (TimeInterval timeInterv: myTimeIntervals) {
+                Time startTime = timeInterv.startTime;
+                Time endTime = timeInterv.endTime;
+
+                inStartYear.add(startTime.year);
+                inStartMonth.add(startTime.month);
+                inStartDay.add(startTime.dayOfMonth);
+                inStartHour.add(startTime.hourOfDay);
+                inStartMin.add(startTime.minute);
+                inEndYear.add(endTime.year);
+                inEndMonth.add(endTime.month);
+                inEndDay.add(endTime.dayOfMonth);
+                inEndHour.add(endTime.hourOfDay);
+                inEndMin.add(endTime.minute);
+            }
+
             Bundle args = new Bundle();
-            //_spacedetail_address
-//            args.putStringArrayList("",);
+            args.putString("ADDRESS", parkingSpot.getStreetAddr());
+            args.putIntegerArrayList("START_YEARS", inStartYear);
+            args.putIntegerArrayList("START_MONTHS", inStartMonth);
+            args.putIntegerArrayList("START_DAYS", inStartDay);
+            args.putIntegerArrayList("START_HOURS", inStartHour);
+            args.putIntegerArrayList("START_MINS", inStartMin);
+            args.putIntegerArrayList("END_YEARS", inEndYear);
+            args.putIntegerArrayList("END_MONTHS", inEndMonth);
+            args.putIntegerArrayList("END_DAYS", inEndDay);
+            args.putIntegerArrayList("END_HOURS", inEndHour);
+            args.putIntegerArrayList("END_MINS", inEndMin);
+
             spaceDetailFragment = new SpaceDetailFragment();
             spaceDetailFragment.setArguments(args);
             fm.beginTransaction().add(R.id.fragContainer, spaceDetailFragment).commit();

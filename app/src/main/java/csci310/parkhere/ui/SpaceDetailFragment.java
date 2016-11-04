@@ -1,9 +1,11 @@
 package csci310.parkhere.ui;
 
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -25,6 +27,7 @@ import com.imanoweb.calendarview.CustomCalendarView;
 import com.imanoweb.calendarview.DayDecorator;
 import com.imanoweb.calendarview.DayView;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -36,6 +39,8 @@ import java.util.Locale;
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
 import csci310.parkhere.resource.CalendarUtils;
+import resource.MyEntry;
+import resource.NetworkPackage;
 import resource.ParkingSpot;
 import resource.Time;
 import resource.TimeInterval;
@@ -69,6 +74,7 @@ public class SpaceDetailFragment extends Fragment {
     Calendar currentCalendar;
     List<DayDecorator> decorators = new ArrayList<>();
     int curr_year, curr_month, curr_day, curr_hour, curr_minute;
+    String address = "";
 
     ArrayList<TimeInterval> currSpaceTimeIntervals = new ArrayList<TimeInterval>();
     // Store currSpaceTimeIntervals in GregorianCalendar in startTime, endTime order
@@ -94,13 +100,13 @@ public class SpaceDetailFragment extends Fragment {
 //    TimeInterval interval1 = new TimeInterval(start1, end1);
 //    //*******************************************************************************
 
-//    // Keep track of current selected time
-//    TwoEntryQueue<Time> currSelectedTime = new TwoEntryQueue<Time>();
-
     Button _btn_add_space, _btn_start_time, _btn_end_time, _btn_add_confirm;
     LinearLayout _addTimeForSpaceLayout;
     EditText _in_start_date, _in_start_time, _in_end_date, _in_end_time, _in_price;
     ListView _timeList;
+
+    ProgressDialog progressDialog;
+    AddTimeForSpaceTask AddSpaceTask = null;
 
     private OnFragmentInteractionListener mListener;
 
@@ -129,10 +135,28 @@ public class SpaceDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-//        }
+
+        ArrayList<Integer> inStartYear=null, inStartMonth=null, inStartDay=null, inStartHour=null, inStartMin=null;
+        ArrayList<Integer> inEndYear=null, inEndMonth=null, inEndDay=null, inEndHour=null, inEndMin=null;
+        // Get data from parent activity/fragment
+        Bundle b = getArguments();
+        if (b != null) {
+            address = b.getString("ADDRESS");
+
+            inStartYear = new ArrayList<Integer>(b.getIntegerArrayList("START_YEARS"));
+            inStartMonth = new ArrayList<Integer>(b.getIntegerArrayList("START_MONTHS"));
+            inStartDay = new ArrayList<Integer>(b.getIntegerArrayList("START_DAYS"));
+            inStartHour = new ArrayList<Integer>(b.getIntegerArrayList("START_HOURS"));
+            inStartMin = new ArrayList<Integer>(b.getIntegerArrayList("START_MINS"));
+
+            inEndYear = new ArrayList<Integer>(b.getIntegerArrayList("END_YEARS"));
+            inEndMonth = new ArrayList<Integer>(b.getIntegerArrayList("END_MONTHS"));
+            inEndDay = new ArrayList<Integer>(b.getIntegerArrayList("END_DAYS"));
+            inEndHour = new ArrayList<Integer>(b.getIntegerArrayList("END_HOURS"));
+            inEndMin = new ArrayList<Integer>(b.getIntegerArrayList("END_MINS"));
+        }
+        updatePostedSpaceTimeIntervalsGC(inStartYear, inStartMonth, inStartDay, inStartHour, inStartMin,
+                inEndYear, inEndMonth, inEndDay, inEndHour, inEndMin);
 
         setHasOptionsMenu(true);
     }
@@ -144,6 +168,7 @@ public class SpaceDetailFragment extends Fragment {
 
 
         _spacedetail_address = (TextView)v.findViewById(R.id.spacedetail_address);
+        _spacedetail_address.setText(address);
 
         _addTimeForSpaceLayout = (LinearLayout) v.findViewById(R.id.addTimeForSpaceLayout);
 
@@ -264,7 +289,6 @@ public class SpaceDetailFragment extends Fragment {
                     currSpaceTimeIntervals.add(timeInterval);
                     updateCurrSpaceTimeIntervalsGC(currSpaceTimeIntervals);
 
-
                     decorators.add(new SelectedColorDecorator());
                     calendarView.setDecorators(decorators);
                     calendarView.refreshCalendar(currentCalendar);
@@ -296,19 +320,8 @@ public class SpaceDetailFragment extends Fragment {
         _btn_add_confirm=(Button)v.findViewById(R.id.btn_add_confirm);
         _btn_add_confirm.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-
-               String price =  _in_price.getText().toString();
-                // call client controller
-                ClientController controller = ClientController.getInstance();
-
-                System.out.println("BEFORE REQ Start:"+ inputedStartTime);
-                System.out.println("BEFORE REQ End:" + inputedEndTime);
-
-                controller.requestAddTime(thisParkingSpot, new TimeInterval(inputedStartTime, inputedEndTime),Integer.valueOf(_in_price.getText().toString()) );
-
-                Log.d("ADDTIME", "finish add time");
-                _addTimeForSpaceLayout.setVisibility(View.GONE);
-                Toast.makeText(getContext(), "Add space requested", Toast.LENGTH_SHORT).show();
+                AddSpaceTask = new AddTimeForSpaceTask(_in_price.getText().toString());
+                AddSpaceTask.execute((Void) null);
             }
         });
 
@@ -414,6 +427,20 @@ public class SpaceDetailFragment extends Fragment {
     }
 
     //GregorianCalendar(int year, int month, int dayOfMonth, int hourOfDay, int minute)
+    public void updatePostedSpaceTimeIntervalsGC(ArrayList<Integer> inStartYear, ArrayList<Integer> inStartMonth,
+                                                 ArrayList<Integer> inStartDay, ArrayList<Integer> inStartHour,
+                                                 ArrayList<Integer> inStartMin, ArrayList<Integer> inEndYear,
+                                                 ArrayList<Integer> inEndMonth, ArrayList<Integer> inEndDay,
+                                                 ArrayList<Integer> inEndHour, ArrayList<Integer> inEndMin) {
+        postedSpaceTimeIntervalsGC = new ArrayList<GregorianCalendar>();
+        for(int i=0; i<inStartYear.size(); ++i) {
+            postedSpaceTimeIntervalsGC.add(new GregorianCalendar(inStartYear.get(i), inStartMonth.get(i),
+                    inStartDay.get(i), inStartHour.get(i), inStartMin.get(i)));
+            postedSpaceTimeIntervalsGC.add(new GregorianCalendar(inEndYear.get(i), inEndMonth.get(i),
+                    inEndDay.get(i), inEndHour.get(i), inEndMin.get(i)));
+        }
+    }
+
     public void updatePostedSpaceTimeIntervalsGC(ArrayList<TimeInterval> inPostedSpaceTimeIntervals) {
         postedSpaceTimeIntervalsGC = new ArrayList<GregorianCalendar>();
         for (TimeInterval timeInterv: inPostedSpaceTimeIntervals) {
@@ -439,8 +466,59 @@ public class SpaceDetailFragment extends Fragment {
         }
     }
 
-    public void setThisParkingSpot(ParkingSpot s)
-    {
-        thisParkingSpot =s;
+    private class AddTimeForSpaceTask extends AsyncTask<Void, Void, Boolean> {
+        private final String mPrice;
+
+        AddTimeForSpaceTask(String price){
+            mPrice = price;
+            doInBackground((Void) null);
+            System.out.println(mPrice);
+        }
+        @Override
+        protected void onPreExecute(){
+            //Display a progress dialog
+            progressDialog = new ProgressDialog(getContext(), R.style.AppTheme);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Adding...");
+            progressDialog.show();
+
+            _addTimeForSpaceLayout.setVisibility(View.GONE);
+        }
+        @Override
+        protected Boolean doInBackground(Void... params ){
+            // call client controller
+            ClientController controller = ClientController.getInstance();
+
+            System.out.println("BEFORE REQ Start:"+ inputedStartTime);
+            System.out.println("BEFORE REQ End:" + inputedEndTime);
+
+            controller.requestAddTime(thisParkingSpot, new TimeInterval(inputedStartTime, inputedEndTime), Integer.valueOf(mPrice));
+
+            NetworkPackage NP = controller.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if(key.equals("ADDTIME")) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        @Override
+        protected void onPostExecute(Boolean success) {
+            if(success) {
+                // Back to SpacesFragment
+                ((ProviderActivity)getActivity()).showSpaceFragment();
+
+                Log.d("ADDTIME", "finish add time");
+                Toast.makeText(getContext(), "Added space!", Toast.LENGTH_SHORT).show();
+
+            } else{
+                progressDialog.dismiss();
+                Toast.makeText(getContext(), "Add space failed! Please try agina.", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
+
 }

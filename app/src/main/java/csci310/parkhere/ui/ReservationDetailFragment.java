@@ -2,6 +2,7 @@ package csci310.parkhere.ui;
 
         import android.content.Context;
         import android.net.Uri;
+        import android.os.AsyncTask;
         import android.os.Bundle;
         import android.support.v4.app.Fragment;
         import android.view.LayoutInflater;
@@ -9,7 +10,9 @@ package csci310.parkhere.ui;
         import android.view.ViewGroup;
         import android.widget.Button;
         import android.widget.TextView;
+        import android.widget.Toast;
 
+        import com.google.android.gms.games.internal.GamesContract;
         import com.google.android.gms.maps.CameraUpdateFactory;
         import com.google.android.gms.maps.GoogleMap;
         import com.google.android.gms.maps.MapsInitializer;
@@ -19,7 +22,17 @@ package csci310.parkhere.ui;
         import com.google.android.gms.maps.model.LatLng;
         import com.google.android.gms.maps.model.MarkerOptions;
 
+        import java.io.Serializable;
+        import java.util.ArrayList;
+        import java.util.HashMap;
+
         import csci310.parkhere.R;
+        import csci310.parkhere.controller.ClientController;
+        import resource.MyEntry;
+        import resource.NetworkPackage;
+        import resource.ParkingSpot;
+        import resource.Reservation;
+        import resource.TimeInterval;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -181,6 +194,7 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+        void returnToReservationsFragment(ArrayList<Reservation>);
     }
 
     @Override
@@ -213,6 +227,58 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
                     .position(new LatLng(curr_lat, curr_long)));
             googleMap.animateCamera(CameraUpdateFactory
                     .newCameraPosition(cameraPosition));
+        }
+    }
+
+    private class RenterCancelTask extends AsyncTask<Void, Void, Long> {
+        long resID;
+
+        RenterCancelTask(long resID){
+            this.resID = resID;
+            doInBackground((Void) null);
+        }
+
+//        @Override
+//        protected void onPreExecute(){
+//            clientController.providerToshowSpacesDetail = true;
+//        }
+
+        @Override
+        protected Long doInBackground(Void... params ){
+            ClientController clientController = ClientController.getInstance();
+            clientController.RenterCancel(resID);
+            NetworkPackage NP = clientController.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if(key.equals("CANCELRESERVATION")){
+//                HashMap<String, Serializable> map = (HashMap<String, Serializable>) value;
+//                ArrayList<TimeInterval> myTimeIntervals = (ArrayList<TimeInterval>) map.get("TIMEINTERVAL");
+//                Long spotID = (Long)map.get("PARKINGSPOTID");
+//                clientController.setSpotTimeInterval(spotID,myTimeIntervals);
+                long reservationID = (long) value;
+                return reservationID;
+            } else if(key.equals("CANCELRESERVATION")){
+                return (long)-1;
+            }
+            return (long)-1;
+        }
+
+        @Override
+        protected void onPostExecute(long resID) {
+
+            if(resID >= 0){
+                ClientController clientcontroller = ClientController.getInstance();
+                for(int i = 0; i<clientcontroller.reservations.size(); i++){
+                    if(clientcontroller.reservations.get(i).getReservationID()==resID){
+                        clientcontroller.reservations.remove(i);
+                    }
+                }
+                mListener.returnToReservationsFragment();
+            } else{
+                Toast.makeText(getContext(), "Error on cancel reservation! Please try again.", Toast.LENGTH_SHORT).show();
+                // back to reservation detail
+            }
         }
     }
 }

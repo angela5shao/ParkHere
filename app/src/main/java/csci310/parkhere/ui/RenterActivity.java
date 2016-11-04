@@ -131,6 +131,13 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         return true;
     }
 
+    public void returnToReservationsFragment() {
+        fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(R.id.fragContainer, reservationsFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items

@@ -3,10 +3,12 @@ package csci310.parkhere.ui;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -22,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -31,10 +34,15 @@ import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Calendar;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
+import resource.MyEntry;
+import resource.NetworkPackage;
+import resource.ParkingSpot;
+import resource.SearchResults;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -55,6 +63,7 @@ public class SearchFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private SearchSpaceTask SSTask;
 
     private static final String TAG = "!!!!!!!!!!!!!!! "; // EDIT/DELETE LATER!
     Button _btn_add_address, btnStartDatePicker, btnStartTimePicker, btnEndDatePicker, btnEndTimePicker, _btn_confirm;
@@ -269,12 +278,9 @@ public class SearchFragment extends Fragment {
                 curr_cartype = _cartypeSpinner.getSelectedItem().toString();
 
                 ClientController clientController = ClientController.getInstance();
-                try {
-                    clientController.search(curr_location, startMonth+"-"+startDay+"-"+startYear, startHour+"-"+startMinute,
-                            endMonth+"-"+endDay+"-"+endYear, endHour+"-"+endMinute, curr_cartype, curr_dist);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                SSTask = new SearchSpaceTask(curr_location, startMonth+"-"+startDay+"-"+startYear, startHour+"-"+startMinute,
+                        endMonth+"-"+endDay+"-"+endYear, endHour+"-"+endMinute, curr_cartype, curr_dist);
+                SSTask.execute((Void)null);
             }
         });
 
@@ -351,6 +357,78 @@ public class SearchFragment extends Fragment {
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 // The user canceled the operation.
             }
+        }
+    }
+    private class SearchSpaceTask extends AsyncTask<Void, Void, SearchResults> {
+//        private final String mAddressText;
+//        private final String mDescrip;
+//        private final String mCarType;
+//        private final int mCancelPolicy;
+        private final LatLng mlocation;
+        private final String mStartDate;
+        private final String mStartTime;
+        private final String mEndDate;
+        private final String mEndTime;
+        private final String mCarType;
+        private final String mDistance;
+
+        SearchSpaceTask(LatLng location, String startDate, String startTime, String endDate, String endTime, String carType, String distance){
+            mlocation = location;
+            mStartDate = startDate;
+            mStartTime = startTime;
+            mEndDate = endDate;
+            mEndTime = endTime;
+            mCarType = carType;
+            mDistance = distance;
+            doInBackground((Void) null);
+
+            System.out.println(mCarType);
+        }
+//        @Override
+//        protected void onPreExecute(){
+//            //Display a progress dialog
+//            progressDialog = new ProgressDialog(getContext(),
+//                    R.style.AppTheme);
+//            progressDialog.setIndeterminate(true);
+//            progressDialog.setMessage("Adding...");
+//            progressDialog.show();
+//        }
+        @Override
+        protected SearchResults doInBackground(Void... params){
+            ClientController clientController = ClientController.getInstance();
+            try {
+                clientController.search(mlocation, mStartDate, mStartTime, mEndDate,mEndTime, mCarType, mDistance);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            NetworkPackage NP = clientController.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Object value = entry.getValue();
+
+            if(key.equals("SEARCH_RESULT")) {
+                SearchResults result = (SearchResults) value;
+                Log.d("Results", result.searchResultList.get(0).getStreetAddr());
+                clientController.toDispaySearch = true;
+                //controller.updateActivity();
+                clientController.searchResults = result;
+                Log.d("SEARCH_RESULT", "Size " + String.valueOf(result.searchResultList.size()));
+                return result;
+            }
+            else {
+                return null;
+            }
+        }
+        @Override
+        protected void onPostExecute(SearchResults result) {
+                if(result!=null) {
+                    ((RenterActivity) getActivity()).displaySearchResult(result);
+                }
+                else{
+                    Toast.makeText(getContext(), "Error to find space! Please try again.", Toast.LENGTH_SHORT).show();
+                    // back to add space?
+                }
+
         }
     }
 }

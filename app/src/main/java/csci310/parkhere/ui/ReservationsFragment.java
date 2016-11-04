@@ -17,6 +17,8 @@ import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
 import resource.ParkingSpot;
 import resource.Reservation;
+import resource.Time;
+import resource.TimeInterval;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -99,8 +101,14 @@ public class ReservationsFragment extends ListFragment implements AdapterView.On
         ClientController controller = ClientController.getInstance();
         ArrayList<Reservation> reservations = controller.reservations;
         ParkingSpot spot = new ParkingSpot(controller.getUser().userID, null, 0, 0, "Tuscany 101, 10 Figueroa", "", "90007", 0x0001,0);
-        reservations.add(new Reservation(0123, controller.getUser().userID, 789, spot, null, 50.00, false));
-        reservations.add(new Reservation(0123, controller.getUser().userID, 789, spot, null, 75.00, false));
+        Time start =  new Time(2016, 2, 29, 4, 30, 0);
+			Time end = new Time(2016, 2 ,29, 5, 0,0);
+			Time start1 =  new Time(2016, 12, 29, 4, 0, 0);
+			Time end1 = new Time(2016,12,29, 5, 0,0);
+			TimeInterval timeInterval1 = new TimeInterval(start, end);
+			TimeInterval timeInterval2 = new TimeInterval(start1, end1);
+        reservations.add(new Reservation(0123, controller.getUser().userID, 789, spot, timeInterval1, 50.00, false));
+        reservations.add(new Reservation(0123, controller.getUser().userID, 789, spot, timeInterval2, 75.00, false));
 
         mAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, reservations);
         setListAdapter(mAdapter);
@@ -152,5 +160,10 @@ public class ReservationsFragment extends ListFragment implements AdapterView.On
                             long id) {
         mListener.onReservationSelected(position);
         System.out.println("CLICKED on Reservation: " + position);
+    }
+
+    public void refresh(){
+        ClientController clientcontroller = ClientController.getInstance();
+        mAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, clientcontroller.reservations);
     }
 }

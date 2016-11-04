@@ -395,6 +395,22 @@ public class ClientController {
         }
     }
 
+    public void requestSpotTimeIntervalWithDate(ParkingSpot spot, String Date){
+        if(user == null && spot == null)
+        {
+            return;
+        }
+        NetworkPackage NP = new NetworkPackage();
+        HashMap<String, Serializable> map = new HashMap<String, Serializable>();
+        map.put("PARKINGSPOTID", spot.getParkingSpotID());
+        map.put("DATE", Date);
+        NP.addEntry("FETCHTIMEINTERVALWITHDATE", map);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void setSpotTimeInterval(long spotID, ArrayList<TimeInterval> intervals)
     {

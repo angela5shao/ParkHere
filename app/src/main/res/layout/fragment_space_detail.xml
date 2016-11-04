@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorLightBackground"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="csci310.parkhere.ui.SpaceDetailFragment">
 
@@ -200,14 +201,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:id="@+id/timeList"/>
+                    android:id="@+id/timeList"
+                    android:background="@color/colorPrimaryDark"/>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:text="delete time"
+                    android:id="@+id/btn_delete_time"
+                    android:textColor="@color/colorMainFont"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp"
+                    android:visibility="gone"/>
             </LinearLayout>
         </ScrollView>
-        <!--<ListView-->
-            <!--android:id="@android:id/list"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:textColor="#000000"-->
-            <!--/>-->
     </LinearLayout>
 </FrameLayout>

@@ -1,7 +1,8 @@
 package csci310.parkhere.ui;
 
-import android.content.Context;
+        import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -19,7 +21,12 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.Serializable;
+
 import csci310.parkhere.R;
+import csci310.parkhere.controller.ClientController;
+import resource.MyEntry;
+import resource.NetworkPackage;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,7 +53,7 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
     CameraPosition cameraPosition;
 
     TextView _spacedetail_address, _start_time_label, _end_time_label, _renter_username_label;
-    Button _btn_cancel;
+    Button _btn_report, _btn_cancel;
 
     // latitude and longitude (default as USC)
     private double curr_lat = 34.0224;
@@ -104,6 +111,7 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
         _start_time_label=(TextView)v.findViewById(R.id.start_time_label);
         _end_time_label=(TextView)v.findViewById(R.id.end_time_label);
         _renter_username_label=(TextView)v.findViewById(R.id.renter_username_label);
+        _btn_report=(Button)v.findViewById(R.id.btn_report);
         _btn_cancel=(Button)v.findViewById(R.id.btn_cancel);
 
         _spacedetail_address.setText(address);
@@ -132,6 +140,14 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
 
         cameraPosition = new CameraPosition.Builder()
                 .target(new LatLng(curr_lat, curr_long)).zoom(12).build();
+
+        _btn_report.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // call Client Controller for reporting reservaiton
+
+            }
+        });
 
         _btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,6 +197,7 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+        void returnToReservationsFragment();
     }
 
     @Override
@@ -213,6 +230,58 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
                     .position(new LatLng(curr_lat, curr_long)));
             googleMap.animateCamera(CameraUpdateFactory
                     .newCameraPosition(cameraPosition));
+        }
+    }
+
+    private class RenterCancelTask extends AsyncTask<Void, Void, Long> {
+        long resID;
+
+        RenterCancelTask(long resID){
+            this.resID = resID;
+            doInBackground((Void) null);
+        }
+
+//        @Override
+//        protected void onPreExecute(){
+//            clientController.providerToshowSpacesDetail = true;
+//        }
+
+        @Override
+        protected Long doInBackground(Void... params ){
+            ClientController clientController = ClientController.getInstance();
+            clientController.RenterCancel(resID);
+            NetworkPackage NP = clientController.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if(key.equals("CANCELRESERVATION")){
+//                HashMap<String, Serializable> map = (HashMap<String, Serializable>) value;
+//                ArrayList<TimeInterval> myTimeIntervals = (ArrayList<TimeInterval>) map.get("TIMEINTERVAL");
+//                Long spotID = (Long)map.get("PARKINGSPOTID");
+//                clientController.setSpotTimeInterval(spotID,myTimeIntervals);
+                long reservationID = (long) value;
+                return reservationID;
+            } else if(key.equals("CANCELRESERVATION")){
+                return (long)-1;
+            }
+            return (long)-1;
+        }
+
+        @Override
+        protected void onPostExecute(Long resID) {
+
+            if(resID >= 0){
+                ClientController clientcontroller = ClientController.getInstance();
+                for(int i = 0; i<clientcontroller.reservations.size(); i++){
+                    if(clientcontroller.reservations.get(i).getReservationID()==resID){
+                        clientcontroller.reservations.remove(i);
+                    }
+                }
+                mListener.returnToReservationsFragment();
+            } else{
+                Toast.makeText(getContext(), "Error on cancel reservation! Please try again.", Toast.LENGTH_SHORT).show();
+                // back to reservation detail
+            }
         }
     }
 }

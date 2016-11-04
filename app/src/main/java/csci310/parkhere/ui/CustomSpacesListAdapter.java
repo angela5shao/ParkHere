@@ -43,6 +43,7 @@ public class CustomSpacesListAdapter extends ArrayAdapter {
 //        txtTitle.setText(itemname.get(position));
 //        imageView.setImageResource(imgid[position]);
 //        extratxt.setText("Reserved by: "+rentername.get(position));
+
         return rowView;
     };
 }

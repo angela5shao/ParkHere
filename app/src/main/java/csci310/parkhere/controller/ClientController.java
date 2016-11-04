@@ -137,8 +137,8 @@ public class ClientController {
 
     //new Functions
     public void updateReceived(NetworkPackage NP){
-        received = true;
         this.NP = NP;
+        received = true;
     }
 
     public void cancelReceived(){
@@ -150,6 +150,7 @@ public class ClientController {
         while(received == false ){
 
         }
+        received = false;
         return NP;
     }
     //new functions for the AsyncTask
@@ -260,7 +261,7 @@ public class ClientController {
         return false;
     }
 
-    public void ProviderCancel (long resID){
+    public void ProviderCancel(long resID) {
         NetworkPackage NP = new NetworkPackage();
         NP.addEntry("PROVIDERCANCEL", resID);
         try {
@@ -414,6 +415,22 @@ public class ClientController {
         }
     }
 
+    public void requestSpotTimeIntervalWithDate(ParkingSpot spot, String Date){
+        if(user == null && spot == null)
+        {
+            return;
+        }
+        NetworkPackage NP = new NetworkPackage();
+        HashMap<String, Serializable> map = new HashMap<String, Serializable>();
+        map.put("PARKINGSPOTID", spot.getParkingSpotID());
+        map.put("DATE", Date);
+        NP.addEntry("FETCHTIMEINTERVALWITHDATE", map);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void setSpotTimeInterval(long spotID, ArrayList<TimeInterval> intervals)
     {

@@ -71,7 +71,6 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         _profilePic = (ImageView) findViewById(R.id.profilePic);
 
 
-
         //*****************************************************************
         reservationDetailFragment = new ReservationDetailFragment();
         fragmentTransaction.add(R.id.fragContainer, searchFragment);
@@ -129,6 +128,13 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         getMenuInflater().inflate(R.menu.renter_menu_ui, menu);
 
         return true;
+    }
+
+    public void returnToReservationsFragment() {
+        fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(R.id.fragContainer, reservationsFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     @Override

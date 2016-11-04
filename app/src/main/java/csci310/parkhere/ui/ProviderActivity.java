@@ -148,6 +148,7 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 
     public void showSpaceFragment()
     {
+        Log.d("show or not", "true");
         spacesFragment = new SpacesFragment();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragContainer, spacesFragment).commit();
@@ -259,6 +260,11 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         //you can leave it empty
     }
 
+    @Override
+    public void returnToReservationsFragment() {
+
+    }
+
     public void onSpaceSelected(int spacePositionInList) {
         if(spacePositionInList < 0 || clientController.parkingSpots == null ||spacePositionInList >= clientController.parkingSpots.size())
             return;
@@ -326,7 +332,13 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
             String key = entry.getKey();
             Object value = entry.getValue();
             if(key.equals("RESPONSEPARKINGSPOT")){
+                Log.d("ResponsePakringSpot", "yes");
                 ArrayList<ParkingSpot> myParkingSpot = (ArrayList<ParkingSpot>)value;
+                Log.d("ResponsePakringSpot", "yes"+ myParkingSpot.size());
+
+                for(int i = 0; i < myParkingSpot.size(); i++)
+                    Log.d("Receive parkingSpot", String.valueOf(myParkingSpot.get(i).getParkingSpotID()));
+
                 return myParkingSpot;
             }
             return null;
@@ -335,8 +347,8 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         protected void onPostExecute(ArrayList<ParkingSpot> list) {
             clientController.providerToshowSpaces = true;
             clientController.parkingSpots = list;
-
-            //
+            Log.d("CheckrequestParkingSpotListTask", " 1");
+            showSpaceFragment();
         }
 
     }
@@ -414,6 +426,7 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
             args.putIntegerArrayList("END_MINS", inEndMin);
 
             spaceDetailFragment = new SpaceDetailFragment();
+            ((SpaceDetailFragment)spaceDetailFragment).thisParkingSpot = parkingSpot;
             spaceDetailFragment.setArguments(args);
             fm.beginTransaction().add(R.id.fragContainer, spaceDetailFragment).commit();
         }

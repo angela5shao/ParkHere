@@ -397,6 +397,8 @@ public class SearchFragment extends Fragment {
         protected SearchResults doInBackground(Void... params){
             ClientController clientController = ClientController.getInstance();
             try {
+
+                Log.d("SEARCH", mStartDate.toString()  + " " + mEndDate.toString());
                 clientController.search(mlocation, mStartDate, mStartTime, mEndDate,mEndTime, mCarType, mDistance);
             } catch (IOException e) {
                 e.printStackTrace();

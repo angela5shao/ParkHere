@@ -260,6 +260,11 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         //you can leave it empty
     }
 
+    @Override
+    public void returnToReservationsFragment() {
+
+    }
+
     public void onSpaceSelected(int spacePositionInList) {
         if(spacePositionInList < 0 || clientController.parkingSpots == null ||spacePositionInList >= clientController.parkingSpots.size())
             return;
@@ -330,6 +335,10 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
                 Log.d("ResponsePakringSpot", "yes");
                 ArrayList<ParkingSpot> myParkingSpot = (ArrayList<ParkingSpot>)value;
                 Log.d("ResponsePakringSpot", "yes"+ myParkingSpot.size());
+
+                for(int i = 0; i < myParkingSpot.size(); i++)
+                    Log.d("Receive parkingSpot", String.valueOf(myParkingSpot.get(i).getParkingSpotID()));
+
                 return myParkingSpot;
             }
             return null;
@@ -417,6 +426,7 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
             args.putIntegerArrayList("END_MINS", inEndMin);
 
             spaceDetailFragment = new SpaceDetailFragment();
+            ((SpaceDetailFragment)spaceDetailFragment).thisParkingSpot = parkingSpot;
             spaceDetailFragment.setArguments(args);
             fm.beginTransaction().add(R.id.fragContainer, spaceDetailFragment).commit();
         }

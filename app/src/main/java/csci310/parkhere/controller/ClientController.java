@@ -136,8 +136,8 @@ public class ClientController {
 
     //new Functions
     public void updateReceived(NetworkPackage NP){
-        received = true;
         this.NP = NP;
+        received = true;
     }
 
     public void cancelReceived(){
@@ -149,6 +149,7 @@ public class ClientController {
         while(received == false ){
 
         }
+        received = false;
         return NP;
     }
     //new functions for the AsyncTask

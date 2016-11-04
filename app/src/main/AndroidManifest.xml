@@ -32,8 +32,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyC6y-duGaR0wOji4UOR4S1LUBn5rO1ach0" />
 
-         <activity android:name=".ui.ProviderActivity"
-             android:theme="@style/AppTheme.NoActionBar" >
+         <activity android:name=".ui.HomeActivity">
              <!--HomeActivity-->
             <intent-filter>
                <action android:name="android.intent.action.MAIN" />
@@ -51,9 +50,9 @@
         <activity android:name=".ui.RegisterProviderActivity" />
          <activity android:name=".ui.RenterActivity"
                    android:theme="@style/AppTheme.NoActionBar"/>
-        <!--<activity-->
-            <!--android:name=".ui.ProviderActivity"-->
-            <!--android:theme="@style/AppTheme.NoActionBar" />-->
+        <activity
+            android:name=".ui.ProviderActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ui.PaymentActivity"></activity>
         
         <activity

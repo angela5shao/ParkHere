@@ -108,7 +108,11 @@ public class SearchSpaceDetailFragment extends Fragment {
         ((TextView) mView.findViewById(R.id.searchspacedetail_price)).setText(new Double(mParkingSpot.search_price).toString());
 //        ((TextView) mView.findViewById(R.id.searchspacedetail_rating)).setText(new Double(mParkingSpot.rating).toString());
         Time sTime = mParkingSpot.getTimeIntervalList().get(0).startTime;
-        ((TextView) mView.findViewById(R.id.searchspacedetail_starttime)).setText(sTime);
+        Time eTime = mParkingSpot.getTimeIntervalList().get(0).endTime;
+        ((TextView) mView.findViewById(R.id.searchspacedetail_starttime)).setText(sTime.toString());
+        ((TextView) mView.findViewById(R.id.searchspacedetail_endtime)).setText(eTime.toString());
+        ((TextView) mView.findViewById(R.id.searchspacedetail_cartype)).setText(new Integer(mParkingSpot.getCartype()).toString());
+        ((TextView) mView.findViewById(R.id.searchspacedetail_cancelpolicy)).setText(new Integer(mParkingSpot.cancelpolicy).toString());
 
         return mView;
     }

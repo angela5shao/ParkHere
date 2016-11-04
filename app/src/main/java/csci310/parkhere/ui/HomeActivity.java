@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import csci310.parkhere.R;
-import csci310.parkhere.controller.ClientCommunicator1;
 import csci310.parkhere.controller.ClientController;
 
 public class HomeActivity extends Activity {
@@ -18,7 +17,6 @@ public class HomeActivity extends Activity {
     ClientController clientController;
     Intent myIntent;
 
-    public static ClientCommunicator1 clientCommunicator;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

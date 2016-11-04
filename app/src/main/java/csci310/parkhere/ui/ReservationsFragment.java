@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 
@@ -17,6 +18,9 @@ import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
 import resource.ParkingSpot;
 import resource.Reservation;
+import resource.SearchResults;
+import csci310.parkhere.controller.ClientController;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,6 +36,9 @@ public class ReservationsFragment extends ListFragment implements AdapterView.On
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    String [] resultList;
+    ListView _myreservationList;
+    ArrayList<Reservation> _reservationList;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -68,15 +75,59 @@ public class ReservationsFragment extends ListFragment implements AdapterView.On
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
-    @Override
+
+    public void setReservationListview(String[] reservationResults)
+    {
+        _myreservationList.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, reservationResults));
+        DiplayListViewHelper.getListViewSize(_myreservationList);
+    }
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_reservations, container, false);
-    }
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+           // setText(bundle.getString("link"));
+            resultList = bundle.getStringArray("RESULT_LIST");
+        }
 
+        View v = inflater.inflate(R.layout.fragment_reservations, container, false);
+        _myreservationList = (ListView) v.findViewById(android.R.id.list);
+
+        ClientController controller = ClientController.getInstance();
+       _reservationList = controller.getReservations();
+
+        resultList = new String[_reservationList.size()];
+
+        for(int i = 0; i < _reservationList.size(); i++)
+        {
+            resultList[i] = _reservationList.get(i).getSpot().getStreetAddr();
+        }
+
+        setReservationListview(resultList);
+
+        _myreservationList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+//                // ListView Clicked item index
+//                int itemPosition     = position;
+//                // ListView Clicked item value
+//                String  itemValue    = (String) listView.getItemAtPosition(position);
+//                // Show Alert
+//                Toast.makeText(getApplicationContext(),
+//                        "Position :" + itemPosition + "  ListItem : " + itemValue, Toast.LENGTH_LONG)
+//                        .show();
+            }
+
+        });
+        //***********************************************
+
+        return v;
+    }
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -84,19 +135,20 @@ public class ReservationsFragment extends ListFragment implements AdapterView.On
 //        if (bundle != null) {
 //            setText(bundle.getString("link"));
 //        }
-        ArrayAdapter adapter = ArrayAdapter.createFromResource(getActivity(), R.array.Planets, android.R.layout.simple_list_item_1);
-        setListAdapter(adapter);
-        getListView().setOnItemClickListener(this);
+//        System.out.println("first");
+//        ArrayAdapter adapter = ArrayAdapter.createFromResource(getActivity(), R.array.Planets, android.R.layout.simple_list_item_1);
+ //       setListAdapter(adapter);
+//        getListView().setOnItemClickListener(this);
 
-        ClientController controller = ClientController.getInstance();
-        ArrayList<Reservation> reservations = controller.reservations;
-        ParkingSpot spot = new ParkingSpot(controller.getUser().userID, null, 0, 0, "Tuscany 101, 10 Figueroa", "", "90007", 0x0001);
-        reservations.add(new Reservation(0123, controller.getUser().userID, 789, spot, null, 50.00, false));
-        reservations.add(new Reservation(0123, controller.getUser().userID, 789, spot, null, 75.00, false));
+  //      ClientController controller = ClientController.getInstance();
+    //    ArrayList<Reservation> reservations = controller.reservations;
+      //  ParkingSpot spot = new ParkingSpot(controller.getUser().userID, null, 0, 0, "Tuscany 101, 10 Figueroa", "", "90007", 0x0001);
+        //reservations.add(new Reservation(0123, controller.getUser().userID, 789, spot, null, 50.00, false));
+        //reservations.add(new Reservation(0123, controller.getUser().userID, 789, spot, null, 75.00, false));
 
-        mAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, reservations);
-        setListAdapter(mAdapter);
-        getListView().setOnItemClickListener(this);
+//        mAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, resultList);
+//        setListAdapter(mAdapter);
+//        getListView().setOnItemClickListener(this);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

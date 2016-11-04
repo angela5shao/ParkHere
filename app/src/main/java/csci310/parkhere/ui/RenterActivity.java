@@ -77,12 +77,13 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         _resLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragmentTransaction = fm.beginTransaction();
-                fragmentTransaction.replace(R.id.fragContainer, reservationsFragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                clientController.requestMyReservationList();
+
             }
         });
+
+
+
 
         _searchLink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -231,4 +232,20 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
             System.out.println("RenterActivity onReservationSelected exception");
         }
     }
+
+    public void SwitchtoReservationList(String [] yeah)
+    {
+        Bundle args = new Bundle();
+        Log.d("fuck", "you");
+        args.putStringArray("RESULT_LIST", yeah );
+        ReservationsFragment newFragment = new ReservationsFragment();
+        newFragment.setArguments(args);
+        fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(R.id.fragContainer, newFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+
+
 }

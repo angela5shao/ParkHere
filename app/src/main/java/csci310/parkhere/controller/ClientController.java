@@ -37,7 +37,7 @@ public class ClientController {
     public ArrayList<Reservation> reservations;
     public ArrayList<Review> reviews;
     public ClientCommunicator clientCommunicator;
-
+    public boolean toDisplayReservation;
     private static ClientController instance;
 
 
@@ -73,6 +73,7 @@ public class ClientController {
         toDispaySearch = false;
         providerToshowSpaces = false;
         providerToshowSpacesDetail = false;
+        toDisplayReservation = false;
         searchResults = null;
         currentIndexofSpaces = -1;
     }
@@ -114,6 +115,7 @@ public class ClientController {
         entry.put("PASSWORD", pw);
         clientCommunicator.send("LOGIN", entry);
     }
+
 
     public void register(String username, String pw, String phone, String license, String plate, String usertype, String name) throws IOException {
         HashMap<String, Serializable> entry = new HashMap<>();
@@ -172,7 +174,18 @@ public class ClientController {
                 ra.displaySearchResult(searchResults);
                 toDispaySearch = false;
             }
+            if(toDisplayReservation)
+            {
+                String [] s = new String[reservations.size()];
+                for(int i = 0; i < reservations.size(); i++)
+                {
+                    s[i] = reservations.get(i).getReservationID() + " "  + reservations.get(i).getSpot().getStreetAddr();
+                }
 
+                Log.d("fajsdfisdla", "adls;fksdafjs;d");
+                ra.SwitchtoReservationList(s);
+                toDisplayReservation = false;
+            }
             if(user != null)
             {
 //                ra.updateUserInfo(user.getUsername(), "", user.userLicense, user.userPlate);

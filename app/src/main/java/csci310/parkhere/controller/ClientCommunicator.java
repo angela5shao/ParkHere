@@ -19,6 +19,7 @@ import java.util.HashMap;
 import resource.MyEntry;
 import resource.NetworkPackage;
 import resource.ParkingSpot;
+import resource.Reservation;
 import resource.SearchResults;
 import resource.Time;
 import resource.TimeInterval;
@@ -115,7 +116,14 @@ public class ClientCommunicator extends Thread{
                         Long spotID = (Long)map.get("PARKINGSPOTID");
                         controller.setSpotTimeInterval(spotID,intervals);
                         Log.d("RESPONSEINTERVAL","Receive list of interval" + intervals.size());
+                    } else if(key.equals("RESERVATIONLIST"))
+                    {
+                        ArrayList<Reservation> res = (ArrayList<Reservation>) value;
+                        controller.setReservations(res);
+                        Log.d("RESPONSRESERVATIONS","Receive list of reservations" + res.size());
+                        controller.toDisplayReservation = true;
                     }
+
                     controller.updateActivity();
                 }
                 oos.flush();

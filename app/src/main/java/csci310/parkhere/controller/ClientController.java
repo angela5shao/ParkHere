@@ -486,4 +486,19 @@ public class ClientController {
         }
     }
 
+    public void EditProfile(String username, String password, String userLicense, String userPlate){
+        NetworkPackage NP = new NetworkPackage();
+        HashMap<String, Serializable> map = new HashMap<String, Serializable>();
+        map.put("USERNAME", username);
+        map.put("PASSWORD", password);
+        map.put("USERLICENSE", userLicense);
+        map.put("USERPLATE", userPlate);
+        NP.addEntry("EDITPROFILE", map);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

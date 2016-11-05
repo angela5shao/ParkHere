@@ -37,12 +37,16 @@ import resource.User;
 public class PrivateProfileFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM1 = "USERNAME";
+    private static final String ARG_PARAM2 = "PASSWORD";
+    private static final String ARG_PARAM3 = "USERLICENSE";
+    private static final String ARG_PARAM4 = "USERPLATE";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private String mParam3;
+    private String mParam4;
 
     private OnFragmentInteractionListener mListener;
 
@@ -62,11 +66,14 @@ public class PrivateProfileFragment extends Fragment {
      * @return A new instance of fragment PrivateProfileFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static PrivateProfileFragment newInstance(String param1, String param2) {
+    public static PrivateProfileFragment newInstance(String param1, String param2, String param3, String param4) {
         PrivateProfileFragment fragment = new PrivateProfileFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_PARAM3, param3);
+        args.putString(ARG_PARAM4, param4);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -77,6 +84,8 @@ public class PrivateProfileFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+            mParam3 = getArguments().getString(ARG_PARAM3);
+            mParam4 = getArguments().getString(ARG_PARAM4);
         }
         setHasOptionsMenu(true);
     }
@@ -106,23 +115,34 @@ public class PrivateProfileFragment extends Fragment {
         _editLogo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                EditProfileFragment editProfileFragment = new EditProfileFragment();
+                Bundle args = new Bundle();
+                args.putString("USERNAME", mParam1 );
+                args.putString("PASSWORD", mParam2);
+                args.putString("USERLICENSE", mParam3);
+                args.putString("USERPLATE", mParam4);
+                editProfileFragment.setArguments(args);
                 Activity ac = getActivity();
                 if(ac instanceof  RenterActivity)
                     ((RenterActivity) getActivity()).switchToEditProfileFrag();
-//                else if(ac instanceof  ProviderActivity)
-//                    ((ProviderActivity) getActivity()).switchToEditProfileFrag();
-
+                else if(ac instanceof  ProviderActivity)
+                    ((ProviderActivity) getActivity()).switchToEditProfileFrag();
             }
         });
 
-        ClientController controller = ClientController.getInstance();
-
-        User user = controller.getUser();
-        if(user != null)
-        {
-            updateUserInfo(user.userName, "", user.userLicense, user.userPlate);
-        }
-
+//        ClientController controller = ClientController.getInstance();
+//
+//        User user = controller.getUser();
+//        if(user != null)
+//        {
+//            updateUserInfo(user.userName, "", user.userLicense, user.userPlate);
+//        } else{
+//            //TO DO: add message pop-up that should log in or register
+//        }
+        _usernameText.setText(mParam1);
+        _pwText.setText(mParam2);
+        _licenseIDText.setText(mParam3);
+        _licenseplateText.setText(mParam4);
         return v;
     }
 
@@ -150,12 +170,12 @@ public class PrivateProfileFragment extends Fragment {
         mListener = null;
     }
 
-    public void updateUserInfo(String inUsername, String inPw, String inLicenseID, String inLicensePlate) {
-        _usernameText.setText(inUsername);
-        _pwText.setText(inPw);
-        _licenseIDText.setText(inLicenseID);
-        _licenseplateText.setText(inLicensePlate);
-    }
+//    public void updateUserInfo(String inUsername, String inPw, String inLicenseID, String inLicensePlate) {
+//        _usernameText.setText(inUsername);
+//        _pwText.setText(inPw);
+//        _licenseIDText.setText(inLicenseID);
+//        _licenseplateText.setText(inLicensePlate);
+//    }
 
     // return edit ImageView for parent fragmaent
 //    public ImageView getEditLogo() {

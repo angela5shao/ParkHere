@@ -32,12 +32,16 @@ import resource.User;
 public class EditProfileFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM1 = "USERNAME";
+    private static final String ARG_PARAM2 = "PASSWORD";
+    private static final String ARG_PARAM3 = "USERLICENSE";
+    private static final String ARG_PARAM4 = "USERPLATE";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private String mParam3;
+    private String mParam4;
 
     private OnFragmentInteractionListener mListener;
 
@@ -58,11 +62,13 @@ public class EditProfileFragment extends Fragment {
      * @return A new instance of fragment EditProfileFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static EditProfileFragment newInstance(String param1, String param2) {
+    public static EditProfileFragment newInstance(String param1, String param2, String param3, String param4) {
         EditProfileFragment fragment = new EditProfileFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_PARAM3, param3);
+        args.putString(ARG_PARAM4, param4);
         fragment.setArguments(args);
         return fragment;
     }
@@ -73,6 +79,8 @@ public class EditProfileFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+            mParam3 = getArguments().getString(ARG_PARAM3);
+            mParam4 = getArguments().getString(ARG_PARAM4);
         }
     }
 
@@ -87,11 +95,10 @@ public class EditProfileFragment extends Fragment {
         _pwText = (EditText) v.findViewById(R.id.pwText);
         _licenseIDText = (EditText) v.findViewById(R.id.licenseIDText);
         _licenseplateText = (EditText) v.findViewById(R.id.licenseplateText);
-
+        updateUserInfo(mParam1, mParam2, mParam3, mParam4);
         _btn_upload_image = (Button) v.findViewById(R.id.btn_upload_image);
         _btn_confirm = (Button) v.findViewById(R.id.btn_confirm);
         _btn_confirm.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 ClientController controller = ClientController.getInstance();
@@ -103,12 +110,12 @@ public class EditProfileFragment extends Fragment {
             }
         });
 
-        ClientController controller = ClientController.getInstance();
-        User user = controller.getUser();
-        if(user != null)
-        {
-            updateUserInfo(user.userName, "", user.userLicense, user.userPlate);
-        }
+//        ClientController controller = ClientController.getInstance();
+//        User user = controller.getUser();
+//        if(user != null)
+//        {
+//            updateUserInfo(user.userName, "", user.userLicense, user.userPlate);
+//        }
 
         return v;
     }
@@ -159,44 +166,50 @@ public class EditProfileFragment extends Fragment {
         _licenseplateText.setHint(inLicensePlate);
     }
 
-//    private class EditProfileTask extends AsyncTask<Void, Void, Long> {
-//        long resID;
-//
-//        EditProfileTask(String username, String ){
-//            this.resID = resID;
-//            doInBackground((Void) null);
-//        }
-//
-////        @Override
-////        protected void onPreExecute(){
-////            clientController.providerToshowSpacesDetail = true;
-////        }
-//
+    private class EditProfileTask extends AsyncTask<Void, Void, Boolean> {
+        String username;
+        String pwText;
+        String licenseIdText;
+        String licenseplateText;
+
+        EditProfileTask(String username, String pwText, String licenseIdText, String licenseplateText){
+            this.username = username;
+            this.pwText = pwText;
+            this.licenseIdText = licenseIdText;
+            this.licenseplateText = licenseplateText;
+            doInBackground((Void) null);
+        }
+
 //        @Override
-//        protected Long doInBackground(Void... params ){
-//            ClientController clientController = ClientController.getInstance();
-//            clientController.RenterCancel(resID);
-//            NetworkPackage NP = clientController.checkReceived();
-//            MyEntry<String, Serializable> entry = NP.getCommand();
-//            String key = entry.getKey();
-//            Object value = entry.getValue();
-//            if(key.equals("CANCELRESERVATION")){
-////                HashMap<String, Serializable> map = (HashMap<String, Serializable>) value;
-////                ArrayList<TimeInterval> myTimeIntervals = (ArrayList<TimeInterval>) map.get("TIMEINTERVAL");
-////                Long spotID = (Long)map.get("PARKINGSPOTID");
-////                clientController.setSpotTimeInterval(spotID,myTimeIntervals);
-//                long reservationID = (long) value;
-//                return reservationID;
-//            } else if(key.equals("CANCELRESERVATION")){
-//                return (long)-1;
-//            }
-//            return (long)-1;
+//        protected void onPreExecute(){
+//            clientController.providerToshowSpacesDetail = true;
 //        }
-//
+
+        @Override
+        protected Boolean doInBackground(Void... params ){
+            ClientController clientController = ClientController.getInstance();
+//            clientController.RenterCancel();
+            NetworkPackage NP = clientController.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if(key.equals("CANCELRESERVATION")){
+//                HashMap<String, Serializable> map = (HashMap<String, Serializable>) value;
+//                ArrayList<TimeInterval> myTimeIntervals = (ArrayList<TimeInterval>) map.get("TIMEINTERVAL");
+//                Long spotID = (Long)map.get("PARKINGSPOTID");
+//                clientController.setSpotTimeInterval(spotID,myTimeIntervals);
+                long reservationID = (long) value;
+                return true;
+            } else if(key.equals("CANCELRESERVATION")){
+                return false;
+            }
+            return false;
+        }
+
 //        @Override
-//        protected void onPostExecute(Long resID) {
+//        protected void onPostExecute(Boolean result) {
 //
-//            if(resID >= 0){
+//            if(result){
 //                ClientController clientcontroller = ClientController.getInstance();
 //                for(int i = 0; i<clientcontroller.reservations.size(); i++){
 //                    if(clientcontroller.reservations.get(i).getReservationID()==resID){
@@ -209,5 +222,5 @@ public class EditProfileFragment extends Fragment {
 //                // back to reservation detail
 //            }
 //        }
-//    }
+    }
 }

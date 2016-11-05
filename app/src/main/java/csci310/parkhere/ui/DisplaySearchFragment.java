@@ -292,6 +292,13 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
 
         _searchresultList.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, resultList));
         DiplayListViewHelper.getListViewSize(_searchresultList);
+
+
+
+
+
+
+
 //        _searchresultList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(AdapterView<?> parent, View view,
@@ -350,8 +357,11 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
     }
 
     public void setSearchResultListview(String[] inSearchResults, String startDate, String startTime, String endDate, String endTime) {
-        _searchresultList.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, inSearchResults));
-        DiplayListViewHelper.getListViewSize(_searchresultList);
+//        _searchresultList.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, inSearchResults));
+//        DiplayListViewHelper.getListViewSize(_searchresultList);
+
+        Log.d("setSearchResultListview", startDate + " " + startTime + " " + endDate + " " + endTime);
+
 
         mStartDate = startDate;
         mStartTime = startTime;

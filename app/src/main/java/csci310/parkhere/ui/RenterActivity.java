@@ -110,18 +110,19 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
             public void onClick(View v) {
                 fragmentTransaction = fm.beginTransaction();
 
-                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
+                privateProfileFragment = new PrivateProfileFragment();
                 User user = clientController.getUser();
-                if (user == null)
+                if(user == null){
                     Log.d("PROFILE", "user is null");
-
-                if (fragment instanceof PrivateProfileFragment && user != null) {
-                    Log.d("@@@@@@@@@@@@@@ ", user.userName);
-                    Log.d("@@@@@@@@@@@@@@ ", user.userLicense);
-                    Log.d("@@@@@@@@@@@@@@ ", user.userPlate);
-                    ((PrivateProfileFragment) fragment).updateUserInfo(user.userName, "", user.userLicense, user.userPlate);
                 }
-
+                else {
+                    Bundle args = new Bundle();
+                    args.putString("USERNAME", user.userName);
+                    args.putString("PASSWORD", "");
+                    args.putString("USERLICENSE",user.userLicense);
+                    args.putString("USERPLATE", user.userPlate);
+                    privateProfileFragment.setArguments(args);
+                }
                 fragmentTransaction.replace(R.id.fragContainer, privateProfileFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
@@ -207,15 +208,20 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         for (int i = 0; i < spotList.size(); i++) {
             searchResults[i] = spotList.get(i).getDescription();
         }
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
-        if (fragment instanceof DisplaySearchFragment) {
-            ((DisplaySearchFragment) fragment).setSearchResultListview(searchResults, startDate, startTime, endDate, endTime);
-        }
+//        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
+//        if (fragment instanceof DisplaySearchFragment) {
+//            Log.d("SEARCH_RESULT", "To setSearchResultListview");
+//
+//            ((DisplaySearchFragment) fragment).setSearchResultListview(searchResults, startDate, startTime, endDate, endTime);
+//        }
 
 
         Log.d("SEARCH_RESULT", "To displaySearchFragment");
 
         displaySearchFragment = new DisplaySearchFragment();
+
+        ((DisplaySearchFragment) displaySearchFragment).setSearchResultListview(searchResults, startDate, startTime, endDate, endTime);
+
         fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.replace(R.id.fragContainer, displaySearchFragment);
         fragmentTransaction.addToBackStack(null);
@@ -236,6 +242,9 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         bundle.putString("param4", endDate);
         bundle.putString("param5", endTime);
 
+
+        Log.d("ONSEARCHSPACESELECTED", startDate + " " + startTime + " " + endDate + " " + endTime);
+
         fragmentTransaction = fm.beginTransaction();
 
         searchSpaceDetailFragment = new SearchSpaceDetailFragment();
@@ -249,17 +258,14 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 
     public void switchToEditProfileFrag() {
         fragmentTransaction = fm.beginTransaction();
-
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
         User user = clientController.getUser();
-        if (fragment instanceof EditProfileFragment && user != null) {
-            Log.d("############## ", user.userName);
-            Log.d("############## ", user.userLicense);
-            Log.d("############## ", user.userPlate);
-            ((EditProfileFragment) fragment).updateUserInfo(user.userName, "", user.userLicense, user.userPlate);
-        }
-
-
+        EditProfileFragment editProfileFragment = new EditProfileFragment();
+        Bundle args = new Bundle();
+        args.putString("USERNAME", user.userName);
+        args.putString("PASSWORD", "******");
+        args.putString("USERLICENSE", user.userLicense);
+        args.putString("USERPLATE", user.userPlate);
+        editProfileFragment.setArguments(args);
         fragmentTransaction.replace(R.id.fragContainer, editProfileFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();

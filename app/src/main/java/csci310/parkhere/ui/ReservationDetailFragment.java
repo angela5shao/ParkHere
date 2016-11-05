@@ -235,7 +235,7 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
 
         RenterCancelTask(long resID){
             this.resID = resID;
-            doInBackground((Void) null);
+//            doInBackground((Void) null);
         }
 
 //        @Override

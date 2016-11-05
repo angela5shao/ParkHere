@@ -321,7 +321,7 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
     private class requestParkingSpotListTask extends AsyncTask<Void, Void, ArrayList<ParkingSpot>> {
 
         requestParkingSpotListTask(){
-            doInBackground((Void) null);
+//            doInBackground((Void) null);
 
         }
         @Override
@@ -359,7 +359,7 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 
         requestSpotTimeIntervalTask(ParkingSpot parkingSpot){
             this.parkingSpot = parkingSpot;
-            doInBackground((Void) null);
+//            doInBackground((Void) null);
         }
 
         @Override

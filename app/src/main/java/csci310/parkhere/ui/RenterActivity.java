@@ -211,6 +211,10 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
             ((DisplaySearchFragment) fragment).setSearchResultListview(searchResults, startDate, startTime, endDate, endTime);
         }
 
+
+        Log.d("SEARCH_RESULT", "To displaySearchFragment");
+
+        displaySearchFragment = new DisplaySearchFragment();
         fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.replace(R.id.fragContainer, displaySearchFragment);
         fragmentTransaction.addToBackStack(null);
@@ -230,7 +234,12 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         bundle.putString("param3", startTime);
         bundle.putString("param4", endDate);
         bundle.putString("param5", endTime);
+
+        fragmentTransaction = fm.beginTransaction();
+
+        searchSpaceDetailFragment = new SearchSpaceDetailFragment();
         searchSpaceDetailFragment.setArguments(bundle);
+
 
         fragmentTransaction.replace(R.id.fragContainer, searchSpaceDetailFragment);
         fragmentTransaction.addToBackStack(null);
@@ -299,7 +308,8 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
     private class RequestReservationsTask extends AsyncTask<Void, Void, ArrayList<Reservation>> {
 
         RequestReservationsTask() {
-            doInBackground((Void) null);
+
+//            doInBackground((Void) null);
         }
 
 //        @Override

@@ -201,7 +201,6 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         if (results == null)
             return;
 
-
         ArrayList<ParkingSpot> spotList = results.searchResultList;
 
         String[] searchResults = new String[spotList.size()];
@@ -213,6 +212,10 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
             ((DisplaySearchFragment) fragment).setSearchResultListview(searchResults, startDate, startTime, endDate, endTime);
         }
 
+
+        Log.d("SEARCH_RESULT", "To displaySearchFragment");
+
+        displaySearchFragment = new DisplaySearchFragment();
         fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.replace(R.id.fragContainer, displaySearchFragment);
         fragmentTransaction.addToBackStack(null);
@@ -232,7 +235,12 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         bundle.putString("param3", startTime);
         bundle.putString("param4", endDate);
         bundle.putString("param5", endTime);
+
+        fragmentTransaction = fm.beginTransaction();
+
+        searchSpaceDetailFragment = new SearchSpaceDetailFragment();
         searchSpaceDetailFragment.setArguments(bundle);
+
 
         fragmentTransaction.replace(R.id.fragContainer, searchSpaceDetailFragment);
         fragmentTransaction.addToBackStack(null);
@@ -282,7 +290,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         args.putString("START_TIME", selectedRes.getReserveTimeInterval().endTime.toString());
         args.putString("END_TIME", selectedRes.getReserveTimeInterval().endTime.toString());
         args.putString("RENTER", Long.toString(selectedRes.getSpot().getOwner()));
-
+        resDetailfragment.setArguments(args);
 //        resDetailfragment.setReservation(selectedRes.getSpot().getStreetAddr(),
 //                                            selectedRes.getReserveTimeInterval().endTime.toString(),
 //                                            selectedRes.getReserveTimeInterval().endTime.toString(),
@@ -301,7 +309,8 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
     private class RequestReservationsTask extends AsyncTask<Void, Void, ArrayList<Reservation>> {
 
         RequestReservationsTask() {
-            doInBackground((Void) null);
+
+//            doInBackground((Void) null);
         }
 
 //        @Override

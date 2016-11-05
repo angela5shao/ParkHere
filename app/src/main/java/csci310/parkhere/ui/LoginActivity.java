@@ -82,7 +82,7 @@ public class LoginActivity extends Activity {
         UserLoginTask(String username, String password){
             mUsername = username;
             mPassword = password;
-            doInBackground((Void) null);
+//            doInBackground((Void) null);
             System.out.println(mUsername);
             System.out.println(mPassword);
         }
@@ -98,6 +98,8 @@ public class LoginActivity extends Activity {
         @Override
         protected Boolean doInBackground(Void... params ){
             try {
+
+                Log.d("LOGIN", "ASYNTASK LOGIN");
                 clientController.login(email, password);
                 NetworkPackage NP = clientController.checkReceived();
 

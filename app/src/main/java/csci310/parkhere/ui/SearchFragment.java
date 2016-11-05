@@ -825,7 +825,7 @@ public class SearchFragment extends Fragment {
             mEndTime = endTime;
             mCarType = carType;
             mDistance = distance;
-            doInBackground((Void) null);
+//            doInBackground((Void) null);
 
             System.out.println(mCarType);
         }
@@ -874,6 +874,7 @@ public class SearchFragment extends Fragment {
         @Override
         protected void onPostExecute(SearchResults result) {
             if(result!=null) {
+                Log.d("SEARCH_RESULT", "onPostExecute");
                 ((RenterActivity) getActivity()).displaySearchResult(result, mStartDate, mStartTime, mEndDate, mEndTime);
             }
             else{

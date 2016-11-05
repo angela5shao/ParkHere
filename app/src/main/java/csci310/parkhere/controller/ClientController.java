@@ -119,6 +119,8 @@ public class ClientController {
 
     // TODO: Functions for login, signup
     public void login(String username, String pw) throws IOException {
+
+        Log.d("LOGIN","Try to Login");
         cancelReceived();
         HashMap<String, Serializable> entry = new HashMap<>();
         entry.put("USERNAME", username);

@@ -104,7 +104,6 @@ public class HomeActivity extends Activity {
 
             if(clientController == null)
             {
-//                Toast.makeText(getBaseContext(), "Server Connection Failed", Toast.LENGTH_SHORT).show();
                 return false;
             }
             else

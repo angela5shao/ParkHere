@@ -289,6 +289,9 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
 //        setSearchResultListview(resultList);
 
         _searchresultList.setOnItemClickListener(this);
+
+        _searchresultList.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, resultList));
+        DiplayListViewHelper.getListViewSize(_searchresultList);
 //        _searchresultList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(AdapterView<?> parent, View view,

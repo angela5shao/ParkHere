@@ -2,6 +2,7 @@ package csci310.parkhere.controller;
 
 import android.net.Network;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.util.Log;
 
 import java.io.IOException;
@@ -50,9 +51,17 @@ public class ClientCommunicator extends Thread {
             while(true) {
                 NetworkPackage obj = (NetworkPackage)ois.readObject();
                 System.out.println("do receive the networkpackage");
+                Log.d("NetworkPackage", "NP is null?" + String.valueOf(obj == null));
+
+                if(obj == null)
+                    continue;
+
                 //controller.updateActivity();
                 controller.updateReceived(obj);
-                oos.flush();
+
+
+
+//                oos.flush();
             }
         } catch (OptionalDataException e1) {
             e1.printStackTrace();

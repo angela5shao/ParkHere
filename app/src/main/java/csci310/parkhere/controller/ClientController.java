@@ -121,7 +121,7 @@ public class ClientController {
     public void login(String username, String pw) throws IOException {
 
         Log.d("LOGIN","Try to Login");
-        cancelReceived();
+//        cancelReceived();
         HashMap<String, Serializable> entry = new HashMap<>();
         entry.put("USERNAME", username);
         entry.put("PASSWORD", pw);
@@ -158,10 +158,14 @@ public class ClientController {
     }
 
     public NetworkPackage checkReceived(){
-        while(received == false ){
+        while(received == false || NP == null ){
 
         }
         received = false;
+        if(NP == null)
+            Log.d("CHECKRECEIVE", "NULL");
+
+
         return NP;
     }
     //new functions for the AsyncTask

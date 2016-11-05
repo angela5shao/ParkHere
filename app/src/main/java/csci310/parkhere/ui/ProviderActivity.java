@@ -41,7 +41,8 @@ import resource.User;
  */
 public class ProviderActivity extends AppCompatActivity implements SpacesFragment.OnFragmentInteractionListener,
         SpaceDetailFragment.OnFragmentInteractionListener, PrivateProfileFragment.OnFragmentInteractionListener,
-        ReservationDetailFragment.OnFragmentInteractionListener, AddSpaceFragment.OnFragmentInteractionListener {
+        ReservationDetailFragment.OnFragmentInteractionListener, AddSpaceFragment.OnFragmentInteractionListener,
+        EditProfileFragment.OnFragmentInteractionListener{
 
     LinearLayout _spaceLink;
     ImageView _profilePic;

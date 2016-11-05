@@ -46,7 +46,7 @@ public class EditProfileFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     ImageView _privatProfileImage;
-    Button _btn_upload_image, _btn_confirm;
+    Button _btn_upload_image, _btn_save;
     EditText _usernameText, _pwText, _licenseIDText, _licenseplateText;
 
     public EditProfileFragment() {
@@ -97,8 +97,8 @@ public class EditProfileFragment extends Fragment {
         _licenseplateText = (EditText) v.findViewById(R.id.licenseplateText);
         updateUserInfo(mParam1, mParam2, mParam3, mParam4);
         _btn_upload_image = (Button) v.findViewById(R.id.btn_upload_image);
-        _btn_confirm = (Button) v.findViewById(R.id.btn_confirm);
-        _btn_confirm.setOnClickListener(new View.OnClickListener() {
+        _btn_save = (Button) v.findViewById(R.id.btn_confirm);
+        _btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ClientController controller = ClientController.getInstance();

@@ -161,6 +161,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -244,17 +245,21 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
         _sortOptionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                ClientController controller = ClientController.getInstance();
                 // Sort by distance
                 if(position == 0) {
-                    //
+                    SearchResults newResult = controller.sortSearchResultByDist();
+                    setSearchResultListview(newResult);
                 }
                 // Sort by price
                 else if(position == 1) {
-                    //
+                    SearchResults newResult = controller.sortSearchResultByPrice();
+                    setSearchResultListview(newResult);
                 }
                 // Sort by parking spot rating
                 else if(position == 2) {
-                    //
+                    SearchResults newResult = controller.sortSearchResultBySpotRating();
+                    setSearchResultListview(newResult);
                 }
                 // Sort by provider rating
                 else {
@@ -277,8 +282,7 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
 
         String[] resultList = new String[result.searchResultList.size()];
 
-        for(int i = 0; i < result.searchResultList.size(); i++)
-        {
+        for(int i = 0; i < result.searchResultList.size(); i++) {
             resultList[i] = result.searchResultList.get(i).getDescription();
         }
 
@@ -327,6 +331,19 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    public void setSearchResultListview(SearchResults result) {
+        Log.d("DisplaySearchFragment", "setSearchResultListview CALLED AFTER SORTING");
+
+        String[] resultList = new String[result.searchResultList.size()];
+
+        for(int i = 0; i < result.searchResultList.size(); i++) {
+            resultList[i] = result.searchResultList.get(i).getDescription();
+        }
+
+        _searchresultList.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, resultList));
+        DiplayListViewHelper.getListViewSize(_searchresultList);
     }
 
     public void setSearchResultListview(String[] inSearchResults, String startDate, String startTime, String endDate, String endTime) {

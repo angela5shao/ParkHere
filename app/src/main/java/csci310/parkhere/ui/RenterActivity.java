@@ -21,11 +21,12 @@ import java.util.ArrayList;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
+import resource.MyEntry;
+import resource.NetworkPackage;
 import resource.ParkingSpot;
 import resource.Reservation;
 import resource.SearchResults;
-import resource.*;
-import android.os.Bundle;
+import resource.User;
 
 /**
  * Created by ivylinlaw on 10/17/16.

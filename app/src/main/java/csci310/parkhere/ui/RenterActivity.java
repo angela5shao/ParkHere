@@ -207,15 +207,20 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         for (int i = 0; i < spotList.size(); i++) {
             searchResults[i] = spotList.get(i).getDescription();
         }
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
-        if (fragment instanceof DisplaySearchFragment) {
-            ((DisplaySearchFragment) fragment).setSearchResultListview(searchResults, startDate, startTime, endDate, endTime);
-        }
+//        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
+//        if (fragment instanceof DisplaySearchFragment) {
+//            Log.d("SEARCH_RESULT", "To setSearchResultListview");
+//
+//            ((DisplaySearchFragment) fragment).setSearchResultListview(searchResults, startDate, startTime, endDate, endTime);
+//        }
 
 
         Log.d("SEARCH_RESULT", "To displaySearchFragment");
 
         displaySearchFragment = new DisplaySearchFragment();
+
+        ((DisplaySearchFragment) displaySearchFragment).setSearchResultListview(searchResults, startDate, startTime, endDate, endTime);
+
         fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.replace(R.id.fragContainer, displaySearchFragment);
         fragmentTransaction.addToBackStack(null);
@@ -235,6 +240,9 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         bundle.putString("param3", startTime);
         bundle.putString("param4", endDate);
         bundle.putString("param5", endTime);
+
+
+        Log.d("ONSEARCHSPACESELECTED", startDate + " " + startTime + " " + endDate + " " + endTime);
 
         fragmentTransaction = fm.beginTransaction();
 

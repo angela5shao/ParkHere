@@ -230,7 +230,7 @@ public class AddSpaceFragment extends Fragment {
             mDescrip = inDescrip;
             mCarType = inCarType;
             mCancelPolicy = inCancelPolicy;
-            doInBackground((Void) null);
+//            doInBackground((Void) null);
 
             System.out.println(mAddressText);
             System.out.println(mDescrip);

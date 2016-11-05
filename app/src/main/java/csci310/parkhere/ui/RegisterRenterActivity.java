@@ -151,7 +151,7 @@ public class RegisterRenterActivity extends Activity {
             mplatenum = platenum;
             mcat = cat;
             mname = name;
-            doInBackground((Void) null);
+//            doInBackground((Void) null);
         }
         @Override
         protected void onPreExecute(){

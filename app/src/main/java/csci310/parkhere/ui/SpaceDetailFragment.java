@@ -497,7 +497,7 @@ public class SpaceDetailFragment extends Fragment {
 
         AddTimeForSpaceTask(String price){
             mPrice = price;
-            doInBackground((Void) null);
+//            doInBackground((Void) null);
             System.out.println(mPrice);
         }
         @Override
@@ -557,7 +557,7 @@ public class SpaceDetailFragment extends Fragment {
 
         DeleteTimeForSpaceTask(long time_id){
             mTimeID = time_id;
-            doInBackground((Void) null);
+//            doInBackground((Void) null);
             System.out.println(mTimeID);
         }
         @Override

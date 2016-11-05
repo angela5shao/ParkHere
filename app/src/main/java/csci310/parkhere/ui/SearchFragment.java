@@ -825,7 +825,7 @@ public class SearchFragment extends Fragment {
             mEndTime = endTime;
             mCarType = carType;
             mDistance = distance;
-            doInBackground((Void) null);
+//            doInBackground((Void) null);
 
             System.out.println(mCarType);
         }

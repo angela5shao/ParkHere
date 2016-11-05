@@ -15,6 +15,15 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.io.Serializable;
 
 import csci310.parkhere.R;
@@ -33,7 +42,7 @@ import resource.TimeInterval;
  * Use the {@link SearchSpaceDetailFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SearchSpaceDetailFragment extends Fragment {
+public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCallback {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "position";
@@ -54,6 +63,14 @@ public class SearchSpaceDetailFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     Button _searchspacedetail_reservebutton;
+
+
+
+
+    SupportMapFragment mMapView;
+    private GoogleMap googleMap;
+    CameraPosition cameraPosition;
+
 
     public SearchSpaceDetailFragment() {
         // Required empty public constructor
@@ -125,12 +142,16 @@ public void onCreate(Bundle savedInstanceState) {
         _searchspacedetail_reservebutton=(Button)mView.findViewById(R.id.searchspacedetail_reservebutton);
         _searchspacedetail_reservebutton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+
+
+
+
                 System.out.println(mParam2+ " "+mParam3+" "+mParam4+" "+mParam5);
-                Time startTime = new Time(mParam2+" "+mParam3);
-                Time endTime = new Time(mParam4+" "+mParam5);
+                Time startTime = new Time(mParam2+" "+mParam3 + "-0");
+                Time endTime = new Time(mParam4+" "+mParam5+"-0");
                 TimeInterval timeInterval = new TimeInterval(startTime,endTime);
-//                RenterReserveTask RRT = new RenterReserveTask(mParkingSpot.getParkingSpotID(), ClientController.getInstance().getUser().userID, timeInterval);
-//                RRT.execute((Void) null);
+                RenterReserveTask RRT = new RenterReserveTask(mParkingSpot.getParkingSpotID(), timeInterval,  ClientController.getInstance().getUser().userID);
+                RRT.execute((Void) null);
                 Intent intent = new Intent(getContext(), PaymentActivity.class);
                 startActivityForResult(intent, 11);
             }
@@ -139,6 +160,35 @@ public void onCreate(Bundle savedInstanceState) {
         // Get ParkingSpot from controller
         ClientController controller = ClientController.getInstance();
         mParkingSpot = controller.searchResults.searchResultList.get(mPosition);
+
+
+        mMapView = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map));
+        mMapView.onCreate(savedInstanceState);
+
+
+        mMapView.onResume();// needed to get the map to display immediately
+
+        try {
+            MapsInitializer.initialize(getActivity().getApplicationContext());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        mMapView.getMapAsync(this);
+
+
+        Log.d("MAPPOSITION", String.valueOf(mParkingSpot.getLat()) +" "+ String.valueOf(mParkingSpot.getLon()));
+        Log.d("MAPPOSITION", "googlemap = null?" + String.valueOf(googleMap == null));
+
+//        cameraPosition = new CameraPosition.Builder()
+//                .target(new LatLng(mParkingSpot.getLat(), mParkingSpot.getLon())).zoom(12).build();
+//
+//        if(googleMap != null) {
+//            googleMap.addMarker(new MarkerOptions()
+//                    .position(new LatLng(mParkingSpot.getLat(), mParkingSpot.getLon())));
+//            googleMap.animateCamera(CameraUpdateFactory
+//                    .newCameraPosition(cameraPosition));
+//        }
 
         // Populate fields with data
         ((TextView) mView.findViewById(R.id.searchspacedetail_address)).setText(mParkingSpot.getStreetAddr());
@@ -176,6 +226,20 @@ public void onCreate(Bundle savedInstanceState) {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onMapReady(GoogleMap inGoogleMap) {
+
+        Log.d("ONMAPREADY", "inGoogleMap");
+
+        googleMap = inGoogleMap;
+        cameraPosition = new CameraPosition.Builder()
+                .target(new LatLng(mParkingSpot.getLat(), mParkingSpot.getLon())).zoom(12).build();
+        googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(mParkingSpot.getLat(), mParkingSpot.getLon())));
+        googleMap.animateCamera(CameraUpdateFactory
+                .newCameraPosition(cameraPosition));
     }
 
     /**
@@ -275,18 +339,25 @@ public void onCreate(Bundle savedInstanceState) {
             // call client controller
             ClientController controller = ClientController.getInstance();
             controller.renterReserve(userID, parkingSpotID, timeInterval);
+            Log.d("SEARCHRESERVE", "AFTERREQUEST");
+
 
             NetworkPackage NP = controller.checkReceived();
             MyEntry<String, Serializable> entry = NP.getCommand();
             String key = entry.getKey();
             Object value = entry.getValue();
+
+            Log.d("SEARCHRESERVE", "key :" + key);
+
             if(key.equals("RESERVE")) {
                 return true;
             }
-            else if(key.equals("RESERVFAIL")) {
+            else if(key.equals("RESERVEFAIL")) {
+                Log.d("SEARCHRESERVE", "RESERVFAIL");
                 return false;
             }
             else {
+                Log.d("SEARCHRESERVE", "UNDEFINED ERROR");
                 return false;
             }
         }

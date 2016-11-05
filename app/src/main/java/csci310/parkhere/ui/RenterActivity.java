@@ -21,11 +21,12 @@ import java.util.ArrayList;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
+import resource.MyEntry;
+import resource.NetworkPackage;
 import resource.ParkingSpot;
 import resource.Reservation;
 import resource.SearchResults;
-import resource.*;
-import android.os.Bundle;
+import resource.User;
 
 /**
  * Created by ivylinlaw on 10/17/16.
@@ -207,10 +208,19 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         for (int i = 0; i < spotList.size(); i++) {
             searchResults[i] = spotList.get(i).getDescription();
         }
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
-        if (fragment instanceof DisplaySearchFragment) {
-            ((DisplaySearchFragment) fragment).setSearchResultListview(searchResults, startDate, startTime, endDate, endTime);
-        }
+//        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
+//        if (fragment instanceof DisplaySearchFragment) {
+//            Log.d("SEARCH_RESULT", "To setSearchResultListview");
+//
+//            ((DisplaySearchFragment) fragment).setSearchResultListview(searchResults, startDate, startTime, endDate, endTime);
+//        }
+
+
+        Log.d("SEARCH_RESULT", "To displaySearchFragment");
+
+        displaySearchFragment = new DisplaySearchFragment();
+
+        ((DisplaySearchFragment) displaySearchFragment).setSearchResultListview(searchResults, startDate, startTime, endDate, endTime);
 
         fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.replace(R.id.fragContainer, displaySearchFragment);
@@ -231,7 +241,15 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         bundle.putString("param3", startTime);
         bundle.putString("param4", endDate);
         bundle.putString("param5", endTime);
+
+
+        Log.d("ONSEARCHSPACESELECTED", startDate + " " + startTime + " " + endDate + " " + endTime);
+
+        fragmentTransaction = fm.beginTransaction();
+
+        searchSpaceDetailFragment = new SearchSpaceDetailFragment();
         searchSpaceDetailFragment.setArguments(bundle);
+
 
         fragmentTransaction.replace(R.id.fragContainer, searchSpaceDetailFragment);
         fragmentTransaction.addToBackStack(null);
@@ -297,7 +315,8 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
     private class RequestReservationsTask extends AsyncTask<Void, Void, ArrayList<Reservation>> {
 
         RequestReservationsTask() {
-            doInBackground((Void) null);
+
+//            doInBackground((Void) null);
         }
 
 //        @Override

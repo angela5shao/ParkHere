@@ -161,12 +161,14 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
@@ -197,6 +199,7 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
 
     private OnFragmentInteractionListener mListener;
 
+    Spinner _sortOptionSpinner;
     ListView _searchresultList;
     //    ArrayList<ParkingSpot> searchResults;
     String[] searchResults={};
@@ -238,6 +241,39 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_display_search, container, false);
 
+        _sortOptionSpinner = (Spinner) v.findViewById(R.id.sortOptionSpinner);
+        _sortOptionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                ClientController controller = ClientController.getInstance();
+                // Sort by distance
+                if(position == 0) {
+                    SearchResults newResult = controller.sortSearchResultByDist();
+                    setSearchResultListview(newResult);
+                }
+                // Sort by price
+                else if(position == 1) {
+                    SearchResults newResult = controller.sortSearchResultByPrice();
+                    setSearchResultListview(newResult);
+                }
+                // Sort by parking spot rating
+                else if(position == 2) {
+                    SearchResults newResult = controller.sortSearchResultBySpotRating();
+                    setSearchResultListview(newResult);
+                }
+                // Sort by provider rating
+                else {
+                    //
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                //
+            }
+        });
+
+
         _searchresultList = (ListView) v.findViewById(R.id.searchresultList);
 
         // Get list of search results
@@ -246,14 +282,23 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
 
         String[] resultList = new String[result.searchResultList.size()];
 
-        for(int i = 0; i < result.searchResultList.size(); i++)
-        {
+        for(int i = 0; i < result.searchResultList.size(); i++) {
             resultList[i] = result.searchResultList.get(i).getDescription();
         }
 
 //        setSearchResultListview(resultList);
 
         _searchresultList.setOnItemClickListener(this);
+
+        _searchresultList.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, resultList));
+        DiplayListViewHelper.getListViewSize(_searchresultList);
+
+
+
+
+
+
+
 //        _searchresultList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(AdapterView<?> parent, View view,
@@ -298,9 +343,25 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
         mListener = null;
     }
 
-    public void setSearchResultListview(String[] inSearchResults, String startDate, String startTime, String endDate, String endTime) {
-        _searchresultList.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, inSearchResults));
+    public void setSearchResultListview(SearchResults result) {
+        Log.d("DisplaySearchFragment", "setSearchResultListview CALLED AFTER SORTING");
+
+        String[] resultList = new String[result.searchResultList.size()];
+
+        for(int i = 0; i < result.searchResultList.size(); i++) {
+            resultList[i] = result.searchResultList.get(i).getDescription();
+        }
+
+        _searchresultList.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, resultList));
         DiplayListViewHelper.getListViewSize(_searchresultList);
+    }
+
+    public void setSearchResultListview(String[] inSearchResults, String startDate, String startTime, String endDate, String endTime) {
+//        _searchresultList.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, inSearchResults));
+//        DiplayListViewHelper.getListViewSize(_searchresultList);
+
+        Log.d("setSearchResultListview", startDate + " " + startTime + " " + endDate + " " + endTime);
+
 
         mStartDate = startDate;
         mStartTime = startTime;

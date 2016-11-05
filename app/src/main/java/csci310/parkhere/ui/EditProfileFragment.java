@@ -159,55 +159,55 @@ public class EditProfileFragment extends Fragment {
         _licenseplateText.setHint(inLicensePlate);
     }
 
-    private class EditProfileTask extends AsyncTask<Void, Void, Long> {
-        long resID;
-
-        EditProfileTask(String username, String ){
-            this.resID = resID;
-            doInBackground((Void) null);
-        }
-
-//        @Override
-//        protected void onPreExecute(){
-//            clientController.providerToshowSpacesDetail = true;
+//    private class EditProfileTask extends AsyncTask<Void, Void, Long> {
+//        long resID;
+//
+//        EditProfileTask(String username, String ){
+//            this.resID = resID;
+//            doInBackground((Void) null);
 //        }
-
-        @Override
-        protected Long doInBackground(Void... params ){
-            ClientController clientController = ClientController.getInstance();
-            clientController.RenterCancel(resID);
-            NetworkPackage NP = clientController.checkReceived();
-            MyEntry<String, Serializable> entry = NP.getCommand();
-            String key = entry.getKey();
-            Object value = entry.getValue();
-            if(key.equals("CANCELRESERVATION")){
-//                HashMap<String, Serializable> map = (HashMap<String, Serializable>) value;
-//                ArrayList<TimeInterval> myTimeIntervals = (ArrayList<TimeInterval>) map.get("TIMEINTERVAL");
-//                Long spotID = (Long)map.get("PARKINGSPOTID");
-//                clientController.setSpotTimeInterval(spotID,myTimeIntervals);
-                long reservationID = (long) value;
-                return reservationID;
-            } else if(key.equals("CANCELRESERVATION")){
-                return (long)-1;
-            }
-            return (long)-1;
-        }
-
-        @Override
-        protected void onPostExecute(Long resID) {
-
-            if(resID >= 0){
-                ClientController clientcontroller = ClientController.getInstance();
-                for(int i = 0; i<clientcontroller.reservations.size(); i++){
-                    if(clientcontroller.reservations.get(i).getReservationID()==resID){
-                        clientcontroller.reservations.remove(i);
-                    }
-                }
-                mListener.returnToReservationsFragment();
-            } else{
-                Toast.makeText(getContext(), "Error on cancel reservation! Please try again.", Toast.LENGTH_SHORT).show();
-                // back to reservation detail
-            }
-        }
-    }
+//
+////        @Override
+////        protected void onPreExecute(){
+////            clientController.providerToshowSpacesDetail = true;
+////        }
+//
+//        @Override
+//        protected Long doInBackground(Void... params ){
+//            ClientController clientController = ClientController.getInstance();
+//            clientController.RenterCancel(resID);
+//            NetworkPackage NP = clientController.checkReceived();
+//            MyEntry<String, Serializable> entry = NP.getCommand();
+//            String key = entry.getKey();
+//            Object value = entry.getValue();
+//            if(key.equals("CANCELRESERVATION")){
+////                HashMap<String, Serializable> map = (HashMap<String, Serializable>) value;
+////                ArrayList<TimeInterval> myTimeIntervals = (ArrayList<TimeInterval>) map.get("TIMEINTERVAL");
+////                Long spotID = (Long)map.get("PARKINGSPOTID");
+////                clientController.setSpotTimeInterval(spotID,myTimeIntervals);
+//                long reservationID = (long) value;
+//                return reservationID;
+//            } else if(key.equals("CANCELRESERVATION")){
+//                return (long)-1;
+//            }
+//            return (long)-1;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Long resID) {
+//
+//            if(resID >= 0){
+//                ClientController clientcontroller = ClientController.getInstance();
+//                for(int i = 0; i<clientcontroller.reservations.size(); i++){
+//                    if(clientcontroller.reservations.get(i).getReservationID()==resID){
+//                        clientcontroller.reservations.remove(i);
+//                    }
+//                }
+//                mListener.returnToReservationsFragment();
+//            } else{
+//                Toast.makeText(getContext(), "Error on cancel reservation! Please try again.", Toast.LENGTH_SHORT).show();
+//                // back to reservation detail
+//            }
+//        }
+//    }
 }

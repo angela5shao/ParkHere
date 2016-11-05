@@ -97,7 +97,7 @@ public class EditProfileFragment extends Fragment {
         _licenseplateText = (EditText) v.findViewById(R.id.licenseplateText);
         updateUserInfo(mParam1, mParam2, mParam3, mParam4);
         _btn_upload_image = (Button) v.findViewById(R.id.btn_upload_image);
-        _btn_save = (Button) v.findViewById(R.id.btn_confirm);
+        _btn_save = (Button) v.findViewById(R.id.btn_save);
         _btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

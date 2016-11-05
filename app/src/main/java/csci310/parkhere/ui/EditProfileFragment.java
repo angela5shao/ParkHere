@@ -2,6 +2,7 @@ package csci310.parkhere.ui;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,9 +11,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import java.io.Serializable;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
+import resource.MyEntry;
+import resource.NetworkPackage;
 import resource.User;
 
 /**
@@ -84,6 +90,18 @@ public class EditProfileFragment extends Fragment {
 
         _btn_upload_image = (Button) v.findViewById(R.id.btn_upload_image);
         _btn_confirm = (Button) v.findViewById(R.id.btn_confirm);
+        _btn_confirm.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                ClientController controller = ClientController.getInstance();
+                User user = controller.getUser();
+                if(user != null)
+                {
+                    updateUserInfo(user.userName, "", user.userLicense, user.userPlate);
+                }
+            }
+        });
 
         ClientController controller = ClientController.getInstance();
         User user = controller.getUser();
@@ -139,5 +157,57 @@ public class EditProfileFragment extends Fragment {
         _pwText.setHint(inPw);
         _licenseIDText.setHint(inLicenseID);
         _licenseplateText.setHint(inLicensePlate);
+    }
+
+    private class EditProfileTask extends AsyncTask<Void, Void, Long> {
+        long resID;
+
+        EditProfileTask(String username, String ){
+            this.resID = resID;
+            doInBackground((Void) null);
+        }
+
+//        @Override
+//        protected void onPreExecute(){
+//            clientController.providerToshowSpacesDetail = true;
+//        }
+
+        @Override
+        protected Long doInBackground(Void... params ){
+            ClientController clientController = ClientController.getInstance();
+            clientController.RenterCancel(resID);
+            NetworkPackage NP = clientController.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if(key.equals("CANCELRESERVATION")){
+//                HashMap<String, Serializable> map = (HashMap<String, Serializable>) value;
+//                ArrayList<TimeInterval> myTimeIntervals = (ArrayList<TimeInterval>) map.get("TIMEINTERVAL");
+//                Long spotID = (Long)map.get("PARKINGSPOTID");
+//                clientController.setSpotTimeInterval(spotID,myTimeIntervals);
+                long reservationID = (long) value;
+                return reservationID;
+            } else if(key.equals("CANCELRESERVATION")){
+                return (long)-1;
+            }
+            return (long)-1;
+        }
+
+        @Override
+        protected void onPostExecute(Long resID) {
+
+            if(resID >= 0){
+                ClientController clientcontroller = ClientController.getInstance();
+                for(int i = 0; i<clientcontroller.reservations.size(); i++){
+                    if(clientcontroller.reservations.get(i).getReservationID()==resID){
+                        clientcontroller.reservations.remove(i);
+                    }
+                }
+                mListener.returnToReservationsFragment();
+            } else{
+                Toast.makeText(getContext(), "Error on cancel reservation! Please try again.", Toast.LENGTH_SHORT).show();
+                // back to reservation detail
+            }
+        }
     }
 }

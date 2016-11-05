@@ -1,16 +1,27 @@
 package csci310.parkhere.ui;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
+
+import java.io.IOException;
+import java.io.Serializable;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
+import resource.MyEntry;
+import resource.NetworkPackage;
+import resource.User;
 
 public class HomeActivity extends Activity {
     Button _loginButton, _registerButton, _guestButton;
@@ -26,37 +37,27 @@ public class HomeActivity extends Activity {
         _registerButton=(Button)findViewById(R.id.registerButton);
         _guestButton=(Button)findViewById(R.id.guestButton);
 
-        Log.v("HomeActivity", "start");
-        Log.v("HomeActivity", "start");
 
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-
-        StrictMode.setThreadPolicy(policy);
+        ServerConnectTask sct = new ServerConnectTask();
+        sct.execute((Void) null);
 
 
-        clientController = ClientController.getInstance();
-        clientController.setCurrentActivity(this);
 
 
         Log.d("HOMEAC", "Oncreate");
 
-        if(clientController.registerFailed)
-        {
-            Log.d("Register failed", "FAILED");
-            Toast.makeText(getApplicationContext(), "Register fail", Toast.LENGTH_SHORT).show();
-            clientController.registerFailed = false;
-        }
-        else if(clientController.loginFailed)
-        {
-            Toast.makeText(getApplicationContext(), "Login fail", Toast.LENGTH_SHORT).show();
-            clientController.loginFailed = false;
-        }
 
 
 
         _loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(clientController == null)
+                {
+                    ServerConnectTask sct = new ServerConnectTask();
+                    sct.execute((Void) null);
+                    return;
+                }
                 myIntent = new Intent(v.getContext(), LoginActivity.class);
                 startActivity(myIntent);
             }
@@ -65,6 +66,12 @@ public class HomeActivity extends Activity {
         _registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(clientController == null)
+                {
+                    ServerConnectTask sct = new ServerConnectTask();
+                    sct.execute((Void) null);
+                    return;
+                }
                 myIntent = new Intent(v.getContext(), RegisterMainActivity.class);
                 startActivity(myIntent);
             }
@@ -77,4 +84,47 @@ public class HomeActivity extends Activity {
             }
         });
     }
+
+
+    private class ServerConnectTask extends AsyncTask<Void, Void, Boolean> {
+
+        ServerConnectTask(){
+
+        }
+        @Override
+        protected void onPreExecute(){
+            //Display a progress dialog
+
+        }
+        @Override
+        protected Boolean doInBackground(Void... params ){
+            clientController = ClientController.getInstance();
+            Looper.prepare();
+            Log.d("SERVERCONNECTTASK", "DOINBACKGROUND");
+
+            if(clientController == null)
+            {
+//                Toast.makeText(getBaseContext(), "Server Connection Failed", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            else
+            {
+                clientController.setCurrentActivity(HomeActivity.this);
+            }
+
+
+            return true;
+
+        }
+        @Override
+        protected void onPostExecute(Boolean success) {
+            Context c = getBaseContext();
+
+            if(!success)
+                Toast.makeText(c, "Server Connection Failed", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+
 }

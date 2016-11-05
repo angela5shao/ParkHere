@@ -192,6 +192,62 @@ public void onCreate(Bundle savedInstanceState) {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+//
+//    private class RenterReserveTask extends AsyncTask<Void, Void, Boolean> {
+//        private final long ;
+//
+//        RenterReserveTask(long parkingSpotID, TimeInterval timeinterval, long userID){
+//            mTimeID = time_id;
+//            doInBackground((Void) null);
+//            System.out.println(mTimeID);
+//        }
+//        @Override
+//        protected void onPreExecute(){
+//            //Display a progress dialog
+//            progressDialog = new ProgressDialog(getContext(), R.style.AppTheme);
+//            progressDialog.setIndeterminate(true);
+//            progressDialog.setMessage("Deleting...");
+//            progressDialog.show();
+//        }
+//        @Override
+//        protected Boolean doInBackground(Void... params ){
+//            // call client controller
+//            ClientController controller = ClientController.getInstance();
+//            System.out.println("DELETE TIME ID: "+ curr_selected_time_id);
+//            controller.ProviderCancel(curr_selected_time_id);
+//
+//            NetworkPackage NP = controller.checkReceived();
+//            MyEntry<String, Serializable> entry = NP.getCommand();
+//            String key = entry.getKey();
+//            Object value = entry.getValue();
+//            if(key.equals("CANCELTIME")) {
+//                return true;
+//            }
+//            else if(key.equals("CANCELTIMEFAIL")) {
+//                return false;
+//            }
+//            else {
+//                return false;
+//            }
+//        }
+//        @Override
+//        protected void onPostExecute(Boolean success) {
+//            if(success) {
+//                _btn_delete_time.setVisibility(View.GONE);
+//                Log.d("DELETETIME", "finish delete time");
+//                Toast.makeText(getContext(), "Deleted!", Toast.LENGTH_SHORT).show();
+//
+//                // Back to SpacesFragment
+//                ((ProviderActivity)getActivity()).showSpaceFragment();
+//
+//                progressDialog.dismiss();
+//
+//            } else{
+//                progressDialog.dismiss();
+//                Toast.makeText(getContext(), "Delete space failed! Please try agian.", Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//    }
 
     private class RenterReserveTask extends AsyncTask<Void, Void, Boolean> {
         private final long parkingSpotID;

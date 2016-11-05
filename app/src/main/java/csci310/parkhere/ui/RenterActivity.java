@@ -200,7 +200,6 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         if (results == null)
             return;
 
-
         ArrayList<ParkingSpot> spotList = results.searchResultList;
 
         String[] searchResults = new String[spotList.size()];
@@ -281,7 +280,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         args.putString("START_TIME", selectedRes.getReserveTimeInterval().endTime.toString());
         args.putString("END_TIME", selectedRes.getReserveTimeInterval().endTime.toString());
         args.putString("RENTER", Long.toString(selectedRes.getSpot().getOwner()));
-
+        resDetailfragment.setArguments(args);
 //        resDetailfragment.setReservation(selectedRes.getSpot().getStreetAddr(),
 //                                            selectedRes.getReserveTimeInterval().endTime.toString(),
 //                                            selectedRes.getReserveTimeInterval().endTime.toString(),

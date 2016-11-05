@@ -54,7 +54,7 @@ public class ClientController {
     private NetworkPackage NP;
     //
 
-    private ClientController() { // private constructor
+    private ClientController() throws IOException { // private constructor
 
         user = null;
         parkingSpots = new ArrayList<>();
@@ -83,9 +83,16 @@ public class ClientController {
     }
     public void setCurrentFragment(Fragment fr) { currentFragment = fr;}
 
-    public static ClientController getInstance() {
+    public static ClientController getInstance(){
+
         if(instance == null) {
-            instance = new ClientController();
+            try {
+                instance = new ClientController();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+
+            }
         }
         return instance;
     }

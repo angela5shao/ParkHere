@@ -31,9 +31,8 @@ public class ClientCommunicator extends Thread {
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
     private ClientController controller;
-    public ClientCommunicator(ClientController controller) {
+    public ClientCommunicator(ClientController controller) throws IOException {
         this.controller = controller;
-        try {
             socket = new Socket("104.236.143.142", 61129);
             oos = new ObjectOutputStream(socket.getOutputStream());
             oos.flush();
@@ -41,9 +40,7 @@ public class ClientCommunicator extends Thread {
             ois = new ObjectInputStream(socket.getInputStream());
 
             start();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
+
     }
     public void run()
     {

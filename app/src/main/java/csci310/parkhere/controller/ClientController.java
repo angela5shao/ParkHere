@@ -465,7 +465,7 @@ public class ClientController {
         }
     }
 
-    public void requestSpotTimeIntervalWithDate(ParkingSpot spot, String Date){
+    public void requestSpotTimeIntervalWithDate(ParkingSpot spot, String Date) {
         if(user == null && spot == null)
         {
             return;

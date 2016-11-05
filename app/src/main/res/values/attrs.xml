@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="colorSubAccent" format="reference"/>
     <attr name="colorDarkBackground" format="reference"/>
     <attr name="colorLightBackground" format="reference"/>
     <attr name="colorLine" format="reference"/>

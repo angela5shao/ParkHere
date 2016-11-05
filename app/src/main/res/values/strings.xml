@@ -33,6 +33,12 @@
         <item>Truck</item>
         <item>AnyCarType</item>
     </string-array>
+    <string-array name="search_sort_option_spinner">
+        <item>Sort by distance</item>
+        <item>Sort by price</item>
+        <item>Sort by parking spot rating</item>
+        <item>Sort by provider rating</item>
+    </string-array>
     <string-array name="cancel_policy_spinner">
         <item>Free cancellation</item>
         <item>10% penalty for cancellation</item>

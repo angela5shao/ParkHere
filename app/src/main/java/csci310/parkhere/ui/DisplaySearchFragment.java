@@ -167,6 +167,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
@@ -197,6 +198,7 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
 
     private OnFragmentInteractionListener mListener;
 
+    Spinner _sortOptionSpinner;
     ListView _searchresultList;
     //    ArrayList<ParkingSpot> searchResults;
     String[] searchResults={};
@@ -237,6 +239,35 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_display_search, container, false);
+
+        _sortOptionSpinner = (Spinner) v.findViewById(R.id.sortOptionSpinner);
+        _sortOptionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                // Sort by distance
+                if(position == 0) {
+                    //
+                }
+                // Sort by price
+                else if(position == 1) {
+                    //
+                }
+                // Sort by parking spot rating
+                else if(position == 2) {
+                    //
+                }
+                // Sort by provider rating
+                else {
+                    //
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                //
+            }
+        });
+
 
         _searchresultList = (ListView) v.findViewById(R.id.searchresultList);
 

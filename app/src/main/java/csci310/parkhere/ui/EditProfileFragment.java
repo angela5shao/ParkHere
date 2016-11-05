@@ -160,10 +160,10 @@ public class EditProfileFragment extends Fragment {
     }
 
     public void updateUserInfo(String inUsername, String inPw, String inLicenseID, String inLicensePlate) {
-        _usernameText.setHint(inUsername);
-        _pwText.setHint(inPw);
-        _licenseIDText.setHint(inLicenseID);
-        _licenseplateText.setHint(inLicensePlate);
+        _usernameText.setText(inUsername);
+        _pwText.setText(inPw);
+        _licenseIDText.setText(inLicenseID);
+        _licenseplateText.setText(inLicensePlate);
     }
 
     private class EditProfileTask extends AsyncTask<Void, Void, Boolean> {
@@ -188,7 +188,7 @@ public class EditProfileFragment extends Fragment {
         @Override
         protected Boolean doInBackground(Void... params ){
             ClientController clientController = ClientController.getInstance();
-//            clientController.RenterCancel();
+            clientController.EditProfile(username,pwText,licenseIdText,licenseplateText);
             NetworkPackage NP = clientController.checkReceived();
             MyEntry<String, Serializable> entry = NP.getCommand();
             String key = entry.getKey();

@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="csci310.parkhere.ui.AddSpaceFragment">
+    tools:context="csci310.parkhere.ui.AddSpaceFragment"
+    android:id="@+id/fragment_addSpace">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

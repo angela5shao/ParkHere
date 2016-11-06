@@ -29,6 +29,7 @@ import com.imanoweb.calendarview.DayDecorator;
 import com.imanoweb.calendarview.DayView;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -65,7 +66,7 @@ public class SpaceDetailFragment extends Fragment {
     private String mParam2;
 
     public ParkingSpot thisParkingSpot;
-
+    public ArrayList<TimeInterval> list;
     TextView _spacedetail_address;
     CustomCalendarView calendarView;
     final String disabledDateColor = "#c3c3c3";
@@ -355,7 +356,7 @@ public class SpaceDetailFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
                 _btn_delete_time.setVisibility(View.VISIBLE);
-                curr_selected_time_id = id;
+                curr_selected_time_id = (long)position;
             }
         });
         _btn_delete_time.setOnClickListener(new View.OnClickListener() {
@@ -602,7 +603,7 @@ public class SpaceDetailFragment extends Fragment {
             // call client controller
             ClientController controller = ClientController.getInstance();
             System.out.println("DELETE TIME ID: " + curr_selected_time_id);
-            controller.ProviderCancel(curr_selected_time_id);
+            controller.ProviderCancel(list.get((int)curr_selected_time_id).TimeIntervalID);
 
             NetworkPackage NP = controller.checkReceived();
             MyEntry<String, Serializable> entry = NP.getCommand();
@@ -667,7 +668,7 @@ public class SpaceDetailFragment extends Fragment {
             if(inTimeInterval != null) {
                 Log.d("SpaceDetailFragment ",
                         "GetPostedTimeOnDateTask onPostExecute inTimeInterval !NULL - "+inTimeInterval.size());
-
+                list = inTimeInterval;
                 String[] timeList = new String[inTimeInterval.size()];
                 for(int i=0; i<inTimeInterval.size(); ++i) {
                     String timeIntervalString = inTimeInterval.get(i).startTime.toString()

@@ -102,7 +102,7 @@ public class ClientController {
 
     public static void resetController()
     {
-//            instance = null;
+            instance = null;
     }
 
     // Getters
@@ -539,7 +539,10 @@ public class ClientController {
 
     public void logout(boolean userType) {
         NetworkPackage NP = new NetworkPackage();
-        NP.addEntry("LOGOUT", userType);
+        HashMap<String, Serializable> map = new HashMap<>();
+        map.put("USERID", user.userID);
+        map.put("USERTYPE", userType);
+        NP.addEntry("LOGOUT", map);
         try {
             clientCommunicator.sendPackage(NP);
         } catch (IOException e) {

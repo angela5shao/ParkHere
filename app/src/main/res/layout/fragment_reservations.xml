@@ -3,10 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="csci310.parkhere.ui.ReservationsFragment">
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="574dp"
-        android:layout_marginTop="12dp">
+    <!--<ScrollView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="574dp"-->
+        <!--android:layout_marginTop="12dp">-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -22,11 +22,11 @@
             <ListView
                 android:id="@android:id/list"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginTop="12dp"
                 android:textColor="@color/colorMainFont"
                 android:background="@color/colorAccent"
                 />
         </LinearLayout>
-    </ScrollView>
+    <!--</ScrollView>-->
 </FrameLayout>

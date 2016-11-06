@@ -99,7 +99,7 @@ public class HomeActivity extends Activity {
         @Override
         protected Boolean doInBackground(Void... params ){
             clientController = ClientController.getInstance();
-            Looper.prepare();
+//            Looper.prepare();
             Log.d("SERVERCONNECTTASK", "DOINBACKGROUND");
 
             if(clientController == null)

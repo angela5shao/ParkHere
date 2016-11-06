@@ -165,6 +165,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         } else if (item.getItemId() == R.id.LogOut) {
             Intent intent = new Intent(this, HomeActivity.class);
             startActivityForResult(intent, 0);
+            clientController.logout(true);
             ClientController.resetController();
             return true;
         } else {

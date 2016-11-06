@@ -338,8 +338,10 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
                 return true;
             }
             else if(key.equals("ADDREVIEWFAIL")){
+                Log.d("Reservation Detail ","ADDREVIEWFAIL");
                 return false;
             }
+            Log.d("Reservation Detail ","doInBackground END");
             return false;
         }
 

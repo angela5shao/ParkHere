@@ -101,15 +101,15 @@ public class ReservationsFragment extends ListFragment implements AdapterView.On
 
         ClientController controller = ClientController.getInstance();
         ArrayList<Reservation> reservations = controller.reservations;
-        ParkingSpot spot = new ParkingSpot(controller.getUser().userID, null, 0, 0, "Tuscany 101, 10 Figueroa", "", "90007", 0x0001,0);
-        Time start =  new Time(2016, 2, 29, 4, 30, 0);
-			Time end = new Time(2016, 2 ,29, 5, 0,0);
-			Time start1 =  new Time(2016, 12, 29, 4, 0, 0);
-			Time end1 = new Time(2016,12,29, 5, 0,0);
-			TimeInterval timeInterval1 = new TimeInterval(start, end);
-			TimeInterval timeInterval2 = new TimeInterval(start1, end1);
-        reservations.add(new Reservation(0123, controller.getUser().userID, 789, spot, timeInterval1, 50.00, false));
-        reservations.add(new Reservation(0123, controller.getUser().userID, 789, spot, timeInterval2, 75.00, false));
+//        ParkingSpot spot = new ParkingSpot(controller.getUser().userID, null, 0, 0, "Tuscany 101, 10 Figueroa", "", "90007", 0x0001,0);
+//        Time start =  new Time(2016, 2, 29, 4, 30, 0);
+//			Time end = new Time(2016, 2 ,29, 5, 0,0);
+//			Time start1 =  new Time(2016, 12, 29, 4, 0, 0);
+//			Time end1 = new Time(2016,12,29, 5, 0,0);
+//			TimeInterval timeInterval1 = new TimeInterval(start, end);
+//			TimeInterval timeInterval2 = new TimeInterval(start1, end1);
+//        reservations.add(new Reservation(0123, controller.getUser().userID, 789, spot, timeInterval1, 50.00, false));
+//        reservations.add(new Reservation(0123, controller.getUser().userID, 789, spot, timeInterval2, 75.00, false));
 
         ArrayList<String> listString = new ArrayList<>();
         for(int i = 0 ; i < reservations.size(); i++)

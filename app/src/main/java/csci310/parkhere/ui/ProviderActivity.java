@@ -109,10 +109,7 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
             public void onClick(View v) {
                 System.out.println("Clicked on spaces tab item");
                 try {
-//                    fragmentTransaction.replace(R.id.fragContainer, spacesFragment)
-//                        .commit();
-//                    getSupportFragmentManager().beginTransaction()
-//                            .replace(R.id.fragContainer, spacesFragment).commit();
+
                     RPTask = new requestParkingSpotListTask();
                     RPTask.execute((Void) null);
                 } catch (Exception e) {

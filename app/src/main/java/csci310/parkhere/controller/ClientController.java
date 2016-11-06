@@ -299,8 +299,16 @@ public class ClientController {
         return reservations.get(position);
     }
 
-    public void submitReview(Review rev) {
-
+    public void submitReview(long parkingSpotID, int rating, String comment) {
+        HashMap<String, Serializable> map = new HashMap<>();
+        map.put("PARKINGSPOTID", parkingSpotID);
+        map.put("REVIEWDESCRIPTION", comment);
+        map.put("RATING", rating);
+        try {
+            clientCommunicator.send("REVIEW", map);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void report(Reservation res) {

@@ -299,9 +299,9 @@ public class ClientController {
         return reservations.get(position);
     }
 
-    public void submitReview(long parkingSpotID, int rating, String comment) {
+    public void submitReview(long reservationID, int rating, String comment) {
         HashMap<String, Serializable> map = new HashMap<>();
-        map.put("PARKINGSPOTID", parkingSpotID);
+        map.put("RESERVATIONID", reservationID);
         map.put("REVIEWDESCRIPTION", comment);
         map.put("RATING", rating);
         try {

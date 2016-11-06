@@ -3,8 +3,6 @@ package csci310.parkhere.ui;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -159,8 +157,8 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
                 reviewDialog.setTitle("Review");
 
                 final RatingBar _ratingBar=(RatingBar)reviewDialog.findViewById(R.id.ratingBar);
-                Drawable stars = _ratingBar.getProgressDrawable();
-                stars.setTint(Color.YELLOW);
+//                Drawable drawable = _ratingBar.getProgressDrawable();
+//                drawable.setColorFilter(Color.parseColor("#FFCC00"), PorterDuff.Mode.SRC_ATOP);
                 final EditText _commentDialog=(EditText)reviewDialog.findViewById(R.id.commentDialog);
                 Button _btn_confirm=(Button)reviewDialog.findViewById(R.id.btn_confirm);
                 _btn_confirm.setOnClickListener(new View.OnClickListener() {
@@ -332,14 +330,15 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
         @Override
         protected Boolean doInBackground(Void... params ){
             ClientController clientController = ClientController.getInstance();
-            clientController.addReview(spotID, mRating, mComment);
+            clientController.submitReview(res_id, mRating, mComment);
             NetworkPackage NP = clientController.checkReceived();
             MyEntry<String, Serializable> entry = NP.getCommand();
             String key = entry.getKey();
-            Object value = entry.getValue();
-            if(key.equals("")){
-
+            if(key.equals("ADDREVIEW")){
                 return true;
+            }
+            else if(key.equals("ADDREVIEWFAIL")){
+                return false;
             }
             return false;
         }
@@ -348,13 +347,11 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
         protected void onPostExecute(Boolean ifAdded) {
             if(ifAdded){
                 progressDialog.dismiss();
-
-//                mListener.returnToReservationsFragment();
+                Toast.makeText(getContext(), "Review added!", Toast.LENGTH_SHORT).show();
             }
             else{
                 progressDialog.dismiss();
                 Toast.makeText(getContext(), "Review cannot be added! Please try agian.", Toast.LENGTH_SHORT).show();
-                // back to reservation detail
             }
         }
     }

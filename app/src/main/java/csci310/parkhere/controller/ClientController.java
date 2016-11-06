@@ -102,7 +102,7 @@ public class ClientController {
 
     public static void resetController()
     {
-//            instance = null;
+            instance = null;
     }
 
     // Getters
@@ -120,8 +120,7 @@ public class ClientController {
     // TODO: Functions for login, signup
     public void login(String username, String pw) throws IOException {
 
-        Log.d("LOGIN","Try to Login");
-//        cancelReceived();
+        Log.d("LOGIN", "Try to Login");
         HashMap<String, Serializable> entry = new HashMap<>();
         entry.put("USERNAME", username);
         entry.put("PASSWORD", pw);
@@ -276,9 +275,9 @@ public class ClientController {
         return false;
     }
 
-    public void ProviderCancel(long resID) {
+    public void ProviderCancel(long timeIntervalID) {
         NetworkPackage NP = new NetworkPackage();
-        NP.addEntry("PROVIDERCANCEL", resID);
+        NP.addEntry("PROVIDERCANCEL", timeIntervalID);
         try {
             clientCommunicator.sendPackage(NP);
         } catch (IOException e) {
@@ -286,7 +285,7 @@ public class ClientController {
         }
     }
 
-    public void RenterCancel (long resID) {
+    public void RenterCancel(long resID) {
         NetworkPackage NP = new NetworkPackage();
         NP.addEntry("RENTERCANCEL", resID);
         try {
@@ -300,8 +299,16 @@ public class ClientController {
         return reservations.get(position);
     }
 
-    public void submitReview(Review rev) {
-
+    public void submitReview(long reservationID, int rating, String comment) {
+        HashMap<String, Serializable> map = new HashMap<>();
+        map.put("RESERVATIONID", reservationID);
+        map.put("REVIEWDESCRIPTION", comment);
+        map.put("RATING", rating);
+        try {
+            clientCommunicator.send("REVIEW", map);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void report(Reservation res) {
@@ -540,7 +547,10 @@ public class ClientController {
 
     public void logout(boolean userType) {
         NetworkPackage NP = new NetworkPackage();
-        NP.addEntry("LOGOUT", userType);
+        HashMap<String, Serializable> map = new HashMap<>();
+        map.put("USERID", user.userID);
+        map.put("USERTYPE", userType);
+        NP.addEntry("LOGOUT", map);
         try {
             clientCommunicator.sendPackage(NP);
         } catch (IOException e) {

@@ -22,10 +22,10 @@ import android.widget.Toast;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 
 import java.io.Serializable;
 
@@ -112,17 +112,14 @@ public class AddSpaceFragment extends Fragment {
         _btn_add_address.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 try {
-                    Log.d("AUTOCOMPLETE", "ONCLICK");
+                    AutocompleteFilter typeFilter = new AutocompleteFilter.Builder().setCountry("US").build();
+
                     Intent intent =
                             new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
-                                    .setBoundsBias(new LatLngBounds(
-                                            new LatLng(44.901184 ,-67.32254),
-                                            new LatLng(32.6393, -117.004304)))
+                                    .setFilter(typeFilter)
                                     .build(getActivity());
 
                     startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
-                    Log.d("AUTOCOMPLETE", "ONCLICK LAST");
-
                 } catch (GooglePlayServicesRepairableException e) {
                     // TODO: Handle the error.
                 } catch (GooglePlayServicesNotAvailableException e) {

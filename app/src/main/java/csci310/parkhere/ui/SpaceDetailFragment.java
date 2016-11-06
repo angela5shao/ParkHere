@@ -70,7 +70,7 @@ public class SpaceDetailFragment extends Fragment {
     CustomCalendarView calendarView;
     final String disabledDateColor = "#c3c3c3";
     final String selectedDateColor = "#3e50b4";
-    final String postedDateColor = "#3e50b4";
+    final String postedDateColor = "#009688";
 
     Calendar currentCalendar;
     List<DayDecorator> decorators = new ArrayList<>();
@@ -86,6 +86,7 @@ public class SpaceDetailFragment extends Fragment {
     // Store currSpaceTimeIntervals in GregorianCalendar in startTime, endTime order
     ArrayList<GregorianCalendar> postedSpaceTimeIntervalsGC = new ArrayList<GregorianCalendar>();
 
+    Date currSelectedDate;
     Date selectedStartDate;
     Date selectedEndDate;
 
@@ -102,7 +103,7 @@ public class SpaceDetailFragment extends Fragment {
 //    TimeInterval interval1 = new TimeInterval(start1, end1);
 //    //*******************************************************************************
 
-    Button _btn_add_space, _btn_start_time, _btn_end_time, _btn_add_confirm, _btn_delete_time;
+    Button _btn_add_time, _btn_start_time, _btn_end_time, _btn_add_confirm, _btn_delete_time;
     LinearLayout _addTimeForSpaceLayout;
     EditText _in_start_date, _in_start_time, _in_end_date, _in_end_time, _in_price;
     ListView _timeList;
@@ -169,16 +170,20 @@ public class SpaceDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_space_detail, container, false);
 
-
         _spacedetail_address = (TextView)v.findViewById(R.id.spacedetail_address);
         _spacedetail_address.setText(address);
 
         _addTimeForSpaceLayout = (LinearLayout) v.findViewById(R.id.addTimeForSpaceLayout);
 
-        _btn_add_space=(Button)v.findViewById(R.id.btn_add_space);
-        _btn_add_space.setOnClickListener(new View.OnClickListener() {
+        _btn_add_time=(Button)v.findViewById(R.id.btn_add_time);
+        _btn_add_time.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                _addTimeForSpaceLayout.setVisibility(View.VISIBLE);
+                if(_addTimeForSpaceLayout.getVisibility()==View.GONE) {
+                    _addTimeForSpaceLayout.setVisibility(View.VISIBLE);
+                }
+                else {
+                    _addTimeForSpaceLayout.setVisibility(View.GONE);
+                }
             }
         });
 
@@ -249,68 +254,74 @@ public class SpaceDetailFragment extends Fragment {
 //        System.out.println("SpaceDetailFragment for spaceID: " + thisParkingSpot.getParkingSpotID());
 
 
-        //Handling custom calendar events
+        // Handling custom calendar events
         calendarView.setCalendarListener(new CalendarListener() {
             @Override
             public void onDateSelected(Date date) {
-                if (selectedStartDate == null) {
-                    selectedStartDate = date;
-                    _in_start_date.setText(dateFormat.format(selectedStartDate));
+                currSelectedDate = date;
+                GetPostedTimeOnDateTask GPTODTask = new GetPostedTimeOnDateTask(currSelectedDate);
+                GPTODTask.execute((Void) null);
 
-                    decorators.clear();
-                    decorators.add(new DisabledColorDecorator());
-                    decorators.add(new PostedColorDecorator());
-                    calendarView.setDecorators(decorators);
-                    currentCalendar.setTime(selectedStartDate);
-                    calendarView.refreshCalendar(currentCalendar);
-                    currSpaceTimeIntervals.clear();
-                    currSpaceTimeIntervalsGC.clear();
-                    return;
+                // Check if date is not pasted first
+                if (!CalendarUtils.isPastDay(date)) {
+                    if (selectedStartDate == null) {
+                        selectedStartDate = date;
+                        _in_start_date.setText(dateFormat.format(selectedStartDate));
+
+                        decorators.clear();
+                        decorators.add(new DisabledColorDecorator());
+                        decorators.add(new PostedColorDecorator());
+                        calendarView.setDecorators(decorators);
+                        currentCalendar.setTime(selectedStartDate);
+                        calendarView.refreshCalendar(currentCalendar);
+                        currSpaceTimeIntervals.clear();
+                        currSpaceTimeIntervalsGC.clear();
+                        return;
+                    }
+
+                    if (selectedStartDate.compareTo(date) >= 0) {
+                        selectedStartDate = date;
+                        _in_start_date.setText(dateFormat.format(selectedStartDate));
+                    } else {
+                        selectedEndDate = date;
+                        _in_end_date.setText(dateFormat.format(selectedEndDate));
+
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTime(selectedStartDate);
+                        Time timeStart = new Time(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
+
+                        cal.setTime(selectedEndDate);
+                        Time timeEnd = new Time(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
+
+    //                    Log.d("time", selectedStartDate.toString() + " " + selectedEndDate.toString());
+                        Log.d("Month", String.valueOf(cal.get(Calendar.MONTH)) + " " + selectedEndDate.toString());
+
+                        Log.d("time", timeStart.toString() + " " + timeEnd.toString());
+                        inputedStartTime = timeStart;
+                        inputedEndTime = timeEnd;
+
+
+                        TimeInterval timeInterval = new TimeInterval(timeStart, timeEnd);
+                        currSpaceTimeIntervals.add(timeInterval);
+                        updateCurrSpaceTimeIntervalsGC(currSpaceTimeIntervals);
+
+                        decorators.add(new SelectedIntervalColorDecorator());
+                        calendarView.setDecorators(decorators);
+                        currentCalendar.setTime(selectedEndDate);
+                        calendarView.refreshCalendar(currentCalendar);
+
+                        selectedStartDate = null;
+                        selectedEndDate = null;
+                    }
                 }
 
-                if (selectedStartDate.compareTo(date) >= 0) {
-                    selectedStartDate = date;
-                    _in_start_date.setText(dateFormat.format(selectedStartDate));
-                } else {
-                    selectedEndDate = date;
-                    _in_end_date.setText(dateFormat.format(selectedEndDate));
-
-                    Calendar cal = Calendar.getInstance();
-                    cal.setTime(selectedStartDate);
-                    Time timeStart = new Time(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
-
-                    cal.setTime(selectedEndDate);
-                    Time timeEnd = new Time(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
-
-//                    Log.d("time", selectedStartDate.toString() + " " + selectedEndDate.toString());
-                    Log.d("Month", String.valueOf(cal.get(Calendar.MONTH)) + " " + selectedEndDate.toString());
-
-                    Log.d("time", timeStart.toString() + " " + timeEnd.toString());
-                    inputedStartTime = timeStart;
-                    inputedEndTime = timeEnd;
-
-
-
-                    TimeInterval timeInterval = new TimeInterval(timeStart, timeEnd);
-                    currSpaceTimeIntervals.add(timeInterval);
-                    updateCurrSpaceTimeIntervalsGC(currSpaceTimeIntervals);
-
-                    decorators.add(new SelectedColorDecorator());
-                    calendarView.setDecorators(decorators);
-                    currentCalendar.setTime(selectedEndDate);
-                    calendarView.refreshCalendar(currentCalendar);
-
-                    selectedStartDate = null;
-                    selectedEndDate = null;
-                }
-
-                if (!currSpaceTimeIntervals.isEmpty()) {
-                    Log.d("btn_add_space", ".setClickable(true)");
-                    _btn_add_space.setClickable(true);
-                } else {
-                    Log.d("btn_add_space", ".setClickable(false)");
-                    _btn_add_space.setClickable(false);
-                }
+//                if (!currSpaceTimeIntervals.isEmpty()) {
+//                    Log.d("btn_add_space", ".setClickable(true)");
+//                    _btn_add_time.setClickable(true);
+//                } else {
+//                    Log.d("btn_add_space", ".setClickable(false)");
+//                    _btn_add_time.setClickable(false);
+//                }
             }
 
             @Override
@@ -321,6 +332,7 @@ public class SpaceDetailFragment extends Fragment {
         });
 
         //adding calendar day decorators
+        decorators.add(new SelectedColorDecorator());
         decorators.add(new DisabledColorDecorator());
         decorators.add(new PostedColorDecorator());
         calendarView.setDecorators(decorators);
@@ -384,11 +396,25 @@ public class SpaceDetailFragment extends Fragment {
         @Override
         public void decorate(DayView dayView) {
             int color = Color.parseColor(selectedDateColor);
+            if(currSelectedDate != null){
+                if(currSelectedDate.equals(dayView.getDate())) {
+                    dayView.setBackgroundColor(color);
+                    dayView.setTextColor(Color.parseColor("#FFFFFF"));
+                }
+            }
+        }
+    }
+
+    private class SelectedIntervalColorDecorator implements DayDecorator {
+        @Override
+        public void decorate(DayView dayView) {
+            int color = Color.parseColor(selectedDateColor);
             for (int i=0; i<currSpaceTimeIntervalsGC.size(); i+=2) {
                 Date startDate = new Date(currSpaceTimeIntervalsGC.get(i).getTimeInMillis());
                 Date endDate = new Date(currSpaceTimeIntervalsGC.get(i+1).getTimeInMillis());
 
-                if (CalendarUtils.isBetweenDay(dayView.getDate(), startDate, endDate)) {
+                if (_addTimeForSpaceLayout.getVisibility()==View.VISIBLE
+                        && CalendarUtils.isBetweenDay(dayView.getDate(), startDate, endDate)) {
                     dayView.setBackgroundColor(color);
                     dayView.setTextColor(Color.parseColor("#FFFFFF"));
                 }
@@ -448,8 +474,11 @@ public class SpaceDetailFragment extends Fragment {
 
     // update ListView timeList
     public void setTimeListview(String[] inTimeList) {
+        Log.d("SpaceDetailFragment ", "setTimeListview CALLED - ");
         _timeList.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, inTimeList));
         DiplayListViewHelper.getListViewSize(_timeList);
+
+        _btn_delete_time.setVisibility(View.GONE);
     }
 
     //GregorianCalendar(int year, int month, int dayOfMonth, int hourOfDay, int minute)
@@ -511,7 +540,7 @@ public class SpaceDetailFragment extends Fragment {
             _addTimeForSpaceLayout.setVisibility(View.GONE);
         }
         @Override
-        protected Boolean doInBackground(Void... params ){
+        protected Boolean doInBackground(Void... params){
             // call client controller
             ClientController controller = ClientController.getInstance();
 
@@ -572,7 +601,7 @@ public class SpaceDetailFragment extends Fragment {
         protected Boolean doInBackground(Void... params ){
             // call client controller
             ClientController controller = ClientController.getInstance();
-            System.out.println("DELETE TIME ID: "+ curr_selected_time_id);
+            System.out.println("DELETE TIME ID: " + curr_selected_time_id);
             controller.ProviderCancel(curr_selected_time_id);
 
             NetworkPackage NP = controller.checkReceived();
@@ -580,9 +609,11 @@ public class SpaceDetailFragment extends Fragment {
             String key = entry.getKey();
             Object value = entry.getValue();
             if(key.equals("CANCELTIME")) {
+                Log.d("CANCELTIME ", "received");
                 return true;
             }
             else if(key.equals("CANCELTIMEFAIL")) {
+                Log.d("CANCELTIMEFAIL ", "received");
                 return false;
             }
             else {
@@ -603,9 +634,54 @@ public class SpaceDetailFragment extends Fragment {
 
             } else{
                 progressDialog.dismiss();
-                Toast.makeText(getContext(), "Delete space failed! Please try agian.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Delete time failed! Please try agian.", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private class GetPostedTimeOnDateTask extends AsyncTask<Void, Void, ArrayList<TimeInterval> >{
+        private Date mDate;
+
+        GetPostedTimeOnDateTask(Date date){
+            mDate = date;
+            Log.d("SpaceDetailFragment ", "GetPostedTimeOnDateTask CALLED - "+mDate.toString());
+        }
+        @Override
+        protected void onPreExecute(){
+            //
+        }
+        @Override
+        protected ArrayList<TimeInterval> doInBackground(Void... params){
+            //dd-mm-yyyy
+            Calendar mCal = Calendar.getInstance();
+            mCal.setTime(mDate);
+            String date = mCal.get(Calendar.DAY_OF_MONTH)+"-"+mCal.get(Calendar.MONTH)+"-"+mCal.get(Calendar.YEAR);
+
+            ClientController controller = ClientController.getInstance();
+            Log.d("SpaceDetailFragment ", "GetPostedTimeOnDateTask doInBackground - "+thisParkingSpot.getParkingSpotID());
+            //requestSpotTimeIntervalWithDate(long spotID, String date)
+            return controller.requestSpotTimeIntervalWithDate(thisParkingSpot.getParkingSpotID(), date);
+        }
+        @Override
+        protected void onPostExecute(ArrayList<TimeInterval> inTimeInterval) {
+            if(inTimeInterval != null) {
+                Log.d("SpaceDetailFragment ",
+                        "GetPostedTimeOnDateTask onPostExecute inTimeInterval !NULL - "+inTimeInterval.size());
+
+                String[] timeList = new String[inTimeInterval.size()];
+                for(int i=0; i<inTimeInterval.size(); ++i) {
+                    String timeIntervalString = inTimeInterval.get(i).startTime.toString()
+                                + " ~ "
+                                + inTimeInterval.get(i).endTime.toString();
+
+                    timeList[i] = timeIntervalString;
+                }
+
+                Log.d("SpaceDetailFragment ", "GetPostedTimeOnDateTask onPostExecute setTimeListview(timeList) CALLED");
+                setTimeListview(timeList);
+            }
+        }
+
     }
 
 }

@@ -147,8 +147,13 @@ public void onCreate(Bundle savedInstanceState) {
 
 
                 System.out.println(mParam2+ " "+mParam3+" "+mParam4+" "+mParam5);
-                Time startTime = new Time(mParam2+" "+mParam3 + "-0");
-                Time endTime = new Time(mParam4+" "+mParam5+"-0");
+                String[] startDate1 = mParam2.split("\\D");
+                String[] endDate1 = mParam4.split("\\D");
+                String startDateStr = startDate1[1] + "-" + startDate1[0] + "-" +startDate1[2];
+                String endDateStr = endDate1[1] + "-" + endDate1[0] + "-" +endDate1[2];
+
+                Time startTime = new Time(startDateStr+" "+mParam3 + "-0");
+                Time endTime = new Time(endDateStr+" "+mParam5+"-0");
                 TimeInterval timeInterval = new TimeInterval(startTime,endTime);
                 RenterReserveTask RRT = new RenterReserveTask(mParkingSpot.getParkingSpotID(), timeInterval,  ClientController.getInstance().getUser().userID);
                 RRT.execute((Void) null);

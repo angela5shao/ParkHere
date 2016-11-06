@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -65,9 +66,9 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         searchFragment = new SearchFragment();
         privateProfileFragment = new PrivateProfileFragment();
         editProfileFragment = new EditProfileFragment();
-        displaySearchFragment = new DisplaySearchFragment();
-        reservationsFragment = new ReservationsFragment();
-        searchSpaceDetailFragment = new SearchSpaceDetailFragment();
+//        displaySearchFragment = new DisplaySearchFragment();
+//        reservationsFragment = new ReservationsFragment();
+//        searchSpaceDetailFragment = new SearchSpaceDetailFragment();
 
         _resLink = (LinearLayout) findViewById(R.id.resLink);
         _searchLink = (LinearLayout) findViewById(R.id.searchLink);
@@ -84,16 +85,14 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         _resLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                RequestReservationsTask RRT = new RequestReservationsTask();
-//                RRT.execute((Void) null);
+                RequestReservationsTask RRT = new RequestReservationsTask();
+                RRT.execute((Void) null);
 
 
-                fragmentTransaction = fm.beginTransaction();
-                fragmentTransaction.replace(R.id.fragContainer, reservationsFragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+
             }
         });
+
 
         _searchLink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,29 +173,6 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 
     }
 
-//    public void displaySearchResult(SearchResults results) {
-//        if(results == null)
-//            return;
-//
-//
-//        ArrayList<ParkingSpot> spotList = results.searchResultList;
-//
-//        String[] searchResults = new String[spotList.size()];
-//        for(int i = 0; i < spotList.size(); i++)
-//        {
-//            searchResults[i] = spotList.get(i).getDescription();
-//        }
-//
-//        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
-//        if (fragment instanceof DisplaySearchFragment) {
-//            ((DisplaySearchFragment) fragment).setSearchResultListview(searchResults);
-//        }
-//
-//        fragmentTransaction = fm.beginTransaction();
-//        fragmentTransaction.replace(R.id.fragContainer, displaySearchFragment);
-//        fragmentTransaction.addToBackStack(null);
-//        fragmentTransaction.commit();
-//    }
 
     public void displaySearchResult(SearchResults results, String startDate, String startTime, String endDate, String endTime) {
         if (results == null)
@@ -208,12 +184,6 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         for (int i = 0; i < spotList.size(); i++) {
             searchResults[i] = spotList.get(i).getDescription();
         }
-//        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
-//        if (fragment instanceof DisplaySearchFragment) {
-//            Log.d("SEARCH_RESULT", "To setSearchResultListview");
-//
-//            ((DisplaySearchFragment) fragment).setSearchResultListview(searchResults, startDate, startTime, endDate, endTime);
-//        }
 
 
         Log.d("SEARCH_RESULT", "To displaySearchFragment");
@@ -338,6 +308,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 //                clientController.setSpotTimeInterval(spotID,myTimeIntervals);
 
                 ArrayList<Reservation> list = (ArrayList<Reservation>) value;
+                Log.d("FETCHRESERVATIONLIST", "listsize: " + String.valueOf(list.size()));
 
 
                 return list;
@@ -350,25 +321,32 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         protected void onPostExecute(ArrayList<Reservation> list) {
             if (list != null) {
                 clientController.reservations = list;
+                reservationsFragment = new ReservationsFragment();
+                fragmentTransaction = fm.beginTransaction();
+                fragmentTransaction.replace(R.id.fragContainer, reservationsFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             } else {
-                //Toast.makeText(this, "Error on make reservation! Please try again.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "Error on get reservations! Please try again.", Toast.LENGTH_SHORT).show();
             }
+
+
         }
 
-        // Implements DisplaySearchFragment
-        public void onSearchSpaceSelected(int position, String startDate, String startTime, String endDate, String endTime) {
-            // Pass position in searchResultList to searchSpaceDetailFragment
-            Bundle bundle = new Bundle();
-            bundle.putInt("position", position);
-            bundle.putString("param2", startDate);
-            bundle.putString("param3", startTime);
-            bundle.putString("param4", endDate);
-            bundle.putString("param5", endTime);
-            searchSpaceDetailFragment.setArguments(bundle);
-
-            fragmentTransaction.replace(R.id.fragContainer, searchSpaceDetailFragment);
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
-        }
+//        // Implements DisplaySearchFragment
+//        public void onSearchSpaceSelected(int position, String startDate, String startTime, String endDate, String endTime) {
+//            // Pass position in searchResultList to searchSpaceDetailFragment
+//            Bundle bundle = new Bundle();
+//            bundle.putInt("position", position);
+//            bundle.putString("param2", startDate);
+//            bundle.putString("param3", startTime);
+//            bundle.putString("param4", endDate);
+//            bundle.putString("param5", endTime);
+//            searchSpaceDetailFragment.setArguments(bundle);
+//
+//            fragmentTransaction.replace(R.id.fragContainer, searchSpaceDetailFragment);
+//            fragmentTransaction.addToBackStack(null);
+//            fragmentTransaction.commit();
+//        }
     }
 }

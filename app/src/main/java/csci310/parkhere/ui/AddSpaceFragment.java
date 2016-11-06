@@ -116,8 +116,8 @@ public class AddSpaceFragment extends Fragment {
                     Intent intent =
                             new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
                                     .setBoundsBias(new LatLngBounds(
-                                            new LatLng(32.6393, -117.004304),
-                                            new LatLng(44.901184 ,-67.32254)))
+                                            new LatLng(44.901184 ,-67.32254),
+                                            new LatLng(32.6393, -117.004304)))
                                     .build(getActivity());
 
                     startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
@@ -163,7 +163,9 @@ public class AddSpaceFragment extends Fragment {
             if (resultCode == Activity.RESULT_OK) {
                 Place place = PlaceAutocomplete.getPlace(getContext(), data);
 
-                Log.d("GOOGLE MAP PLACE", "Here");
+                Log.i("AddSpaceFragment ", "Place: " + place.getName());
+                Log.i("AddSpaceFragment ", "Place LatLng: " + place.getLatLng().toString());
+
                 _addressText.setText(place.getAddress());
                 curr_location = place.getLatLng();
 

@@ -465,27 +465,41 @@ public class ClientController {
         }
     }
 
-    public void requestSpotTimeIntervalWithDate(ParkingSpot spot, String Date) {
-        if(user == null && spot == null)
-        {
-            return;
+    public ArrayList<TimeInterval> requestSpotTimeIntervalWithDate(long spotID, String date) {
+        ArrayList<TimeInterval> list = new ArrayList<TimeInterval>();
+        Time TestStart = new Time(date+" 0:0:0");
+        Time TestEnd = new Time(date+" 23:59:59");
+        Log.d("TEST1", TestStart.toString());
+        Log.d("TEST2", TestEnd.toString());
+        for(int i = 0; i < parkingSpots.size(); i++) {
+            ParkingSpot spot = parkingSpots.get(i);
+            if(spot.getParkingSpotID() == spotID) {
+                ArrayList<TimeInterval> list2 = spot.getTimeIntervalList();
+                Log.d("TEST3", String.valueOf(list2.size()));
+                for(int k = 0; k <list2.size(); k++){
+                    String startTime1 = list2.get(k).startTime.toString();
+                    String[] startTime11 = startTime1.split(" ");
+                    String startTime111 = startTime11[0]+" 0:0:0";
+                    Time start = new Time(startTime111);
+                    String endTime1 = list2.get(k).endTime.toString();
+                    Log.d("TEST4", startTime1+" "+endTime1);
+                    String[] endTime11 = endTime1.split(" ");
+                    String endTime111 = endTime11[0]+" 23:59:59";
+                    Time end = new Time(endTime111);
+                    Log.d("TEST5", end.toString()+" "+start.toString()+" "+TestStart.toString()+" "+TestEnd.toString());
+                    if(start.compareTo(TestStart)<=0){
+                        if(end.compareTo(TestEnd)>=0){
+                            list.add(list2.get(k));
+                        }
+                    }
+                }
+            }
         }
-        NetworkPackage NP = new NetworkPackage();
-        HashMap<String, Serializable> map = new HashMap<String, Serializable>();
-        map.put("PARKINGSPOTID", spot.getParkingSpotID());
-        map.put("DATE", Date);
-        NP.addEntry("FETCHTIMEINTERVALWITHDATE", map);
-        try {
-            clientCommunicator.sendPackage(NP);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        return list;
     }
 
-    public void setSpotTimeInterval(long spotID, ArrayList<TimeInterval> intervals)
-    {
-        for(int i = 0; i < parkingSpots.size(); i++)
-        {
+    public void setSpotTimeInterval(long spotID, ArrayList<TimeInterval> intervals) {
+        for(int i = 0; i < parkingSpots.size(); i++) {
             ParkingSpot spot = parkingSpots.get(i);
             if(spot.getParkingSpotID() == spotID)
             {

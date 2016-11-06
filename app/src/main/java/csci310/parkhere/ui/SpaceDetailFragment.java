@@ -3,7 +3,6 @@ package csci310.parkhere.ui;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -29,7 +28,6 @@ import com.imanoweb.calendarview.CustomCalendarView;
 import com.imanoweb.calendarview.DayDecorator;
 import com.imanoweb.calendarview.DayView;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -47,7 +45,6 @@ import resource.NetworkPackage;
 import resource.ParkingSpot;
 import resource.Time;
 import resource.TimeInterval;
-import resource.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -262,6 +259,8 @@ public class SpaceDetailFragment extends Fragment {
             @Override
             public void onDateSelected(Date date) {
                 currSelectedDate = date;
+                GetPostedTimeOnDateTask GPTODTask = new GetPostedTimeOnDateTask(currSelectedDate);
+                GPTODTask.execute((Void) null);
 
                 // Check if date is not pasted first
                 if (!CalendarUtils.isPastDay(date)) {
@@ -414,7 +413,8 @@ public class SpaceDetailFragment extends Fragment {
                 Date startDate = new Date(currSpaceTimeIntervalsGC.get(i).getTimeInMillis());
                 Date endDate = new Date(currSpaceTimeIntervalsGC.get(i+1).getTimeInMillis());
 
-                if (CalendarUtils.isBetweenDay(dayView.getDate(), startDate, endDate)) {
+                if (_addTimeForSpaceLayout.getVisibility()==View.VISIBLE
+                        && CalendarUtils.isBetweenDay(dayView.getDate(), startDate, endDate)) {
                     dayView.setBackgroundColor(color);
                     dayView.setTextColor(Color.parseColor("#FFFFFF"));
                 }
@@ -474,8 +474,11 @@ public class SpaceDetailFragment extends Fragment {
 
     // update ListView timeList
     public void setTimeListview(String[] inTimeList) {
+        Log.d("SpaceDetailFragment ", "setTimeListview CALLED - ");
         _timeList.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, inTimeList));
         DiplayListViewHelper.getListViewSize(_timeList);
+
+        _btn_delete_time.setVisibility(View.GONE);
     }
 
     //GregorianCalendar(int year, int month, int dayOfMonth, int hourOfDay, int minute)
@@ -606,9 +609,11 @@ public class SpaceDetailFragment extends Fragment {
             String key = entry.getKey();
             Object value = entry.getValue();
             if(key.equals("CANCELTIME")) {
+                Log.d("CANCELTIME ", "received");
                 return true;
             }
             else if(key.equals("CANCELTIMEFAIL")) {
+                Log.d("CANCELTIMEFAIL ", "received");
                 return false;
             }
             else {
@@ -634,26 +639,47 @@ public class SpaceDetailFragment extends Fragment {
         }
     }
 
-    private class GetPostedTimeOnDateTask extends AsyncTask<Void, Void, Void>{
+    private class GetPostedTimeOnDateTask extends AsyncTask<Void, Void, ArrayList<TimeInterval> >{
         private Date mDate;
 
         GetPostedTimeOnDateTask(Date date){
             mDate = date;
-            System.out.println(mDate.toString());
+            Log.d("SpaceDetailFragment ", "GetPostedTimeOnDateTask CALLED - "+mDate.toString());
         }
         @Override
         protected void onPreExecute(){
             //
         }
         @Override
-        protected Void doInBackground(Void... params){
+        protected ArrayList<TimeInterval> doInBackground(Void... params){
+            //dd-mm-yyyy
+            Calendar mCal = Calendar.getInstance();
+            mCal.setTime(mDate);
+            String date = mCal.get(Calendar.DAY_OF_MONTH)+"-"+mCal.get(Calendar.MONTH)+"-"+mCal.get(Calendar.YEAR);
+
             ClientController controller = ClientController.getInstance();
-            controller.requestSpotTimeIntervalWithDate(ParkingSpot spot, String Date);
-            return null;
+            Log.d("SpaceDetailFragment ", "GetPostedTimeOnDateTask doInBackground - "+thisParkingSpot.getParkingSpotID());
+            //requestSpotTimeIntervalWithDate(long spotID, String date)
+            return controller.requestSpotTimeIntervalWithDate(thisParkingSpot.getParkingSpotID(), date);
         }
         @Override
-        protected void onPostExecute() {
-            //
+        protected void onPostExecute(ArrayList<TimeInterval> inTimeInterval) {
+            if(inTimeInterval != null) {
+                Log.d("SpaceDetailFragment ",
+                        "GetPostedTimeOnDateTask onPostExecute inTimeInterval !NULL - "+inTimeInterval.size());
+
+                String[] timeList = new String[inTimeInterval.size()];
+                for(int i=0; i<inTimeInterval.size(); ++i) {
+                    String timeIntervalString = inTimeInterval.get(i).startTime.toString()
+                                + " ~ "
+                                + inTimeInterval.get(i).endTime.toString();
+
+                    timeList[i] = timeIntervalString;
+                }
+
+                Log.d("SpaceDetailFragment ", "GetPostedTimeOnDateTask onPostExecute setTimeListview(timeList) CALLED");
+                setTimeListview(timeList);
+            }
         }
 
     }

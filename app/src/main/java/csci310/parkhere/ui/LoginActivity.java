@@ -101,6 +101,7 @@ public class LoginActivity extends Activity {
 
                 Log.d("LOGIN", "ASYNTASK LOGIN");
                 clientController.login(email, password);
+//                clientController.cancelReceived();
                 NetworkPackage NP = clientController.checkReceived();
 
                 if(NP == null)

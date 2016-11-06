@@ -379,7 +379,7 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
             clientController.providerToshowSpaces = true;
             clientController.parkingSpots = list;
 
-            spacesFragment = new SpacesFragment();
+//            spacesFragment = new SpacesFragment();
 
             Log.d("requestParkingSpots", "onPostExecute");
             showSpaceFragment();

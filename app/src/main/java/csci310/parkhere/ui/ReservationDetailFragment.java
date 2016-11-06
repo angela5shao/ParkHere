@@ -1,38 +1,39 @@
 package csci310.parkhere.ui;
 
-        import android.content.Context;
-        import android.net.Uri;
-        import android.os.AsyncTask;
-        import android.os.Bundle;
-        import android.support.v4.app.Fragment;
-        import android.view.LayoutInflater;
-        import android.view.View;
-        import android.view.ViewGroup;
-        import android.widget.Button;
-        import android.widget.TextView;
-        import android.widget.Toast;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RatingBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
-        import com.google.android.gms.games.internal.GamesContract;
-        import com.google.android.gms.maps.CameraUpdateFactory;
-        import com.google.android.gms.maps.GoogleMap;
-        import com.google.android.gms.maps.MapsInitializer;
-        import com.google.android.gms.maps.OnMapReadyCallback;
-        import com.google.android.gms.maps.SupportMapFragment;
-        import com.google.android.gms.maps.model.CameraPosition;
-        import com.google.android.gms.maps.model.LatLng;
-        import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-        import java.io.Serializable;
-        import java.util.ArrayList;
-        import java.util.HashMap;
+import java.io.Serializable;
 
-        import csci310.parkhere.R;
-        import csci310.parkhere.controller.ClientController;
-        import resource.MyEntry;
-        import resource.NetworkPackage;
-        import resource.ParkingSpot;
-        import resource.Reservation;
-        import resource.TimeInterval;
+import csci310.parkhere.R;
+import csci310.parkhere.controller.ClientController;
+import resource.MyEntry;
+import resource.NetworkPackage;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,7 +60,7 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
     CameraPosition cameraPosition;
 
     TextView _spacedetail_address, _start_time_label, _end_time_label, _renter_username_label;
-    Button _btn_cancel;
+    Button _btn_review, _btn_cancel;
 
     // latitude and longitude (default as USC)
     private double curr_lat = 34.0224;
@@ -68,6 +69,7 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
     private String start_time = "[start time]";
     private String end_time = "[end time]";
     private String renter_username = "[renter username]";
+    private long res_id = 0;
 
     public ReservationDetailFragment() {
         // Required empty public constructor
@@ -104,6 +106,7 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
             start_time = b.getString("START_TIME");
             end_time = b.getString("END_TIME");
             renter_username = b.getString("RENTER");
+            res_id = b.getLong("RES_ID");
         }
     }
 
@@ -117,6 +120,7 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
         _start_time_label=(TextView)v.findViewById(R.id.start_time_label);
         _end_time_label=(TextView)v.findViewById(R.id.end_time_label);
         _renter_username_label=(TextView)v.findViewById(R.id.renter_username_label);
+        _btn_review=(Button)v.findViewById(R.id.btn_review);
         _btn_cancel=(Button)v.findViewById(R.id.btn_cancel);
 
         _spacedetail_address.setText(address);
@@ -146,11 +150,41 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
         cameraPosition = new CameraPosition.Builder()
                 .target(new LatLng(curr_lat, curr_long)).zoom(12).build();
 
+        _btn_review.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create custom dialog object
+                final Dialog reviewDialog = new Dialog(getActivity());
+                reviewDialog.setContentView(R.layout.dialog_review);
+                reviewDialog.setTitle("Review");
+
+                final RatingBar _ratingBar=(RatingBar)reviewDialog.findViewById(R.id.ratingBar);
+                Drawable stars = _ratingBar.getProgressDrawable();
+                stars.setTint(Color.YELLOW);
+                final EditText _commentDialog=(EditText)reviewDialog.findViewById(R.id.commentDialog);
+                Button _btn_confirm=(Button)reviewDialog.findViewById(R.id.btn_confirm);
+                _btn_confirm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Send to controller
+                        AddReviewTask ART = new AddReviewTask(_ratingBar.getRating(),
+                                                    _commentDialog.getText().toString());
+                        ART.execute((Void) null);
+
+                        // Close dialog
+                        reviewDialog.dismiss();
+                    }
+                });
+                reviewDialog.show();
+            }
+        });
+
         _btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // call Client Controller for cancelling reservaiton
-
+                RenterCancelTask RCT = new RenterCancelTask(res_id);
+                RCT.execute((Void) null);
             }
         });
 
@@ -235,13 +269,7 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
 
         RenterCancelTask(long resID){
             this.resID = resID;
-//            doInBackground((Void) null);
         }
-
-//        @Override
-//        protected void onPreExecute(){
-//            clientController.providerToshowSpacesDetail = true;
-//        }
 
         @Override
         protected Long doInBackground(Void... params ){
@@ -252,21 +280,18 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
             String key = entry.getKey();
             Object value = entry.getValue();
             if(key.equals("CANCELRESERVATION")){
-//                HashMap<String, Serializable> map = (HashMap<String, Serializable>) value;
-//                ArrayList<TimeInterval> myTimeIntervals = (ArrayList<TimeInterval>) map.get("TIMEINTERVAL");
-//                Long spotID = (Long)map.get("PARKINGSPOTID");
-//                clientController.setSpotTimeInterval(spotID,myTimeIntervals);
                 long reservationID = (long) value;
                 return reservationID;
-            } else if(key.equals("CANCELRESERVATION")){
+            } else if(key.equals("CANCELRESERVATIONFAIL")){
+                Log.d("ReservationDetail ","CANCELRESERVATIONFAIL");
                 return (long)-1;
             }
+            Log.d("ReservationDetail ","END OF doInBackground");
             return (long)-1;
         }
 
         @Override
         protected void onPostExecute(Long resID) {
-
             if(resID >= 0){
                 ClientController clientcontroller = ClientController.getInstance();
                 for(int i = 0; i<clientcontroller.reservations.size(); i++){
@@ -276,7 +301,59 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
                 }
                 mListener.returnToReservationsFragment();
             } else{
-                Toast.makeText(getContext(), "Error on cancel reservation! Please try again.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Error on cancel reservation!", Toast.LENGTH_SHORT).show();
+                // back to reservation detail
+            }
+        }
+    }
+
+    private class AddReviewTask extends AsyncTask<Void, Void, Boolean> {
+        private int mRating;
+        private String mComment;
+        ProgressDialog progressDialog;
+
+        AddReviewTask(float inRating, String inComment){
+            mRating = (int) inRating;
+            mComment = inComment;
+
+            Log.d("Reservation Detail: ", "AddReviewTask.mRating = "+inRating);
+        }
+
+        @Override
+        protected void onPreExecute(){
+            //Display a progress dialog
+            progressDialog = new ProgressDialog(getActivity(),
+                    R.style.AppTheme);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Adding...");
+            progressDialog.show();
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params ){
+            ClientController clientController = ClientController.getInstance();
+            clientController.addReview(spotID, mRating, mComment);
+            NetworkPackage NP = clientController.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if(key.equals("")){
+
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean ifAdded) {
+            if(ifAdded){
+                progressDialog.dismiss();
+
+//                mListener.returnToReservationsFragment();
+            }
+            else{
+                progressDialog.dismiss();
+                Toast.makeText(getContext(), "Review cannot be added! Please try agian.", Toast.LENGTH_SHORT).show();
                 // back to reservation detail
             }
         }

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:textAlignment="center">
+    <TextView
+        android:id="@+id/review_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/rating_label"
+        android:textSize="24dp"
+        android:layout_centerHorizontal="true"/>
+
+    <RatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="5"
+        android:stepSize="1.0"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/review_label"/>
+
+    <EditText
+        android:id="@+id/commentDialog"
+        android:layout_width="fill_parent"
+        android:layout_height="200dp"
+        android:hint="@string/comment_label"
+        android:textColor="@color/colorSubFont"
+        android:layout_below="@+id/ratingBar"
+        android:layout_margin="8dp"/>
+
+    <Button
+        android:id="@+id/btn_confirm"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="@string/confirm_label"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_below="@+id/commentDialog"
+        android:layout_centerHorizontal="true"/>
+</RelativeLayout>

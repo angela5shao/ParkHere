@@ -18,8 +18,13 @@ import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
 import resource.ParkingSpot;
 import resource.Reservation;
+import resource.SearchResults;
 import resource.Time;
-import resource.TimeInterval;
+
+import java.util.Calendar;
+import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -100,18 +105,23 @@ public class ReservationsFragment extends ListFragment implements AdapterView.On
         getListView().setOnItemClickListener(this);
 
         ClientController controller = ClientController.getInstance();
-        ArrayList<Reservation> reservations = controller.reservations;
-        ParkingSpot spot = new ParkingSpot(controller.getUser().userID, null, 0, 0, "Tuscany 101, 10 Figueroa", "", "90007", 0x0001,0);
-        Time start =  new Time(2016, 2, 29, 4, 30, 0);
-			Time end = new Time(2016, 2 ,29, 5, 0,0);
-			Time start1 =  new Time(2016, 12, 29, 4, 0, 0);
-			Time end1 = new Time(2016,12,29, 5, 0,0);
-			TimeInterval timeInterval1 = new TimeInterval(start, end);
-			TimeInterval timeInterval2 = new TimeInterval(start1, end1);
-        reservations.add(new Reservation(0123, controller.getUser().userID, 789, spot, timeInterval1, 50.00, false));
-        reservations.add(new Reservation(0123, controller.getUser().userID, 789, spot, timeInterval2, 75.00, false));
+        ArrayList<Reservation> original_reservations = controller.reservations;
 
-        ArrayList<String> listString = new ArrayList<>();
+
+        String timeStamp = new SimpleDateFormat("d-M-yyyy HH:mm:ss").format(Calendar.getInstance().getTime());
+        Time currentTime = new Time(timeStamp);
+        ArrayList<Reservation> reservations = sortReservationListByStartTime(original_reservations);
+        ArrayList<Reservation> passedReservations = new ArrayList<Reservation>();
+        ArrayList<Reservation> futureReservations = new ArrayList<Reservation>();
+        for(int i = 0; i<reservations.size();i++){
+            if(currentTime.compareTo(reservations.get(i).getReserveTimeInterval().endTime)>=0){
+                passedReservations.add(reservations.get(i));
+            }
+            else{
+                futureReservations.add(reservations.get(i));
+            }
+        }
+        ArrayList<String> listString = new ArrayList<String>();
         for(int i = 0 ; i < reservations.size(); i++)
         {
             Log.d("FETCHRESERVATIONLIST","add into list");
@@ -180,4 +190,16 @@ public class ReservationsFragment extends ListFragment implements AdapterView.On
         mAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, clientcontroller.reservations);
     }
 
+
+    public ArrayList<Reservation> sortReservationListByStartTime(ArrayList<Reservation> reservationlist) {
+        if(reservationlist != null) {
+            // ArrayList<ParkingSpot> searchResultList
+            Collections.sort(reservationlist, new Comparator<Reservation>() {
+                public int compare(Reservation r1, Reservation r2) {
+                    return r1.getReserveTimeInterval().startTime.compareTo(r2.getReserveTimeInterval().startTime);
+                }
+            });
+        }
+        return reservationlist;
+    }
 }

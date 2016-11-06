@@ -2,9 +2,13 @@
     <string name="app_name">ParkHere</string>
     <string name="login_signuplink"><u>No account yet? Sign up!</u></string>
     <string name="login_forgotpwlink"><u>Forgot password</u></string>
+    <string name="cancel_label">Cancel</string>
     <string name="search_label">Search</string>
+    <string name="res_label">Reservation</string>
+    <string name="space_label">Space</string>
     <string name="private_profile_label">My profile</string>
     <string name="edit_profile_label">Edit profile</string>
+    <string name="addspace_label">Add space</string>
     <string name="private_profile_username_label">Username: </string>
     <string name="private_profile_pw_label">Password: </string>
     <string name="private_profile_licenesID_label">License ID: </string>
@@ -30,9 +34,34 @@
         <item>Truck</item>
         <item>AnyCarType</item>
     </string-array>
+    <string-array name="search_sort_option_spinner">
+        <item>Sort by distance</item>
+        <item>Sort by price</item>
+        <item>Sort by parking spot rating</item>
+        <item>Sort by provider rating</item>
+    </string-array>
+    <string-array name="cancel_policy_spinner">
+        <item>Free cancellation</item>
+        <item>10% penalty for cancellation</item>
+        <item>15% penalty for cancellation</item>
+    </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="Planets">
+        <item>Sun</item>
+        <item>Mercury</item>
+        <item>Venus</item>
+        <item>Earth</item>
+        <item>Mars</item>
+        <item>Jupiter</item>
+        <item>Saturn</item>
+        <item>Uranus</item>
+        <item>Neptune</item>
+    </string-array>
+
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_display_search">DisplaySearchActivity</string>
+    <string name="title_activity_payment">PaymentActivity</string>
 </resources>

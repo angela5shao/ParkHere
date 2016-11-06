@@ -4,6 +4,14 @@
     android:layout_height="match_parent"
     tools:context="csci310.parkhere.ui.PrivateProfileFragment">
 
+    <!-- TODO: Update blank fragment layout -->
+
+    <!--<TextView-->
+        <!--android:text="My private profile info"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:id="@+id/textView2" />-->
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -72,6 +80,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="username"
+                    android:id="@+id/usernameText"
                     android:layout_alignBottom="@+id/username_label"
                     android:layout_toRightOf="@+id/username_label"
                     android:layout_toEndOf="@+id/username_label"
@@ -109,6 +118,7 @@
                     android:layout_height="wrap_content"
                     android:text="password"
                     android:password="true"
+                    android:id="@+id/pwText"
                     android:layout_alignBottom="@+id/pw_label"
                     android:layout_toRightOf="@+id/pw_label"
                     android:layout_toEndOf="@+id/pw_label"
@@ -145,6 +155,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="licenseID"
+                    android:id="@+id/licenseIDText"
                     android:layout_alignBottom="@+id/licenseID_label"
                     android:layout_toRightOf="@+id/licenseID_label"
                     android:layout_toEndOf="@+id/licenseID_label"
@@ -181,6 +192,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="license plate num"
+                    android:id="@+id/licenseplateText"
                     android:layout_alignBottom="@+id/licensePlate_label"
                     android:layout_toRightOf="@+id/licensePlate_label"
                     android:layout_toEndOf="@+id/licensePlate_label"

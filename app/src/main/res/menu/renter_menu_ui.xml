@@ -3,12 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.RenterActivity">
 
-    <item android:id="@+id/profileLink"
+    <item android:id="@+id/ProviderSwitch"
         android:orderInCategory="100"
         android:title="Switch to Provider"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-    <item android:id="@+id/reservationsLink"
+    <item android:id="@+id/LogOut"
         android:orderInCategory="200"
         android:title="Log Out"
         android:layout_width="wrap_content"

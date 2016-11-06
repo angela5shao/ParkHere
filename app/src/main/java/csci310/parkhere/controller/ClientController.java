@@ -1,16 +1,26 @@
 package csci310.parkhere.controller;
 
+import android.app.Activity;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.widget.Toast;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 import resource.CarType;
+import resource.NetworkPackage;
 import resource.ParkingSpot;
 import resource.Reservation;
 import resource.Review;
+import resource.SearchResults;
+import resource.Time;
 import resource.TimeInterval;
 import resource.User;
 
@@ -20,36 +30,79 @@ public class ClientController {
     private static final long serialVersionUID = 1239123098533917283L;
 
     private User user;
-    private ArrayList<ParkingSpot> parkingSpots;
-    private ArrayList<Reservation> reservations;
-    private ArrayList<Review> reviews;
-    private HashMap<String, Serializable> entry;
+    public ArrayList<ParkingSpot> parkingSpots;
+    public ArrayList<Reservation> reservations;
+    public ArrayList<Review> reviews;
     public ClientCommunicator clientCommunicator;
 
     private static ClientController instance;
 
-    public ClientController() { // private constructor
 
-        Log.d("&&&&&&&&&&&&&&&&& ", "waiting for the somthing wrong0");
-        Log.d("new Tag", "a new tag");
+    private static Activity currentActivity;
+    private static Fragment currentFragment;
+
+    public int currentIndexofSpaces;
+
+    public LatLng currLocation;
+    public SearchResults searchResults;
+
+    public boolean registerFailed;
+    public boolean loginFailed;
+    public boolean toDispaySearch;
+
+    public boolean providerToshowSpaces;
+    public boolean providerToshowSpacesDetail;
+    //new
+    private boolean received;
+    private NetworkPackage NP;
+    //
+
+    private ClientController() throws IOException { // private constructor
+
         user = null;
-        parkingSpots = null;
-        reservations = null;
-        reviews = null;
-        entry = new HashMap<>();
-        Log.d("&&&&&&&&&&&&&&&&& ", "waiting for the somthing wrong1");
-        Log.d("&&&&&&&&&&&&&&&&& ", "waiting for the somthing else wrong1");
-        clientCommunicator = new ClientCommunicator();
+        parkingSpots = new ArrayList<>();
+        reservations = new ArrayList<>();
+        reviews = new ArrayList<>();
+        clientCommunicator = new ClientCommunicator(this);
 
         instance = this;
 
+        registerFailed = false;
+        loginFailed = false;
+        toDispaySearch = false;
+        providerToshowSpaces = false;
+        providerToshowSpacesDetail = false;
+        searchResults = null;
+        currentIndexofSpaces = -1;
+        //new
+        received = false;
+        NP = null;
+        //
     }
 
-    public static ClientController getInstance() {
+    public void setCurrentActivity(Activity ac)
+    {
+        currentActivity = ac;
+    }
+    public void setCurrentFragment(Fragment fr) { currentFragment = fr;}
+
+    public static ClientController getInstance(){
+
         if(instance == null) {
-            instance = new ClientController();
+            try {
+                instance = new ClientController();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+
+            }
         }
         return instance;
+    }
+
+    public static void resetController()
+    {
+//            instance = null;
     }
 
     // Getters
@@ -65,23 +118,22 @@ public class ClientController {
     public void setReviews(ArrayList<Review> rev) { reviews = rev; }
 
     // TODO: Functions for login, signup
-    public long login(String username, String pw) {
-        return 0;
+    public void login(String username, String pw) throws IOException {
+
+        Log.d("LOGIN","Try to Login");
+//        cancelReceived();
+        HashMap<String, Serializable> entry = new HashMap<>();
+        entry.put("USERNAME", username);
+        entry.put("PASSWORD", pw);
+        clientCommunicator.send("LOGIN", entry);
     }
 
     public void register(String username, String pw, String phone, String license, String plate, String usertype, String name) throws IOException {
-        Log.v("############ ", username);
-        Log.v("############ ", pw);
-        Log.v("############ ", phone);
-        Log.v("############ ", license);
-        Log.v("############ ", plate);
-        Log.v("############ ", usertype);
-        Log.v("############ ", name);
-
+        HashMap<String, Serializable> entry = new HashMap<>();
         entry.put("USERNAME", username);
         entry.put("PASSWORD", pw);
         entry.put("NAME", name);
-        entry.put("PHONE", Integer.parseInt(phone));
+        entry.put("PHONE", Long.parseLong(phone));
         entry.put("LICENSE", license);
         entry.put("PLATE", plate);
         boolean usertype_bool;
@@ -94,6 +146,103 @@ public class ClientController {
         clientCommunicator.send("REGISTER", entry);
     }
 
+    //new Functions
+    public void updateReceived(NetworkPackage NP){
+        this.NP = NP;
+        received = true;
+    }
+
+    public void cancelReceived(){
+        received = false;
+        NP = null;
+    }
+
+    public NetworkPackage checkReceived(){
+        while(received == false || NP == null ){
+
+        }
+        received = false;
+        if(NP == null)
+            Log.d("CHECKRECEIVE", "NULL");
+
+
+        return NP;
+    }
+    //new functions for the AsyncTask
+//    public void updateActivity()
+//    {
+//        if(currentActivity instanceof RegisterRenterActivity)
+//        {
+//            RegisterRenterActivity rra = (RegisterRenterActivity)currentActivity;
+//            Log.d("UPDATEACTIVITY", "RegisterRenterActivity");
+//
+//            if(user == null)
+//            {
+//                rra.onRegisterFailed(rra.getApplicationContext());
+//            }
+//            else
+//            {
+//                rra.onRegisterSuccess(rra.getApplicationContext());
+//            }
+//        }
+//        else if(currentActivity instanceof RegisterProviderActivity) {
+//            RegisterProviderActivity rpa = (RegisterProviderActivity)currentActivity;
+//            Log.d("UPDATEACTIVITY", "RegisterProviderActivity");
+//
+//            if(user == null)
+//            {
+//                rpa.onRegisterFailed(rpa.getApplicationContext());
+//            }
+//            else
+//            {
+//                rpa.onRegisterSuccess(rpa.getApplicationContext());
+//            }
+//        }
+//        else if(currentActivity instanceof RenterActivity) {
+//            RenterActivity ra = (RenterActivity)currentActivity;
+////            Log.d("UPDATEACTIVITY", "RenterActivity");
+//
+//            if(toDispaySearch)
+//            {
+//                ra.displaySearchResult(searchResults);
+//                toDispaySearch = false;
+//            }
+//
+//            if(user != null)
+//            {
+////                ra.updateUserInfo(user.getUsername(), "", user.userLicense, user.userPlate);
+//            }
+//        }
+//        else if(currentActivity instanceof ProviderActivity) {
+//            ProviderActivity ra = (ProviderActivity)currentActivity;
+//            if(providerToshowSpaces)
+//            {
+//                ra.showSpaceFragment();
+//                providerToshowSpaces = false;
+//            }
+//
+//            else if(providerToshowSpacesDetail)
+//            {
+//                ra.showSpaceDetailFragment();
+//                providerToshowSpacesDetail = false;
+//            }
+//
+//
+//        }
+//        else if(currentActivity instanceof LoginActivity)
+//        {
+//            LoginActivity la = (LoginActivity)currentActivity;
+//            if(user == null)
+//            {
+//                la.onLoginFailed(la.getApplicationContext());
+//            }
+//            else
+//            {
+//                la.onLoginSuccess(la.getApplicationContext());
+//            }
+//        }
+//    }
+
     public User getProfile(long userID) {
         return null;
     }
@@ -104,10 +253,6 @@ public class ClientController {
 
     // TODO: Functions for provider
 //    public ArrayList<>
-
-    public ArrayList<ParkingSpot> getSpaces(long userID) {
-        return null;
-    }
 
     public boolean addSpace(TimeInterval interval, String address, long userID) {
         return false;
@@ -126,20 +271,33 @@ public class ClientController {
     }
 
     // TODO: Functions for renter
-    public ArrayList<Reservation> getReservations(long userID) {
-        return null;
-    }
 
     public boolean editReservation(long resID) {
         return false;
     }
 
-    public boolean cancelReservation(long resID) {
-        return false;
+    public void ProviderCancel(long resID) {
+        NetworkPackage NP = new NetworkPackage();
+        NP.addEntry("PROVIDERCANCEL", resID);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public Reservation getReservationDetail(long resID) {
-        return null;
+    public void RenterCancel (long resID) {
+        NetworkPackage NP = new NetworkPackage();
+        NP.addEntry("RENTERCANCEL", resID);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Reservation getReservationDetail(int position) {
+        return reservations.get(position);
     }
 
     public void submitReview(Review rev) {
@@ -150,15 +308,273 @@ public class ClientController {
 
     }
 
-    public ArrayList<ParkingSpot> search(String address, int dist, CarType type, TimeInterval interval, int length) {
-        return null;
+    public void search(LatLng location, String startDate, String startTime, String endDate, String endTime, String carType, String distance) throws IOException {
+        currLocation = location;
+        String[] time1 = startDate.split("-");
+        String[] time11 = startTime.split("-");
+        String[] time2 = endDate.split("-");
+        String[] time22 = endTime.split("-");
+        Log.d("time", time1[0] + " " + time1[1] + " "+time1[2]+ " "+ time11[0]+" "+time11[1]+ " "+time2[0] + " " + time2[1] + " "+time2[2]+ " "+ time22[0]+" "+time22[1]+ " " );
+        Time inStartTime = new Time(Integer.parseInt(time1[2]),Integer.parseInt(time1[0]), Integer.parseInt(time1[1]), Integer.parseInt(time11[1]), Integer.parseInt(time11[0]),0);
+        Time inEndTime = new Time(Integer.parseInt(time2[2]),Integer.parseInt(time2[0]), Integer.parseInt(time2[1]), Integer.parseInt(time22[1]), Integer.parseInt(time22[0]),0);
+//        inStartTime.month -=;
+//        inEndTime.month -=1;
+
+
+        TimeInterval timeInterval = new TimeInterval(inStartTime, inEndTime);
+        HashMap<String, Serializable> entry = new HashMap<>();
+        if(location == null)
+        {
+            Toast.makeText(currentActivity.getApplicationContext(), "Please input search address", Toast.LENGTH_SHORT).show();
+
+            return;
+        }
+
+
+        ParkingSpot.Location current_location = new ParkingSpot.Location(location.longitude, location.latitude);
+        entry.put("LOCATION", current_location);
+        entry.put("TIMEINTERVAL", timeInterval);
+        entry.put("CARTYPE", carType);
+        entry.put("DISTANCE", Integer.parseInt(distance.replaceAll("[\\D]", "")));
+        clientCommunicator.send("SEARCH", entry);
     }
+
+    public SearchResults sortSearchResultByPrice() {
+        if(searchResults != null) {
+            // ArrayList<ParkingSpot> searchResultList
+            Collections.sort(searchResults.searchResultList, new Comparator<ParkingSpot>() {
+                public int compare(ParkingSpot p1, ParkingSpot p2) {
+                    return Double.compare(p1.search_price, p2.search_price);
+                }
+            });
+        }
+        return searchResults;
+    }
+
+    public SearchResults sortSearchResultByDist() {
+        if(searchResults != null) {
+            Collections.sort(searchResults.searchResultList, new Comparator<ParkingSpot>() {
+                public int compare(ParkingSpot p1, ParkingSpot p2) {
+                    double p1LatDiff = p1.getLat()-currLocation.latitude;
+                    double p1LongDiff = p1.getLon()-currLocation.longitude;
+                    double p1Dist = Math.sqrt(p1LatDiff*p1LatDiff + p1LongDiff*p1LongDiff);
+
+                    double p2LatDiff = p2.getLat()-currLocation.latitude;
+                    double p2LongDiff = p2.getLon()-currLocation.longitude;
+                    double p2Dist = Math.sqrt(p2LatDiff*p2LatDiff + p2LongDiff*p2LongDiff);
+
+                    return Double.compare(p1Dist, p2Dist);
+                }
+            });
+        }
+        return searchResults;
+    }
+
+    public SearchResults sortSearchResultBySpotRating() {
+        if(searchResults != null) {
+            Collections.sort(searchResults.searchResultList, new Comparator<ParkingSpot>() {
+                public int compare(ParkingSpot p1, ParkingSpot p2) {
+                    return Double.compare(p1.review, p2.review);
+                }
+            });
+        }
+        return searchResults;
+    }
+
+    public SearchResults sortSearchResultByProviderRating() {
+        if(searchResults != null) {
+//            Collections.sort(searchResults.searchResultList, new Comparator<ParkingSpot>() {
+//                public int compare(ParkingSpot p1, ParkingSpot p2) {
+//                    return Double.compare(p1.providerReview, p2.providerReview);
+//                }
+//            });
+        }
+        return searchResults;
+    }
+
+    public void addSpace(LatLng location, String streetAddress, String description, String carType, int cancelPolicy)
+    {
+        if(location == null)
+            return;
+
+        int mCarType = new CarType(carType).findNum();
+        ParkingSpot spot = new ParkingSpot(user.userID,null,location.latitude,location.longitude,streetAddress,description, "",mCarType,cancelPolicy);
+        //public ParkingSpot(long userID, ArrayList<TimeInterval> time, double lat, double lon, String streetAddr, String description, String zipcode, int cartype) {
+        try {
+            clientCommunicator.send("ADD_PARKINGSPOT", spot);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     public boolean book(long spaceID, long userID, TimeInterval interval) {
         return false;
     }
 
-    public void loadPay(String method) {
-
+    public void postPaymentNonceToServer(String paymentMethodNonce)
+    {
+        try {
+            clientCommunicator.send("PAYMENT_SUCCESS", paymentMethodNonce);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
+
+
+
+    public void requestMyReservationList()
+    {
+        if(user == null)
+            return;
+
+        NetworkPackage NP = new NetworkPackage();
+        NP.addEntry("FETCHRESERVATION", user.userID);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void requestMyParkingSpotList()
+    {
+        if(user == null)
+            return;
+
+        NetworkPackage NP = new NetworkPackage();
+        NP.addEntry("FETCHPARKINGSPOT", user.userID);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void requestSpotTimeInterval(ParkingSpot spot)
+    {
+        if(user == null && spot == null)
+        {
+            return;
+        }
+
+        NetworkPackage NP = new NetworkPackage();
+        NP.addEntry("FETCHTIMEINTERVAL", spot.getParkingSpotID());
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public ArrayList<TimeInterval> requestSpotTimeIntervalWithDate(long spotID, String date) {
+        ArrayList<TimeInterval> list = new ArrayList<TimeInterval>();
+        Time TestStart = new Time(date+" 0:0:0");
+        Time TestEnd = new Time(date+" 23:59:59");
+        Log.d("TEST1", TestStart.toString());
+        Log.d("TEST2", TestEnd.toString());
+        for(int i = 0; i < parkingSpots.size(); i++) {
+            ParkingSpot spot = parkingSpots.get(i);
+            if(spot.getParkingSpotID() == spotID) {
+                ArrayList<TimeInterval> list2 = spot.getTimeIntervalList();
+                Log.d("TEST3", String.valueOf(list2.size()));
+                for(int k = 0; k <list2.size(); k++){
+                    String startTime1 = list2.get(k).startTime.toString();
+                    String[] startTime11 = startTime1.split(" ");
+                    String startTime111 = startTime11[0]+" 0:0:0";
+                    Time start = new Time(startTime111);
+                    String endTime1 = list2.get(k).endTime.toString();
+                    Log.d("TEST4", startTime1+" "+endTime1);
+                    String[] endTime11 = endTime1.split(" ");
+                    String endTime111 = endTime11[0]+" 23:59:59";
+                    Time end = new Time(endTime111);
+                    Log.d("TEST5", end.toString()+" "+start.toString()+" "+TestStart.toString()+" "+TestEnd.toString());
+                    if(start.compareTo(TestStart)<=0){
+                        if(end.compareTo(TestEnd)>=0){
+                            list.add(list2.get(k));
+                        }
+                    }
+                }
+            }
+        }
+        return list;
+    }
+
+    public void setSpotTimeInterval(long spotID, ArrayList<TimeInterval> intervals) {
+        for(int i = 0; i < parkingSpots.size(); i++) {
+            ParkingSpot spot = parkingSpots.get(i);
+            if(spot.getParkingSpotID() == spotID)
+            {
+                spot.setTimeIntervalList(intervals);
+            }
+        }
+    }
+
+    public void requestAddTime(ParkingSpot spot, Time startTime, Time endTime, double price)
+    {
+//        startTime.month +=1;
+//        endTime.month += 1;
+
+        TimeInterval timeInterval = new TimeInterval(startTime, endTime);
+
+
+        NetworkPackage NP = new NetworkPackage();
+        HashMap<String, Serializable> map = new HashMap<>();
+        map.put("PARKINGSPOTID", spot.getParkingSpotID());
+        map.put("TIMEINTERVAL", timeInterval);
+
+
+
+        System.out.println("Start:"+timeInterval.startTime);
+        System.out.println("End:" + timeInterval.endTime);
+        map.put("PRICE", price);
+        NP.addEntry("ADDTIME", map);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void logout(boolean userType) {
+        NetworkPackage NP = new NetworkPackage();
+        NP.addEntry("LOGOUT", userType);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void renterReserve(long userID, long parkingSpotID, TimeInterval timeInterval){
+        NetworkPackage NP = new NetworkPackage();
+        HashMap<String, Serializable> map = new HashMap<String, Serializable>();
+        map.put("PARKINGSPOTID", parkingSpotID);
+        map.put("RENTERID", userID);
+        map.put("TIMEINTERVAL", timeInterval);
+        NP.addEntry("RESERVE", map);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void EditProfile(String username, String password, String userLicense, String userPlate){
+        NetworkPackage NP = new NetworkPackage();
+        HashMap<String, Serializable> map = new HashMap<String, Serializable>();
+        map.put("USERNAME", username);
+        map.put("PASSWORD", password);
+        map.put("USERLICENSE", userLicense);
+        map.put("USERPLATE", userPlate);
+        NP.addEntry("EDITPROFILE", map);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

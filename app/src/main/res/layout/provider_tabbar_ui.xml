@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.widget.Toolbar
+<android.support.v7.widget.Toolbar
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/providerTabbar"
     android:minHeight="?attr/actionBarSize"
     android:background="@color/colorDarkBackground"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="?attr/actionBarSize">
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -26,7 +26,8 @@
 
             <LinearLayout android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="6"
+                android:id="@+id/spaceLink"
+                android:layout_weight="1"
                 android:layout_gravity="center">
                 <ImageView
                     android:src="@mipmap/ic_space"
@@ -36,7 +37,6 @@
                     android:layout_gravity="center"/>
 
                 <TextView
-                    android:id="@+id/spaceLink"
                     android:text="Spaces"
                     android:textColor="@color/colorMainFont"
                     android:orientation="horizontal"
@@ -44,6 +44,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"/>
             </LinearLayout>
+            <LinearLayout android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:layout_gravity="center"/>
         </LinearLayout>
     </FrameLayout>
-</android.widget.Toolbar>
+</android.support.v7.widget.Toolbar>

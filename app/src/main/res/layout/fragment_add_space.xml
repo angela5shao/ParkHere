@@ -1,0 +1,110 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="csci310.parkhere.ui.AddSpaceFragment">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_gravity="center">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/addspace_label"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="36dp"
+                android:layout_marginBottom="12dp"
+                android:textAlignment="center"/>
+
+            <LinearLayout
+                android:id="@+id/addressSearchLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/addressText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="Add address"
+                    android:textAlignment="center"
+                    android:textSize="@dimen/text_size"
+                    android:textColor="@color/colorSubFont"/>
+                <Button
+                    android:id="@+id/btn_add_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Add address"
+                    android:textColor="@color/colorMainFont"
+                    android:background="@color/colorAccent"/>
+            </LinearLayout>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/in_descrip"
+                android:layout_marginTop="8dp"
+                android:hint="Add description"
+                android:textColorHint="@color/colorSubFont"
+                android:textColor="@color/colorSubFont"/>
+
+            <Spinner
+                android:id="@+id/cartypeSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorAccent"
+                android:popupBackground="@color/colorAccent"
+                android:spinnerMode="dropdown"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:layout_margin="4dp"
+                android:entries="@array/search_cartype_spinner"/>
+
+            <Spinner
+                android:id="@+id/cancelPolicySpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorAccent"
+                android:popupBackground="@color/colorAccent"
+                android:spinnerMode="dropdown"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:layout_margin="4dp"
+                android:entries="@array/cancel_policy_spinner"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Upload image"
+                android:id="@+id/btn_upload_image"
+                android:layout_marginTop="6dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Add"
+                android:id="@+id/btn_confirm"
+                android:layout_marginTop="6dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:textColor="@color/colorMainFont"
+                android:background="@color/colorAccent"
+                />
+
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>

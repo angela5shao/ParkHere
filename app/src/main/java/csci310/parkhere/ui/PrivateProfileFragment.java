@@ -1,5 +1,6 @@
 package csci310.parkhere.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,12 +15,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import csci310.parkhere.R;
+import csci310.parkhere.controller.ClientController;
+import resource.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,16 +37,21 @@ import csci310.parkhere.R;
 public class PrivateProfileFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM1 = "USERNAME";
+    private static final String ARG_PARAM2 = "PASSWORD";
+    private static final String ARG_PARAM3 = "USERLICENSE";
+    private static final String ARG_PARAM4 = "USERPLATE";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private String mParam3;
+    private String mParam4;
 
     private OnFragmentInteractionListener mListener;
 
     ImageView _privatProfileImage, _editLogo;
+    TextView _usernameText, _pwText, _licenseIDText, _licenseplateText;
 
     public PrivateProfileFragment() {
         // Required empty public constructor
@@ -56,11 +66,14 @@ public class PrivateProfileFragment extends Fragment {
      * @return A new instance of fragment PrivateProfileFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static PrivateProfileFragment newInstance(String param1, String param2) {
+    public static PrivateProfileFragment newInstance(String param1, String param2, String param3, String param4) {
         PrivateProfileFragment fragment = new PrivateProfileFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_PARAM3, param3);
+        args.putString(ARG_PARAM4, param4);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -71,8 +84,9 @@ public class PrivateProfileFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+            mParam3 = getArguments().getString(ARG_PARAM3);
+            mParam4 = getArguments().getString(ARG_PARAM4);
         }
-
         setHasOptionsMenu(true);
     }
 
@@ -80,22 +94,55 @@ public class PrivateProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         View v = inflater.inflate(R.layout.fragment_private_profile, container, false);
 
+
+
+
         _privatProfileImage = (ImageView) v.findViewById(R.id.privatProfileImage);
+        _editLogo = (ImageView) v.findViewById(R.id.editLogo);
+        _usernameText = (TextView) v.findViewById(R.id.usernameText);
+        _pwText = (TextView) v.findViewById(R.id.pwText);
+        _licenseIDText = (TextView) v.findViewById(R.id.licenseIDText);
+        _licenseplateText = (TextView) v.findViewById(R.id.licenseplateText);
+
         Bitmap bm = BitmapFactory.decodeResource(getResources(),
                 R.mipmap.ic_default_profile_pic);
         Bitmap conv_bm = getRoundedBitmap(bm);
         _privatProfileImage.setImageBitmap(conv_bm);
 
-        _editLogo = (ImageView) v.findViewById(R.id.editLogo);
         _editLogo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((RenterActivity)getActivity()).switchToEditProfileFrag();
+                EditProfileFragment editProfileFragment = new EditProfileFragment();
+                Bundle args = new Bundle();
+                args.putString("USERNAME", mParam1 );
+                args.putString("PASSWORD", mParam2);
+                args.putString("USERLICENSE", mParam3);
+                args.putString("USERPLATE", mParam4);
+                editProfileFragment.setArguments(args);
+                Activity ac = getActivity();
+                if(ac instanceof  RenterActivity)
+                    ((RenterActivity) getActivity()).switchToEditProfileFrag();
+                else if(ac instanceof  ProviderActivity)
+                    ((ProviderActivity) getActivity()).switchToEditProfileFrag();
             }
         });
 
+//        ClientController controller = ClientController.getInstance();
+//
+//        User user = controller.getUser();
+//        if(user != null)
+//        {
+//            updateUserInfo(user.userName, "", user.userLicense, user.userPlate);
+//        } else{
+//            //TO DO: add message pop-up that should log in or register
+//        }
+        _usernameText.setText(mParam1);
+        _pwText.setText(mParam2);
+        _licenseIDText.setText(mParam3);
+        _licenseplateText.setText(mParam4);
         return v;
     }
 
@@ -123,6 +170,13 @@ public class PrivateProfileFragment extends Fragment {
         mListener = null;
     }
 
+//    public void updateUserInfo(String inUsername, String inPw, String inLicenseID, String inLicensePlate) {
+//        _usernameText.setText(inUsername);
+//        _pwText.setText(inPw);
+//        _licenseIDText.setText(inLicenseID);
+//        _licenseplateText.setText(inLicensePlate);
+//    }
+
     // return edit ImageView for parent fragmaent
 //    public ImageView getEditLogo() {
 //        ImageView _editLogo = (ImageView) getActivity().findViewById(R.id.editLogo);
@@ -134,7 +188,7 @@ public class PrivateProfileFragment extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p/>
+     * <p>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
@@ -176,4 +230,3 @@ public class PrivateProfileFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 }
-

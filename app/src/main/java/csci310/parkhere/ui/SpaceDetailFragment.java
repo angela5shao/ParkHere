@@ -29,7 +29,6 @@ import com.imanoweb.calendarview.DayDecorator;
 import com.imanoweb.calendarview.DayView;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -602,6 +601,7 @@ public class SpaceDetailFragment extends Fragment {
         protected Boolean doInBackground(Void... params ){
             // call client controller
             ClientController controller = ClientController.getInstance();
+//            curr_selected_time_id = controller.;
             System.out.println("DELETE TIME ID: " + curr_selected_time_id);
             controller.ProviderCancel(list.get((int)curr_selected_time_id).TimeIntervalID);
 

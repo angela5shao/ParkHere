@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import csci310.parkhere.R;
@@ -54,9 +55,9 @@ public class PublicProfileFragment extends android.support.v4.app.Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    ImageView _privatProfileImage, _editLogo;
-    TextView _usernameText, _pwText, _licenseIDText, _licenseplateText;
-
+    ImageView _publicProfileImage;
+    TextView _FnameText, _ReviewText, _PhoneText ;
+    ListView _CommentsList;
     public PublicProfileFragment() {
         // Required empty public constructor
     }
@@ -70,13 +71,13 @@ public class PublicProfileFragment extends android.support.v4.app.Fragment {
      * @return A new instance of fragment PublicProfileFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static PublicProfileFragment newInstance(String param1, String param2, String param3, String param4) {
+    public static PublicProfileFragment newInstance(String param1, String param2, String param3, String [] param4) {
         PublicProfileFragment fragment = new PublicProfileFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         args.putString(ARG_PARAM3, param3);
-        args.putString(ARG_PARAM4, param4);
+        args.putStringArray(ARG_PARAM4, param4);
 
         fragment.setArguments(args);
         return fragment;
@@ -104,9 +105,9 @@ public class PublicProfileFragment extends android.support.v4.app.Fragment {
 
 
 
-        _privatProfileImage = (ImageView) v.findViewById(R.id.privatProfileImage);
-        _editLogo = (ImageView) v.findViewById(R.id.editLogo);
-        _usernameText = (TextView) v.findViewById(R.id.usernameText);
+        _publicProfileImage = (ImageView) v.findViewById(R.id.publicProfileImage);
+//        _editLogo = (ImageView) v.findViewById(R.id.editLogo);
+        _FnameText = (TextView) v.findViewById(R.id.usernameText);
         _pwText = (TextView) v.findViewById(R.id.pwText);
         _licenseIDText = (TextView) v.findViewById(R.id.licenseIDText);
         _licenseplateText = (TextView) v.findViewById(R.id.licenseplateText);

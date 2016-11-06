@@ -278,6 +278,7 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         {
             Intent intent = new Intent(this, HomeActivity.class);
             startActivityForResult(intent, 0);
+            clientController.logout(false);
             ClientController.resetController();
             return true;
         }

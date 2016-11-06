@@ -160,10 +160,10 @@ public class EditProfileFragment extends Fragment {
     }
 
     public void updateUserInfo(String inUsername, String inPw, String inLicenseID, String inLicensePlate) {
-        _usernameText.setText(inUsername);
-        _pwText.setText(inPw);
-        _licenseIDText.setText(inLicenseID);
-        _licenseplateText.setText(inLicensePlate);
+        _usernameText.setHint(inUsername);
+        _pwText.setHint(inPw);
+        _licenseIDText.setHint(inLicenseID);
+        _licenseplateText.setHint(inLicensePlate);
     }
 
     private class EditProfileTask extends AsyncTask<Void, Void, Boolean> {

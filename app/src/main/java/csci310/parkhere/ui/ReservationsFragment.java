@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -113,6 +114,7 @@ public class ReservationsFragment extends ListFragment implements AdapterView.On
         ArrayList<String> listString = new ArrayList<>();
         for(int i = 0 ; i < reservations.size(); i++)
         {
+            Log.d("FETCHRESERVATIONLIST","add into list");
             ParkingSpot spotInlist = reservations.get(i).getSpot();
             Time startTIme = reservations.get(i).getReserveTimeInterval().startTime;
             Time endTime = reservations.get(i).getReserveTimeInterval().endTime;

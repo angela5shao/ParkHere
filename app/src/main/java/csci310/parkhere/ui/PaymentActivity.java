@@ -112,6 +112,8 @@ public class PaymentActivity extends Activity {
                     ClientController clientController = ClientController.getInstance();
                     clientController.setCurrentActivity(this);
                     clientController.postPaymentNonceToServer(paymentMethodNonce);
+                    Intent intent = new Intent(getBaseContext(), RenterActivity.class);
+                    startActivity(intent);
 
                     break;
                 case BraintreePaymentActivity.BRAINTREE_RESULT_DEVELOPER_ERROR:
@@ -126,7 +128,8 @@ public class PaymentActivity extends Activity {
         }
 
         if (requestCode == BRAINTREE_PAYPAL_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
+            if (resultCode == Activity.RESULT_OK)
+            {
                 Log.d("BT onActivityResult ", "Activity.RESULT_OK");
                 PaymentMethodNonce paymentMethodNonce = data.getParcelableExtra(
                         BraintreePaymentActivity.EXTRA_PAYMENT_METHOD_NONCE

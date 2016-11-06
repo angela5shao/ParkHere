@@ -41,7 +41,8 @@ import resource.User;
  */
 public class ProviderActivity extends AppCompatActivity implements SpacesFragment.OnFragmentInteractionListener,
         SpaceDetailFragment.OnFragmentInteractionListener, PrivateProfileFragment.OnFragmentInteractionListener,
-        ReservationDetailFragment.OnFragmentInteractionListener, AddSpaceFragment.OnFragmentInteractionListener {
+        ReservationDetailFragment.OnFragmentInteractionListener, AddSpaceFragment.OnFragmentInteractionListener,
+        EditProfileFragment.OnFragmentInteractionListener{
 
     LinearLayout _spaceLink;
     ImageView _profilePic;
@@ -71,9 +72,13 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 //
         fm = getSupportFragmentManager();
         fragmentTransaction = fm.beginTransaction();
-        spacesFragment = new SpacesFragment();
 
-        fragmentTransaction.add(R.id.fragContainer, spacesFragment).commit();
+
+        (new requestParkingSpotListTask()).execute();
+
+//        spacesFragment = new SpacesFragment();
+
+//        fragmentTransaction.add(R.id.fragContainer, spacesFragment).commit();
 
 //        ArrayList<ParkingSpot> parkingSpots = clientController.getSpaces(clientController.getUser().userID);
 
@@ -127,18 +132,30 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 //                }
                 fragmentTransaction = fm.beginTransaction();
 
-                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
+                privateProfileFragment = new PrivateProfileFragment();
                 User user = clientController.getUser();
-                if(user == null)
+                if(user == null){
                     Log.d("PROFILE", "user is null");
-
-                if (fragment instanceof PrivateProfileFragment && user != null) {
-                    Log.d("@@@@@@@@@@@@@@ ", user.userName);
-                    Log.d("@@@@@@@@@@@@@@ ", user.userLicense);
-                    Log.d("@@@@@@@@@@@@@@ ", user.userPlate);
-                    ((PrivateProfileFragment) fragment).updateUserInfo(user.userName, "", user.userLicense, user.userPlate);
                 }
-
+                else {
+                    Bundle args = new Bundle();
+                    args.putString("USERNAME", user.userName);
+                    args.putString("PASSWORD", "");
+                    args.putString("USERLICENSE",user.userLicense);
+                    args.putString("USERPLATE", user.userPlate);
+                    privateProfileFragment.setArguments(args);
+                }
+//                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
+//                User user = clientController.getUser();
+//                if(user == null)
+//                    Log.d("PROFILE", "user is null");
+//
+//                if (fragment instanceof PrivateProfileFragment && user != null) {
+//                    Log.d("@@@@@@@@@@@@@@ ", user.userName);
+//                    Log.d("@@@@@@@@@@@@@@ ", user.userLicense);
+//                    Log.d("@@@@@@@@@@@@@@ ", user.userPlate);
+//                    ((PrivateProfileFragment) fragment).updateUserInfo(user.userName, "", user.userLicense, user.userPlate);
+//                }
                 fragmentTransaction.replace(R.id.fragContainer, privateProfileFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
@@ -154,6 +171,20 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
                 .replace(R.id.fragContainer, spacesFragment).commit();
     }
 
+    public void switchToEditProfileFrag() {
+        fragmentTransaction = fm.beginTransaction();
+        User user = clientController.getUser();
+        EditProfileFragment editProfileFragment = new EditProfileFragment();
+        Bundle args = new Bundle();
+        args.putString("USERNAME", user.userName);
+        args.putString("PASSWORD", "******");
+        args.putString("USERLICENSE", user.userLicense);
+        args.putString("USERPLATE", user.userPlate);
+        editProfileFragment.setArguments(args);
+        fragmentTransaction.replace(R.id.fragContainer, editProfileFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
 
     public void showSpaceDetailFragment()
     {
@@ -347,7 +378,10 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         protected void onPostExecute(ArrayList<ParkingSpot> list) {
             clientController.providerToshowSpaces = true;
             clientController.parkingSpots = list;
-            Log.d("CheckrequestParkingSpotListTask", " 1");
+
+//            spacesFragment = new SpacesFragment();
+
+            Log.d("requestParkingSpots", "onPostExecute");
             showSpaceFragment();
         }
 

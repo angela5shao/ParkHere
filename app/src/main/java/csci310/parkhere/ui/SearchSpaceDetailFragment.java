@@ -142,12 +142,16 @@ public void onCreate(Bundle savedInstanceState) {
         _searchspacedetail_reservebutton=(Button)mView.findViewById(R.id.searchspacedetail_reservebutton);
         _searchspacedetail_reservebutton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+
+
+
+
                 System.out.println(mParam2+ " "+mParam3+" "+mParam4+" "+mParam5);
-                Time startTime = new Time(mParam2+" "+mParam3);
-                Time endTime = new Time(mParam4+" "+mParam5);
+                Time startTime = new Time(mParam2+" "+mParam3 + "-0");
+                Time endTime = new Time(mParam4+" "+mParam5+"-0");
                 TimeInterval timeInterval = new TimeInterval(startTime,endTime);
-//                RenterReserveTask RRT = new RenterReserveTask(mParkingSpot.getParkingSpotID(), ClientController.getInstance().getUser().userID, timeInterval);
-//                RRT.execute((Void) null);
+                RenterReserveTask RRT = new RenterReserveTask(mParkingSpot.getParkingSpotID(), timeInterval,  ClientController.getInstance().getUser().userID);
+                RRT.execute((Void) null);
                 Intent intent = new Intent(getContext(), PaymentActivity.class);
                 startActivityForResult(intent, 11);
             }
@@ -335,18 +339,25 @@ public void onCreate(Bundle savedInstanceState) {
             // call client controller
             ClientController controller = ClientController.getInstance();
             controller.renterReserve(userID, parkingSpotID, timeInterval);
+            Log.d("SEARCHRESERVE", "AFTERREQUEST");
+
 
             NetworkPackage NP = controller.checkReceived();
             MyEntry<String, Serializable> entry = NP.getCommand();
             String key = entry.getKey();
             Object value = entry.getValue();
+
+            Log.d("SEARCHRESERVE", "key :" + key);
+
             if(key.equals("RESERVE")) {
                 return true;
             }
-            else if(key.equals("RESERVFAIL")) {
+            else if(key.equals("RESERVEFAIL")) {
+                Log.d("SEARCHRESERVE", "RESERVFAIL");
                 return false;
             }
             else {
+                Log.d("SEARCHRESERVE", "UNDEFINED ERROR");
                 return false;
             }
         }

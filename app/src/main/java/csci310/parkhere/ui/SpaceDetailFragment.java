@@ -539,10 +539,10 @@ public class SpaceDetailFragment extends Fragment {
                 progressDialog.dismiss();
                 ((ProviderActivity)getActivity()).showSpaceFragment();
                 Log.d("ADDTIME", "finish add time");
-                Toast.makeText(getContext(), "Added space!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Added Time!", Toast.LENGTH_SHORT).show();
 
                 // Back to SpacesFragment
-                ((ProviderActivity)getActivity()).showSpaceFragment();
+//                ((ProviderActivity)getActivity()).showSpaceFragment();
                 progressDialog.dismiss();
 
             } else{

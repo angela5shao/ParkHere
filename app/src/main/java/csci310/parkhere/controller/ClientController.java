@@ -10,6 +10,8 @@ import com.google.android.gms.maps.model.LatLng;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 import resource.CarType;
@@ -41,6 +43,7 @@ public class ClientController {
 
     public int currentIndexofSpaces;
 
+    public LatLng currLocation;
     public SearchResults searchResults;
 
     public boolean registerFailed;
@@ -118,7 +121,7 @@ public class ClientController {
     public void login(String username, String pw) throws IOException {
 
         Log.d("LOGIN","Try to Login");
-        cancelReceived();
+//        cancelReceived();
         HashMap<String, Serializable> entry = new HashMap<>();
         entry.put("USERNAME", username);
         entry.put("PASSWORD", pw);
@@ -155,10 +158,14 @@ public class ClientController {
     }
 
     public NetworkPackage checkReceived(){
-        while(received == false ){
+        while(received == false || NP == null ){
 
         }
         received = false;
+        if(NP == null)
+            Log.d("CHECKRECEIVE", "NULL");
+
+
         return NP;
     }
     //new functions for the AsyncTask
@@ -302,6 +309,7 @@ public class ClientController {
     }
 
     public void search(LatLng location, String startDate, String startTime, String endDate, String endTime, String carType, String distance) throws IOException {
+        currLocation = location;
         String[] time1 = startDate.split("-");
         String[] time11 = startTime.split("-");
         String[] time2 = endDate.split("-");
@@ -331,6 +339,58 @@ public class ClientController {
         clientCommunicator.send("SEARCH", entry);
     }
 
+    public SearchResults sortSearchResultByPrice() {
+        if(searchResults != null) {
+            // ArrayList<ParkingSpot> searchResultList
+            Collections.sort(searchResults.searchResultList, new Comparator<ParkingSpot>() {
+                public int compare(ParkingSpot p1, ParkingSpot p2) {
+                    return Double.compare(p1.search_price, p2.search_price);
+                }
+            });
+        }
+        return searchResults;
+    }
+
+    public SearchResults sortSearchResultByDist() {
+        if(searchResults != null) {
+            Collections.sort(searchResults.searchResultList, new Comparator<ParkingSpot>() {
+                public int compare(ParkingSpot p1, ParkingSpot p2) {
+                    double p1LatDiff = p1.getLat()-currLocation.latitude;
+                    double p1LongDiff = p1.getLon()-currLocation.longitude;
+                    double p1Dist = Math.sqrt(p1LatDiff*p1LatDiff + p1LongDiff*p1LongDiff);
+
+                    double p2LatDiff = p2.getLat()-currLocation.latitude;
+                    double p2LongDiff = p2.getLon()-currLocation.longitude;
+                    double p2Dist = Math.sqrt(p2LatDiff*p2LatDiff + p2LongDiff*p2LongDiff);
+
+                    return Double.compare(p1Dist, p2Dist);
+                }
+            });
+        }
+        return searchResults;
+    }
+
+    public SearchResults sortSearchResultBySpotRating() {
+        if(searchResults != null) {
+            Collections.sort(searchResults.searchResultList, new Comparator<ParkingSpot>() {
+                public int compare(ParkingSpot p1, ParkingSpot p2) {
+                    return Double.compare(p1.review, p2.review);
+                }
+            });
+        }
+        return searchResults;
+    }
+
+    public SearchResults sortSearchResultByProviderRating() {
+        if(searchResults != null) {
+//            Collections.sort(searchResults.searchResultList, new Comparator<ParkingSpot>() {
+//                public int compare(ParkingSpot p1, ParkingSpot p2) {
+//                    return Double.compare(p1.providerReview, p2.providerReview);
+//                }
+//            });
+        }
+        return searchResults;
+    }
 
     public void addSpace(LatLng location, String streetAddress, String description, String carType, int cancelPolicy)
     {
@@ -481,6 +541,21 @@ public class ClientController {
         map.put("RENTERID", userID);
         map.put("TIMEINTERVAL", timeInterval);
         NP.addEntry("RESERVE", map);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void EditProfile(String username, String password, String userLicense, String userPlate){
+        NetworkPackage NP = new NetworkPackage();
+        HashMap<String, Serializable> map = new HashMap<String, Serializable>();
+        map.put("USERNAME", username);
+        map.put("PASSWORD", password);
+        map.put("USERLICENSE", userLicense);
+        map.put("USERPLATE", userPlate);
+        NP.addEntry("EDITPROFILE", map);
         try {
             clientCommunicator.sendPackage(NP);
         } catch (IOException e) {

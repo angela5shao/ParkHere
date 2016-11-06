@@ -25,6 +25,7 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 
 import java.io.Serializable;
 
@@ -114,7 +115,11 @@ public class AddSpaceFragment extends Fragment {
                     Log.d("AUTOCOMPLETE", "ONCLICK");
                     Intent intent =
                             new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+                                    .setBoundsBias(new LatLngBounds(
+                                            new LatLng(44.901184 ,-67.32254),
+                                            new LatLng(32.6393, -117.004304)))
                                     .build(getActivity());
+
                     startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
                     Log.d("AUTOCOMPLETE", "ONCLICK LAST");
 
@@ -158,9 +163,13 @@ public class AddSpaceFragment extends Fragment {
             if (resultCode == Activity.RESULT_OK) {
                 Place place = PlaceAutocomplete.getPlace(getContext(), data);
 
-                Log.d("GOOGLE MAP PLACE", "Here");
+                Log.i("AddSpaceFragment ", "Place: " + place.getName());
+                Log.i("AddSpaceFragment ", "Place LatLng: " + place.getLatLng().toString());
+
                 _addressText.setText(place.getAddress());
                 curr_location = place.getLatLng();
+
+
                 Log.d("GOOGLE MAP PLACE", "After " + (curr_location == null));
 
 

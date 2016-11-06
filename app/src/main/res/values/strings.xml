@@ -5,6 +5,7 @@
     <string name="cancel_label">Cancel</string>
     <string name="search_label">Search</string>
     <string name="res_label">Reservation</string>
+    <string name="space_label">Space</string>
     <string name="private_profile_label">My profile</string>
     <string name="edit_profile_label">Edit profile</string>
     <string name="addspace_label">Add space</string>

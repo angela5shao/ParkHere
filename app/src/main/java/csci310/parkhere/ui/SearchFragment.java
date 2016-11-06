@@ -440,7 +440,6 @@ package csci310.parkhere.ui;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -469,6 +468,7 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -478,7 +478,6 @@ import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
 import resource.MyEntry;
 import resource.NetworkPackage;
-import resource.ParkingSpot;
 import resource.SearchResults;
 
 /**
@@ -583,6 +582,9 @@ public class SearchFragment extends Fragment {
                 try {
                     Intent intent =
                             new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+                                    .setBoundsBias(new LatLngBounds(
+                                            new LatLng(32.6393, -117.004304),
+                                            new LatLng(44.901184 ,-67.32254)))
                                     .build(getActivity());
                     startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
                 } catch (GooglePlayServicesRepairableException e) {

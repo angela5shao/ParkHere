@@ -1,5 +1,6 @@
-package csci310.parkhere;
+package csci310.parkhere.ui;
 
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -8,6 +9,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import csci310.parkhere.R;
 import csci310.parkhere.ui.RegisterMainActivity;
 import csci310.parkhere.ui.RegisterRenterActivity;
 
@@ -28,8 +30,8 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.instanceOf;
 
-//@RunWith(AndroidJUnit4.class)
-//@LargeTest
+@RunWith(AndroidJUnit4.class)
+@LargeTest
 public class UserRegistrationTest {
 
     public static final String NAME_TO_BE_TYPED = "Espresso East";
@@ -41,7 +43,7 @@ public class UserRegistrationTest {
     public static final String PHONE_TO_BE_TYPED = "2132132133";
 
     @Rule
-    public ActivityTestRule<RegisterMainActivity> mActivityRule = new ActivityTestRule(RegisterMainActivity.class);
+    public ActivityTestRule<HomeActivity> mActivityRule = new ActivityTestRule(HomeActivity.class);
 
 //    @Test
 //    public void listGoesOverTheFold() {
@@ -49,8 +51,11 @@ public class UserRegistrationTest {
 //    }
     @Test
     public void uniqueEmailLongPasswordRegistration() {
+        // From HomeActivity, click on Login
+        onView(ViewMatchers.withId(R.id.registerButton)).perform(click());
+
         // Type name, email, password, phone.
-        onView(withId(R.id.nameText)).perform(typeText(NAME_TO_BE_TYPED), closeSoftKeyboard());
+        onView(ViewMatchers.withId(R.id.nameText)).perform(typeText(NAME_TO_BE_TYPED), closeSoftKeyboard());
         onView(withId(R.id.emailText)).perform(typeText(EMAIL_TO_BE_TYPED), closeSoftKeyboard());
         onView(withId(R.id.passwordText)).perform(typeText(PASSWORD_LONG_TO_BE_TYPED), closeSoftKeyboard());
         onView(withId(R.id.phoneText)).perform(typeText(PHONE_TO_BE_TYPED), closeSoftKeyboard());
@@ -68,6 +73,9 @@ public class UserRegistrationTest {
 
     @Test
     public void uniqueEmailShortPasswordRegistration() {
+        // From HomeActivity, click on Login
+        onView(ViewMatchers.withId(R.id.registerButton)).perform(click());
+
         // Type name, email, password, phone.
         onView(withId(R.id.nameText)).perform(typeText(NAME2_TO_BE_TYPED), closeSoftKeyboard());
         onView(withId(R.id.emailText)).perform(typeText(EMAIL2_TO_BE_TYPED), closeSoftKeyboard());
@@ -87,6 +95,9 @@ public class UserRegistrationTest {
 
     @Test
     public void duplicateRegistration() {
+        // From HomeActivity, click on Login
+        onView(ViewMatchers.withId(R.id.registerButton)).perform(click());
+
         // Type name, email, password, phone.
         onView(withId(R.id.nameText)).perform(typeText(NAME_TO_BE_TYPED), closeSoftKeyboard());
         onView(withId(R.id.emailText)).perform(typeText(EMAIL_TO_BE_TYPED), closeSoftKeyboard());

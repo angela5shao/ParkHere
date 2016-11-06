@@ -121,6 +121,10 @@ public class LoginActivity extends Activity {
                     User result = (User) value;
                     Log.d("LOGIN", result.userName);
                     clientController.setUser(result);
+
+                    Log.d("Login", result.userPlate);
+
+
                     return true;
                 } else{
                     return false;

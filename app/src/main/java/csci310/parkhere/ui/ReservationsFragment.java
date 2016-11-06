@@ -105,6 +105,7 @@ public class ReservationsFragment extends ListFragment implements AdapterView.On
         getListView().setOnItemClickListener(this);
 
         ClientController controller = ClientController.getInstance();
+
         ArrayList<Reservation> original_reservations = controller.reservations;
 
 
@@ -122,6 +123,7 @@ public class ReservationsFragment extends ListFragment implements AdapterView.On
             }
         }
         ArrayList<String> listString = new ArrayList<String>();
+
         for(int i = 0 ; i < reservations.size(); i++)
         {
             Log.d("FETCHRESERVATIONLIST","add into list");

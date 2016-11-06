@@ -355,7 +355,6 @@ public class SpaceDetailFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
                 _btn_delete_time.setVisibility(View.VISIBLE);
-                curr_selected_time_id = id;
             }
         });
         _btn_delete_time.setOnClickListener(new View.OnClickListener() {
@@ -601,6 +600,7 @@ public class SpaceDetailFragment extends Fragment {
         protected Boolean doInBackground(Void... params ){
             // call client controller
             ClientController controller = ClientController.getInstance();
+//            curr_selected_time_id = controller.;
             System.out.println("DELETE TIME ID: " + curr_selected_time_id);
             controller.ProviderCancel(curr_selected_time_id);
 

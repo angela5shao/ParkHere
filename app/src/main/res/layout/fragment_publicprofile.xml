@@ -2,15 +2,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="csci310.parkhere.ui.PrivateProfileFragment">
+    tools:context="csci310.parkhere.ui.PublicProfileFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
     <!--<TextView-->
-        <!--android:text="My private profile info"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:id="@+id/textView2" />-->
+    <!--android:text="My private profile info"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:id="@+id/textView2" />-->
 
     <ScrollView
         android:layout_width="match_parent"
@@ -29,13 +29,13 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/private_profile_label"
+                    android:text="@string/public_profile_label"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="36dp"
                     android:textAlignment="center"/>
 
                 <ImageView
-                    android:id="@+id/privatProfileImage"
+                    android:id="@+id/publicProfileImage"
                     android:layout_width="match_parent"
                     android:layout_height="120dp"
                     android:layout_alignParentTop="true"
@@ -45,14 +45,6 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginBottom="12dp"/>
 
-                <ImageView
-                    android:id="@+id/editLogo"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:adjustViewBounds="true"
-                    android:src="@mipmap/ic_edit"/>
             </LinearLayout>
 
             <LinearLayout
@@ -64,7 +56,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/private_profile_username_label"
+                    android:text="@string/public_profile_Fname_label"
                     android:id="@+id/username_label"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
@@ -101,7 +93,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/private_profile_pw_label"
+                    android:text="@string/public_profile_phonenumber_label"
                     android:id="@+id/pw_label"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
@@ -139,7 +131,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/private_profile_licenesID_label"
+                    android:text="@string/public_profile_review_label"
                     android:id="@+id/licenseID_label"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
@@ -176,7 +168,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/private_profile_licenesPlate_label"
+                    android:text="@string/public_profile_reviewscore_label"
                     android:id="@+id/licensePlate_label"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
@@ -187,58 +179,14 @@
                     android:paddingBottom="8dp"
                     android:textColor="@color/colorMainFont"
                     android:background="@color/colorPrimary"/>
-
-                <TextView
+                <ListView
+                    android:id="@+id/UserReviewList"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="license plate num"
-                    android:id="@+id/licenseplateText"
-                    android:layout_alignBottom="@+id/licensePlate_label"
-                    android:layout_toRightOf="@+id/licensePlate_label"
-                    android:layout_toEndOf="@+id/licensePlate_label"
-                    android:layout_weight="1"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:textAlignment="center"
+                    android:layout_marginTop="12dp"
                     android:textColor="@color/colorMainFont"
-                    android:background="@color/colorAccent"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/private_profile_phone_label"
-                    android:id="@+id/phoneText_label"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_weight="1"
-                    android:textAlignment="center"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:textColor="@color/colorMainFont"
-                    android:background="@color/colorPrimary"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Phone num"
-                    android:id="@+id/phoneText"
-                    android:layout_alignBottom="@+id/licensePlate_label"
-                    android:layout_toRightOf="@+id/licensePlate_label"
-                    android:layout_toEndOf="@+id/licensePlate_label"
-                    android:layout_weight="1"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:textAlignment="center"
-                    android:textColor="@color/colorMainFont"
-                    android:background="@color/colorAccent"/>
+                    android:background="@color/colorAccent"
+                    />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

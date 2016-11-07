@@ -85,6 +85,11 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         _resLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (clientController.getUser().userPlate.equals("#######"))
+                {
+                    Toast.makeText(getBaseContext(), "Please fill in licence plate info before proceed", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 RequestReservationsTask RRT = new RequestReservationsTask();
                 RRT.execute((Void) null);
             }
@@ -94,6 +99,13 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         _searchLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (clientController.getUser().userPlate.equals("#######"))
+                {
+                    Toast.makeText(getBaseContext(), "Please fill in licence plate info before proceed", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+
                 fragmentTransaction = fm.beginTransaction();
                 fragmentTransaction.replace(R.id.fragContainer, searchFragment);
                 fragmentTransaction.addToBackStack(null);
@@ -117,6 +129,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
                     args.putString("PASSWORD", "");
                     args.putString("USERLICENSE",user.userLicense);
                     args.putString("USERPLATE", user.userPlate);
+                    args.putString("PHONE", user.userPhone);
                     privateProfileFragment.setArguments(args);
                 }
                 fragmentTransaction.replace(R.id.fragContainer, privateProfileFragment);
@@ -124,6 +137,29 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
                 fragmentTransaction.commit();
             }
         });
+
+
+        if(clientController.getUser().userPlate.equals("#######"))
+        {
+            fragmentTransaction = fm.beginTransaction();
+
+            privateProfileFragment = new PrivateProfileFragment();
+            User user = clientController.getUser();
+            if(user == null){
+                Log.d("PROFILE", "user is null");
+            }
+            else {
+                Bundle args = new Bundle();
+                args.putString("USERNAME", user.userName);
+                args.putString("PASSWORD", "");
+                args.putString("USERLICENSE",user.userLicense);
+                args.putString("USERPLATE", user.userPlate);
+                privateProfileFragment.setArguments(args);
+            }
+            fragmentTransaction.replace(R.id.fragContainer, privateProfileFragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
     }
 
     @Override
@@ -224,17 +260,16 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         fragmentTransaction.commit();
     }
 
-    public void switchToEditProfileFrag() {
+    public void switchToEditProfileFrag(EditProfileFragment editProfileFragment) {
         fragmentTransaction = fm.beginTransaction();
-        User user = clientController.getUser();
-        EditProfileFragment editProfileFragment = new EditProfileFragment();
-        Bundle args = new Bundle();
-        args.putString("USERNAME", user.userName);
-        args.putString("PASSWORD", "******");
-        args.putString("USERLICENSE", user.userLicense);
-        args.putString("USERPLATE", user.userPlate);
-        editProfileFragment.setArguments(args);
         fragmentTransaction.replace(R.id.fragContainer, editProfileFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    public void switchToPrivateProfileFrag(PrivateProfileFragment privateProfileFragment){
+        fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(R.id.fragContainer, privateProfileFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

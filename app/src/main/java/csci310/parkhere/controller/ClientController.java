@@ -246,10 +246,6 @@ public class ClientController {
         return null;
     }
 
-    public boolean editProfile(String name, String email, String pw, String license, String plateNum) {
-        return false;
-    }
-
     // TODO: Functions for provider
 //    public ArrayList<>
 
@@ -572,13 +568,15 @@ public class ClientController {
         }
     }
 
-    public void EditProfile(String username, String password, String userLicense, String userPlate){
+    public void editProfile(String username, String password, String userLicense, String userPlate, String phone){
         NetworkPackage NP = new NetworkPackage();
+        user.userName = username;
+        user.userLicense = userLicense;
+        user.userPlate = userPlate;
+        user.userPhone = phone;
         HashMap<String, Serializable> map = new HashMap<String, Serializable>();
-        map.put("USERNAME", username);
+        map.put("USER", user);
         map.put("PASSWORD", password);
-        map.put("USERLICENSE", userLicense);
-        map.put("USERPLATE", userPlate);
         NP.addEntry("EDITPROFILE", map);
         try {
             clientCommunicator.sendPackage(NP);
@@ -587,4 +585,7 @@ public class ClientController {
         }
     }
 
+    public void paymentSuccess(){
+
+    }
 }

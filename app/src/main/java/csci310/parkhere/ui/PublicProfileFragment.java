@@ -1,5 +1,10 @@
 package csci310.parkhere.ui;
 
+
+/**
+ * Created by yubowang on 11/6/16.
+ */
+
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -13,13 +18,13 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-
+import android.support.v4.app.Fragment;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import csci310.parkhere.R;
@@ -27,35 +32,33 @@ import csci310.parkhere.controller.ClientController;
 import resource.User;
 
 /**
- * A simple {@link Fragment} subclass.
+ * A simple {@link android.support.v4.app.Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link PrivateProfileFragment.OnFragmentInteractionListener} interface
+ * {@link PublicProfileFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link PrivateProfileFragment#newInstance} factory method to
+ * Use the {@link PublicProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PrivateProfileFragment extends Fragment {
+public class PublicProfileFragment extends android.support.v4.app.Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "USERNAME";
-    private static final String ARG_PARAM2 = "PASSWORD";
-    private static final String ARG_PARAM3 = "USERLICENSE";
-    private static final String ARG_PARAM4 = "USERPLATE";
-    private static final String ARG_PARAM5 = "PHONE";
+    private static final String ARG_PARAM1 = "FIRSTNAME";
+    private static final String ARG_PARAM2 = "PHONENUMBER";
+    private static final String ARG_PARAM3 = "REVIEWSCORE";
+    private static final String ARG_PARAM4 = "COMMENTS";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     private String mParam3;
-    private String mParam4;
-    private String mParam5;
+    private String [] mParam4;
 
     private OnFragmentInteractionListener mListener;
 
-    ImageView _privatProfileImage, _editLogo;
-    TextView _usernameText, _pwText, _licenseIDText, _licenseplateText, _phoneText;
-
-    public PrivateProfileFragment() {
+    ImageView _publicProfileImage;
+    TextView _FnameText, _ReviewText, _PhoneText ;
+    ListView _CommentsList;
+    public PublicProfileFragment() {
         // Required empty public constructor
     }
 
@@ -65,17 +68,17 @@ public class PrivateProfileFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment PrivateProfileFragment.
+     * @return A new instance of fragment PublicProfileFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static PrivateProfileFragment newInstance(String param1, String param2, String param3, String param4, String param5) {
-        PrivateProfileFragment fragment = new PrivateProfileFragment();
+    public static PublicProfileFragment newInstance(String param1, String param2, String param3, String [] param4) {
+        PublicProfileFragment fragment = new PublicProfileFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         args.putString(ARG_PARAM3, param3);
-        args.putString(ARG_PARAM4, param4);
-        args.putString(ARG_PARAM5, param5);
+        args.putStringArray(ARG_PARAM4, param4);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -87,8 +90,7 @@ public class PrivateProfileFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
             mParam3 = getArguments().getString(ARG_PARAM3);
-            mParam4 = getArguments().getString(ARG_PARAM4);
-            mParam5 = getArguments().getString(ARG_PARAM5);
+            mParam4 = getArguments().getStringArray(ARG_PARAM4);
         }
         setHasOptionsMenu(true);
     }
@@ -103,37 +105,18 @@ public class PrivateProfileFragment extends Fragment {
 
 
 
-        _privatProfileImage = (ImageView) v.findViewById(R.id.privatProfileImage);
-        _editLogo = (ImageView) v.findViewById(R.id.editLogo);
-        _usernameText = (TextView) v.findViewById(R.id.usernameText);
+        _publicProfileImage = (ImageView) v.findViewById(R.id.publicProfileImage);
+//        _editLogo = (ImageView) v.findViewById(R.id.editLogo);
+        _FnameText = (TextView) v.findViewById(R.id.usernameText);
         _pwText = (TextView) v.findViewById(R.id.pwText);
         _licenseIDText = (TextView) v.findViewById(R.id.licenseIDText);
         _licenseplateText = (TextView) v.findViewById(R.id.licenseplateText);
-        _phoneText = (TextView) v.findViewById(R.id.phoneText);
 
         Bitmap bm = BitmapFactory.decodeResource(getResources(),
                 R.mipmap.ic_default_profile_pic);
         Bitmap conv_bm = getRoundedBitmap(bm);
-        _privatProfileImage.setImageBitmap(conv_bm);
+        _ProfileImage.setImageBitmap(conv_bm);
 
-        _editLogo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditProfileFragment editProfileFragment = new EditProfileFragment();
-                Bundle args = new Bundle();
-                args.putString("USERNAME", mParam1 );
-                args.putString("PASSWORD", mParam2);
-                args.putString("USERLICENSE", mParam3);
-                args.putString("USERPLATE", mParam4);
-                args.putString("PHONE", mParam5);
-                editProfileFragment.setArguments(args);
-                Activity ac = getActivity();
-                if(ac instanceof  RenterActivity)
-                    ((RenterActivity) getActivity()).switchToEditProfileFrag(editProfileFragment);
-                else if(ac instanceof  ProviderActivity)
-                    ((ProviderActivity) getActivity()).switchToEditProfileFrag(editProfileFragment);
-            }
-        });
 
 //        ClientController controller = ClientController.getInstance();
 //
@@ -148,7 +131,6 @@ public class PrivateProfileFragment extends Fragment {
         _pwText.setText(mParam2);
         _licenseIDText.setText(mParam3);
         _licenseplateText.setText(mParam4);
-        _phoneText.setText(mParam5);
         return v;
     }
 

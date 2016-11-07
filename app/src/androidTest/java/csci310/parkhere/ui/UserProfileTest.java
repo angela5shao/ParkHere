@@ -53,6 +53,21 @@ public class UserProfileTest {
     }
 
     @Test
+    public void editPasswordLongPhoneNumberLong() {
+
+    }
+
+    @Test
+    public void editPasswordShort() {
+
+    }
+
+    @Test
+    public void editPhoneNumberShort() {
+
+    }
+
+    @Test
     public void checkPublicProfileInfo() {
         // Assuming loggedin as Renter
         // TODO:

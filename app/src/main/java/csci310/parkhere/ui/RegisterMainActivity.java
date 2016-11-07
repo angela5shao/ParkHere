@@ -32,7 +32,7 @@ public class RegisterMainActivity extends Activity {
         clientController = ClientController.getInstance();
         clientController.setCurrentActivity(this);
 
-        _nextButton=(Button)findViewById(R.id.nextButton);
+        _nextButton=(Button)findViewById(R.id.registerNextButton);
         _nameText=(EditText)findViewById(R.id.nameText); // name
         _nameText.setHint("FirstName LastName");
 

@@ -276,6 +276,13 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         fragmentTransaction.commit();
     }
 
+    public void switchToPublicProfileFrag(PublicProfileFragment publicProfileFragment) {
+        fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(R.id.fragContainer, publicProfileFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
 //    public void updateUserInfo(String inUsername, String inPw, String inLicenseID, String inLicensePlate) {
 //        // STILL NEED TO ADD PROFILE PIC
 //        privateProfileFragment.updateUserInfo(inUsername, inPw, inLicenseID, inLicensePlate);

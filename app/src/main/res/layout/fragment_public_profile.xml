@@ -1,8 +1,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-tools:context="csci310.parkhere.ui.PublicProfileFragment">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="csci310.parkhere.ui.PublicProfileFragment">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -35,20 +35,17 @@ tools:context="csci310.parkhere.ui.PublicProfileFragment">
                     android:src="@mipmap/ic_default_profile_pic"
                     android:layout_marginTop="12dp"
                     android:layout_marginBottom="12dp"/>
-
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp">
+                android:orientation="horizontal">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/first_name_label"
-                    android:id="@+id/username_label"
+                    android:id="@+id/first_name_label"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
@@ -62,11 +59,11 @@ tools:context="csci310.parkhere.ui.PublicProfileFragment">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="username"
-                    android:id="@+id/usernameText"
-                    android:layout_alignBottom="@+id/username_label"
-                    android:layout_toRightOf="@+id/username_label"
-                    android:layout_toEndOf="@+id/username_label"
+                    android:text="firstname"
+                    android:id="@+id/firstnameText"
+                    android:layout_alignBottom="@+id/first_name_label"
+                    android:layout_toRightOf="@+id/first_name_label"
+                    android:layout_toEndOf="@+id/first_name_label"
                     android:layout_weight="1"
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
@@ -78,14 +75,47 @@ tools:context="csci310.parkhere.ui.PublicProfileFragment">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp">
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/email_label"
+                    android:id="@+id/email_label"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_weight="1"
+                    android:textAlignment="center"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@color/colorMainFont"
+                    android:background="@color/colorPrimary"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="email"
+                    android:id="@+id/emailText"
+                    android:layout_alignBottom="@+id/email_label"
+                    android:layout_toRightOf="@+id/email_label"
+                    android:layout_toEndOf="@+id/email_label"
+                    android:layout_weight="1"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorMainFont"
+                    android:background="@color/colorAccent"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/phone_label"
-                    android:id="@+id/pw_label"
+                    android:id="@+id/phone_label"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
@@ -99,12 +129,12 @@ tools:context="csci310.parkhere.ui.PublicProfileFragment">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="password"
+                    android:text="phone #"
                     android:password="true"
-                    android:id="@+id/pwText"
-                    android:layout_alignBottom="@+id/pw_label"
-                    android:layout_toRightOf="@+id/pw_label"
-                    android:layout_toEndOf="@+id/pw_label"
+                    android:id="@+id/phoneNumText"
+                    android:layout_alignBottom="@+id/phone_label"
+                    android:layout_toRightOf="@+id/phone_label"
+                    android:layout_toEndOf="@+id/phone_label"
                     android:layout_weight="1"
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
@@ -113,72 +143,28 @@ tools:context="csci310.parkhere.ui.PublicProfileFragment">
                     android:background="@color/colorAccent"/>
             </LinearLayout>
 
-            <LinearLayout
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/review_label"
-                    android:id="@+id/licenseID_label"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_weight="1"
-                    android:textAlignment="center"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:textColor="@color/colorMainFont"
-                    android:background="@color/colorPrimary"/>
+                android:text="@string/review_label"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:textColor="@color/colorMainFont"
+                android:background="@color/colorPrimary"/>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="licenseID"
-                    android:id="@+id/licenseIDText"
-                    android:layout_alignBottom="@+id/licenseID_label"
-                    android:layout_toRightOf="@+id/licenseID_label"
-                    android:layout_toEndOf="@+id/licenseID_label"
-                    android:layout_weight="1"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:textAlignment="center"
-                    android:textColor="@color/colorMainFont"
-                    android:background="@color/colorAccent"/>
-            </LinearLayout>
-
-            <LinearLayout
+            <ListView
+                android:id="@+id/userReviewList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/review_score_label"
-                    android:id="@+id/licensePlate_label"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_weight="1"
-                    android:textAlignment="center"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:textColor="@color/colorMainFont"
-                    android:background="@color/colorPrimary"/>
-                <ListView
-                    android:id="@+id/UserReviewList"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:textColor="@color/colorMainFont"
-                    android:background="@color/colorAccent"
-                    />
-            </LinearLayout>
+                android:textColor="@color/colorSubFont"
+                android:background="@color/colorAccent"
+                />
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

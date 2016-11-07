@@ -1,5 +1,6 @@
 package csci310.parkhere.ui;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -24,7 +25,9 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
@@ -33,6 +36,7 @@ import resource.NetworkPackage;
 import resource.ParkingSpot;
 import resource.Time;
 import resource.TimeInterval;
+import resource.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -199,6 +203,27 @@ public void onCreate(Bundle savedInstanceState) {
         ((TextView) mView.findViewById(R.id.searchspacedetail_address)).setText(mParkingSpot.getStreetAddr());
         ((TextView) mView.findViewById(R.id.searchspacedetail_price)).setText(new Double(mParkingSpot.search_price).toString());
 //        ((TextView) mView.findViewById(R.id.searchspacedetail_rating)).setText(new Double(mParkingSpot.rating).toString());
+        TextView _provider = (TextView) mView.findViewById(R.id.searchspacedetail_providername);
+        _provider.setText(new Double(mParkingSpot.search_price).toString());
+        _provider.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PublicProfileFragment publicProfileFragment = new PublicProfileFragment();
+                Bundle args = new Bundle();
+//                _firstnameText.setText();
+//                _emailText.setText();
+//                _phoneNumText.setText();
+                args.putString("FIRSTNAME", );
+                args.putString("EMAIL", );
+                args.putString("PHONE_NUM", );
+                args.putStringArrayList("REVIEWS", );
+                publicProfileFragment.setArguments(args);
+                Activity ac = getActivity();
+                if(ac instanceof  RenterActivity)
+                    ((RenterActivity) getActivity()).switchToPublicProfileFrag(publicProfileFragment);
+            }
+        });
+
         Time sTime = mParkingSpot.getTimeIntervalList().get(0).startTime;
         Time eTime = mParkingSpot.getTimeIntervalList().get(0).endTime;
         ((TextView) mView.findViewById(R.id.searchspacedetail_starttime)).setText(sTime.toString());
@@ -261,62 +286,6 @@ public void onCreate(Bundle savedInstanceState) {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-//
-//    private class RenterReserveTask extends AsyncTask<Void, Void, Boolean> {
-//        private final long ;
-//
-//        RenterReserveTask(long parkingSpotID, TimeInterval timeinterval, long userID){
-//            mTimeID = time_id;
-//            doInBackground((Void) null);
-//            System.out.println(mTimeID);
-//        }
-//        @Override
-//        protected void onPreExecute(){
-//            //Display a progress dialog
-//            progressDialog = new ProgressDialog(getContext(), R.style.AppTheme);
-//            progressDialog.setIndeterminate(true);
-//            progressDialog.setMessage("Deleting...");
-//            progressDialog.show();
-//        }
-//        @Override
-//        protected Boolean doInBackground(Void... params ){
-//            // call client controller
-//            ClientController controller = ClientController.getInstance();
-//            System.out.println("DELETE TIME ID: "+ curr_selected_time_id);
-//            controller.ProviderCancel(curr_selected_time_id);
-//
-//            NetworkPackage NP = controller.checkReceived();
-//            MyEntry<String, Serializable> entry = NP.getCommand();
-//            String key = entry.getKey();
-//            Object value = entry.getValue();
-//            if(key.equals("CANCELTIME")) {
-//                return true;
-//            }
-//            else if(key.equals("CANCELTIMEFAIL")) {
-//                return false;
-//            }
-//            else {
-//                return false;
-//            }
-//        }
-//        @Override
-//        protected void onPostExecute(Boolean success) {
-//            if(success) {
-//                _btn_delete_time.setVisibility(View.GONE);
-//                Log.d("DELETETIME", "finish delete time");
-//                Toast.makeText(getContext(), "Deleted!", Toast.LENGTH_SHORT).show();
-//
-//                // Back to SpacesFragment
-//                ((ProviderActivity)getActivity()).showSpaceFragment();
-//
-//                progressDialog.dismiss();
-//
-//            } else{
-//                progressDialog.dismiss();
-//                Toast.makeText(getContext(), "Delete space failed! Please try agian.", Toast.LENGTH_SHORT).show();
-//            }
-//        }
-//    }
 
     private class RenterReserveTask extends AsyncTask<Void, Void, Boolean> {
         private final long parkingSpotID;
@@ -376,5 +345,87 @@ public void onCreate(Bundle savedInstanceState) {
                 Toast.makeText(getContext(), "Book space failed! Please try agian.", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private class GetPublicProfileTask extends AsyncTask<Void, Void, ArrayList<String> >{
+        private final String mUsername;
+        private final String mPassword;
+        private boolean authenticationStatus = true;
+
+        UserLoginTask(String username, String password){
+            mUsername = username;
+            mPassword = password;
+//            doInBackground((Void) null);
+            System.out.println(mUsername);
+            System.out.println(mPassword);
+        }
+        @Override
+        protected void onPreExecute(){
+            //Display a progress dialog
+            progressDialog = new ProgressDialog(LoginActivity.this,
+                    R.style.AppTheme);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Authenticating...");
+            progressDialog.show();
+        }
+        @Override
+        protected ArrayList<String> doInBackground(Void... params ){
+            try {
+
+                Log.d("LOGIN", "ASYNTASK LOGIN");
+                clientController.login(email, password);
+//                clientController.cancelReceived();
+                NetworkPackage NP = clientController.checkReceived();
+
+                if(NP == null)
+                {
+                    Log.d("DOINBACKGROUND", "null");
+                }
+                MyEntry<String, Serializable> entry = NP.getCommand();
+
+
+
+
+                String key = entry.getKey();
+                Object value = entry.getValue();
+                if(key.equals("LF")){
+                    return false;
+                } else if(key.equals("LOGIN")){
+                    User result = (User) value;
+                    Log.d("LOGIN", result.userName);
+                    clientController.setUser(result);
+
+                    Log.d("Login", result.userPlate);
+
+
+                    return true;
+                } else{
+                    return false;
+                }
+            } catch (IOException e) {
+                return false;
+            }
+        }
+        @Override
+        protected void onPostExecute(ArrayList<String> inReview) {
+            Context c = getBaseContext();
+            if(success) {
+                Log.d("LOGIN TEST 1", "yeah");
+                progressDialog.dismiss();
+                finish();
+                if (clientController.getUser().userType) {
+                    Intent myIntent = new Intent(c, RenterActivity.class);
+                    startActivityForResult(myIntent, 0);
+                } else {
+                    Intent myIntent = new Intent(c, ProviderActivity.class);
+                    startActivityForResult(myIntent, 0);
+                }
+            } else{
+                progressDialog.dismiss();
+                Intent intent = new Intent(c, HomeActivity.class);
+                startActivityForResult(intent, 0);
+            }
+        }
+
     }
 }

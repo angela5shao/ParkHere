@@ -1,7 +1,7 @@
 package csci310.parkhere.ui;
 
 import android.support.test.filters.LargeTest;
-import android.support.test.espresso.contrib.PickerActions;
+//import android.support.test.espresso.contrib.PickerActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.widget.DatePicker;
@@ -19,6 +19,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.contrib.PickerActions;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -51,9 +52,7 @@ public class SearchTest {
 
         // Select start date & time
         onView(withId(R.id.btn_start_date)).perform(click());
-        // Change the date of the DatePicker.
-        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2016, 8, 25));
-        // Click on the "OK" button to confirm and close the dialog
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2016, 8, 1));
         onView(withText("OK")).perform(click());
 
         onView(withId(R.id.btn_start_time)).perform(click());
@@ -63,8 +62,9 @@ public class SearchTest {
 
         // Select end date & time
         onView(withId(R.id.btn_end_date)).perform(click());
-        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(1989, 8, 25));
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2016, 8, 30));
         onView(withText("OK")).perform(click());
+
         onView(withId(R.id.btn_end_time)).perform(click());
         onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(0, 0));
         onView(withText("OK")).perform(click());

@@ -1,13 +1,21 @@
 package csci310.parkhere.ui;
 
+import android.support.test.espresso.DataInteraction;
+import android.support.test.espresso.Espresso;
+import android.support.test.espresso.ViewInteraction;
+import android.support.test.espresso.assertion.ViewAssertions;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.Calendar;
 
 import csci310.parkhere.R;
 
@@ -18,13 +26,19 @@ import static android.support.test.espresso.Espresso.openActionBarOverflowOrOpti
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasEntry;
+import static org.hamcrest.Matchers.hasToString;
 import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.startsWith;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
@@ -54,37 +68,49 @@ public class ParkingSpotTest {
         onView(withId(R.id.loginButton)).perform(click());
     }
 
+//    @Test
+//    public void addNewSpot() {
+//        // Ensure in Provider role
+//        intended(hasComponent(ProviderActivity.class.getName()));
+//
+//        // Click on Add, type new space info (address, car type, cancellation policy)
+//        onView(withId(R.id.spaces_addbutton)).perform(click());
+//        onView(withId(R.id.btn_add_address)).perform(click());
+//        onView(withId(R.id.emailText)).perform(typeText(ADDRESS_TO_BE_TYPED));
+//        // TODO: search address
+//        onView(withId(R.id.in_descrip)).perform(typeText(DESCRIPTION_TO_BE_TYPED));
+//
+//        onView(withId(R.id.cartypeSpinner)).perform(click());
+//        onData(allOf(is(instanceOf(String.class)), is(CARTYPE_TO_SELECT))).perform(click());
+////        onView(withId(R.id.usertypeSpinner)).check(matches(withSpinnerText(containsString("Renter"))));
+//        onView(withId(R.id.cancelPolicySpinner)).perform(click());
+//        onData(allOf(is(instanceOf(String.class)), is(CANCEL_POLICY_TO_SELECT))).perform(click());
+//        onView(withId(R.id.btn_confirm)).perform(click());
+//    }
+
     @Test
-    public void addNewSpot() {
-        // Ensure in Provider role
-        intended(hasComponent(ProviderActivity.class.getName()));
-
-        // Click on Add, type new space info (address, car type, cancellation policy)
-        onView(withId(R.id.spaces_addbutton)).perform(click());
-        onView(withId(R.id.btn_add_address)).perform(click());
-        onView(withId(R.id.emailText)).perform(typeText(ADDRESS_TO_BE_TYPED));
-        // TODO: search address
-        onView(withId(R.id.in_descrip)).perform(typeText(DESCRIPTION_TO_BE_TYPED));
-
-        onView(withId(R.id.cartypeSpinner)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is(CARTYPE_TO_SELECT))).perform(click());
-//        onView(withId(R.id.usertypeSpinner)).check(matches(withSpinnerText(containsString("Renter"))));
-        onView(withId(R.id.cancelPolicySpinner)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is(CANCEL_POLICY_TO_SELECT))).perform(click());
-        onView(withId(R.id.btn_confirm)).perform(click());
-    }
-
-    @Test
-    public void editSpot() {
+    public void addNewTime() {
         // Assuming logged in as Renter, switch to Provider
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         onView(withText("Switch to Provider")).perform(click());
 
+        // Click on first spot and check that space detail frag shows up
+        onData(hasToString(startsWith("100 Citadel Dr #480"))).perform(click());
+        // get the text which the fragment shows
+        ViewInteraction fragmentText = onView(withId(R.id.spacedetail_address));
+        // check the fragments text is now visible in the activity
+        fragmentText.check(ViewAssertions.matches(isDisplayed()));
 
+        // Click on add time button
+        onView(withId(R.id.btn_add_time)).perform(click());
+
+        // Select new date
+//        onView(withId(R.id.calendar_view)).perform()
     }
 
-    // add new time
-
-    // add time that overlaps with existing times
+//    @Test
+//    public void addTimeThatOverlapsWithExisting() {
+//
+//    }
 }
 

@@ -75,7 +75,7 @@ public class LoginTest {
 
         // Assuming registered as a renter, check that intent to Renter Activity is called.
         intended(hasComponent(RenterActivity.class.getName()));
-        intended(hasComponent(new ComponentName(getTargetContext(), RenterActivity.class)));
+//        intended(hasComponent(new ComponentName(getTargetContext(), RenterActivity.class)));
 
     }
 
@@ -84,7 +84,7 @@ public class LoginTest {
     Test that role is correct when logged in after registering & logging out as a provider.
      */
     @Test
-    public void addProviderRoleLogoutCheckRole() {
+    public void switchToProviderRoleLogoutCheckRole() {
         // From HomeActivity, click on Login
         onView(withId(R.id.loginButton)).perform(click());
 
@@ -119,6 +119,19 @@ public class LoginTest {
         onView(withText("Switch to Provider")).perform(click());
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         onView(withText("Log Out")).perform(click());
+    }
+
+    @Test
+    public void switchToRenterRoleLogoutCheckRole() {
+        // From HomeActivity, click on Login
+        onView(withId(R.id.loginButton)).perform(click());
+
+        // Login (as a renter). Type email, password. Then press Login button
+        onView(withId(R.id.emailText)).perform(typeText(EMAIL_TO_BE_TYPED));
+        onView(withId(R.id.passwordText)).perform(typeText(PASSWORD_CORRECT_TO_BE_TYPED), closeSoftKeyboard());
+        onView(withId(R.id.loginButton)).perform(click());
+//        intended(hasComponent(ProviderActivity.class.getName()));
+
     }
 
     /*

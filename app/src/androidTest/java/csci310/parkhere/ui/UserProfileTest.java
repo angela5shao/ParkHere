@@ -43,12 +43,23 @@ public class UserProfileTest {
     }
 
     @Test
-    public void checkProfileInfo() {
+    public void checkPrivateProfileInfo() {
         // Click on Profile and validate email
         onView(withId(R.id.profilePic)).perform(click());
         onView(withId(R.id.usernameText)).check(matches(withText(EMAIL_TO_BE_TYPED)));
         // TODO: check licence ID & licence plate
 //        onView(withId(R.id.licenseIDText)).check(matches(withText(LICENSE_TO_BE_TYPED)));
 //        onView(withId(R.id.licenseplateText)).check(matches(withText(LICENSE_PLATE_TO_BE_TYPED)));
+    }
+
+    @Test
+    public void checkPublicProfileInfo() {
+        // Assuming loggedin as Renter
+        // TODO:
+        // Search for my own parking spot
+
+        // Click to get search detail
+
+        // Click to get public profile & validate information (first name)
     }
 }

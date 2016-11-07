@@ -54,26 +54,50 @@ dependencies {
 //    compile group: 'com.google.android.apps.common.testing.accessibility.framework', name: 'accessibility-test-framework', version: '2.0'
 
     testCompile 'junit:junit:4.12'
-    androidTestCompile('com.android.support.test:runner:0.5') {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    }
-    androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.2'
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', { // To build and run Espresso tests
-        exclude group: 'com.android.support', module: 'support-annotations'
-
-        exclude module: 'testing-support-lib'
-        exclude module: 'support-v4'
-        exclude group: 'javax.inject'
-    })
-    androidTestCompile ('com.android.support.test:rules:0.5') {
-        exclude module: 'support-annotations'
-        exclude module: 'support-v4'
-    }
     // To use JUnit 4 rules
-//    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.2.2'
     androidTestCompile 'junit:junit:4.+'
 
-    androidTestCompile ('com.android.support.test.espresso:espresso-contrib:2.0') {
-        exclude module: 'support-annotations'
+//    androidTestCompile('com.android.support.test:runner:0.5') {
+//        exclude group: 'com.android.support', module: 'support-annotations'
+//    }
+//    androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.1'
+//    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.1', { // To build and run Espresso tests
+//        exclude group: 'com.android.support', module: 'support-annotations'
+//
+//        exclude module: 'testing-support-lib'
+//        exclude module: 'support-v4'
+//        exclude group: 'javax.inject'
+//    })
+//    androidTestCompile ('com.android.support.test:rules:0.5') {
+//        exclude module: 'support-annotations'
+//        exclude module: 'support-v4'
+//    }
+//    androidTestCompile('com.android.support.test.espresso:espresso-contrib:2.2.1') {
+//        exclude group: 'com.android.support', module: 'appcompat'
+//        exclude group: 'com.android.support', module: 'support-v4'
+//        exclude module: 'recyclerview-v7'
+//    }
+//    androidTestCompile 'com.android.support:support-annotations:23.2.1'
+    androidTestCompile 'com.android.support.test:rules:0.4.1'
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2') {
+        exclude group: 'com.android.support', module: 'support-annotations'
     }
+    androidTestCompile('com.android.support.test.espresso:espresso-intents:2.2.2') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    androidTestCompile("com.android.support.test.espresso:espresso-contrib:2.2.2") {
+        exclude group: 'com.android.support', module: 'appcompat'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude group: 'com.android.support', module: 'support-v7'
+        exclude group: 'com.android.support', module: 'design'
+        exclude module: 'support-annotations'
+        exclude module: 'recyclerview-v7'
+    }
+    androidTestCompile('com.android.support.test.espresso:espresso-web:2.2.2') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    androidTestCompile ('com.android.support.test:runner:0.4.1') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+
 }

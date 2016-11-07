@@ -56,22 +56,27 @@ public class UserRegistrationTest {
         onView(ViewMatchers.withId(R.id.registerButton)).perform(click());
 
         // Type name, email, password, phone.
-        onView(ViewMatchers.withId(R.id.nameText)).perform(typeText(NAME_TO_BE_TYPED), closeSoftKeyboard());
-        onView(withId(R.id.emailText)).perform(typeText(EMAIL_TO_BE_TYPED), closeSoftKeyboard());
-        onView(withId(R.id.passwordText)).perform(typeText(PASSWORD_LONG_TO_BE_TYPED), closeSoftKeyboard());
+        onView(ViewMatchers.withId(R.id.nameText)).perform(typeText(NAME_TO_BE_TYPED));
+        onView(withId(R.id.emailText)).perform(typeText(EMAIL_TO_BE_TYPED));
+        onView(withId(R.id.passwordText)).perform(typeText(PASSWORD_LONG_TO_BE_TYPED));
         onView(withId(R.id.phoneText)).perform(typeText(PHONE_TO_BE_TYPED), closeSoftKeyboard());
 
         // Select "Renter". Then press button.
         onView(withId(R.id.usertypeSpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("Renter"))).perform(click());
         onView(withId(R.id.usertypeSpinner)).check(matches(withSpinnerText(containsString("Renter"))));
-
         onView(withId(R.id.nextButton)).perform(click());
-
-        // Type license ID
 
         // Check that intent to Renter (same as Provider) Registration Activity is called.
         intended(toPackage("csci310.parkhere.RegisterRenterActivity"));
+
+        // Type license ID
+        onView(withId(R.id.liscenseIdText)).perform(typeText(LICENSE_TO_BE_TYPED));
+        onView(withId(R.id.liscensePlateNumText)).perform(typeText(LICENSE_PLATE_TO_BE_TYPED), closeSoftKeyboard());
+        onView(withId(R.id.nextButton)).perform(click());
+
+        // Check that intent to Renter Activity is called.
+        intended(toPackage("csci310.parkhere.RenterActivity"));
     }
 
     /*

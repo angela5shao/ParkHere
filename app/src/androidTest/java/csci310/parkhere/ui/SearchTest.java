@@ -19,7 +19,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
-import static android.support.test.espresso.contrib.PickerActions;
+//import static android.support.test.espresso.contrib.PickerActions;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -50,24 +50,24 @@ public class SearchTest {
         // Search: type address
         onView(withId(R.id.emailText)).perform(typeText(EMAIL_TO_BE_TYPED));
 
-        // Select start date & time
-        onView(withId(R.id.btn_start_date)).perform(click());
-        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2016, 8, 1));
-        onView(withText("OK")).perform(click());
-
-        onView(withId(R.id.btn_start_time)).perform(click());
-        onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(0, 0));
-        onView(withText("OK")).perform(click());
-
-
-        // Select end date & time
-        onView(withId(R.id.btn_end_date)).perform(click());
-        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2016, 8, 30));
-        onView(withText("OK")).perform(click());
-
-        onView(withId(R.id.btn_end_time)).perform(click());
-        onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(0, 0));
-        onView(withText("OK")).perform(click());
+//        // Select start date & time
+//        onView(withId(R.id.btn_start_date)).perform(click());
+//        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2016, 8, 1));
+//        onView(withText("OK")).perform(click());
+//
+//        onView(withId(R.id.btn_start_time)).perform(click());
+//        onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(0, 0));
+//        onView(withText("OK")).perform(click());
+//
+//
+//        // Select end date & time
+//        onView(withId(R.id.btn_end_date)).perform(click());
+//        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2016, 8, 30));
+//        onView(withText("OK")).perform(click());
+//
+//        onView(withId(R.id.btn_end_time)).perform(click());
+//        onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(0, 0));
+//        onView(withText("OK")).perform(click());
     }
 
 

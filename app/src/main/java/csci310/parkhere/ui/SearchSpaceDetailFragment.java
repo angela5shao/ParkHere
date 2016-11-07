@@ -25,15 +25,16 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
 import resource.MyEntry;
 import resource.NetworkPackage;
 import resource.ParkingSpot;
+import resource.Review;
 import resource.Time;
 import resource.TimeInterval;
 import resource.User;
@@ -67,9 +68,6 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
     private OnFragmentInteractionListener mListener;
 
     Button _searchspacedetail_reservebutton;
-
-
-
 
     SupportMapFragment mMapView;
     private GoogleMap googleMap;
@@ -209,19 +207,8 @@ public void onCreate(Bundle savedInstanceState) {
         _provider.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PublicProfileFragment publicProfileFragment = new PublicProfileFragment();
-                Bundle args = new Bundle();
-//                _firstnameText.setText();
-//                _emailText.setText();
-//                _phoneNumText.setText();
-                args.putString("FIRSTNAME", );
-                args.putString("EMAIL", );
-                args.putString("PHONE_NUM", );
-                args.putStringArrayList("REVIEWS", );
-                publicProfileFragment.setArguments(args);
-                Activity ac = getActivity();
-                if(ac instanceof  RenterActivity)
-                    ((RenterActivity) getActivity()).switchToPublicProfileFrag(publicProfileFragment);
+                GetPublicProfileTask GPPT = new GetPublicProfileTask(mParkingSpot.getOwner());
+                GPPT.execute((Void) null);
             }
         });
 
@@ -312,6 +299,7 @@ public void onCreate(Bundle savedInstanceState) {
         @Override
         protected Boolean doInBackground(Void... params ){
             // call client controller
+            // call client controller
             ClientController controller = ClientController.getInstance();
             controller.renterReserve(userID, parkingSpotID, timeInterval);
             Log.d("SEARCHRESERVE", "AFTERREQUEST");
@@ -354,83 +342,69 @@ public void onCreate(Bundle savedInstanceState) {
         }
     }
 
-    private class GetPublicProfileTask extends AsyncTask<Void, Void, ArrayList<String> >{
-        private final String mUsername;
-        private final String mPassword;
-        private boolean authenticationStatus = true;
+    private class GetPublicProfileTask extends AsyncTask<Void, Void, HashMap<String, Serializable> >{
+        private final long mProviderID;
+        ProgressDialog progressDialog;
 
-        UserLoginTask(String username, String password){
-            mUsername = username;
-            mPassword = password;
-//            doInBackground((Void) null);
-            System.out.println(mUsername);
-            System.out.println(mPassword);
+        GetPublicProfileTask(long providerID){
+            mProviderID = providerID;
         }
         @Override
         protected void onPreExecute(){
             //Display a progress dialog
-            progressDialog = new ProgressDialog(LoginActivity.this,
+            progressDialog = new ProgressDialog(getActivity(),
                     R.style.AppTheme);
             progressDialog.setIndeterminate(true);
-            progressDialog.setMessage("Authenticating...");
+            progressDialog.setMessage("Searching...");
             progressDialog.show();
         }
         @Override
-        protected ArrayList<String> doInBackground(Void... params ){
-            try {
-
-                Log.d("LOGIN", "ASYNTASK LOGIN");
-                clientController.login(email, password);
+        protected HashMap<String, Serializable> doInBackground(Void... params ){
+            ClientController clientController = ClientController.getInstance();
+            clientController.fetchReviewsForUser(mProviderID);
 //                clientController.cancelReceived();
-                NetworkPackage NP = clientController.checkReceived();
-
-                if(NP == null)
-                {
-                    Log.d("DOINBACKGROUND", "null");
-                }
-                MyEntry<String, Serializable> entry = NP.getCommand();
-
-
-
-
-                String key = entry.getKey();
-                Object value = entry.getValue();
-                if(key.equals("LF")){
-                    return false;
-                } else if(key.equals("LOGIN")){
-                    User result = (User) value;
-                    Log.d("LOGIN", result.userName);
-                    clientController.setUser(result);
-
-                    Log.d("Login", result.userPlate);
-
-
-                    return true;
-                } else{
-                    return false;
-                }
-            } catch (IOException e) {
-                return false;
+            NetworkPackage NP = clientController.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if(key.equals("REVIEWSFORUSER")){
+                return (HashMap<String, Serializable>)value;
             }
+            return null;
         }
+
         @Override
-        protected void onPostExecute(ArrayList<String> inReview) {
-            Context c = getBaseContext();
-            if(success) {
-                Log.d("LOGIN TEST 1", "yeah");
+        protected void onPostExecute(HashMap<String, Serializable> inPublicProfileInfo) {
+            Context c = getContext();
+            if(inPublicProfileInfo != null) {
+                Log.d("Search Space Detail ", "GetPublicProfileTask inReview != null");
                 progressDialog.dismiss();
-                finish();
-                if (clientController.getUser().userType) {
-                    Intent myIntent = new Intent(c, RenterActivity.class);
-                    startActivityForResult(myIntent, 0);
-                } else {
-                    Intent myIntent = new Intent(c, ProviderActivity.class);
-                    startActivityForResult(myIntent, 0);
+
+                User user = (User) inPublicProfileInfo.get("USER");
+                ArrayList<Review> list = (ArrayList<Review>)inPublicProfileInfo.get("REVIEWS");
+
+                if(user != null && list != null) {
+                    ArrayList<String> reviewsString = new ArrayList<String>();
+                    for(Review review : list) {
+                        String s = review.spotRating + " - " + review.comment;
+
+                        reviewsString.add(s);
+                    }
+
+                    PublicProfileFragment publicProfileFragment = new PublicProfileFragment();
+                    Bundle args = new Bundle();
+                    args.putString("FIRSTNAME", user.Fname);
+                    args.putString("EMAIL", user.userName);
+                    args.putString("PHONE_NUM", user.userPhone);
+                    args.putStringArrayList("REVIEWS", reviewsString);
+                    publicProfileFragment.setArguments(args);
+                    Activity ac = getActivity();
+                    if (ac instanceof RenterActivity)
+                        ((RenterActivity) getActivity()).switchToPublicProfileFrag(publicProfileFragment);
                 }
             } else{
                 progressDialog.dismiss();
-                Intent intent = new Intent(c, HomeActivity.class);
-                startActivityForResult(intent, 0);
+                Toast.makeText(getContext(), "Get provider profile failed.", Toast.LENGTH_SHORT).show();
             }
         }
 

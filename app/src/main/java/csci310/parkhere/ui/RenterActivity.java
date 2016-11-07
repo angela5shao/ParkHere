@@ -35,7 +35,8 @@ import resource.User;
 public class RenterActivity extends AppCompatActivity implements SearchFragment.OnFragmentInteractionListener,
         PrivateProfileFragment.OnFragmentInteractionListener, EditProfileFragment.OnFragmentInteractionListener,
         DisplaySearchFragment.OnFragmentInteractionListener, ReservationsFragment.OnFragmentInteractionListener,
-        SearchSpaceDetailFragment.OnFragmentInteractionListener, ReservationDetailFragment.OnFragmentInteractionListener {
+        SearchSpaceDetailFragment.OnFragmentInteractionListener, ReservationDetailFragment.OnFragmentInteractionListener,
+        PublicProfileFragment.OnFragmentInteractionListener {
 
     int PAYMENT_REQUEST_CODE = 11;
 
@@ -310,10 +311,12 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         args.putString("RENTER", Long.toString(selectedRes.getSpot().getOwner()));
         args.putLong("RES_ID", selectedRes.getReservationID());
 
-        //******************************************************************
-        args.putBoolean("IF_CANREVIEW", true);
-        //******************************************************************
-
+        if(selectedRes.review==null) {
+            args.putBoolean("IF_CANREVIEW", true);
+        }
+        else {
+            args.putBoolean("IF_CANREVIEW", false);
+        }
         args.putBoolean("IF_CANCANCEL", ifCanCancel);
         resDetailfragment.setArguments(args);
 

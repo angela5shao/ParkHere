@@ -7,7 +7,6 @@ package csci310.parkhere.ui;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -17,6 +16,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +25,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 import csci310.parkhere.R;
 
@@ -55,6 +57,10 @@ public class PublicProfileFragment extends android.support.v4.app.Fragment {
     ImageView _publicProfileImage;
     TextView _firstnameText, _emailText, _phoneNumText;
     ListView _userReviewList;
+
+    String fname, email, phone_num;
+    ArrayList<String> reviews;
+
     public PublicProfileFragment() {
         // Required empty public constructor
     }
@@ -83,15 +89,26 @@ public class PublicProfileFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-            mParam3 = getArguments().getString(ARG_PARAM3);
-            mParam4 = getArguments().getStringArray(ARG_PARAM4);
+//        if (getArguments() != null) {
+//            mParam1 = getArguments().getString(ARG_PARAM1);
+//            mParam2 = getArguments().getString(ARG_PARAM2);
+//            mParam3 = getArguments().getString(ARG_PARAM3);
+//            mParam4 = getArguments().getStringArray(ARG_PARAM4);
+//        }
+        Bundle b = getArguments();
+        if (b != null) {
+            fname = b.getString("FIRSTNAME");
+            email = b.getString("EMAIL");
+            phone_num = b.getString("PHONE_NUM");
+            reviews = new ArrayList<String>((ArrayList<String>) b.getStringArrayList("REVIEWS"));
+
+            Log.d("Public Profile ", "fname = "+fname);
+            Log.d("Public Profile ", "email = "+email);
+            Log.d("Public Profile ", "phone_num = "+phone_num);
+            Log.d("Public Profile ", "reviews.size() = "+reviews.size());
         }
+
         setHasOptionsMenu(true);
-
-
     }
 
     @Override
@@ -99,7 +116,7 @@ public class PublicProfileFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View v = inflater.inflate(R.layout.fragment_private_profile, container, false);
+        View v = inflater.inflate(R.layout.fragment_public_profile, container, false);
 
         _publicProfileImage = (ImageView) v.findViewById(R.id.publicProfileImage);
         //TextView _firstnameText, _emailText, _phoneNumText;
@@ -109,20 +126,21 @@ public class PublicProfileFragment extends android.support.v4.app.Fragment {
         _phoneNumText = (TextView) v.findViewById(R.id.phoneNumText);
         _userReviewList = (ListView) v.findViewById(R.id.userReviewList);
 
-        Bitmap bm = BitmapFactory.decodeResource(getResources(),
-                R.mipmap.ic_default_profile_pic);
-        Bitmap conv_bm = getRoundedBitmap(bm);
-        _publicProfileImage.setImageBitmap(conv_bm);
+//        Bitmap bm = BitmapFactory.decodeResource(getResources(),
+//                R.mipmap.ic_default_profile_pic);
+//        Bitmap conv_bm = getRoundedBitmap(bm);
+//        _publicProfileImage.setImageBitmap(conv_bm);
 
-        _firstnameText.setText();
-        _emailText.setText();
-        _phoneNumText.setText();
+        _firstnameText.setText(fname);
+        _emailText.setText(email);
+        _phoneNumText.setText(phone_num);
 
-//        _userReviewList.setAdapter(new ArrayAdapter(getActivity(),
-//                                    android.R.layout.simple_list_item_1,
-//                                    ArrayList<String>));
-        _userReviewList.setOnItemClickListener(this);
-
+        if(reviews != null) {
+            _userReviewList.setAdapter(new ArrayAdapter(getActivity(),
+                    android.R.layout.simple_list_item_1,
+                    reviews));
+        }
+//        _userReviewList.setOnItemClickListener(this);
 
         return v;
     }

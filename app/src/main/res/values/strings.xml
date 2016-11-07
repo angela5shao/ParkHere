@@ -3,6 +3,8 @@
     <string name="login_signuplink"><u>No account yet? Sign up!</u></string>
     <string name="login_forgotpwlink"><u>Forgot password</u></string>
     <string name="confirm_label">Confirm</string>
+    <string name="first_name_label">First Name: </string>
+    <string name="phone_label">Phone #: </string>
     <string name="cancel_label">Cancel</string>
     <string name="comment_label">Comment</string>
     <string name="search_label">Search</string>
@@ -10,6 +12,7 @@
     <string name="review_label">Review</string>
     <string name="rating_label">Rating</string>
     <string name="space_label">Space</string>
+    <string name="public_profile_label">Profile</string>
     <string name="private_profile_label">My profile</string>
     <string name="edit_profile_label">Edit profile</string>
     <string name="addspace_label">Add space</string>
@@ -17,7 +20,6 @@
     <string name="private_profile_pw_label">Password: </string>
     <string name="private_profile_licenesID_label">License ID: </string>
     <string name="private_profile_licenesPlate_label">License plate #: </string>
-    <string name="private_profile_phone_label">Phone #: </string>
     <string-array name="signup_usertype_spinner">
         <item>Renter</item>
         <item>Provider</item>

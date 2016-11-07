@@ -38,31 +38,6 @@ public class LoginTest {
     @Rule
     public IntentsTestRule<HomeActivity> mActivityRule = new IntentsTestRule(HomeActivity.class);
 
-//    @Before
-//    public void init() {
-//        // From HomeActivity, click on Login
-////        onView(ViewMatchers.withId(R.id.loginButton)).perform(click());
-//        onView(withId(R.id.loginButton)).perform(click());
-//
-//        // Login (as a renter). Type email, password. Then press Login button
-//        onView(withId(R.id.emailText)).perform(typeText(EMAIL_TO_BE_TYPED));
-//        onView(withId(R.id.passwordText)).perform(typeText(PASSWORD_CORRECT_TO_BE_TYPED), closeSoftKeyboard());
-//        onView(withId(R.id.loginButton)).perform(click());
-//    }
-
-//    @After
-//    public void after() {
-//        // Logout
-//        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
-////        onView(withText("Log Out")).perform(click());
-//        onView(withId(R.id.LogOut)).perform(click());
-////        onView(anyOf(withText(R.string.<your label for the menu item>), withId(R.id.<id of the menu item>))).perform(click());
-//
-//    }
-
-    /*
-    Test to login with correct credentials
-     */
     @Test
     public void successfulLogin() {
         // From HomeActivity, click on Login
@@ -73,15 +48,8 @@ public class LoginTest {
         onView(withId(R.id.passwordText)).perform(typeText(PASSWORD_CORRECT_TO_BE_TYPED), closeSoftKeyboard());
         onView(withId(R.id.loginButton)).perform(click());
 
-        // Assuming only registered only as a renter, check that intent to Renter Activity is called.
-//        onView(withId(R.id.renter_ui)).check(matches(isDisplayed()));
-        // Validate label on SecondActivity
-//        onView(withText("RenterActivity")).check(ViewAssertions.matches(isDisplayed()));
-
-        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(
-                Activity.RESULT_OK, new Intent());
-        intending(toPackage("csci310.parkhere.ui")).respondWith(result);
-//        intended(hasComponent(RenterActivity.class.getName()));
+        // Assuming registered as a renter, check that intent to Renter Activity is called.
+        intended(hasComponent(RenterActivity.class.getName()));
 //        intended(hasComponent(new ComponentName(getTargetContext(), RenterActivity.class)));
 
     }
@@ -91,7 +59,7 @@ public class LoginTest {
     Test that role is correct when logged in after registering & logging out as a provider.
      */
     @Test
-    public void addProviderRoleLogoutCheckRole() {
+    public void switchToProviderRoleLogoutCheckRole() {
         // From HomeActivity, click on Login
         onView(withId(R.id.loginButton)).perform(click());
 
@@ -99,22 +67,11 @@ public class LoginTest {
         onView(withId(R.id.emailText)).perform(typeText(EMAIL_TO_BE_TYPED));
         onView(withId(R.id.passwordText)).perform(typeText(PASSWORD_CORRECT_TO_BE_TYPED), closeSoftKeyboard());
         onView(withId(R.id.loginButton)).perform(click());
+        intended(hasComponent(ProviderActivity.class.getName()));
 
         // Switch to provider
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
-        onView(withText("Switch to Provider")).perform(click());
-
-//        {
-//            // Check that RegisterProviderActivity is called.
-//            intended(toPackage("csci310.parkhere.RegisterProviderActivity"));
-//
-//            // Enter licence ID. Click on Next.
-//            onView(withId(R.id.liscenseIdText)).perform(typeText(LICENCE_TO_BE_TYPED), closeSoftKeyboard());
-//            onView(withId(R.id.nextButton)).perform(click());
-//
-//            // Check that ProviderActivity is called.
-//            intended(toPackage("csci310.parkhere.ProviderActivity"));
-//        }
+        onView(withText("Switch to Renter")).perform(click());
 
         // Logout
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
@@ -127,16 +84,29 @@ public class LoginTest {
         onView(withId(R.id.loginButton)).perform(click());
 
         // Check that ProviderActivity is called.
-//        intended(toPackage("csci310.parkhere.ProviderActivity"));
-        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(
-                Activity.RESULT_OK, new Intent());
-        intending(toPackage("csci310.parkhere.ui")).respondWith(result);
+        intended(hasComponent(RenterActivity.class.getName()));
+//        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(
+//                Activity.RESULT_OK, new Intent());
+//        intending(toPackage("csci310.parkhere.ui")).respondWith(result);
 
         // For consistency purposes (set last role as renter), switch back to renter and logout
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
-        onView(withText("Switch to Renter")).perform(click());
+        onView(withText("Switch to Provider")).perform(click());
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         onView(withText("Log Out")).perform(click());
+    }
+
+    @Test
+    public void switchToRenterRoleLogoutCheckRole() {
+        // From HomeActivity, click on Login
+        onView(withId(R.id.loginButton)).perform(click());
+
+        // Login (as a renter). Type email, password. Then press Login button
+        onView(withId(R.id.emailText)).perform(typeText(EMAIL_TO_BE_TYPED));
+        onView(withId(R.id.passwordText)).perform(typeText(PASSWORD_CORRECT_TO_BE_TYPED), closeSoftKeyboard());
+        onView(withId(R.id.loginButton)).perform(click());
+//        intended(hasComponent(ProviderActivity.class.getName()));
+
     }
 
     /*

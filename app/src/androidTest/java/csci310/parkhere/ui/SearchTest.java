@@ -36,7 +36,7 @@ public class SearchTest {
     public static final String EMAIL_TO_BE_TYPED = "yy@yy.com"; //"espressoeast@usc.edu";
     public static final String PASSWORD_CORRECT_TO_BE_TYPED = "1234567890"; //"12345";
     public static final String LAST_USER_ROLE = "Provider";
-    public static final String ADDRESS_USER_ROLE = "UC Berkeley";
+    public static final String ADDRESS_TO_BE_TYPED = "UC Berkeley";
 
     @Rule
     public ActivityTestRule<RenterActivity> mActivityRule = new ActivityTestRule(RenterActivity.class);
@@ -97,6 +97,7 @@ public class SearchTest {
         onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2016, 8, 25));
         // Click on the "OK" button to confirm and close the dialog
         onView(withText("OK")).perform(click());
+//        onView(withId(R.id.emailText)).perform(typeText(ADDRESS_TO_BE_TYPED));
 
 //        // Select start date & time
 //        onView(withId(R.id.btn_start_date)).perform(click());

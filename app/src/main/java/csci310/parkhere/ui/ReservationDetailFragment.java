@@ -68,6 +68,7 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
     private String end_time = "[end time]";
     private String renter_username = "[renter username]";
     private long res_id = 0;
+    private boolean if_canReview, if_canCancel;
 
     public ReservationDetailFragment() {
         // Required empty public constructor
@@ -105,6 +106,8 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
             end_time = b.getString("END_TIME");
             renter_username = b.getString("RENTER");
             res_id = b.getLong("RES_ID");
+            if_canReview = b.getBoolean("IF_CANREVIEW");
+            if_canCancel = b.getBoolean("IF_CANCANCEL");
         }
     }
 
@@ -120,6 +123,13 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
         _renter_username_label=(TextView)v.findViewById(R.id.renter_username_label);
         _btn_review=(Button)v.findViewById(R.id.btn_review);
         _btn_cancel=(Button)v.findViewById(R.id.btn_cancel);
+
+        if(!if_canReview) {
+            _btn_review.setVisibility(View.GONE);
+        }
+        if(!if_canReview) {
+            _btn_cancel.setVisibility(View.GONE);
+        }
 
         _spacedetail_address.setText(address);
         _start_time_label.setText(start_time);

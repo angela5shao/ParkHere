@@ -87,9 +87,6 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
             public void onClick(View v) {
                 RequestReservationsTask RRT = new RequestReservationsTask();
                 RRT.execute((Void) null);
-
-
-
             }
         });
 
@@ -248,7 +245,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 //        editProfileFragment.updateUserInfo(inUsername, inPw, inLicenseID, inLicensePlate);
 //    }
 
-    public void onReservationSelected(int resPosition) {
+    public void onReservationSelected(int resPosition, boolean ifCanCancel) {
         System.out.println("RenterActivity onReservationSelected for: " + resPosition);
         if (clientController.reservations.size() == 0) {
             System.out.println("RenterActivity: error - no reservations to select");
@@ -268,13 +265,13 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         args.putString("END_TIME", selectedRes.getReserveTimeInterval().endTime.toString());
         args.putString("RENTER", Long.toString(selectedRes.getSpot().getOwner()));
         args.putLong("RES_ID", selectedRes.getReservationID());
+
+        //******************************************************************
+        args.putBoolean("IF_CANREVIEW", true);
+        //******************************************************************
+
+        args.putBoolean("IF_CANCANCEL", ifCanCancel);
         resDetailfragment.setArguments(args);
-//        resDetailfragment.setReservation(selectedRes.getSpot().getStreetAddr(),
-//                                            selectedRes.getReserveTimeInterval().endTime.toString(),
-//                                            selectedRes.getReserveTimeInterval().endTime.toString(),
-//                                            Long.toString(selectedRes.getSpot().getOwner()),
-//                                            selectedRes.getSpot().getLat(),
-//                                            selectedRes.getSpot().getLon());
 
         try {
             getSupportFragmentManager().beginTransaction()
@@ -285,17 +282,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
     }
 
     private class RequestReservationsTask extends AsyncTask<Void, Void, ArrayList<Reservation>> {
-
-        RequestReservationsTask() {
-
-//            doInBackground((Void) null);
-        }
-
-//        @Override
-//        protected void onPreExecute(){
-//            clientController.providerToshowSpacesDetail = true;
-//        }
-
+        RequestReservationsTask() { }
         @Override
         protected ArrayList<Reservation> doInBackground(Void... params) {
             clientController.requestMyReservationList();
@@ -304,14 +291,8 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
             String key = entry.getKey();
             Object value = entry.getValue();
             if (key.equals("RESERVATIONLIST")) {
-//                HashMap<String, Serializable> map = (HashMap<String, Serializable>) value;
-//                ArrayList<TimeInterval> myTimeIntervals = (ArrayList<TimeInterval>) map.get("TIMEINTERVAL");
-//                Long spotID = (Long)map.get("PARKINGSPOTID");
-//                clientController.setSpotTimeInterval(spotID,myTimeIntervals);
-
                 ArrayList<Reservation> list = (ArrayList<Reservation>) value;
                 Log.d("FETCHRESERVATIONLIST", "listsize: " + String.valueOf(list.size()));
-
 
                 return list;
             } else {

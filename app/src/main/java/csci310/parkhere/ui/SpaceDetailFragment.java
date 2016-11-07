@@ -263,7 +263,7 @@ public class SpaceDetailFragment extends Fragment {
                 GPTODTask.execute((Void) null);
 
                 // Check if date is not pasted first
-                if (!CalendarUtils.isPastDay(date)) {
+//                if (!CalendarUtils.isPastDay(date)) {
                     if (selectedStartDate == null) {
                         selectedStartDate = date;
                         _in_start_date.setText(dateFormat.format(selectedStartDate));
@@ -313,7 +313,7 @@ public class SpaceDetailFragment extends Fragment {
                         selectedStartDate = null;
                         selectedEndDate = null;
                     }
-                }
+//                }
 
 //                if (!currSpaceTimeIntervals.isEmpty()) {
 //                    Log.d("btn_add_space", ".setClickable(true)");

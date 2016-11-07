@@ -298,7 +298,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         args.putDouble("LAT", selectedRes.getSpot().getLat());
         args.putDouble("LONG", selectedRes.getSpot().getLon());
         args.putString("ADDRESS", selectedRes.getSpot().getStreetAddr());
-        args.putString("START_TIME", selectedRes.getReserveTimeInterval().endTime.toString());
+        args.putString("START_TIME", selectedRes.getReserveTimeInterval().startTime.toString());
         args.putString("END_TIME", selectedRes.getReserveTimeInterval().endTime.toString());
         args.putString("RENTER", Long.toString(selectedRes.getSpot().getOwner()));
         args.putLong("RES_ID", selectedRes.getReservationID());
@@ -363,7 +363,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 //            bundle.putString("param4", endDate);
 //            bundle.putString("param5", endTime);
 //            searchSpaceDetailFragment.setArguments(bundle);
-//
+//0
 //            fragmentTransaction.replace(R.id.fragContainer, searchSpaceDetailFragment);
 //            fragmentTransaction.addToBackStack(null);
 //            fragmentTransaction.commit();

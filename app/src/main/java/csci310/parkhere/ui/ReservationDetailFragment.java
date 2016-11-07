@@ -354,6 +354,9 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
             NetworkPackage NP = clientController.checkReceived();
             MyEntry<String, Serializable> entry = NP.getCommand();
             String key = entry.getKey();
+
+
+            Log.d("ADDREVIEW", key);
             if(key.equals("ADDREVIEW")){
                 return true;
             }

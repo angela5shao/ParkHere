@@ -41,14 +41,15 @@ public class UserRegistrationTest {
     public static final String PASSWORD_SHORT_TO_BE_TYPED = "12345";
     public static final String PASSWORD_LONG_TO_BE_TYPED = "123456789012";
     public static final String PHONE_TO_BE_TYPED = "2132132133";
+    public static final String LICENSE_TO_BE_TYPED = "0909090";
+    public static final String LICENSE_PLATE_TO_BE_TYPED = "089089089";
 
     @Rule
     public ActivityTestRule<HomeActivity> mActivityRule = new ActivityTestRule(HomeActivity.class);
 
-//    @Test
-//    public void listGoesOverTheFold() {
-//        onView(withText("Hello world!")).check(matches(isDisplayed()));
-//    }
+    /*
+    Tests that registration succeeds with unique email and long enough password.
+     */
     @Test
     public void uniqueEmailLongPasswordRegistration() {
         // From HomeActivity, click on Login
@@ -67,10 +68,15 @@ public class UserRegistrationTest {
 
         onView(withId(R.id.nextButton)).perform(click());
 
+        // Type license ID
+
         // Check that intent to Renter (same as Provider) Registration Activity is called.
         intended(toPackage("csci310.parkhere.RegisterRenterActivity"));
     }
 
+    /*
+    Tests that registration fails with unique email and password that's too short.
+     */
     @Test
     public void uniqueEmailShortPasswordRegistration() {
         // From HomeActivity, click on Login
@@ -93,6 +99,9 @@ public class UserRegistrationTest {
         intended(hasComponent(RegisterRenterActivity.class.getName()), times(0));
     }
 
+    /*
+    Tests that registration fails with duplicate email.
+     */
     @Test
     public void duplicateRegistration() {
         // From HomeActivity, click on Login

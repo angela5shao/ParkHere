@@ -115,26 +115,8 @@ public class PublicProfileFragment extends android.support.v4.app.Fragment {
         Bitmap bm = BitmapFactory.decodeResource(getResources(),
                 R.mipmap.ic_default_profile_pic);
         Bitmap conv_bm = getRoundedBitmap(bm);
-        _privatProfileImage.setImageBitmap(conv_bm);
+        _ProfileImage.setImageBitmap(conv_bm);
 
-        _editLogo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditProfileFragment editProfileFragment = new EditProfileFragment();
-                Bundle args = new Bundle();
-                args.putString("FIRSTNAME", mParam1 );
-                args.putString("PHONENUMBER", mParam2);
-                args.putString("REVIEWSCORE", mParam3);
-                args.putStringArray("COMMENTS",mParam4);
-//                args.putString("COMMENTS", mParam4);
-                editProfileFragment.setArguments(args);
-                Activity ac = getActivity();
-                if(ac instanceof  RenterActivity)
-                    ((RenterActivity) getActivity()).switchToEditProfileFrag();
-                else if(ac instanceof  ProviderActivity)
-                    ((ProviderActivity) getActivity()).switchToEditProfileFrag();
-            }
-        });
 
 //        ClientController controller = ClientController.getInstance();
 //

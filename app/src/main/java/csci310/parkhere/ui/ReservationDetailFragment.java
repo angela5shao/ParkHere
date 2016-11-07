@@ -27,11 +27,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
 import resource.MyEntry;
 import resource.NetworkPackage;
+import resource.Time;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -68,6 +70,7 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
     private String end_time = "[end time]";
     private String renter_username = "[renter username]";
     private long res_id = 0;
+    private boolean if_canReview, if_canCancel;
 
     public ReservationDetailFragment() {
         // Required empty public constructor
@@ -105,6 +108,8 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
             end_time = b.getString("END_TIME");
             renter_username = b.getString("RENTER");
             res_id = b.getLong("RES_ID");
+            if_canReview = b.getBoolean("IF_CANREVIEW");
+            if_canCancel = b.getBoolean("IF_CANCANCEL");
         }
     }
 
@@ -120,6 +125,13 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
         _renter_username_label=(TextView)v.findViewById(R.id.renter_username_label);
         _btn_review=(Button)v.findViewById(R.id.btn_review);
         _btn_cancel=(Button)v.findViewById(R.id.btn_cancel);
+
+        if(!if_canReview) {
+            _btn_review.setVisibility(View.GONE);
+        }
+        if(!if_canReview) {
+            _btn_cancel.setVisibility(View.GONE);
+        }
 
         _spacedetail_address.setText(address);
         _start_time_label.setText(start_time);
@@ -181,8 +193,16 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
             @Override
             public void onClick(View v) {
                 // call Client Controller for cancelling reservaiton
-                RenterCancelTask RCT = new RenterCancelTask(res_id);
-                RCT.execute((Void) null);
+                Time start = new Time(start_time);
+                Calendar cal = Calendar.getInstance();
+                Time currentTime = new Time(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH),cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
+                if(currentTime.compareTo(start)<0){
+                    RenterCancelTask RCT = new RenterCancelTask(res_id);
+                    RCT.execute((Void) null);
+                }
+                else{
+                    Toast.makeText(getContext(), "Can not cancel the reservation which has started!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -338,8 +358,10 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
                 return true;
             }
             else if(key.equals("ADDREVIEWFAIL")){
+                Log.d("Reservation Detail ","ADDREVIEWFAIL");
                 return false;
             }
+            Log.d("Reservation Detail ","doInBackground END");
             return false;
         }
 

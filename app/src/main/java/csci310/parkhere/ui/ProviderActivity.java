@@ -109,10 +109,7 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
             public void onClick(View v) {
                 System.out.println("Clicked on spaces tab item");
                 try {
-//                    fragmentTransaction.replace(R.id.fragContainer, spacesFragment)
-//                        .commit();
-//                    getSupportFragmentManager().beginTransaction()
-//                            .replace(R.id.fragContainer, spacesFragment).commit();
+
                     RPTask = new requestParkingSpotListTask();
                     RPTask.execute((Void) null);
                 } catch (Exception e) {
@@ -143,6 +140,7 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
                     args.putString("PASSWORD", "");
                     args.putString("USERLICENSE",user.userLicense);
                     args.putString("USERPLATE", user.userPlate);
+                    args.putString("PHONE", user.userPhone);
                     privateProfileFragment.setArguments(args);
                 }
 //                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragContainer);
@@ -171,17 +169,16 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
                 .replace(R.id.fragContainer, spacesFragment).commit();
     }
 
-    public void switchToEditProfileFrag() {
+    public void switchToEditProfileFrag(EditProfileFragment editProfileFragment) {
         fragmentTransaction = fm.beginTransaction();
-        User user = clientController.getUser();
-        EditProfileFragment editProfileFragment = new EditProfileFragment();
-        Bundle args = new Bundle();
-        args.putString("USERNAME", user.userName);
-        args.putString("PASSWORD", "******");
-        args.putString("USERLICENSE", user.userLicense);
-        args.putString("USERPLATE", user.userPlate);
-        editProfileFragment.setArguments(args);
         fragmentTransaction.replace(R.id.fragContainer, editProfileFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    public void switchToPrivateProfileFrag(PrivateProfileFragment privateProfileFragment){
+        fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(R.id.fragContainer, privateProfileFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

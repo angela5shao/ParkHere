@@ -85,11 +85,15 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         _resLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (clientController.getUser().userPlate.equals("#######"))
+                {
+                    Toast.makeText(getBaseContext(), "Please fill in licence plate info before proceed", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 RequestReservationsTask RRT = new RequestReservationsTask();
                 RRT.execute((Void) null);
-
-
-
             }
         });
 
@@ -97,6 +101,13 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         _searchLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (clientController.getUser().userPlate.equals("#######"))
+                {
+                    Toast.makeText(getBaseContext(), "Please fill in licence plate info before proceed", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+
                 fragmentTransaction = fm.beginTransaction();
                 fragmentTransaction.replace(R.id.fragContainer, searchFragment);
                 fragmentTransaction.addToBackStack(null);
@@ -120,6 +131,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
                     args.putString("PASSWORD", "");
                     args.putString("USERLICENSE",user.userLicense);
                     args.putString("USERPLATE", user.userPlate);
+                    args.putString("PHONE", user.userPhone);
                     privateProfileFragment.setArguments(args);
                 }
                 fragmentTransaction.replace(R.id.fragContainer, privateProfileFragment);
@@ -127,6 +139,29 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
                 fragmentTransaction.commit();
             }
         });
+
+
+        if(clientController.getUser().userPlate.equals("#######"))
+        {
+            fragmentTransaction = fm.beginTransaction();
+
+            privateProfileFragment = new PrivateProfileFragment();
+            User user = clientController.getUser();
+            if(user == null){
+                Log.d("PROFILE", "user is null");
+            }
+            else {
+                Bundle args = new Bundle();
+                args.putString("USERNAME", user.userName);
+                args.putString("PASSWORD", "");
+                args.putString("USERLICENSE",user.userLicense);
+                args.putString("USERPLATE", user.userPlate);
+                privateProfileFragment.setArguments(args);
+            }
+            fragmentTransaction.replace(R.id.fragContainer, privateProfileFragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
     }
 
     @Override
@@ -227,17 +262,16 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         fragmentTransaction.commit();
     }
 
-    public void switchToEditProfileFrag() {
+    public void switchToEditProfileFrag(EditProfileFragment editProfileFragment) {
         fragmentTransaction = fm.beginTransaction();
-        User user = clientController.getUser();
-        EditProfileFragment editProfileFragment = new EditProfileFragment();
-        Bundle args = new Bundle();
-        args.putString("USERNAME", user.userName);
-        args.putString("PASSWORD", "******");
-        args.putString("USERLICENSE", user.userLicense);
-        args.putString("USERPLATE", user.userPlate);
-        editProfileFragment.setArguments(args);
         fragmentTransaction.replace(R.id.fragContainer, editProfileFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    public void switchToPrivateProfileFrag(PrivateProfileFragment privateProfileFragment){
+        fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(R.id.fragContainer, privateProfileFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
@@ -248,7 +282,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 //        editProfileFragment.updateUserInfo(inUsername, inPw, inLicenseID, inLicensePlate);
 //    }
 
-    public void onReservationSelected(int resPosition) {
+    public void onReservationSelected(int resPosition, boolean ifCanCancel) {
         System.out.println("RenterActivity onReservationSelected for: " + resPosition);
         if (clientController.reservations.size() == 0) {
             System.out.println("RenterActivity: error - no reservations to select");
@@ -264,17 +298,17 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         args.putDouble("LAT", selectedRes.getSpot().getLat());
         args.putDouble("LONG", selectedRes.getSpot().getLon());
         args.putString("ADDRESS", selectedRes.getSpot().getStreetAddr());
-        args.putString("START_TIME", selectedRes.getReserveTimeInterval().endTime.toString());
+        args.putString("START_TIME", selectedRes.getReserveTimeInterval().startTime.toString());
         args.putString("END_TIME", selectedRes.getReserveTimeInterval().endTime.toString());
         args.putString("RENTER", Long.toString(selectedRes.getSpot().getOwner()));
         args.putLong("RES_ID", selectedRes.getReservationID());
+
+        //******************************************************************
+        args.putBoolean("IF_CANREVIEW", true);
+        //******************************************************************
+
+        args.putBoolean("IF_CANCANCEL", ifCanCancel);
         resDetailfragment.setArguments(args);
-//        resDetailfragment.setReservation(selectedRes.getSpot().getStreetAddr(),
-//                                            selectedRes.getReserveTimeInterval().endTime.toString(),
-//                                            selectedRes.getReserveTimeInterval().endTime.toString(),
-//                                            Long.toString(selectedRes.getSpot().getOwner()),
-//                                            selectedRes.getSpot().getLat(),
-//                                            selectedRes.getSpot().getLon());
 
         try {
             getSupportFragmentManager().beginTransaction()
@@ -285,17 +319,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
     }
 
     private class RequestReservationsTask extends AsyncTask<Void, Void, ArrayList<Reservation>> {
-
-        RequestReservationsTask() {
-
-//            doInBackground((Void) null);
-        }
-
-//        @Override
-//        protected void onPreExecute(){
-//            clientController.providerToshowSpacesDetail = true;
-//        }
-
+        RequestReservationsTask() { }
         @Override
         protected ArrayList<Reservation> doInBackground(Void... params) {
             clientController.requestMyReservationList();
@@ -304,14 +328,8 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
             String key = entry.getKey();
             Object value = entry.getValue();
             if (key.equals("RESERVATIONLIST")) {
-//                HashMap<String, Serializable> map = (HashMap<String, Serializable>) value;
-//                ArrayList<TimeInterval> myTimeIntervals = (ArrayList<TimeInterval>) map.get("TIMEINTERVAL");
-//                Long spotID = (Long)map.get("PARKINGSPOTID");
-//                clientController.setSpotTimeInterval(spotID,myTimeIntervals);
-
                 ArrayList<Reservation> list = (ArrayList<Reservation>) value;
                 Log.d("FETCHRESERVATIONLIST", "listsize: " + String.valueOf(list.size()));
-
 
                 return list;
             } else {
@@ -345,7 +363,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 //            bundle.putString("param4", endDate);
 //            bundle.putString("param5", endTime);
 //            searchSpaceDetailFragment.setArguments(bundle);
-//
+//0
 //            fragmentTransaction.replace(R.id.fragContainer, searchSpaceDetailFragment);
 //            fragmentTransaction.addToBackStack(null);
 //            fragmentTransaction.commit();

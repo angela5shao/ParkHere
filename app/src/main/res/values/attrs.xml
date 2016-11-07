@@ -3,6 +3,7 @@
     <attr name="colorSubAccent" format="reference"/>
     <attr name="colorDarkBackground" format="reference"/>
     <attr name="colorLightBackground" format="reference"/>
+    <attr name="colorGrey" format="reference"/>
     <attr name="colorLine" format="reference"/>
     <attr name="colorMainFont" format="reference"/>
     <attr name="colorSubFont" format="reference"/>

@@ -18,7 +18,8 @@
         android:numStars="5"
         android:rating="3.0"
         android:stepSize="1.0"
-        android:clickable="true"
+        android:progressTint="#FFCC00"
+        android:secondaryProgressTint="#FFCC00"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/review_label"/>
 

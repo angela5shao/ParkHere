@@ -9,6 +9,7 @@
         <item name="colorSubAccent">@color/colorSubAccent</item>
         <item name="colorDarkBackground">@color/colorDarkBackground</item>
         <item name="colorLightBackground">@color/colorLightBackground</item>
+        <item name="colorGrey">@color/colorGrey</item>
         <item name="colorLine">@color/colorLine</item>
         <item name="colorMainFont">@color/colorMainFont</item>
         <item name="colorSubFont">@color/colorSubFont</item>

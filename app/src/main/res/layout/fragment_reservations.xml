@@ -20,12 +20,21 @@
                 android:textAlignment="center"/>
 
             <ListView
-                android:id="@android:id/list"
+                android:id="@+id/futureList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="12dp"
                 android:textColor="@color/colorMainFont"
                 android:background="@color/colorAccent"
+                />
+
+            <ListView
+                android:id="@+id/passedList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="12dp"
+                android:textColor="@color/colorMainFont"
+                android:background="@color/colorGrey"
                 />
         </LinearLayout>
     <!--</ScrollView>-->

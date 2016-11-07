@@ -203,6 +203,43 @@
                     android:textColor="@color/colorMainFont"
                     android:background="@color/colorAccent"/>
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/private_profile_phone_label"
+                    android:id="@+id/phoneText_label"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_weight="1"
+                    android:textAlignment="center"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@color/colorMainFont"
+                    android:background="@color/colorPrimary"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Phone num"
+                    android:id="@+id/phoneText"
+                    android:layout_alignBottom="@+id/licensePlate_label"
+                    android:layout_toRightOf="@+id/licensePlate_label"
+                    android:layout_toEndOf="@+id/licensePlate_label"
+                    android:layout_weight="1"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorMainFont"
+                    android:background="@color/colorAccent"/>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

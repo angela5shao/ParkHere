@@ -41,17 +41,19 @@ public class PrivateProfileFragment extends Fragment {
     private static final String ARG_PARAM2 = "PASSWORD";
     private static final String ARG_PARAM3 = "USERLICENSE";
     private static final String ARG_PARAM4 = "USERPLATE";
+    private static final String ARG_PARAM5 = "PHONE";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     private String mParam3;
     private String mParam4;
+    private String mParam5;
 
     private OnFragmentInteractionListener mListener;
 
     ImageView _privatProfileImage, _editLogo;
-    TextView _usernameText, _pwText, _licenseIDText, _licenseplateText;
+    TextView _usernameText, _pwText, _licenseIDText, _licenseplateText, _phoneText;
 
     public PrivateProfileFragment() {
         // Required empty public constructor
@@ -66,14 +68,14 @@ public class PrivateProfileFragment extends Fragment {
      * @return A new instance of fragment PrivateProfileFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static PrivateProfileFragment newInstance(String param1, String param2, String param3, String param4) {
+    public static PrivateProfileFragment newInstance(String param1, String param2, String param3, String param4, String param5) {
         PrivateProfileFragment fragment = new PrivateProfileFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         args.putString(ARG_PARAM3, param3);
         args.putString(ARG_PARAM4, param4);
-
+        args.putString(ARG_PARAM5, param5);
         fragment.setArguments(args);
         return fragment;
     }
@@ -86,6 +88,7 @@ public class PrivateProfileFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
             mParam3 = getArguments().getString(ARG_PARAM3);
             mParam4 = getArguments().getString(ARG_PARAM4);
+            mParam5 = getArguments().getString(ARG_PARAM5);
         }
         setHasOptionsMenu(true);
     }
@@ -106,6 +109,7 @@ public class PrivateProfileFragment extends Fragment {
         _pwText = (TextView) v.findViewById(R.id.pwText);
         _licenseIDText = (TextView) v.findViewById(R.id.licenseIDText);
         _licenseplateText = (TextView) v.findViewById(R.id.licenseplateText);
+        _phoneText = (TextView) v.findViewById(R.id.phoneText);
 
         Bitmap bm = BitmapFactory.decodeResource(getResources(),
                 R.mipmap.ic_default_profile_pic);
@@ -121,12 +125,13 @@ public class PrivateProfileFragment extends Fragment {
                 args.putString("PASSWORD", mParam2);
                 args.putString("USERLICENSE", mParam3);
                 args.putString("USERPLATE", mParam4);
+                args.putString("PHONE", mParam5);
                 editProfileFragment.setArguments(args);
                 Activity ac = getActivity();
                 if(ac instanceof  RenterActivity)
-                    ((RenterActivity) getActivity()).switchToEditProfileFrag();
+                    ((RenterActivity) getActivity()).switchToEditProfileFrag(editProfileFragment);
                 else if(ac instanceof  ProviderActivity)
-                    ((ProviderActivity) getActivity()).switchToEditProfileFrag();
+                    ((ProviderActivity) getActivity()).switchToEditProfileFrag(editProfileFragment);
             }
         });
 
@@ -143,6 +148,7 @@ public class PrivateProfileFragment extends Fragment {
         _pwText.setText(mParam2);
         _licenseIDText.setText(mParam3);
         _licenseplateText.setText(mParam4);
+        _phoneText.setText(mParam5);
         return v;
     }
 

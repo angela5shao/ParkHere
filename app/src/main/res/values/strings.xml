@@ -17,6 +17,7 @@
     <string name="private_profile_pw_label">Password: </string>
     <string name="private_profile_licenesID_label">License ID: </string>
     <string name="private_profile_licenesPlate_label">License plate #: </string>
+    <string name="private_profile_phone_label">Phone #: </string>
     <string-array name="signup_usertype_spinner">
         <item>Renter</item>
         <item>Provider</item>

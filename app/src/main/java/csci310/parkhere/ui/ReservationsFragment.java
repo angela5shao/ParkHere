@@ -85,6 +85,7 @@ public class ReservationsFragment extends Fragment implements AdapterView.OnItem
         _passedList = (ListView) v.findViewById(R.id.passedList);
 
         ClientController controller = ClientController.getInstance();
+
         ArrayList<Reservation> original_reservations = controller.reservations;
 
 
@@ -117,6 +118,7 @@ public class ReservationsFragment extends Fragment implements AdapterView.OnItem
             Time endTime = futureReservations.get(i).getReserveTimeInterval().endTime;
 
             futureListString.add(spotInlist.getStreetAddr() + " Time: " + startTIme.toString() + "-" + endTime.toString());
+
         }
         for(int i = 0 ; i < passedReservations.size(); i++) {
             Log.d("FETCHRESERVATIONLIST","add into passed list");
@@ -183,7 +185,7 @@ public class ReservationsFragment extends Fragment implements AdapterView.OnItem
                             long id) {
         boolean ifCanCancel = true;
         if(view.getId()==R.id.passedList) ifCanCancel = false;
-        Log.d("view.getId() = ", getContext().getString(view.getId()));
+//        Log.d("view.getId() = ", getContext().getString(view.getId()));
         mListener.onReservationSelected(position, ifCanCancel);
         System.out.println("CLICKED on Reservation: " + position);
     }

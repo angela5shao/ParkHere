@@ -341,6 +341,29 @@ public class SpaceDetailFragment extends Fragment {
         _btn_add_confirm=(Button)v.findViewById(R.id.btn_add_confirm);
         _btn_add_confirm.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+
+                boolean valid = true;
+                ArrayList<TimeInterval> intervals = thisParkingSpot.getTimeIntervalList();
+                for(int i = 0; i < intervals.size(); i++)
+                {
+                    Time start = intervals.get(i).startTime;
+                    Time end = intervals.get(i).endTime;
+                    if((start.compareTo(inputedStartTime) <= 0 && end.compareTo(inputedEndTime) >=0) ||
+                            (start.compareTo(inputedStartTime) >= 0 && end.compareTo(inputedEndTime) >=0) ||
+                            (start.compareTo(inputedStartTime) <= 0 && end.compareTo(inputedEndTime) <=0))
+                    {
+                        valid = false;
+                        Log.d("ADDTIME", "Try to add: " + inputedStartTime + " " + inputedEndTime);
+                        Log.d("ADDTIME", "Conflict: " + start + " " + end);
+                        Log.d("ADDTIME", "Not valid time interval");
+                    }
+                }
+
+                if(!valid)
+                    return;
+
+
+
                 AddSpaceTask = new AddTimeForSpaceTask(_in_price.getText().toString());
                 AddSpaceTask.execute((Void) null);
             }
@@ -543,6 +566,10 @@ public class SpaceDetailFragment extends Fragment {
         protected Boolean doInBackground(Void... params){
             // call client controller
             ClientController controller = ClientController.getInstance();
+
+
+
+
 
             System.out.println("BEFORE REQ Start:"+ inputedStartTime);
             System.out.println("BEFORE REQ End:" + inputedEndTime);

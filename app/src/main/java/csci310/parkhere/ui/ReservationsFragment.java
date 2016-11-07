@@ -112,17 +112,17 @@ public class ReservationsFragment extends Fragment implements AdapterView.OnItem
         ArrayList<String> passedListString = new ArrayList<String>();
         for(int i = 0 ; i < futureReservations.size(); i++) {
             Log.d("FETCHRESERVATIONLIST", "add into future list");
-            ParkingSpot spotInlist = reservations.get(i).getSpot();
-            Time startTIme = reservations.get(i).getReserveTimeInterval().startTime;
-            Time endTime = reservations.get(i).getReserveTimeInterval().endTime;
+            ParkingSpot spotInlist = futureReservations.get(i).getSpot();
+            Time startTIme = futureReservations.get(i).getReserveTimeInterval().startTime;
+            Time endTime = futureReservations.get(i).getReserveTimeInterval().endTime;
 
             futureListString.add(spotInlist.getStreetAddr() + " Time: " + startTIme.toString() + "-" + endTime.toString());
         }
         for(int i = 0 ; i < passedReservations.size(); i++) {
             Log.d("FETCHRESERVATIONLIST","add into passed list");
-            ParkingSpot spotInlist = reservations.get(i).getSpot();
-            Time startTIme = reservations.get(i).getReserveTimeInterval().startTime;
-            Time endTime = reservations.get(i).getReserveTimeInterval().endTime;
+            ParkingSpot spotInlist = passedReservations.get(i).getSpot();
+            Time startTIme = passedReservations.get(i).getReserveTimeInterval().startTime;
+            Time endTime = passedReservations.get(i).getReserveTimeInterval().endTime;
 
             passedListString.add(spotInlist.getStreetAddr() + " Time: " + startTIme.toString() + "-" + endTime.toString());
         }

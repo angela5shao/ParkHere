@@ -349,8 +349,8 @@ public class SpaceDetailFragment extends Fragment {
                     Time start = intervals.get(i).startTime;
                     Time end = intervals.get(i).endTime;
                     if((start.compareTo(inputedStartTime) <= 0 && end.compareTo(inputedEndTime) >=0) ||
-                            (start.compareTo(inputedStartTime) >= 0 && end.compareTo(inputedEndTime) >=0) ||
-                            (start.compareTo(inputedStartTime) <= 0 && end.compareTo(inputedEndTime) <=0) ||
+                            (start.compareTo(inputedStartTime) >= 0 && start.compareTo(inputedEndTime) <=0) ||
+                            (end.compareTo(inputedStartTime) >= 0 && end.compareTo(inputedEndTime) <=0) ||
                             (start.compareTo(inputedStartTime) >= 0 && end.compareTo(inputedEndTime) <=0))
                     {
                         valid = false;
@@ -361,7 +361,10 @@ public class SpaceDetailFragment extends Fragment {
                 }
 
                 if(!valid)
+                {
+                    Toast.makeText(getContext(), "Please input valid time interval", Toast.LENGTH_SHORT).show();
                     return;
+                }
 
 
 

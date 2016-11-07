@@ -350,7 +350,8 @@ public class SpaceDetailFragment extends Fragment {
                     Time end = intervals.get(i).endTime;
                     if((start.compareTo(inputedStartTime) <= 0 && end.compareTo(inputedEndTime) >=0) ||
                             (start.compareTo(inputedStartTime) >= 0 && end.compareTo(inputedEndTime) >=0) ||
-                            (start.compareTo(inputedStartTime) <= 0 && end.compareTo(inputedEndTime) <=0))
+                            (start.compareTo(inputedStartTime) <= 0 && end.compareTo(inputedEndTime) <=0) ||
+                            (start.compareTo(inputedStartTime) >= 0 && end.compareTo(inputedEndTime) <=0))
                     {
                         valid = false;
                         Log.d("ADDTIME", "Try to add: " + inputedStartTime + " " + inputedEndTime);

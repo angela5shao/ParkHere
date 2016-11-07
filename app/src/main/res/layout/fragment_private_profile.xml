@@ -213,7 +213,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/private_profile_phone_label"
+                    android:text="@string/phone_label"
                     android:id="@+id/phoneText_label"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"

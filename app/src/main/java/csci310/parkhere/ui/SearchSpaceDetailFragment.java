@@ -1,5 +1,6 @@
 package csci310.parkhere.ui;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -25,14 +26,18 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
 import resource.MyEntry;
 import resource.NetworkPackage;
 import resource.ParkingSpot;
+import resource.Review;
 import resource.Time;
 import resource.TimeInterval;
+import resource.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -63,9 +68,6 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
     private OnFragmentInteractionListener mListener;
 
     Button _searchspacedetail_reservebutton;
-
-
-
 
     SupportMapFragment mMapView;
     private GoogleMap googleMap;
@@ -200,6 +202,16 @@ public void onCreate(Bundle savedInstanceState) {
         ((TextView) mView.findViewById(R.id.searchspacedetail_address)).setText(mParkingSpot.getStreetAddr());
         ((TextView) mView.findViewById(R.id.searchspacedetail_price)).setText(new Double(mParkingSpot.search_price).toString());
 //        ((TextView) mView.findViewById(R.id.searchspacedetail_rating)).setText(new Double(mParkingSpot.rating).toString());
+        TextView _provider = (TextView) mView.findViewById(R.id.searchspacedetail_providername);
+        _provider.setText(new Double(mParkingSpot.search_price).toString());
+        _provider.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GetPublicProfileTask GPPT = new GetPublicProfileTask(mParkingSpot.getOwner());
+                GPPT.execute((Void) null);
+            }
+        });
+
         Time sTime = mParkingSpot.getTimeIntervalList().get(0).startTime;
         Time eTime = mParkingSpot.getTimeIntervalList().get(0).endTime;
         ((TextView) mView.findViewById(R.id.searchspacedetail_starttime)).setText(sTime.toString());
@@ -262,62 +274,6 @@ public void onCreate(Bundle savedInstanceState) {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-//
-//    private class RenterReserveTask extends AsyncTask<Void, Void, Boolean> {
-//        private final long ;
-//
-//        RenterReserveTask(long parkingSpotID, TimeInterval timeinterval, long userID){
-//            mTimeID = time_id;
-//            doInBackground((Void) null);
-//            System.out.println(mTimeID);
-//        }
-//        @Override
-//        protected void onPreExecute(){
-//            //Display a progress dialog
-//            progressDialog = new ProgressDialog(getContext(), R.style.AppTheme);
-//            progressDialog.setIndeterminate(true);
-//            progressDialog.setMessage("Deleting...");
-//            progressDialog.show();
-//        }
-//        @Override
-//        protected Boolean doInBackground(Void... params ){
-//            // call client controller
-//            ClientController controller = ClientController.getInstance();
-//            System.out.println("DELETE TIME ID: "+ curr_selected_time_id);
-//            controller.ProviderCancel(curr_selected_time_id);
-//
-//            NetworkPackage NP = controller.checkReceived();
-//            MyEntry<String, Serializable> entry = NP.getCommand();
-//            String key = entry.getKey();
-//            Object value = entry.getValue();
-//            if(key.equals("CANCELTIME")) {
-//                return true;
-//            }
-//            else if(key.equals("CANCELTIMEFAIL")) {
-//                return false;
-//            }
-//            else {
-//                return false;
-//            }
-//        }
-//        @Override
-//        protected void onPostExecute(Boolean success) {
-//            if(success) {
-//                _btn_delete_time.setVisibility(View.GONE);
-//                Log.d("DELETETIME", "finish delete time");
-//                Toast.makeText(getContext(), "Deleted!", Toast.LENGTH_SHORT).show();
-//
-//                // Back to SpacesFragment
-//                ((ProviderActivity)getActivity()).showSpaceFragment();
-//
-//                progressDialog.dismiss();
-//
-//            } else{
-//                progressDialog.dismiss();
-//                Toast.makeText(getContext(), "Delete space failed! Please try agian.", Toast.LENGTH_SHORT).show();
-//            }
-//        }
-//    }
 
     private class RenterReserveTask extends AsyncTask<Void, Void, Boolean> {
         private final long parkingSpotID;
@@ -342,6 +298,7 @@ public void onCreate(Bundle savedInstanceState) {
         }
         @Override
         protected Boolean doInBackground(Void... params ){
+            // call client controller
             // call client controller
             ClientController controller = ClientController.getInstance();
             controller.renterReserve(userID, parkingSpotID, timeInterval);
@@ -383,5 +340,73 @@ public void onCreate(Bundle savedInstanceState) {
                 Toast.makeText(getContext(), "Book space failed! Please try agian.", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private class GetPublicProfileTask extends AsyncTask<Void, Void, HashMap<String, Serializable> >{
+        private final long mProviderID;
+        ProgressDialog progressDialog;
+
+        GetPublicProfileTask(long providerID){
+            mProviderID = providerID;
+        }
+        @Override
+        protected void onPreExecute(){
+            //Display a progress dialog
+            progressDialog = new ProgressDialog(getActivity(),
+                    R.style.AppTheme);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Searching...");
+            progressDialog.show();
+        }
+        @Override
+        protected HashMap<String, Serializable> doInBackground(Void... params ){
+            ClientController clientController = ClientController.getInstance();
+            clientController.fetchReviewsForUser(mProviderID);
+//                clientController.cancelReceived();
+            NetworkPackage NP = clientController.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if(key.equals("REVIEWSFORUSER")){
+                return (HashMap<String, Serializable>)value;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(HashMap<String, Serializable> inPublicProfileInfo) {
+            Context c = getContext();
+            if(inPublicProfileInfo != null) {
+                Log.d("Search Space Detail ", "GetPublicProfileTask inReview != null");
+                progressDialog.dismiss();
+
+                User user = (User) inPublicProfileInfo.get("USER");
+                ArrayList<Review> list = (ArrayList<Review>)inPublicProfileInfo.get("REVIEWS");
+
+                if(user != null && list != null) {
+                    ArrayList<String> reviewsString = new ArrayList<String>();
+                    for(Review review : list) {
+                        String s = review.spotRating + " - " + review.comment;
+
+                        reviewsString.add(s);
+                    }
+
+                    PublicProfileFragment publicProfileFragment = new PublicProfileFragment();
+                    Bundle args = new Bundle();
+                    args.putString("FIRSTNAME", user.Fname);
+                    args.putString("EMAIL", user.userName);
+                    args.putString("PHONE_NUM", user.userPhone);
+                    args.putStringArrayList("REVIEWS", reviewsString);
+                    publicProfileFragment.setArguments(args);
+                    Activity ac = getActivity();
+                    if (ac instanceof RenterActivity)
+                        ((RenterActivity) getActivity()).switchToPublicProfileFrag(publicProfileFragment);
+                }
+            } else{
+                progressDialog.dismiss();
+                Toast.makeText(getContext(), "Get provider profile failed.", Toast.LENGTH_SHORT).show();
+            }
+        }
+
     }
 }

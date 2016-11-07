@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,12 +28,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
 import resource.MyEntry;
 import resource.NetworkPackage;
+import resource.Reservation;
 import resource.Time;
 
 /**
@@ -176,13 +179,20 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
                 _btn_confirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // Send to controller
-                        AddReviewTask ART = new AddReviewTask(_ratingBar.getRating(),
-                                                    _commentDialog.getText().toString());
-                        ART.execute((Void) null);
+                        Time end = new Time(end_time);
+                        Calendar cal = Calendar.getInstance();
+                        Time currentTime = new Time(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH),cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
+                        if(currentTime.compareTo(end)>=0) {
+                            // Send to controller
+                            AddReviewTask ART = new AddReviewTask(_ratingBar.getRating(),
+                                    _commentDialog.getText().toString());
+                            ART.execute((Void) null);
 
-                        // Close dialog
-                        reviewDialog.dismiss();
+                            // Close dialog
+                            reviewDialog.dismiss();
+                        } else{
+                            Toast.makeText(getContext(), "Can not cancel the reservation which hasn't ended!", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
                 reviewDialog.show();
@@ -354,6 +364,9 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
             NetworkPackage NP = clientController.checkReceived();
             MyEntry<String, Serializable> entry = NP.getCommand();
             String key = entry.getKey();
+
+
+            Log.d("ADDREVIEW", key);
             if(key.equals("ADDREVIEW")){
                 return true;
             }
@@ -370,11 +383,57 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
             if(ifAdded){
                 progressDialog.dismiss();
                 Toast.makeText(getContext(), "Review added!", Toast.LENGTH_SHORT).show();
+                RequestReservationsTask rrt = new RequestReservationsTask();
+                rrt.execute((Void)null);
+
             }
             else{
                 progressDialog.dismiss();
                 Toast.makeText(getContext(), "Review cannot be added! Please try agian.", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+
+    private class RequestReservationsTask extends AsyncTask<Void, Void, ArrayList<Reservation>> {
+        RequestReservationsTask() { }
+        @Override
+        protected ArrayList<Reservation> doInBackground(Void... params) {
+            ClientController controller = ClientController.getInstance();
+            controller.requestMyReservationList();
+            NetworkPackage NP = controller.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if (key.equals("RESERVATIONLIST")) {
+                ArrayList<Reservation> list = (ArrayList<Reservation>) value;
+                Log.d("FETCHRESERVATIONLIST", "listsize: " + String.valueOf(list.size()));
+
+                return list;
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Reservation> list) {
+            if (list != null) {
+                ClientController controller = ClientController.getInstance();
+
+                controller.reservations = list;
+                Fragment reservationsFragment = new ReservationsFragment();
+
+                FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragContainer, reservationsFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            } else {
+                Toast.makeText(getContext(), "Error on get reservations! Please try again.", Toast.LENGTH_SHORT).show();
+            }
+
+
+        }
+
+
     }
 }

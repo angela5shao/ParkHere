@@ -6,6 +6,7 @@ import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -26,6 +27,7 @@ import static android.support.test.espresso.Espresso.openActionBarOverflowOrOpti
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.times;
@@ -36,6 +38,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.instanceOf;
 
@@ -52,25 +55,44 @@ public class LoginTest {
     @Rule
     public IntentsTestRule<HomeActivity> mActivityRule = new IntentsTestRule(HomeActivity.class);
 
-    @Before
-    public void init() {
-        // From HomeActivity, click on Login
-//        onView(ViewMatchers.withId(R.id.loginButton)).perform(click());
-        onView(withId(R.id.loginButton)).perform(click());
+//    @Before
+//    public void init() {
+//        // From HomeActivity, click on Login
+////        onView(ViewMatchers.withId(R.id.loginButton)).perform(click());
+//        onView(withId(R.id.loginButton)).perform(click());
+//
+//        // Login (as a renter). Type email, password. Then press Login button
+//        onView(withId(R.id.emailText)).perform(typeText(EMAIL_TO_BE_TYPED));
+//        onView(withId(R.id.passwordText)).perform(typeText(PASSWORD_CORRECT_TO_BE_TYPED), closeSoftKeyboard());
+//        onView(withId(R.id.loginButton)).perform(click());
+//    }
 
-        // Login (as a renter). Type email, password. Then press Login button
-        onView(withId(R.id.emailText)).perform(typeText(EMAIL_TO_BE_TYPED));
-        onView(withId(R.id.passwordText)).perform(typeText(PASSWORD_CORRECT_TO_BE_TYPED), closeSoftKeyboard());
-        onView(withId(R.id.loginButton)).perform(click());
-    }
+//    @After
+//    public void after() {
+//        // Logout
+//        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+////        onView(withText("Log Out")).perform(click());
+//        onView(withId(R.id.LogOut)).perform(click());
+////        onView(anyOf(withText(R.string.<your label for the menu item>), withId(R.id.<id of the menu item>))).perform(click());
+//
+//    }
 
     /*
     Test to login with correct credentials
      */
     @Test
     public void successfulLogin() {
+        // From HomeActivity, click on Login
+        onView(withId(R.id.loginButton)).perform(click());
+
+        // Login (as a renter). Type email, password. Then press Login button
+        onView(withId(R.id.emailText)).perform(typeText(EMAIL_TO_BE_TYPED));
+        onView(withId(R.id.passwordText)).perform(typeText(PASSWORD_CORRECT_TO_BE_TYPED), closeSoftKeyboard());
+        onView(withId(R.id.loginButton)).perform(click());
+
         // Assuming only registered only as a renter, check that intent to Renter Activity is called.
-        intended(toPackage("csci310.parkhere.RenterActivity"));
+//        intended(toPackage("csci310.parkhere.RenterActivity"));
+        onView(withId(R.id.renter_ui)).check(doesNotExist());
     }
 
     /*
@@ -78,6 +100,14 @@ public class LoginTest {
      */
     @Test
     public void addProviderRoleLogoutCheckRole() {
+        // From HomeActivity, click on Login
+        onView(withId(R.id.loginButton)).perform(click());
+
+        // Login (as a renter). Type email, password. Then press Login button
+        onView(withId(R.id.emailText)).perform(typeText(EMAIL_TO_BE_TYPED));
+        onView(withId(R.id.passwordText)).perform(typeText(PASSWORD_CORRECT_TO_BE_TYPED), closeSoftKeyboard());
+        onView(withId(R.id.loginButton)).perform(click());
+
         // Switch to provider
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         onView(withText("Switch to Provider")).perform(click());
@@ -120,7 +150,18 @@ public class LoginTest {
      */
     @Test
     public void incorrectEmailAndPasswordLogin() {
+        // From HomeActivity, click on Login
+        onView(withId(R.id.loginButton)).perform(click());
+
+        // Login (as a renter). Type email, password. Then press Login button
+        onView(withId(R.id.emailText)).perform(typeText(EMAIL_TO_BE_TYPED));
+        onView(withId(R.id.passwordText)).perform(typeText(PASSWORD_INCORRECT_TO_BE_TYPED), closeSoftKeyboard());
+        onView(withId(R.id.loginButton)).perform(click());
+
 //        intended(hasComponent(RenterActivity.class.getName()), times(0));
 //        intended(hasComponent(ProviderActivity.class.getName()), times(0));
+
+        onView(withId(R.id.renter_ui)).check(doesNotExist());
+        onView(withId(R.id.provider_ui)).check(doesNotExist());
     }
 }

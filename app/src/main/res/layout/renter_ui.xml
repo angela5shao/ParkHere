@@ -6,6 +6,7 @@
     android:layout_height="fill_parent"
     android:fitsSystemWindows="true"
     android:background="@color/colorLightBackground"
+    android:id="@+id/renter_ui"
     tools:context=".ui.RenterActivity">
         <RelativeLayout
             android:layout_width="match_parent"

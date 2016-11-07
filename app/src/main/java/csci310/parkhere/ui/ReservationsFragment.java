@@ -45,6 +45,10 @@ public class ReservationsFragment extends Fragment implements AdapterView.OnItem
     private ArrayAdapter passedListAdapter, futureListAdapter;
     ListView _futureList, _passedList;
 
+
+    ArrayList<Reservation> passedReservations;
+    ArrayList<Reservation> futureReservations;
+
     public ReservationsFragment() {
         // Required empty public constructor
     }
@@ -97,8 +101,8 @@ public class ReservationsFragment extends Fragment implements AdapterView.OnItem
 
 
         ArrayList<Reservation> reservations = sortReservationListByStartTime(original_reservations);
-        ArrayList<Reservation> passedReservations = new ArrayList<Reservation>();
-        ArrayList<Reservation> futureReservations = new ArrayList<Reservation>();
+        passedReservations = new ArrayList<Reservation>();
+        futureReservations = new ArrayList<Reservation>();
 //         ArrayList<Reservation> allReservations = new ArrayList<Reservation>();
         for(int i = 0; i<reservations.size();i++){
             if(currentTime.compareTo(reservations.get(i).getReserveTimeInterval().endTime)>=0){
@@ -186,8 +190,33 @@ public class ReservationsFragment extends Fragment implements AdapterView.OnItem
         boolean ifCanCancel = true;
         if(view.getId()==R.id.passedList) ifCanCancel = false;
 //        Log.d("view.getId() = ", getContext().getString(view.getId()));
-        mListener.onReservationSelected(position, ifCanCancel);
-        System.out.println("CLICKED on Reservation: " + position);
+
+        ClientController controller = ClientController.getInstance();
+
+
+        ArrayList<Reservation> resList = controller.getReservations();
+        long resID = futureReservations.get(position).getReservationID();
+
+        int posInControllerList = -1;
+        for(int i = 0; i < resList.size(); i++ )
+        {
+            if(resList.get(i).getReservationID() == resID)
+            {
+                posInControllerList = i;
+            }
+        }
+
+
+        if(posInControllerList != -1)
+        {
+            mListener.onReservationSelected(posInControllerList, ifCanCancel);
+            System.out.println("CLICKED on Reservation: " + position);
+        }
+        else
+        {
+            Log.d("CANCELRESERVATION", "cannot find corresponded reservation");
+        }
+
     }
 
 //    public void refresh(){

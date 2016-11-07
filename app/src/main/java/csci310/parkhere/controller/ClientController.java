@@ -416,10 +416,11 @@ public class ClientController {
         return false;
     }
 
-    public void postPaymentNonceToServer(String paymentMethodNonce)
+    public void postPaymentNonceToServer(String paymentMethodNonce, long resID)
     {
         try {
-            clientCommunicator.send("PAYMENT_SUCCESS", paymentMethodNonce);
+
+            clientCommunicator.send("PAYMENT_SUCCESS", resID);
         } catch (IOException e) {
             e.printStackTrace();
         }

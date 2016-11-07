@@ -111,7 +111,11 @@ public class PaymentActivity extends Activity {
                     Log.d("PAYMENT", " success and send to server!");
                     ClientController clientController = ClientController.getInstance();
                     clientController.setCurrentActivity(this);
-                    clientController.postPaymentNonceToServer(paymentMethodNonce);
+
+                    Intent myintent = getIntent();
+                    Long resID = myintent.getLongExtra("RESERVATIONID",0);
+
+                    clientController.postPaymentNonceToServer(paymentMethodNonce, resID);
                     Intent intent = new Intent(getBaseContext(), RenterActivity.class);
                     startActivity(intent);
 

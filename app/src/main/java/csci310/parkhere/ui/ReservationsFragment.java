@@ -135,11 +135,103 @@ public class ReservationsFragment extends Fragment implements AdapterView.OnItem
 
         futureListAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, futureListString);
         _futureList.setAdapter(futureListAdapter);
-        _futureList.setOnItemClickListener(this);
+        _futureList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+
+                    Log.d("ONITEMCLICKED", "FUTRUELIST");
+                    ClientController controller = ClientController.getInstance();
+
+
+                    ArrayList<Reservation> resList = controller.getReservations();
+
+                    int posInControllerList = -1;
+
+                    long resID = futureReservations.get(position).getReservationID();
+
+                    for(int i = 0; i < resList.size(); i++ )
+                    {
+                        if(resList.get(i).getReservationID() == resID)
+                        {
+                            posInControllerList = i;
+                        }
+                    }
+
+                if(posInControllerList != -1)
+                {
+                    mListener.onReservationSelected(posInControllerList, true);
+                    System.out.println("CLICKED on Reservation: " + position);
+                }
+                else
+                {
+                    Log.d("CANCELRESERVATION", "cannot find corresponded reservation");
+                }
+            }
+        });
 
         passedListAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, passedListString);
         _passedList.setAdapter(passedListAdapter);
-        _passedList.setOnItemClickListener(this);
+        _passedList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+
+                boolean ifCanCancel = false;
+
+                ClientController controller = ClientController.getInstance();
+
+
+                ArrayList<Reservation> resList = controller.getReservations();
+
+                int posInControllerList = -1;
+//
+//                Log.d("ONITEMCLICKED", "viewid: " + String.valueOf(view.getId()));
+//                Log.d("ONITEMCLICKED", "pass id: " + String.valueOf(R.id.passedList));
+//                Log.d("ONITEMCLICKED", "future id: " + String.valueOf(R.id.futureList));
+
+
+//                if(view.getId() == R.id.passedList)
+                {
+                    Log.d("ONITEMCLICKED", "PASSEDLIST");
+                    long resID = passedReservations.get(position).getReservationID();
+
+                    for(int i = 0; i < resList.size(); i++ )
+                    {
+                        if(resList.get(i).getReservationID() == resID)
+                        {
+                            posInControllerList = i;
+                        }
+                    }
+                }
+//                else if(view.getId() == R.id.futureList)
+//                {
+//                    Log.d("ONITEMCLICKED", "FUTRUELIST");
+//
+//                    long resID = futureReservations.get(position).getReservationID();
+//
+//                    for(int i = 0; i < resList.size(); i++ )
+//                    {
+//                        if(resList.get(i).getReservationID() == resID)
+//                        {
+//                            posInControllerList = i;
+//                        }
+//                    }
+//                }
+
+
+
+
+                if(posInControllerList != -1)
+                {
+                    mListener.onReservationSelected(posInControllerList, ifCanCancel);
+                    System.out.println("CLICKED on Reservation: " + position);
+                }
+                else
+                {
+                    Log.d("CANCELRESERVATION", "cannot find corresponded reservation");
+                }
+
+            }
+        });
 
         return v;
     }
@@ -187,35 +279,6 @@ public class ReservationsFragment extends Fragment implements AdapterView.OnItem
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
                             long id) {
-        boolean ifCanCancel = true;
-        if(view.getId()==R.id.passedList) ifCanCancel = false;
-//        Log.d("view.getId() = ", getContext().getString(view.getId()));
-
-        ClientController controller = ClientController.getInstance();
-
-
-        ArrayList<Reservation> resList = controller.getReservations();
-        long resID = futureReservations.get(position).getReservationID();
-
-        int posInControllerList = -1;
-        for(int i = 0; i < resList.size(); i++ )
-        {
-            if(resList.get(i).getReservationID() == resID)
-            {
-                posInControllerList = i;
-            }
-        }
-
-
-        if(posInControllerList != -1)
-        {
-            mListener.onReservationSelected(posInControllerList, ifCanCancel);
-            System.out.println("CLICKED on Reservation: " + position);
-        }
-        else
-        {
-            Log.d("CANCELRESERVATION", "cannot find corresponded reservation");
-        }
 
     }
 

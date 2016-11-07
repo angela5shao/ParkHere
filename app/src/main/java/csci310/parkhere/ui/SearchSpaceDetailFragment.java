@@ -161,8 +161,9 @@ public void onCreate(Bundle savedInstanceState) {
                 TimeInterval timeInterval = new TimeInterval(startTime,endTime);
                 RenterReserveTask RRT = new RenterReserveTask(mParkingSpot.getParkingSpotID(), timeInterval,  ClientController.getInstance().getUser().userID);
                 RRT.execute((Void) null);
-                Intent intent = new Intent(getContext(), PaymentActivity.class);
-                startActivityForResult(intent, 11);
+
+
+
             }
         });
 
@@ -324,6 +325,11 @@ public void onCreate(Bundle savedInstanceState) {
             Log.d("SEARCHRESERVE", "key :" + key);
 
             if(key.equals("RESERVE")) {
+
+                Intent intent = new Intent(getContext(), PaymentActivity.class);
+                intent.putExtra("RESERVATIONID", (Long)value);
+
+                startActivityForResult(intent, 11);
                 return true;
             }
             else if(key.equals("RESERVEFAIL")) {
@@ -339,6 +345,7 @@ public void onCreate(Bundle savedInstanceState) {
         protected void onPostExecute(Boolean success) {
             if(success) {
                 progressDialog.dismiss();
+
 
             } else{
                 progressDialog.dismiss();

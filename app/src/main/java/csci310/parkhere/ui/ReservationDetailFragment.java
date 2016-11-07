@@ -27,11 +27,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
 import resource.MyEntry;
 import resource.NetworkPackage;
+import resource.Time;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -191,8 +193,16 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
             @Override
             public void onClick(View v) {
                 // call Client Controller for cancelling reservaiton
-                RenterCancelTask RCT = new RenterCancelTask(res_id);
-                RCT.execute((Void) null);
+                Time start = new Time(start_time);
+                Calendar cal = Calendar.getInstance();
+                Time currentTime = new Time(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH),cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
+                if(currentTime.compareTo(start)<0){
+                    RenterCancelTask RCT = new RenterCancelTask(res_id);
+                    RCT.execute((Void) null);
+                }
+                else{
+                    Toast.makeText(getContext(), "Can not cancel the reservation which has started!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

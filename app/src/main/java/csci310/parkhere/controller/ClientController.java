@@ -416,10 +416,11 @@ public class ClientController {
         return false;
     }
 
-    public void postPaymentNonceToServer(String paymentMethodNonce)
+    public void postPaymentNonceToServer(String paymentMethodNonce, long resID)
     {
         try {
-            clientCommunicator.send("PAYMENT_SUCCESS", paymentMethodNonce);
+
+            clientCommunicator.send("PAYMENT_SUCCESS", resID);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -585,7 +586,21 @@ public class ClientController {
         }
     }
 
-    public void paymentSuccess(){
-        
+    public void fetchReviewsForUser(long providerID){
+        NP.addEntry("FETCHREVIEWSFORUSER", providerID);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void fetchReviewsForParkingSpot(long parkingSpotID){
+        NP.addEntry("FETCHREVIEWSFORPARKINGSPOT", parkingSpotID);
+        try{
+            clientCommunicator.sendPackage(NP);
+        } catch(IOException e){
+            e.printStackTrace();
+        }
     }
 }

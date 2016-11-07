@@ -363,7 +363,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 //            bundle.putString("param4", endDate);
 //            bundle.putString("param5", endTime);
 //            searchSpaceDetailFragment.setArguments(bundle);
-//
+//0
 //            fragmentTransaction.replace(R.id.fragContainer, searchSpaceDetailFragment);
 //            fragmentTransaction.addToBackStack(null);
 //            fragmentTransaction.commit();

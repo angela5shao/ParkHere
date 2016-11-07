@@ -58,7 +58,7 @@ public class LoginTest {
     public static final String PASSWORD_CORRECT_TO_BE_TYPED = "1234567890"; //"12345";
     public static final String PASSWORD_INCORRECT_TO_BE_TYPED = "123456789012";
     public static final String LAST_USER_ROLE = "Provider";
-    public static final String LICENCE_TO_BE_TYPED = "1122334455";
+//    public static final String LICENCE_TO_BE_TYPED = "1122334455";
 
     @Rule
     public IntentsTestRule<HomeActivity> mActivityRule = new IntentsTestRule(HomeActivity.class);

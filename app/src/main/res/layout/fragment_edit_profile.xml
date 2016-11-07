@@ -74,8 +74,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="username"
+                        android:clickable="false"
                         android:id="@+id/usernameText"
                         android:textColorHint="@color/colorAccent"
+                        android:textColor="@color/colorSubAccent"
                         android:layout_alignBottom="@+id/username_label"
                         android:layout_toRightOf="@+id/username_label"
                         android:layout_toEndOf="@+id/username_label"
@@ -111,6 +113,7 @@
                         android:hint="password"
                         android:id="@+id/pwText"
                         android:textColorHint="@color/colorAccent"
+                        android:textColor="@color/colorSubAccent"
                         android:password="true"
                         android:layout_alignBottom="@+id/pw_label"
                         android:layout_toRightOf="@+id/pw_label"
@@ -126,6 +129,7 @@
                     android:orientation="horizontal"
                     android:layout_marginTop="12dp"
                     android:layout_marginBottom="12dp">
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -147,6 +151,7 @@
                         android:hint="licenseID"
                         android:id="@+id/licenseIDText"
                         android:textColorHint="@color/colorAccent"
+                        android:textColor="@color/colorSubAccent"
                         android:layout_alignBottom="@+id/licenseID_label"
                         android:layout_toRightOf="@+id/licenseID_label"
                         android:layout_toEndOf="@+id/licenseID_label"
@@ -182,6 +187,7 @@
                         android:id="@+id/licenseplateText"
                         android:hint="license plate num"
                         android:textColorHint="@color/colorAccent"
+                        android:textColor="@color/colorSubAccent"
                         android:layout_alignBottom="@+id/licensePlate_label"
                         android:layout_toRightOf="@+id/licensePlate_label"
                         android:layout_toEndOf="@+id/licensePlate_label"
@@ -189,6 +195,45 @@
                         android:paddingTop="8dp"
                         android:paddingLeft="8dp"/>
                 </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/private_profile_phone_label"
+                        android:id="@+id/phone_label"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_weight="1"
+                        android:textAlignment="center"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:textColor="@color/colorMainFont"
+                        android:background="@color/colorPrimary"/>
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/phoneText"
+                        android:hint="phone num"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColor="@color/colorSubAccent"
+                        android:layout_alignBottom="@+id/licensePlate_label"
+                        android:layout_toRightOf="@+id/licensePlate_label"
+                        android:layout_toEndOf="@+id/licensePlate_label"
+                        android:layout_weight="1"
+                        android:paddingTop="8dp"
+                        android:paddingLeft="8dp"/>
+                </LinearLayout>
+
+
 
                 <Button
                     android:id="@+id/btn_save"

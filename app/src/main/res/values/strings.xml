@@ -22,6 +22,8 @@
     <string name="public_profile_phonenumber_label">Phone Number</string>
     <string name="public_profile_review_label">Phone Number</string>
     <string name="public_profile_reviewscore_label">Phone Number</string>
+    <string name="private_profile_phone_label">Phone #: </string>
+
     <string-array name="signup_usertype_spinner">
 
         <item>Renter</item>

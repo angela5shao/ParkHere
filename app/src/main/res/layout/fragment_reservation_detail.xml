@@ -44,6 +44,7 @@ tools:context="csci310.parkhere.ui.SpaceDetailFragment">
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/res_label"
+                android:id="@+id/reservationDetailTextView"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="36dp"
                 android:layout_marginBottom="12dp"

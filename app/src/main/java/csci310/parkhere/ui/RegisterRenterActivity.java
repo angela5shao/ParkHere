@@ -72,7 +72,7 @@ public class RegisterRenterActivity extends Activity {
         String licenseID = _liscenseIdText.getText().toString();
         String licensePlate = _liscensePlateNumText.getText().toString();
 
-        RegTask = new UserRegisterTask(email, password, phonenum, licenseID,"#######", "provider", name);
+        RegTask = new UserRegisterTask(email, password, phonenum, licenseID,_liscensePlateNumText.getText().toString(), "provider", name);
         RegTask.execute((Void) null);
     }
 
@@ -190,7 +190,7 @@ public class RegisterRenterActivity extends Activity {
             if(success) {
                 Log.d("LOGIN TEST 1", "yeah");
                 progressDialog.dismiss();
-                Intent intent = new Intent(c, ProviderActivity.class);
+                Intent intent = new Intent(c, RenterActivity.class);
                 startActivityForResult(intent, 0);
             } else{
                 progressDialog.dismiss();

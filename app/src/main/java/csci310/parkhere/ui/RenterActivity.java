@@ -290,7 +290,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 //        editProfileFragment.updateUserInfo(inUsername, inPw, inLicenseID, inLicensePlate);
 //    }
 
-    public void onReservationSelected(int resPosition, boolean ifCanCancel) {
+    public void onReservationSelected(int resPosition, boolean ifNotPassed) {
         System.out.println("RenterActivity onReservationSelected for: " + resPosition);
         if (clientController.reservations.size() == 0) {
             System.out.println("RenterActivity: error - no reservations to select");
@@ -311,13 +311,13 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         args.putString("RENTER", Long.toString(selectedRes.getSpot().getOwner()));
         args.putLong("RES_ID", selectedRes.getReservationID());
 
-        if(selectedRes.review==null) {
+        if(selectedRes.review==null && !ifNotPassed) {
             args.putBoolean("IF_CANREVIEW", true);
         }
         else {
             args.putBoolean("IF_CANREVIEW", false);
         }
-        args.putBoolean("IF_CANCANCEL", ifCanCancel);
+        args.putBoolean("IF_CANCANCEL", ifNotPassed);
         resDetailfragment.setArguments(args);
 
         try {

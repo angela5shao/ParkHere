@@ -503,7 +503,7 @@ public class SearchFragment extends Fragment {
 
     private static final String TAG = "!!!!!!!!!!!!!!! "; // EDIT/DELETE LATER!
     Button _btn_add_address, btnStartDatePicker, btnStartTimePicker, btnEndDatePicker, btnEndTimePicker, _btn_confirm;
-    EditText txtStartDate, txtStartTime, txtEndDate, txtEndTime;
+    EditText _in_lat, _in_long, txtStartDate, txtStartTime, txtEndDate, txtEndTime;
     TextView _addressText;
     LinearLayout _addressSearchLayout, _latlongSearchLayout;
     Spinner  _distSpinner, _cartypeSpinner;
@@ -513,7 +513,7 @@ public class SearchFragment extends Fragment {
 
     private Calendar startDate = Calendar.getInstance();
     private Calendar endDate = Calendar.getInstance();
-    LatLng curr_location;
+    LatLng curr_location;// = new LatLng(37.8719, 122.2585);
     String curr_cartype, curr_dist;
 
     private OnFragmentInteractionListener mListener;
@@ -559,6 +559,8 @@ public class SearchFragment extends Fragment {
         _addressText = (TextView)v.findViewById(R.id.addressText);
         _addressSearchLayout = (LinearLayout)v.findViewById(R.id.addressSearchLayout);
         _latlongSearchLayout = (LinearLayout)v.findViewById(R.id.latlongSearchLayout);
+        _in_lat = (EditText)v.findViewById(R.id.in_lat);
+        _in_long = (EditText)v.findViewById(R.id.in_long);
 
         Spinner _usertypeSpinner = (Spinner)v.findViewById(R.id.usertypeSpinner);
         _usertypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -716,6 +718,12 @@ public class SearchFragment extends Fragment {
                 curr_dist = _distSpinner.getSelectedItem().toString();
                 curr_cartype = _cartypeSpinner.getSelectedItem().toString();
 
+                if(_latlongSearchLayout.getVisibility()==View.VISIBLE) {
+                    Double mLat = Double.parseDouble(_in_lat.getText().toString());
+                    Double mLong = Double.parseDouble(_in_long.getText().toString());
+                    curr_location = new LatLng(mLat, mLong);
+                }
+
                 ClientController clientController = ClientController.getInstance();
                 // SearchSpaceTask(LatLng location, String startDate, String startTime, String endDate, String endTime, String carType, String distance){
 
@@ -830,6 +838,8 @@ public class SearchFragment extends Fragment {
 //            doInBackground((Void) null);
 
             System.out.println(mCarType);
+            Log.d("@@@@@@ ", "mlocation.latitude = "+mlocation.latitude);
+            Log.d("@@@@@@ ", "mlocation.longitude = "+mlocation.longitude);
         }
         //        @Override
 //        protected void onPreExecute(){
@@ -862,7 +872,7 @@ public class SearchFragment extends Fragment {
 
             if(key.equals("SEARCH_RESULT")) {
                 SearchResults result = (SearchResults) value;
-                Log.d("Results", result.searchResultList.get(0).getStreetAddr());
+//                Log.d("Results", result.searchResultList.get(0).getStreetAddr());
                 clientController.toDispaySearch = true;
                 //controller.updateActivity();
                 clientController.searchResults = result;

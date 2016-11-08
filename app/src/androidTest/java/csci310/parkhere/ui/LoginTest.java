@@ -31,8 +31,8 @@ public class LoginTest {
 //    public static final String PASSWORD_CORRECT_TO_BE_TYPED = "1234567890"; //"12345";
     public static final String PASSWORD_INCORRECT_TO_BE_TYPED = "0987654321";
 
-    public static final String EMAIL_TO_BE_TYPED = "renter3@usc.edu";
-    public static final String EMAIL2_TO_BE_TYPED = "provider@usc.edu";
+    public static final String EMAIL_TO_BE_TYPED = "renter8@usc.edu";
+    public static final String EMAIL2_TO_BE_TYPED = "provider4@usc.edu";
     public static final String PASSWORD_CORRECT_TO_BE_TYPED = "123456789012";
 //    public static final String LICENSE_PLATE2_TO_BE_TYPED = "079079079";
 
@@ -43,20 +43,20 @@ public class LoginTest {
     @Rule
     public IntentsTestRule<HomeActivity> mActivityRule = new IntentsTestRule(HomeActivity.class);
 
-    @Test
-    public void successfulLogin() {
-        // From HomeActivity, click on Login
-        onView(withId(R.id.loginButton)).perform(click());
-
-        // Login (as a renter). Type email, password. Then press Login button
-        onView(withId(R.id.emailText)).perform(typeText(EMAIL_TO_BE_TYPED));
-        onView(withId(R.id.passwordText)).perform(typeText(PASSWORD_CORRECT_TO_BE_TYPED), closeSoftKeyboard());
-        onView(withId(R.id.loginButton)).perform(click());
-
-        // Assuming registered as a renter, check that intent to Renter Activity is called.
-        intended(hasComponent(RenterActivity.class.getName()));
-//        intended(hasComponent(new ComponentName(getTargetContext(), RenterActivity.class)));
-    }
+//    @Test
+//    public void successfulLogin() {
+//        // From HomeActivity, click on Login
+//        onView(withId(R.id.loginButton)).perform(click());
+//
+//        // Login (as a renter). Type email, password. Then press Login button
+//        onView(withId(R.id.emailText)).perform(typeText(EMAIL_TO_BE_TYPED));
+//        onView(withId(R.id.passwordText)).perform(typeText(PASSWORD_CORRECT_TO_BE_TYPED), closeSoftKeyboard());
+//        onView(withId(R.id.loginButton)).perform(click());
+//
+//        // Assuming registered as a renter, check that intent to Renter Activity is called.
+//        intended(hasComponent(RenterActivity.class.getName()));
+////        intended(hasComponent(new ComponentName(getTargetContext(), RenterActivity.class)));
+//    }
 
 
     /*
@@ -75,7 +75,7 @@ public class LoginTest {
 
         // Switch to provider
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
-        onView(withText("Switch to Renter")).perform(click());
+        onView(withText("Switch to Provider")).perform(click());
 
         // Logout
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
@@ -92,74 +92,74 @@ public class LoginTest {
 
         // For consistency purposes (set last role as renter), switch back to renter and logout
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
-        onView(withText("Switch to Provider")).perform(click());
-        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
-        onView(withText("Log Out")).perform(click());
-    }
-
-    @Test
-    public void switchToRenterRoleLogoutCheckRole() {
-        // From HomeActivity, click on Login
-        onView(withId(R.id.loginButton)).perform(click());
-
-        // Login (as a provider). Type email, password. Then press Login button
-        onView(withId(R.id.emailText)).perform(typeText(EMAIL2_TO_BE_TYPED));
-        onView(withId(R.id.passwordText)).perform(typeText(PASSWORD_CORRECT_TO_BE_TYPED), closeSoftKeyboard());
-        onView(withId(R.id.loginButton)).perform(click());
-
-        // Check that ProviderActivity is called.
-        intended(hasComponent(ProviderActivity.class.getName()));
-
-        // Switch to renter
-        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         onView(withText("Switch to Renter")).perform(click());
-
-        // Enter license plate number with original password, phone number, and licence ID
-        onView(withId(R.id.licenseIDText)).perform(typeText(LICENSE_TO_BE_TYPED));
-        onView(withId(R.id.licenseplateText)).perform(typeText(LICENSE_PLATE_TO_BE_TYPED));
-        onView(withId(R.id.phoneText)).perform(typeText(PHONE_TO_BE_TYPED));
-        onView(withId(R.id.pwText)).perform(typeText(PASSWORD_CORRECT_TO_BE_TYPED), closeSoftKeyboard());
-
-        // Click save button
-        onView(withId(R.id.btn_save)).perform(scrollTo(), click());
-
-        // Logout
-        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
-        onView(withText("Log Out")).perform(click());
-
-        // In HomeActivity, click on login.  Login in LoginActivity
-        onView(withId(R.id.loginButton)).perform(click());
-        onView(withId(R.id.emailText)).perform(typeText(EMAIL_TO_BE_TYPED), closeSoftKeyboard());
-        onView(withId(R.id.passwordText)).perform(typeText(PASSWORD_CORRECT_TO_BE_TYPED), closeSoftKeyboard());
-        onView(withId(R.id.loginButton)).perform(click());
-
-        // Check that RenterActivity is called.
-        intended(hasComponent(RenterActivity.class.getName()));
-
-        // For consistency purposes (set last role as renter), switch back to renter and logout
-        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
-        onView(withText("Switch to Provider")).perform(click());
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         onView(withText("Log Out")).perform(click());
     }
-
-    /*
-    Test that login fails with incorrect credentials
-     */
-    @Test
-    public void incorrectEmailAndPasswordLogin() {
-        // From HomeActivity, click on Login
-        onView(withId(R.id.loginButton)).perform(click());
-
-        // Login (as a renter). Type email, password. Then press Login button
-        onView(withId(R.id.emailText)).perform(typeText(EMAIL_TO_BE_TYPED));
-        onView(withId(R.id.passwordText)).perform(typeText(PASSWORD_INCORRECT_TO_BE_TYPED), closeSoftKeyboard());
-        onView(withId(R.id.loginButton)).perform(click());
-
-//        intended(hasComponent(RenterActivity.class.getName()), times(0));
-//        intended(hasComponent(ProviderActivity.class.getName()), times(0));
-
-        onView(withId(R.id.renter_ui)).check(doesNotExist());
-        onView(withId(R.id.provider_ui)).check(doesNotExist());
-    }
+//
+//    @Test
+//    public void switchToRenterRoleLogoutCheckRole() {
+//        // From HomeActivity, click on Login
+//        onView(withId(R.id.loginButton)).perform(click());
+//
+//        // Login (as a provider). Type email, password. Then press Login button
+//        onView(withId(R.id.emailText)).perform(typeText(EMAIL2_TO_BE_TYPED));
+//        onView(withId(R.id.passwordText)).perform(typeText(PASSWORD_CORRECT_TO_BE_TYPED), closeSoftKeyboard());
+//        onView(withId(R.id.loginButton)).perform(click());
+//
+//        // Check that ProviderActivity is called.
+//        intended(hasComponent(ProviderActivity.class.getName()));
+//
+//        // Switch to renter
+//        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+//        onView(withText("Switch to Renter")).perform(click());
+//
+//        // Enter license plate number with original password, phone number, and licence ID
+//        onView(withId(R.id.licenseIDText)).perform(typeText(LICENSE_TO_BE_TYPED));
+//        onView(withId(R.id.licenseplateText)).perform(typeText(LICENSE_PLATE_TO_BE_TYPED));
+//        onView(withId(R.id.phoneText)).perform(typeText(PHONE_TO_BE_TYPED));
+//        onView(withId(R.id.pwText)).perform(typeText(PASSWORD_CORRECT_TO_BE_TYPED), closeSoftKeyboard());
+//
+//        // Click save button
+//        onView(withId(R.id.btn_save)).perform(scrollTo(), click());
+//
+//        // Logout
+//        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+//        onView(withText("Log Out")).perform(click());
+//
+//        // In HomeActivity, click on login.  Login in LoginActivity
+//        onView(withId(R.id.loginButton)).perform(click());
+//        onView(withId(R.id.emailText)).perform(typeText(EMAIL_TO_BE_TYPED), closeSoftKeyboard());
+//        onView(withId(R.id.passwordText)).perform(typeText(PASSWORD_CORRECT_TO_BE_TYPED), closeSoftKeyboard());
+//        onView(withId(R.id.loginButton)).perform(click());
+//
+//        // Check that RenterActivity is called.
+//        intended(hasComponent(RenterActivity.class.getName()));
+//
+//        // For consistency purposes (set last role as renter), switch back to renter and logout
+//        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+//        onView(withText("Switch to Provider")).perform(click());
+//        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+//        onView(withText("Log Out")).perform(click());
+//    }
+//
+//    /*
+//    Test that login fails with incorrect credentials
+//     */
+//    @Test
+//    public void incorrectEmailAndPasswordLogin() {
+//        // From HomeActivity, click on Login
+//        onView(withId(R.id.loginButton)).perform(click());
+//
+//        // Login (as a renter). Type email, password. Then press Login button
+//        onView(withId(R.id.emailText)).perform(typeText(EMAIL_TO_BE_TYPED));
+//        onView(withId(R.id.passwordText)).perform(typeText(PASSWORD_INCORRECT_TO_BE_TYPED), closeSoftKeyboard());
+//        onView(withId(R.id.loginButton)).perform(click());
+//
+////        intended(hasComponent(RenterActivity.class.getName()), times(0));
+////        intended(hasComponent(ProviderActivity.class.getName()), times(0));
+//
+//        onView(withId(R.id.renter_ui)).check(doesNotExist());
+//        onView(withId(R.id.provider_ui)).check(doesNotExist());
+//    }
 }

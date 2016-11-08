@@ -72,7 +72,7 @@ public class RegisterRenterActivity extends Activity {
         String licenseID = _liscenseIdText.getText().toString();
         String licensePlate = _liscensePlateNumText.getText().toString();
 
-        RegTask = new UserRegisterTask(email, password, phonenum, licenseID,"#######", "provider", name);
+        RegTask = new UserRegisterTask(email, password, phonenum, licenseID,_liscensePlateNumText.getText().toString(), "provider", name);
         RegTask.execute((Void) null);
     }
 

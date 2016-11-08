@@ -139,11 +139,19 @@ public class EditProfileFragment extends Fragment {
                     _licenseplateText.setText("#######");
                 }
 
+                if(_phoneText.getText().length() != 10)
+                {
+                    Toast.makeText(getContext(), "Please input valid phone numebr", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 if(controller.getUser().userType && _licenseplateText.getText().toString().equals("#######"))
                 {
                     Toast.makeText(getContext(), "Please input your licence plate to proceed in renter mode", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
+
 
 
                 if(_licenseIDText.getText().length() == 0 || _phoneText.getText().length() == 0 )

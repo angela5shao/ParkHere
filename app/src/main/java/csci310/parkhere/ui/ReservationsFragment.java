@@ -118,19 +118,32 @@ public class ReservationsFragment extends Fragment implements AdapterView.OnItem
         for(int i = 0 ; i < futureReservations.size(); i++) {
             Log.d("FETCHRESERVATIONLIST", "add into future list");
             ParkingSpot spotInlist = futureReservations.get(i).getSpot();
-            Time startTIme = futureReservations.get(i).getReserveTimeInterval().startTime;
+            Time startTime = futureReservations.get(i).getReserveTimeInterval().startTime;
             Time endTime = futureReservations.get(i).getReserveTimeInterval().endTime;
 
-            futureListString.add(spotInlist.getStreetAddr() + " Time: " + startTIme.toString() + "-" + endTime.toString());
+
+            Time displayStartTime = new Time(startTime.year,startTime.month,startTime.dayOfMonth,startTime.hourOfDay,startTime.minute,startTime.second);
+            Time displayEndTime = new Time(endTime.year,endTime.month,endTime.dayOfMonth,endTime.hourOfDay,endTime.minute,endTime.second);
+
+            displayStartTime.month+=1;
+            displayEndTime.month+=1;
+
+            futureListString.add(spotInlist.getStreetAddr() + "\n Time: " + displayStartTime.toString() + " ~ " + displayEndTime.toString());
 
         }
         for(int i = 0 ; i < passedReservations.size(); i++) {
             Log.d("FETCHRESERVATIONLIST","add into passed list");
             ParkingSpot spotInlist = passedReservations.get(i).getSpot();
-            Time startTIme = passedReservations.get(i).getReserveTimeInterval().startTime;
+            Time startTime = passedReservations.get(i).getReserveTimeInterval().startTime;
             Time endTime = passedReservations.get(i).getReserveTimeInterval().endTime;
 
-            passedListString.add(spotInlist.getStreetAddr() + " Time: " + startTIme.toString() + "-" + endTime.toString());
+            Time displayStartTime = new Time(startTime.year,startTime.month,startTime.dayOfMonth,startTime.hourOfDay,startTime.minute,startTime.second);
+            Time displayEndTime = new Time(endTime.year,endTime.month,endTime.dayOfMonth,endTime.hourOfDay,endTime.minute,endTime.second);
+
+            displayStartTime.month+=1;
+            displayEndTime.month+=1;
+
+            passedListString.add(spotInlist.getStreetAddr() + "\n Time: " + displayStartTime.toString() + " ~ " + displayEndTime.toString());
         }
 
         futureListAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, futureListString);

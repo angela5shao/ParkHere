@@ -46,12 +46,12 @@ import static org.hamcrest.Matchers.not;
 @LargeTest
 public class UserRegistrationTest {
 
-    public static final String NAME_TO_BE_TYPED = "Renter3 USC";
-    public static final String EMAIL_TO_BE_TYPED = "renter3@usc.edu";
-    public static final String NAME2_TO_BE_TYPED = "Provider USC";
-    public static final String EMAIL2_TO_BE_TYPED = "provider@usc.edu";
-    public static final String NAME3_TO_BE_TYPED = "Renter4 USC";
-    public static final String EMAIL3_TO_BE_TYPED = "renter4@usc.edu";
+    public static final String NAME_TO_BE_TYPED = "Renter5 USC";
+    public static final String EMAIL_TO_BE_TYPED = "renter5@usc.edu";
+    public static final String NAME2_TO_BE_TYPED = "Provider2 USC";
+    public static final String EMAIL2_TO_BE_TYPED = "provider2@usc.edu";
+    public static final String NAME3_TO_BE_TYPED = "Renter6 USC";
+    public static final String EMAIL3_TO_BE_TYPED = "renter6@usc.edu";
     public static final String PASSWORD_SHORT_TO_BE_TYPED = "12345";
     public static final String PASSWORD_LONG_TO_BE_TYPED = "123456789012";
     public static final String PHONE_TO_BE_TYPED = "2132132133";
@@ -122,7 +122,6 @@ public class UserRegistrationTest {
         onView(withId(R.id.registerNextButton)).perform(click());
 
         // Check that intent to Renter (same as Provider) Registration Activity is called.
-//        intended(toPackage("csci310.parkhere.RegisterRenterActivity"));
         intended(hasComponent(RegisterProviderActivity.class.getName()));
 
         // Type license ID
@@ -148,13 +147,9 @@ public class UserRegistrationTest {
         onView(withId(R.id.phoneText)).perform(typeText(PHONE_TO_BE_TYPED), closeSoftKeyboard());
 
         // Select "Renter". Then press button.
-//        onView(withId(R.id.usertypeSpinner)).perform(click());
-//        onData(allOf(is(instanceOf(String.class)), is("Renter"))).perform(click());
-//        onView(withId(R.id.usertypeSpinner)).check(matches(withSpinnerText(containsString("Renter"))));
         onView(withId(R.id.registerNextButton)).perform(click());
 
         // Check that intent to Renter (same as Provider) Registration Activity is not called.
-//        intended(hasComponent(RegisterRenterActivity.class.getName()), times(0));
         intended(hasComponent(HomeActivity.class.getName()));
     }
 
@@ -173,13 +168,9 @@ public class UserRegistrationTest {
         onView(withId(R.id.phoneText)).perform(typeText(PHONE_TO_BE_TYPED), closeSoftKeyboard());
 
         // Select "Renter". Then press button.
-//        onView(withId(R.id.usertypeSpinner)).perform(click());
-//        onData(allOf(is(instanceOf(String.class)), is("Renter"))).perform(click());
-////        onView(withId(R.id.usertypeSpinner)).check(matches(withSpinnerText(containsString("Renter"))));
         onView(withId(R.id.registerNextButton)).perform(click());
 
         // Check that intent to Renter (same as Provider) Registration Activity is not called.
-//        intended(hasComponent(RegisterRenterActivity.class.getName()), times(0));
         intended(hasComponent(HomeActivity.class.getName()));
     }
 }

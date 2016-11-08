@@ -2,6 +2,7 @@ package csci310.parkhere.ui;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -95,36 +96,68 @@ public class EditProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_edit_profile, container, false);
 
+        final ClientController controller = ClientController.getInstance();
+
         _privatProfileImage = (ImageView) v.findViewById(R.id.privatProfileImage);
+
         _usernameText = (EditText) v.findViewById(R.id.usernameText);
+        _usernameText.setText(controller.getUser().userName);
+        _usernameText.setFocusable(false);
+        _usernameText.setEnabled(false);
+        _usernameText.setCursorVisible(false);
+        _usernameText.setKeyListener(null);
+        _usernameText.setBackgroundColor(Color.TRANSPARENT);
+
+
+
         _pwText = (EditText) v.findViewById(R.id.pwText);
+
         _licenseIDText = (EditText) v.findViewById(R.id.licenseIDText);
+        _licenseIDText.setText(controller.getUser().userLicense);
+
         _licenseplateText = (EditText) v.findViewById(R.id.licenseplateText);
+        _licenseplateText.setText(controller.getUser().userPlate);
+
+
         _phoneText = (EditText) v.findViewById(R.id.phoneText);
+        _phoneText.setText(controller.getUser().userPhone);
+
         updateUserInfo(mParam1, mParam2, mParam3, mParam4, mParam5);
         _btn_upload_image = (Button) v.findViewById(R.id.btn_upload_image);
         _btn_save = (Button) v.findViewById(R.id.btn_save);
         _btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(_pwText.getText().length() < 10)
+                {
+                    Toast.makeText(getContext(), "Please input password longer than 10 digits", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if(_licenseplateText.getText().length() == 0)
+                {
+                    _licenseplateText.setText("#######");
+                }
+
+                if(controller.getUser().userType && _licenseplateText.getText().toString().equals("#######"))
+                {
+                    Toast.makeText(getContext(), "Please input your licence plate to proceed in renter mode", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+
+                if(_licenseIDText.getText().length() == 0 || _phoneText.getText().length() == 0 )
+                {
+                    Toast.makeText(getContext(), "Please fill in all required field", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 EditProfileTask editProfileTask = new EditProfileTask(_usernameText.getText().toString(),_pwText.getText().toString(), _licenseIDText.getText().toString(), _licenseplateText.getText().toString(), _phoneText.getText().toString());
                 editProfileTask.execute((Void)null);
-//                ClientController controller = ClientController.getInstance();
-//
-//                User user = controller.getUser();
-//                if(user != null)
-//                {
-//                    updateUserInfo(user.userName, "", user.userLicense, user.userPlate, );
-//                }
+
             }
         });
 
-//        ClientController controller = ClientController.getInstance();
-//        User user = controller.getUser();
-//        if(user != null)
-//        {
-//            updateUserInfo(user.userName, "", user.userLicense, user.userPlate);
-//        }
 
         return v;
     }
@@ -219,11 +252,11 @@ public class EditProfileFragment extends Fragment {
             if(result){
                 PrivateProfileFragment privateProfileFragment = new PrivateProfileFragment();
                 Bundle args = new Bundle();
-                args.putString("USERNAME", mParam1 );
-                args.putString("PASSWORD", mParam2);
-                args.putString("USERLICENSE", mParam3);
-                args.putString("USERPLATE", mParam4);
-                args.putString("PHONE", mParam5);
+                args.putString("USERNAME", _usernameText.getText().toString() );
+                args.putString("PASSWORD", "");
+                args.putString("USERLICENSE", _licenseIDText.getText().toString());
+                args.putString("USERPLATE", _licenseplateText.getText().toString());
+                args.putString("PHONE", _phoneText.getText().toString());
                 privateProfileFragment.setArguments(args);
                 Activity ac = getActivity();
                 if(ac instanceof  RenterActivity)

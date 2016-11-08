@@ -190,7 +190,7 @@ public class RegisterRenterActivity extends Activity {
             if(success) {
                 Log.d("LOGIN TEST 1", "yeah");
                 progressDialog.dismiss();
-                Intent intent = new Intent(c, ProviderActivity.class);
+                Intent intent = new Intent(c, RenterActivity.class);
                 startActivityForResult(intent, 0);
             } else{
                 progressDialog.dismiss();

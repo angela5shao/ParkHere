@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.braintreepayments.api.BraintreeFragment;
 import com.braintreepayments.api.BraintreePaymentActivity;
@@ -373,13 +374,25 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         }
         @Override
         protected void onPostExecute(ArrayList<ParkingSpot> list) {
+            if(list == null) {
+                Toast.makeText(getBaseContext(), "Error get parkingspots Please try again.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+
             clientController.providerToshowSpaces = true;
             clientController.parkingSpots = list;
 
-//            spacesFragment = new SpacesFragment();
+            spacesFragment = new SpacesFragment();
+            fragmentTransaction.replace(R.id.fragContainer, spacesFragment);
+            fragmentTransaction.addToBackStack(null);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragContainer, spacesFragment).commit();
+
+
 
             Log.d("requestParkingSpots", "onPostExecute");
-            showSpaceFragment();
+//            showSpaceFragment();
         }
 
     }

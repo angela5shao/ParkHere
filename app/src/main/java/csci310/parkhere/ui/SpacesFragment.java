@@ -127,6 +127,7 @@ public class SpacesFragment extends ListFragment implements AdapterView.OnItemCl
 //            mAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, spaces);
 
 
+
             ArrayList<String> spacesAddr = new ArrayList<String>();
 
             for (int i=0; i<spaces.size(); i++) {

@@ -27,6 +27,7 @@ import resource.NetworkPackage;
 import resource.ParkingSpot;
 import resource.Reservation;
 import resource.SearchResults;
+import resource.Time;
 import resource.User;
 
 /**
@@ -306,8 +307,19 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         args.putDouble("LAT", selectedRes.getSpot().getLat());
         args.putDouble("LONG", selectedRes.getSpot().getLon());
         args.putString("ADDRESS", selectedRes.getSpot().getStreetAddr());
-        args.putString("START_TIME", selectedRes.getReserveTimeInterval().startTime.toString());
-        args.putString("END_TIME", selectedRes.getReserveTimeInterval().endTime.toString());
+
+        Time startTime = selectedRes.getReserveTimeInterval().startTime;
+        Time endTime = selectedRes.getReserveTimeInterval().endTime;
+
+        Time displayStartTime = new Time(startTime.year,startTime.month,startTime.dayOfMonth,startTime.hourOfDay,startTime.minute,startTime.second);
+        Time displayEndTime = new Time(endTime.year,endTime.month,endTime.dayOfMonth,endTime.hourOfDay,endTime.minute,endTime.second);
+
+        displayStartTime.month+=1;
+        displayEndTime.month+=1;
+
+
+        args.putString("START_TIME", displayStartTime.toString());
+        args.putString("END_TIME", displayEndTime.toString());
         args.putString("RENTER", Long.toString(selectedRes.getSpot().getOwner()));
         args.putLong("RES_ID", selectedRes.getReservationID());
 

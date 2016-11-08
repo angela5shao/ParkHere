@@ -301,7 +301,6 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         System.out.println("ProviderActivity onSpaceSelected for: " + spacePositionInList);
 
         clientController.currentIndexofSpaces = spacePositionInList;
-
         RSTTask = new requestSpotTimeIntervalTask(clientController.parkingSpots.get(spacePositionInList));
         RSTTask.execute((Void) null);
 

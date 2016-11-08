@@ -203,7 +203,7 @@ public void onCreate(Bundle savedInstanceState) {
         ((TextView) mView.findViewById(R.id.searchspacedetail_price)).setText(new Double(mParkingSpot.search_price).toString());
 //        ((TextView) mView.findViewById(R.id.searchspacedetail_rating)).setText(new Double(mParkingSpot.rating).toString());
         TextView _provider = (TextView) mView.findViewById(R.id.searchspacedetail_providername);
-        _provider.setText(new Double(mParkingSpot.search_price).toString());
+        _provider.setText(new Long(mParkingSpot.getOwner()).toString());
         _provider.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

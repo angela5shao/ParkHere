@@ -31,7 +31,7 @@ public class LoginTest {
 //    public static final String PASSWORD_CORRECT_TO_BE_TYPED = "1234567890"; //"12345";
     public static final String PASSWORD_INCORRECT_TO_BE_TYPED = "0987654321";
 
-    public static final String EMAIL_TO_BE_TYPED = "renter@usc.edu";
+    public static final String EMAIL_TO_BE_TYPED = "renter3@usc.edu";
     public static final String EMAIL2_TO_BE_TYPED = "provider@usc.edu";
     public static final String PASSWORD_CORRECT_TO_BE_TYPED = "123456789012";
 //    public static final String LICENSE_PLATE2_TO_BE_TYPED = "079079079";

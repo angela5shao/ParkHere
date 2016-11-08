@@ -46,9 +46,12 @@ import static org.hamcrest.Matchers.is;
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class SearchTest { //extends ActivityInstrumentationTestCase2<RenterActivity> {
-    public static final String EMAIL_TO_BE_TYPED = "yy@yy.com"; //"espressoeast@usc.edu";
-    public static final String PASSWORD_CORRECT_TO_BE_TYPED = "1234567890"; //"12345";
-    public static final String LAST_USER_ROLE = "Provider";
+    public static final String EMAIL_TO_BE_TYPED = "renter3@usc.edu";//"yy@yy.com"; //"espressoeast@usc.edu";
+    public static final String PASSWORD_CORRECT_TO_BE_TYPED = "123456789012"; //"1234567890"; //"12345";
+    public static final String PHONE_TO_BE_MATCHED = "2132132133";
+    public static final String LICENSE_TO_BE_MATCHED = "0909090";
+    public static final String LICENSE_PLATE_TO_BE_MATCHED = "089089089";
+
     public static final String ADDRESS_TO_BE_TYPED = "UC Berkeley";
     public static final String ADDRESS_LAT= "37.8719";
     public static final String ADDRESS_LONG= "-122.2585";
@@ -171,25 +174,19 @@ public class SearchTest { //extends ActivityInstrumentationTestCase2<RenterActiv
 
     @Test
     public void checkPublicProfile() {
-        //get the text which the fragment shows
-        ViewInteraction fragmentText = onView(withId(R.id.displaySearchTextView));
-
-        //check the fragment text does not exist on fresh activity start
-        fragmentText.check(ViewAssertions.doesNotExist());
-
         //click the search button to show the search result fragment
         onView(withId(R.id.btn_confirm)).perform(scrollTo(), click());
-
-        //check the fragments text is now visible in the activity
-        fragmentText.check(ViewAssertions.matches(isDisplayed()));
 
         //click on first item on search result list
         onData(anything()).inAdapterView(withId(R.id.searchresultList)).atPosition(0).perform(click());
 
-        // TODO
         // Click on profile item
+        onView(withId(R.id.profilePic)).perform(click());
 
         // Check that email, phone number, and licence ID are correct
+        onView(withId(R.id.usernameText)).check(matches(withText(EMAIL_TO_BE_TYPED)));
+        onView(withId(R.id.licenseIDText)).check(matches(withText(LICENSE_TO_BE_MATCHED)));
+        onView(withId(R.id.licenseplateText)).check(matches(withText(LICENSE_PLATE_TO_BE_MATCHED)));
 
         // Logout
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());

@@ -22,9 +22,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class UserProfileTest {
-    public static final String EMAIL_TO_BE_TYPED = "yy@yy.com"; //"espressoeast@usc.edu";
-    public static final String PASSWORD_CORRECT_TO_BE_TYPED = "1234567890"; //"12345";
-    public static final String LAST_USER_ROLE = "Provider";
+    public static final String EMAIL_TO_BE_TYPED = "renter3@usc.edu";//"yy@yy.com"; //"espressoeast@usc.edu";
+    public static final String PASSWORD_CORRECT_TO_BE_TYPED = "123456789012";//"1234567890"; //"12345";
     public static final String LICENSE_TO_BE_TYPED = "0909090";
     public static final String LICENSE_PLATE_TO_BE_TYPED = "089089089";
 

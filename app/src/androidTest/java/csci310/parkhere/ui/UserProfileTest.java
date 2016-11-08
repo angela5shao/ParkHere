@@ -125,9 +125,39 @@ public class UserProfileTest {
         onView(withId(R.id.btn_save)).perform(ViewActions.scrollTo()).perform(click());
         // TODO: check licence ID & licence plate
         onView(withId(R.id.profilePic)).perform(click());
+        onView(withId(R.id.usernameText)).check(matches(withText(EMAIL_TO_BE_TYPED)));
         onView(withId(R.id.licenseIDText)).check(matches(withText(LICENSE_TO_BE_TYPED)));
         onView(withId(R.id.licenseplateText)).check(matches(withText(LICENSE_PLATE_TO_BE_TYPED)));
         onView(withId(R.id.phoneText)).check(matches(withText(PHONE_TO_BE_TYPED)));
+    }
+
+    @Test
+    public void editPasswordLong() {
+        // Click on Profile and validate email
+        onView(withId(R.id.profilePic)).perform(click());
+        onView(withId(R.id.usernameText)).check(matches(withText(EMAIL_TO_BE_TYPED)));
+        onView(withId(R.id.editLogo)).perform(click());
+        onView(withId(R.id.pwText)).perform(typeText("1234567890") , closeSoftKeyboard());
+        onView(withId(R.id.phoneText)).perform(clearText()).perform(typeText("7472346799"), closeSoftKeyboard());
+        onView(withId(R.id.btn_save)).perform(ViewActions.scrollTo()).perform(click());
+        // TODO: check licence ID & licence plate
+        onView(withId(R.id.profilePic)).perform(click());
+        onView(withId(R.id.usernameText)).check(matches(withText(EMAIL_TO_BE_TYPED)));
+        onView(withId(R.id.licenseIDText)).check(matches(withText(LICENSE_TO_BE_TYPED)));
+        onView(withId(R.id.licenseplateText)).check(matches(withText(LICENSE_PLATE_TO_BE_TYPED)));
+        onView(withId(R.id.phoneText)).check(matches(withText("7472346799")));
+
+        onView(withId(R.id.editLogo)).perform(click());
+        onView(withId(R.id.pwText)).perform(typeText("1234567890") , closeSoftKeyboard());
+        onView(withId(R.id.phoneText)).perform(clearText()).perform(typeText(PHONE_TO_BE_TYPED), closeSoftKeyboard());
+        onView(withId(R.id.btn_save)).perform(ViewActions.scrollTo()).perform(click());
+        // TODO: check licence ID & licence plate
+        onView(withId(R.id.profilePic)).perform(click());
+        onView(withId(R.id.usernameText)).check(matches(withText(EMAIL_TO_BE_TYPED)));
+        onView(withId(R.id.licenseIDText)).check(matches(withText(LICENSE_TO_BE_TYPED)));
+        onView(withId(R.id.licenseplateText)).check(matches(withText(LICENSE_PLATE_TO_BE_TYPED)));
+        onView(withId(R.id.phoneText)).check(matches(withText(PHONE_TO_BE_TYPED)));
+
     }
 
     @Test
@@ -141,12 +171,13 @@ public class UserProfileTest {
         onView(withId(R.id.btn_save)).perform(ViewActions.scrollTo()).perform(click());
         // TODO: check licence ID & licence plate
         onView(withId(R.id.profilePic)).perform(click());
+        onView(withId(R.id.usernameText)).check(matches(withText(EMAIL_TO_BE_TYPED)));
         onView(withId(R.id.licenseIDText)).check(matches(withText(LICENSE_TO_BE_TYPED)));
         onView(withId(R.id.licenseplateText)).check(matches(withText(LICENSE_PLATE_TO_BE_TYPED)));
         onView(withId(R.id.phoneText)).check(matches(withText(PHONE_TO_BE_TYPED)));
     }
 
-
+    @Test
     public void checkPrivateProfileInfo() {
         // Click on Profile and validate email
         onView(withId(R.id.profilePic)).perform(click());

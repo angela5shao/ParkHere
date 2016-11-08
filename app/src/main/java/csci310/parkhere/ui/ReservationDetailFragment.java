@@ -129,10 +129,13 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
         _btn_review=(Button)v.findViewById(R.id.btn_review);
         _btn_cancel=(Button)v.findViewById(R.id.btn_cancel);
 
+        Log.d("Reservation detail ","if_canReview = "+if_canReview);
+        Log.d("Reservation detail ","if_canCancel = "+if_canCancel);
+
         if(!if_canReview) {
             _btn_review.setVisibility(View.GONE);
         }
-        if(!if_canReview) {
+        if(!if_canCancel) {
             _btn_cancel.setVisibility(View.GONE);
         }
 

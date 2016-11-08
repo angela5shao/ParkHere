@@ -222,7 +222,7 @@ public class ReservationsFragment extends Fragment implements AdapterView.OnItem
 
                 if(posInControllerList != -1)
                 {
-                    mListener.onReservationSelected(posInControllerList, ifCanCancel);
+                    mListener.onReservationSelected(posInControllerList, false);
                     System.out.println("CLICKED on Reservation: " + position);
                 }
                 else
@@ -273,7 +273,7 @@ public class ReservationsFragment extends Fragment implements AdapterView.OnItem
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-        void onReservationSelected(int resPosition, boolean ifCanCancel);
+        void onReservationSelected(int resPosition, boolean ifNotPasses);
     }
 
     @Override

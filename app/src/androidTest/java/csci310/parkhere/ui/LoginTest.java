@@ -54,11 +54,18 @@ import static org.hamcrest.Matchers.instanceOf;
 @LargeTest
 public class LoginTest {
 
-    public static final String EMAIL_TO_BE_TYPED = "yy@yy.com"; //"espressoeast@usc.edu";
-    public static final String PASSWORD_CORRECT_TO_BE_TYPED = "1234567890"; //"12345";
-    public static final String PASSWORD_INCORRECT_TO_BE_TYPED = "123456789012";
-    public static final String LAST_USER_ROLE = "Provider";
-//    public static final String LICENCE_TO_BE_TYPED = "1122334455";
+//    public static final String EMAIL_TO_BE_TYPED = "yy@yy.com"; //"espressoeast@usc.edu";
+//    public static final String PASSWORD_CORRECT_TO_BE_TYPED = "1234567890"; //"12345";
+    public static final String PASSWORD_INCORRECT_TO_BE_TYPED = "0987654321";
+
+    public static final String EMAIL_TO_BE_TYPED = "renter@usc.edu";
+    public static final String EMAIL2_TO_BE_TYPED = "provider@usc.edu";
+    public static final String PASSWORD_CORRECT_TO_BE_TYPED = "123456789012";
+    public static final String LICENSE_PLATE2_TO_BE_TYPED = "079079079";
+
+    public static final String PHONE_TO_BE_TYPED = "2132132133";
+    public static final String LICENSE_TO_BE_TYPED = "0909090";
+    public static final String LICENSE_PLATE_TO_BE_TYPED = "089089089";
 
     @Rule
     public IntentsTestRule<HomeActivity> mActivityRule = new IntentsTestRule(HomeActivity.class);
@@ -76,7 +83,6 @@ public class LoginTest {
         // Assuming registered as a renter, check that intent to Renter Activity is called.
         intended(hasComponent(RenterActivity.class.getName()));
 //        intended(hasComponent(new ComponentName(getTargetContext(), RenterActivity.class)));
-
     }
 
 
@@ -92,7 +98,7 @@ public class LoginTest {
         onView(withId(R.id.emailText)).perform(typeText(EMAIL_TO_BE_TYPED));
         onView(withId(R.id.passwordText)).perform(typeText(PASSWORD_CORRECT_TO_BE_TYPED), closeSoftKeyboard());
         onView(withId(R.id.loginButton)).perform(click());
-        intended(hasComponent(ProviderActivity.class.getName()));
+        intended(hasComponent(RenterActivity.class.getName()));
 
         // Switch to provider
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
@@ -108,7 +114,7 @@ public class LoginTest {
         onView(withId(R.id.passwordText)).perform(typeText(PASSWORD_CORRECT_TO_BE_TYPED), closeSoftKeyboard());
         onView(withId(R.id.loginButton)).perform(click());
 
-        // Check that ProviderActivity is called.
+        // Check that RenterActivity is called.
         intended(hasComponent(RenterActivity.class.getName()));
 //        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(
 //                Activity.RESULT_OK, new Intent());
@@ -126,12 +132,45 @@ public class LoginTest {
         // From HomeActivity, click on Login
         onView(withId(R.id.loginButton)).perform(click());
 
-        // Login (as a renter). Type email, password. Then press Login button
-        onView(withId(R.id.emailText)).perform(typeText(EMAIL_TO_BE_TYPED));
+        // Login (as a provider). Type email, password. Then press Login button
+        onView(withId(R.id.emailText)).perform(typeText(EMAIL2_TO_BE_TYPED));
         onView(withId(R.id.passwordText)).perform(typeText(PASSWORD_CORRECT_TO_BE_TYPED), closeSoftKeyboard());
         onView(withId(R.id.loginButton)).perform(click());
-//        intended(hasComponent(ProviderActivity.class.getName()));
 
+        // Check that ProviderActivity is called.
+        intended(hasComponent(ProviderActivity.class.getName()));
+
+        // Switch to renter
+        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+        onView(withText("Switch to Renter")).perform(click());
+
+        // Enter license plate number with original password, phone number, and licence ID
+        onView(withId(R.id.licenseIDText)).perform(typeText(EMAIL2_TO_BE_TYPED));
+        onView(withId(R.id.licenseplateText)).perform(typeText(EMAIL2_TO_BE_TYPED));
+        onView(withId(R.id.phoneText)).perform(typeText(EMAIL2_TO_BE_TYPED));
+        onView(withId(R.id.pwText)).perform(typeText(PASSWORD_CORRECT_TO_BE_TYPED), closeSoftKeyboard());
+
+        // Logout
+        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+        onView(withText("Log Out")).perform(click());
+
+        // In HomeActivity, click on login.  Login in LoginActivity
+        onView(withId(R.id.loginButton)).perform(click());
+        onView(withId(R.id.emailText)).perform(typeText(EMAIL_TO_BE_TYPED), closeSoftKeyboard());
+        onView(withId(R.id.passwordText)).perform(typeText(PASSWORD_CORRECT_TO_BE_TYPED), closeSoftKeyboard());
+        onView(withId(R.id.loginButton)).perform(click());
+
+        // Check that RenterActivity is called.
+        intended(hasComponent(RenterActivity.class.getName()));
+//        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(
+//                Activity.RESULT_OK, new Intent());
+//        intending(toPackage("csci310.parkhere.ui")).respondWith(result);
+
+        // For consistency purposes (set last role as renter), switch back to renter and logout
+        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+        onView(withText("Switch to Provider")).perform(click());
+        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+        onView(withText("Log Out")).perform(click());
     }
 
     /*

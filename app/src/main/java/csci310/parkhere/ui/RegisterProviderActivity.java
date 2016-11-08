@@ -61,7 +61,7 @@ public class RegisterProviderActivity extends Activity {
         String licenseID = _liscenseIdText.getText().toString();
 
         // TODO: Implement your own authentication logic here.
-        RegTask = new UserRegisterTask(email, password, phonenum, licenseID,"#######", "provider", name);
+        RegTask = new UserRegisterTask(email, password, phonenum, licenseID, "#######", "provider", name);
         RegTask.execute((Void) null);
     }
 

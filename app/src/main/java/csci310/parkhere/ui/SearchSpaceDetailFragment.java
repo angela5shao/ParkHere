@@ -73,6 +73,9 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
     private GoogleMap googleMap;
     CameraPosition cameraPosition;
 
+    Time displaySearchStartTime;
+    Time displaySearchEndTime;
+
 
     public SearchSpaceDetailFragment() {
         // Required empty public constructor
@@ -140,6 +143,19 @@ public void onCreate(Bundle savedInstanceState) {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_search_space_detail, container, false);
+
+
+        String[] startDate1 = mParam2.split("\\D");
+        String[] endDate1 = mParam4.split("\\D");
+        String startDateStr = startDate1[1] + "-" + startDate1[0] + "-" +startDate1[2];
+        String endDateStr = endDate1[1] + "-" + endDate1[0] + "-" +endDate1[2];
+
+        displaySearchStartTime = new Time(startDateStr+" "+mParam3 + "-0");
+        displaySearchEndTime = new Time(endDateStr+" "+mParam5+"-0");
+
+        displaySearchStartTime.month+=1;
+        displaySearchEndTime.month+=1;
+
 
         _searchspacedetail_reservebutton=(Button)mView.findViewById(R.id.searchspacedetail_reservebutton);
         _searchspacedetail_reservebutton.setOnClickListener(new View.OnClickListener() {
@@ -212,8 +228,8 @@ public void onCreate(Bundle savedInstanceState) {
             }
         });
 
-        Time sTime = mParkingSpot.getTimeIntervalList().get(0).startTime;
-        Time eTime = mParkingSpot.getTimeIntervalList().get(0).endTime;
+        Time sTime = displaySearchStartTime;
+        Time eTime = displaySearchEndTime;
         ((TextView) mView.findViewById(R.id.searchspacedetail_starttime)).setText(sTime.toString());
         ((TextView) mView.findViewById(R.id.searchspacedetail_endtime)).setText(eTime.toString());
         ((TextView) mView.findViewById(R.id.searchspacedetail_cartype)).setText(new Integer(mParkingSpot.getCartype()).toString());

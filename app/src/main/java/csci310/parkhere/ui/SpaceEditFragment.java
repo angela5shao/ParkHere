@@ -219,10 +219,10 @@ public class SpaceEditFragment extends Fragment {
 //            ImageView imageView = (ImageView) findViewById(R.id.imgView);
 //            imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
 
-            Bitmap d = new BitmapDrawable(ctx.getResources() , w.photo.getAbsolutePath()).getBitmap();
-            int nh = (int) ( d.getHeight() * (512.0 / d.getWidth()) );
-            Bitmap scaled = Bitmap.createScaledBitmap(d, 512, nh, true);
-            iv.setImageBitmap(scaled);
+//            Bitmap d = new BitmapDrawable(ctx.getResources() , w.photo.getAbsolutePath()).getBitmap();
+//            int nh = (int) ( d.getHeight() * (512.0 / d.getWidth()) );
+//            Bitmap scaled = Bitmap.createScaledBitmap(d, 512, nh, true);
+//            iv.setImageBitmap(scaled);
 
             mSpacePic.setImageBitmap(BitmapFactory.decodeFile(picturePath));
             System.out.println("- - - SpaceEditFrag: setImage - -");

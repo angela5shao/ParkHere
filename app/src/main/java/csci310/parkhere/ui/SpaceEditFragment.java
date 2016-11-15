@@ -3,9 +3,12 @@ package csci310.parkhere.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -55,6 +58,7 @@ public class SpaceEditFragment extends Fragment {
     private ParkingSpot thisParkingSpot;
 
     private int PLACE_AUTOCOMPLETE_REQUEST_CODE = 0;
+    private int RESULT_LOAD_IMAGE = 1;
 
     private Button mDoneButton, mUploadPicButton, mEditAddressButton;
     private EditText mAddressText, mDescriptionText;
@@ -135,7 +139,9 @@ public class SpaceEditFragment extends Fragment {
         mUploadPicButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            // TODO
+                // TODO
+                Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(i, RESULT_LOAD_IMAGE);
             }
         });
 
@@ -187,7 +193,7 @@ public class SpaceEditFragment extends Fragment {
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d("ONACTIVITYRESULT", "START");
+//        Log.d("ONACTIVITYRESULT", "START");
         if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 Place place = PlaceAutocomplete.getPlace(getContext(), data);
@@ -198,6 +204,19 @@ public class SpaceEditFragment extends Fragment {
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 // The user canceled the operation.
             }
+        }
+        else if (requestCode == RESULT_LOAD_IMAGE && resultCode == Activity.RESULT_OK && null != data) {
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+            Cursor cursor = getContext().getContentResolver().query(selectedImage,filePathColumn, null, null, null);
+            cursor.moveToFirst();
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            cursor.close();
+
+//            ImageView imageView = (ImageView) findViewById(R.id.imgView);
+//            imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+            mSpacePic.setImageBitmap(BitmapFactory.decodeFile(picturePath));
         }
     }
 

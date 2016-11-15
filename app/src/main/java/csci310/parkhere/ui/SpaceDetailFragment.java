@@ -107,7 +107,7 @@ public class SpaceDetailFragment extends Fragment {
             _btn_editStartTime, _btn_editEndTime;
     LinearLayout _addTimeForSpaceLayout, _editTimeForSpaceLayout;
     EditText _in_start_date, _in_start_time, _in_end_date, _in_end_time, _in_price,
-            _edit_start_time, _edit_end_time, _edit_price;
+            _edit_start_date, _edit_end_date, _edit_start_time, _edit_end_time, _edit_price;
     ListView _timeList;
 
     ProgressDialog progressDialog;
@@ -279,6 +279,7 @@ public class SpaceDetailFragment extends Fragment {
                     if (selectedStartDate == null) {
                         selectedStartDate = date;
                         _in_start_date.setText(dateFormat.format(selectedStartDate));
+                        _edit_start_date.setText(dateFormat.format(selectedStartDate));
 
                         decorators.clear();
                         decorators.add(new DisabledColorDecorator());
@@ -294,9 +295,11 @@ public class SpaceDetailFragment extends Fragment {
                     if (selectedStartDate.compareTo(date) >= 0) {
                         selectedStartDate = date;
                         _in_start_date.setText(dateFormat.format(selectedStartDate));
+                        _edit_start_date.setText(dateFormat.format(selectedStartDate));
                     } else {
                         selectedEndDate = date;
                         _in_end_date.setText(dateFormat.format(selectedEndDate));
+                        _edit_end_date.setText(dateFormat.format(selectedEndDate));
 
                         Calendar cal = Calendar.getInstance();
                         cal.setTime(selectedStartDate);
@@ -306,9 +309,8 @@ public class SpaceDetailFragment extends Fragment {
                         Time timeEnd = new Time(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
 
     //                    Log.d("time", selectedStartDate.toString() + " " + selectedEndDate.toString());
-                        Log.d("Month", String.valueOf(cal.get(Calendar.MONTH)) + " " + selectedEndDate.toString());
-
-                        Log.d("time", timeStart.toString() + " " + timeEnd.toString());
+//                        Log.d("Month", String.valueOf(cal.get(Calendar.MONTH)) + " " + selectedEndDate.toString());
+//                        Log.d("time", timeStart.toString() + " " + timeEnd.toString());
                         inputedStartTime = timeStart;
                         inputedEndTime = timeEnd;
 
@@ -411,8 +413,12 @@ public class SpaceDetailFragment extends Fragment {
             }
         });
 
+        _edit_start_date = (EditText)v.findViewById(R.id.edit_start_date);
+        _edit_end_date = (EditText)v.findViewById(R.id.edit_end_date);
         _edit_start_time = (EditText)v.findViewById(R.id.edit_start_time);
         _edit_end_time = (EditText)v.findViewById(R.id.edit_end_time);
+        _edit_price = (EditText)v.findViewById(R.id.editPrice_text);
+
         _edit_price = (EditText)v.findViewById(R.id.editPrice_text);
 
         _btn_editStartTime=(Button)v.findViewById(R.id.editStartTime_btn);

@@ -32,6 +32,7 @@ import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
 import resource.MyEntry;
 import resource.NetworkPackage;
+import resource.ParkingSpot;
 import resource.TimeInterval;
 import resource.User;
 
@@ -201,60 +202,45 @@ public class SpaceEditFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    private class EditSpaceTask extends AsyncTask<Void, Void, Boolean> {
+    private class EditSpaceTask extends AsyncTask<Void, Void, ParkingSpot> {
         String address;
         String description;
         String cartype;
-        String cancelpolicy;
+        int cancelpolicy;
         ImageView picture;
 //        TimeInterval timeInterval;
 
-        EditSpaceTask(String addr, String description, String cartype, String cancelpolicy, ImageView pic, TimeInterval time){
+        EditSpaceTask(String addr, String description, String cartype, int inCancelPolicy, ImageView pic){
             this.address = addr;
             this.description = description;
             this.cartype = cartype;
-            this.cancelpolicy = cancelpolicy;
+            this.cancelpolicy = inCancelPolicy;
             this.picture = pic;
-            this.timeInterval = time;
-            doInBackground((Void) null);
         }
 
         @Override
-        protected Boolean doInBackground(Void... params ){
+        protected ParkingSpot doInBackground(Void... params ){
             ClientController clientController = ClientController.getInstance();
-            clientController.editProfile(username, pwText, licenseIdText, licenseplateText, phoneText);
+            clientController.editParkingSpot(address, description, cartype, cancelpolicy, picture);
             NetworkPackage NP = clientController.checkReceived();
             MyEntry<String, Serializable> entry = NP.getCommand();
             String key = entry.getKey();
             Object value = entry.getValue();
-            if(key.equals("EDITPROFILE")){
-                User user = (User) value;
-                clientController.setUser(user);
-                return true;
+            if(key.equals("EDITPARKINGSPOT")){
+                ParkingSpot spot = (ParkingSpot)value;
+                return spot;
             }
-            return false;
+            return null;
         }
 
         @Override
-        protected void onPostExecute(Boolean result) {
+        protected void onPostExecute(ParkingSpot spot) {
 
-            if(result){
-                PrivateProfileFragment privateProfileFragment = new PrivateProfileFragment();
-                Bundle args = new Bundle();
-                args.putString("USERNAME", _usernameText.getText().toString() );
-                args.putString("PASSWORD", "");
-                args.putString("USERLICENSE", _licenseIDText.getText().toString());
-                args.putString("USERPLATE", _licenseplateText.getText().toString());
-                args.putString("PHONE", _phoneText.getText().toString());
-                privateProfileFragment.setArguments(args);
-                Activity ac = getActivity();
-                if(ac instanceof  RenterActivity)
-                    ((RenterActivity) getActivity()).switchToPrivateProfileFrag(privateProfileFragment);
-                else if(ac instanceof  ProviderActivity)
-                    ((ProviderActivity) getActivity()).switchToPrivateProfileFrag(privateProfileFragment);
+            if(spot!=null){
+
             } else{
-                Toast.makeText(getContext(), "Error on edit profile! Please try again.", Toast.LENGTH_SHORT).show();
-                // back to reservation detail
+                Toast.makeText(getContext(), "Error on edit space! Please try again.", Toast.LENGTH_SHORT).show();
+                // back to parking spot detail
             }
         }
     }

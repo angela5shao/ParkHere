@@ -3,6 +3,7 @@ package csci310.parkhere.controller;
 import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -413,9 +414,9 @@ public class ClientController {
 
 
 
-    public boolean book(long spaceID, long userID, TimeInterval interval) {
-        return false;
-    }
+//    public boolean book(long spaceID, long userID, TimeInterval interval) {
+//        return false;
+//    }
 
     public void postPaymentNonceToServer(String paymentMethodNonce, long resID)
     {
@@ -601,6 +602,21 @@ public class ClientController {
         try{
             clientCommunicator.sendPackage(NP);
         } catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void editParkingSpot(String address, String description, String cartype, int inCancelPolicy, ImageView picture) {
+        HashMap<String, Serializable> map = new HashMap<String, Serializable>();
+        map.put("ADDRESS", address);
+        map.put("DESCRIPTION", description);
+        map.put("CARTYPE", cartype);
+        map.put("CANCELPOLICY", inCancelPolicy);
+        map.put("PICTURE", (Serializable) picture);
+        NP.addEntry("EDITPROFILE", map);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

@@ -185,29 +185,33 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         fragmentTransaction.commit();
     }
 
-    public void showSpaceDetailFragment()
-    {
-        // TODO: Get ParkingSpot given position in list
-        if (clientController.parkingSpots.size() == 0) {
-            System.out.println("ProviderActivity: no spaces to select");
-            return;
-        }
-        ParkingSpot spotSelected = clientController.parkingSpots.get(clientController.currentIndexofSpaces);
-        if (spotSelected == null) {
-            System.out.println("Selected parking spot is null");
-            return;
-        }
+//    public void showSpaceDetailFragment()
+//    {
+//        // TODO: Get ParkingSpot given position in list
+//        if (clientController.parkingSpots.size() == 0) {
+//            System.out.println("ProviderActivity: no spaces to select");
+//            return;
+//        }
+//        ParkingSpot spotSelected = clientController.parkingSpots.get(clientController.currentIndexofSpaces);
+//        if (spotSelected == null) {
+//            System.out.println("Selected parking spot is null");
+//            return;
+//        }
+//
+//        spaceDetailFragment = new SpaceDetailFragment();
+//        System.out.print("Show space detail " + spotSelected.getDescription());
+//
+//
+//        try {
+//            getSupportFragmentManager().beginTransaction()
+//                    .replace(R.id.fragContainer, spaceDetailFragment).commit();
+//        } catch (Exception e) {
+//            System.out.println("Spaces tab item exception");
+//        }
+//    }
 
-        spaceDetailFragment = new SpaceDetailFragment();
-        System.out.print("Show space detail " + spotSelected.getDescription());
+    public void showSpaceDetailFragment(ParkingSpot ps){
 
-
-        try {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragContainer, spaceDetailFragment).commit();
-        } catch (Exception e) {
-            System.out.println("Spaces tab item exception");
-        }
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -323,7 +327,24 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 
     }
 
-    public void onEditSpace(long spaceID) {
+    public void onEditSpace(ParkingSpot ps) {
+        Bundle args = new Bundle();
+        args.putString("ADDRESS", ps.getStreetAddr());
+        args.putIntegerArrayList("START_YEARS", inStartYear);
+        args.putIntegerArrayList("START_MONTHS", inStartMonth);
+        args.putIntegerArrayList("START_DAYS", inStartDay);
+        args.putIntegerArrayList("START_HOURS", inStartHour);
+        args.putIntegerArrayList("START_MINS", inStartMin);
+        args.putIntegerArrayList("END_YEARS", inEndYear);
+        args.putIntegerArrayList("END_MONTHS", inEndMonth);
+        args.putIntegerArrayList("END_DAYS", inEndDay);
+        args.putIntegerArrayList("END_HOURS", inEndHour);
+        args.putIntegerArrayList("END_MINS", inEndMin);
+
+        spaceDetailFragment = new SpaceDetailFragment();
+        ((SpaceDetailFragment)spaceDetailFragment).thisParkingSpot = parkingSpot;
+        spaceDetailFragment.setArguments(args);
+        fm.beginTransaction().add(R.id.fragContainer, spaceDetailFragment).commit();
     }
 
     // Called by SpacesFragment's "add" button

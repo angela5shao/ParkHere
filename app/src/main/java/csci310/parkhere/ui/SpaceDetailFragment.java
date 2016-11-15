@@ -103,8 +103,9 @@ public class SpaceDetailFragment extends Fragment {
 //    TimeInterval interval1 = new TimeInterval(start1, end1);
 //    //*******************************************************************************
 
-    Button _btn_add_time, _btn_start_time, _btn_end_time, _btn_add_confirm, _btn_delete_time, _btn_editSpace;
-    LinearLayout _addTimeForSpaceLayout;
+    Button _btn_add_time, _btn_start_time, _btn_end_time, _btn_add_confirm, _btn_delete_time,
+            _btn_editSpace, _btn_editTimeConfirm;
+    LinearLayout _addTimeForSpaceLayout, _editTimeForSpaceLayout;
     EditText _in_start_date, _in_start_time, _in_end_date, _in_end_time, _in_price;
     ListView _timeList;
 
@@ -174,6 +175,7 @@ public class SpaceDetailFragment extends Fragment {
         _spacedetail_address.setText(address);
 
         _addTimeForSpaceLayout = (LinearLayout) v.findViewById(R.id.addTimeForSpaceLayout);
+        _editTimeForSpaceLayout = (LinearLayout) v.findViewById(R.id.editTimeForSpaceLayout);
 
         _btn_add_time=(Button)v.findViewById(R.id.btn_add_time);
         _btn_add_time.setOnClickListener(new View.OnClickListener() {
@@ -385,14 +387,43 @@ public class SpaceDetailFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
-                _btn_delete_time.setVisibility(View.VISIBLE);
                 curr_selected_time_id = (long)position;
+
+                if(_editTimeForSpaceLayout.getVisibility()==View.GONE) {
+                    _btn_delete_time.setVisibility(View.VISIBLE);
+                    _editTimeForSpaceLayout.setVisibility(View.VISIBLE);
+                }
+                else {
+                    _btn_delete_time.setVisibility(View.GONE);
+                    _editTimeForSpaceLayout.setVisibility(View.GONE);
+                }
             }
         });
         _btn_delete_time.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 DeleteTimeTask = new DeleteTimeForSpaceTask(curr_selected_time_id);
                 DeleteTimeTask.execute((Void) null);
+            }
+        });
+
+        _btn_editTimeConfirm = (Button) v.findViewById(R.id.editTimeConfirm_btn);
+        _btn_editTimeConfirm.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                ArrayList<TimeInterval> intervals = thisParkingSpot.getTimeIntervalList();
+                for(int i = 0; i < intervals.size(); i++) {
+                    Time start = intervals.get(i).startTime;
+                    Time end = intervals.get(i).endTime;
+                    if((start.compareTo(inputedStartTime) <= 0 && end.compareTo(inputedEndTime) >=0) ||
+                            (start.compareTo(inputedStartTime) >= 0 && start.compareTo(inputedEndTime) <=0) ||
+                            (end.compareTo(inputedStartTime) >= 0 && end.compareTo(inputedEndTime) <=0) ||
+                            (start.compareTo(inputedStartTime) >= 0 && end.compareTo(inputedEndTime) <=0)) {
+                        Toast.makeText(getContext(), "Please input valid time interval", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+
+                AddSpaceTask = new AddTimeForSpaceTask(_in_price.getText().toString());
+                AddSpaceTask.execute((Void) null);
             }
         });
 

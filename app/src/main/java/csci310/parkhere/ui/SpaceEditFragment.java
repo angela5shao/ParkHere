@@ -30,6 +30,7 @@ import java.io.Serializable;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
+import csci310.parkhere.resource.CarType;
 import resource.MyEntry;
 import resource.NetworkPackage;
 import resource.ParkingSpot;
@@ -45,14 +46,13 @@ import resource.User;
  * create an instance of this fragment.
  */
 public class SpaceEditFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private ParkingSpot thisParkingSpot;
 
     private int PLACE_AUTOCOMPLETE_REQUEST_CODE = 0;
 
@@ -91,8 +91,7 @@ public class SpaceEditFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            thisParkingSpot = (ParkingSpot) getArguments().getSerializable("spot");
         }
     }
 
@@ -102,10 +101,15 @@ public class SpaceEditFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_space_edit, container, false);
 
         mAddressText = (EditText) v.findViewById(R.id.address_text);
+        mAddressText.setText(thisParkingSpot.getStreetAddr());
         mDescriptionText = (EditText) v.findViewById(R.id.description_text);
+        mDescriptionText.setText(thisParkingSpot.getDescription());
         mSpacePic = (ImageView) v.findViewById(R.id.parkingSpotImage);
+        // TODO: Set image of parking spot
         mCartypeSpinner = (Spinner)v.findViewById(R.id.editCartype_spinner);
+        mCartypeSpinner.setSelection(thisParkingSpot.getCartype());
         mCancelPolicySpinner = (Spinner)v.findViewById(R.id.editCancelPolicy_spinner);
+        mCancelPolicySpinner.setSelection(thisParkingSpot.cancelpolicy);
 
         mDoneButton = (Button)v.findViewById(R.id.editSpaceSave_btn);
         mUploadPicButton = (Button)v.findViewById(R.id.spacePicUpload_btn);
@@ -114,22 +118,17 @@ public class SpaceEditFragment extends Fragment {
         mDoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if(_pwText.getText().length() < 10) {
-//                    Toast.makeText(getContext(), "Please input password longer than 10 digits", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-
-                // Convert into TimeInterval
-                TimeInterval time = null;
+                if(mAddressText.getText().length() == 0) {
+                    Toast.makeText(getContext(), "Please enter address.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 EditSpaceTask editProfileTask = new EditSpaceTask(mAddressText.getText().toString(),
                         mDescriptionText.getText().toString(),
                         mCartypeSpinner.getSelectedItem().toString(),
                         mCancelPolicySpinner.getSelectedItem().toString(),
-                        mSpacePic,
-                        time);
+                        mSpacePic);
                 editProfileTask.execute((Void)null);
-
             }
         });
 
@@ -187,6 +186,21 @@ public class SpaceEditFragment extends Fragment {
         mListener = null;
     }
 
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("ONACTIVITYRESULT", "START");
+        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                Place place = PlaceAutocomplete.getPlace(getContext(), data);
+                mAddressText.setText(place.getAddress());
+                mCurrLocation = place.getLatLng();
+            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                Status status = PlaceAutocomplete.getStatus(getContext(), data);
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
+        }
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -208,7 +222,6 @@ public class SpaceEditFragment extends Fragment {
         String cartype;
         int cancelpolicy;
         ImageView picture;
-//        TimeInterval timeInterval;
 
         EditSpaceTask(String addr, String description, String cartype, int inCancelPolicy, ImageView pic){
             this.address = addr;

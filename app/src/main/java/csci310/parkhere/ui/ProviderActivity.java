@@ -43,7 +43,7 @@ import resource.User;
 public class ProviderActivity extends AppCompatActivity implements SpacesFragment.OnFragmentInteractionListener,
         SpaceDetailFragment.OnFragmentInteractionListener, PrivateProfileFragment.OnFragmentInteractionListener,
         ReservationDetailFragment.OnFragmentInteractionListener, AddSpaceFragment.OnFragmentInteractionListener,
-        EditProfileFragment.OnFragmentInteractionListener{
+        EditProfileFragment.OnFragmentInteractionListener, SpaceEditFragment.OnFragmentInteractionListener {
 
     LinearLayout _spaceLink;
     ImageView _profilePic;
@@ -297,6 +297,11 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 
     public void openSpaceEditFragment(ParkingSpot spot) {
         SpaceEditFragment editSpaceFrag = new SpaceEditFragment();
+
+        Bundle args = new Bundle();
+        args.putSerializable("spot", spot);
+        editSpaceFrag.setArguments(args);
+
         // TODO: pass parkingspot
 
         fragmentTransaction = fm.beginTransaction();

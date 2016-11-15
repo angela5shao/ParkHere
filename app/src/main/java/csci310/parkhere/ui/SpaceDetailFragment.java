@@ -90,6 +90,8 @@ public class SpaceDetailFragment extends Fragment {
     SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
     Time inputedStartTime;
     Time inputedEndTime;
+    Time inputedEditStartTime;
+    Time inputedEditEndTime;
 
 //    //*******************************************************************************
 //    // FOR TESTING DELETE LATER!!!
@@ -105,7 +107,7 @@ public class SpaceDetailFragment extends Fragment {
             _btn_editStartTime, _btn_editEndTime;
     LinearLayout _addTimeForSpaceLayout, _editTimeForSpaceLayout;
     EditText _in_start_date, _in_start_time, _in_end_date, _in_end_time, _in_price,
-            _edit_start_time, _edit_end_time;
+            _edit_start_time, _edit_end_time, _edit_price;
     ListView _timeList;
 
     ProgressDialog progressDialog;
@@ -411,6 +413,7 @@ public class SpaceDetailFragment extends Fragment {
 
         _edit_start_time = (EditText)v.findViewById(R.id.edit_start_time);
         _edit_end_time = (EditText)v.findViewById(R.id.edit_end_time);
+        _edit_price = (EditText)v.findViewById(R.id.editPrice_text);
 
         _btn_editStartTime=(Button)v.findViewById(R.id.editStartTime_btn);
         _btn_editStartTime.setOnClickListener(new View.OnClickListener() {
@@ -454,22 +457,21 @@ public class SpaceDetailFragment extends Fragment {
         _btn_editTimeConfirm = (Button) v.findViewById(R.id.editTimeConfirm_btn);
         _btn_editTimeConfirm.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                ArrayList<TimeInterval> intervals = thisParkingSpot.getTimeIntervalList();
-                for(int i = 0; i < intervals.size(); i++) {
-                    Time start = intervals.get(i).startTime;
-                    Time end = intervals.get(i).endTime;
-                    if((start.compareTo(inputedStartTime) <= 0 && end.compareTo(inputedEndTime) >=0) ||
-                            (start.compareTo(inputedStartTime) >= 0 && start.compareTo(inputedEndTime) <=0) ||
-                            (end.compareTo(inputedStartTime) >= 0 && end.compareTo(inputedEndTime) <=0) ||
-                            (start.compareTo(inputedStartTime) >= 0 && end.compareTo(inputedEndTime) <=0)) {
-                        Toast.makeText(getContext(), "Please input valid time interval", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                }
-
-                // TODO: call EditTimeTask
-//                AddSpaceTask = new AddTimeForSpaceTask(_in_price.getText().toString());
-//                AddSpaceTask.execute((Void) null);
+//                ArrayList<TimeInterval> intervals = thisParkingSpot.getTimeIntervalList();
+//                for(int i = 0; i < intervals.size(); i++) {
+//                    Time start = intervals.get(i).startTime;
+//                    Time end = intervals.get(i).endTime;
+//                    if((start.compareTo(inputedStartTime) <= 0 && end.compareTo(inputedEndTime) >=0) ||
+//                            (start.compareTo(inputedStartTime) >= 0 && start.compareTo(inputedEndTime) <=0) ||
+//                            (end.compareTo(inputedStartTime) >= 0 && end.compareTo(inputedEndTime) <=0) ||
+//                            (start.compareTo(inputedStartTime) >= 0 && end.compareTo(inputedEndTime) <=0)) {
+//                        Toast.makeText(getContext(), "Please input valid time interval", Toast.LENGTH_SHORT).show();
+//                        return;
+//                    }
+//                }
+                //TODO: get the timeslotID
+                EditTimeTask editTimeTask = new EditTimeTask(_edit_price.getText().toString(), 1);
+                editTimeTask.execute((Void)null);
             }
         });
 
@@ -634,7 +636,6 @@ public class SpaceDetailFragment extends Fragment {
 
         AddTimeForSpaceTask(String price){
             mPrice = price;
-//            doInBackground((Void) null);
         }
         @Override
         protected void onPreExecute(){
@@ -788,6 +789,106 @@ public class SpaceDetailFragment extends Fragment {
             }
         }
 
+    }
+
+    private class EditTimeTask extends AsyncTask<Void, Void, Boolean>{
+        private final String mPrice;
+        private final long timeSlotID;
+
+        EditTimeTask(String price, long timeSlotID){
+            mPrice = price;
+            this.timeSlotID = timeSlotID;
+        }
+
+        @Override
+        protected void onPreExecute(){
+            //Display a progress dialog
+            progressDialog = new ProgressDialog(getContext(), R.style.AppTheme);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Editing...");
+            progressDialog.show();
+        }
+        @Override
+        protected Boolean doInBackground(Void... params){
+            // call client controller
+            ClientController controller = ClientController.getInstance();
+
+            controller.requestEditTime(timeSlotID, inputedEditStartTime, inputedEditEndTime, Integer.valueOf(mPrice));
+
+            NetworkPackage NP = controller.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if(key.equals("EDITTIME")) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        @Override
+        protected void onPostExecute(Boolean success) {
+            if(success) {
+                // Back to SpacesFragment
+                ((ProviderActivity)getActivity()).showSpaceFragment();
+                Toast.makeText(getContext(), "Edited time!", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+
+            } else{
+                progressDialog.dismiss();
+                Toast.makeText(getContext(), "Edit time failed! Please try agian.", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+
+
+    }
+
+    private class DeleteSpaceTask extends AsyncTask<Void, Void, Boolean>{
+        private long parkingSpaceID;
+        DeleteSpaceTask(ParkingSpot parkingSpot){
+            parkingSpaceID = parkingSpot.getParkingSpotID();
+        }
+
+        @Override
+        protected void onPreExecute(){
+            //Display a progress dialog
+            progressDialog = new ProgressDialog(getContext(), R.style.AppTheme);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Deleting...");
+            progressDialog.show();
+        }
+        @Override
+        protected Boolean doInBackground(Void... params){
+            // call client controller
+            ClientController controller = ClientController.getInstance();
+
+            controller.deleteSpace(parkingSpaceID);
+
+            NetworkPackage NP = controller.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if(key.equals("DELETESPACE")) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        @Override
+        protected void onPostExecute(Boolean success) {
+            if(success) {
+                // Back to SpacesFragment
+                ((ProviderActivity)getActivity()).showSpaceFragment();
+                Toast.makeText(getContext(), "Deleted time!", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+
+            } else{
+                progressDialog.dismiss();
+                Toast.makeText(getContext(), "Delete time failed! Please try agian.", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
 }

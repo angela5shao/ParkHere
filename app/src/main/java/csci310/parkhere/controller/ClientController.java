@@ -518,21 +518,31 @@ public class ClientController {
         }
     }
 
+    public void requestEditTime(long timeSlotID, Time startTime, Time endTime, double price){
+        TimeInterval timeInterval = new TimeInterval(startTime, endTime);
+        NetworkPackage NP = new NetworkPackage();
+        HashMap<String, Serializable> map = new HashMap<>();
+        map.put("TIMESLOTID", timeSlotID);
+        map.put("TIMEINTERVAL", timeInterval);
+        System.out.println("Start:"+timeInterval.startTime);
+        System.out.println("End:" + timeInterval.endTime);
+        map.put("PRICE", price);
+        NP.addEntry("EDITTIME", map);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void requestAddTime(ParkingSpot spot, Time startTime, Time endTime, double price)
     {
-//        startTime.month +=1;
-//        endTime.month += 1;
-
         TimeInterval timeInterval = new TimeInterval(startTime, endTime);
-
-
         NetworkPackage NP = new NetworkPackage();
         HashMap<String, Serializable> map = new HashMap<>();
         map.put("PARKINGSPOTID", spot.getParkingSpotID());
         map.put("TIMEINTERVAL", timeInterval);
-
-
-
+        map.put("PRICE", price);
         System.out.println("Start:"+timeInterval.startTime);
         System.out.println("End:" + timeInterval.endTime);
         map.put("PRICE", price);
@@ -544,6 +554,14 @@ public class ClientController {
         }
     }
 
+    public void deleteSpace(long parkingSpotid){
+        NP.addEntry("DELETESPACE", parkingSpotid);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public void logout(boolean userType) {
         NetworkPackage NP = new NetworkPackage();
         HashMap<String, Serializable> map = new HashMap<>();
@@ -607,13 +625,13 @@ public class ClientController {
     }
 
     public void editParkingSpot(String address, String description, String cartype, int inCancelPolicy, ImageView picture) {
-        HashMap<String, Serializable> map = new HashMap<String, Serializable>();
+        HashMap<String, Serializable> map = new HashMap<>();
         map.put("ADDRESS", address);
         map.put("DESCRIPTION", description);
         map.put("CARTYPE", cartype);
         map.put("CANCELPOLICY", inCancelPolicy);
         map.put("PICTURE", (Serializable) picture);
-        NP.addEntry("EDITPROFILE", map);
+        NP.addEntry("EDITSPACE", map);
         try {
             clientCommunicator.sendPackage(NP);
         } catch (IOException e) {

@@ -586,6 +586,29 @@ public class ClientController {
         }
     }
 
+    public void sendImagetoServer(String DataURI, String Identifier, long ID)
+    {
+        CustomImage customImage = new CustomImage();
+        if(Identifier.equals("PARKINGSPACEIMAGE"))
+        {
+
+        }
+        else if(Identifier.equals("USERPROFILEIAMGE"))
+        {
+
+        }
+        else
+        {
+            Log.d("WRONG", "WRONG IDENTIFIER");
+        }
+        NP.addEntry("FETCHIMAGE",);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void fetchReviewsForUser(long providerID){
         NP.addEntry("FETCHREVIEWSFORUSER", providerID);
         try {

@@ -207,7 +207,7 @@ public class SpaceEditFragment extends Fragment {
         String cartype;
         String cancelpolicy;
         ImageView picture;
-        TimeInterval timeInterval;
+//        TimeInterval timeInterval;
 
         EditSpaceTask(String addr, String description, String cartype, String cancelpolicy, ImageView pic, TimeInterval time){
             this.address = addr;

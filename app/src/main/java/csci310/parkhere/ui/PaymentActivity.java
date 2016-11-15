@@ -114,10 +114,10 @@ public class PaymentActivity extends Activity {
 
                     Intent myintent = getIntent();
                     Long resID = myintent.getLongExtra("RESERVATIONID", 0);
-                    String userName = myintent.getStringExtra("USERNAME");
+                    Long providerID = myintent.getLongExtra("PROVIDERID", 0);
                     String price = myintent.getStringExtra("PRICE");
 
-                    clientController.postPaymentNonceToServer(paymentMethodNonce, resID, userName, price);
+                    clientController.postPaymentNonceToServer(paymentMethodNonce, resID, providerID, price);
                     Intent intent = new Intent(getBaseContext(), RenterActivity.class);
                     startActivity(intent);
 

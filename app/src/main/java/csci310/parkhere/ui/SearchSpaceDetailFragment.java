@@ -167,7 +167,7 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
                 TimeInterval timeInterval = new TimeInterval(startTime,endTime);
                 RenterReserveTask RRT = new RenterReserveTask(mParkingSpot.getParkingSpotID(),
                                                                 timeInterval,
-                                                                ClientController.getInstance().getUser().userName,
+                                                                mParkingSpot.getOwner(),
                                                                 ClientController.getInstance().getUser().userID);
                 RRT.execute((Void) null);
 
@@ -380,15 +380,15 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
     private class RenterReserveTask extends AsyncTask<Void, Void, Boolean> {
         private final long parkingSpotID;
         private final TimeInterval timeInterval;
+        private final long providerID;
         private final long userID;
-        private final String userName;
 
         private ProgressDialog progressDialog;
 
-        RenterReserveTask(long parkingSpotID, TimeInterval timeinterval, String userName, long userID){
+        RenterReserveTask(long parkingSpotID, TimeInterval timeinterval, long providerID, long userID){
             this.parkingSpotID = parkingSpotID;
             this.timeInterval = timeinterval;
-            this.userName = userName;
+            this.providerID = providerID;
             this.userID = userID;
         }
 
@@ -419,7 +419,7 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
             if(key.equals("RESERVE")) {
                 Intent intent = new Intent(getContext(), PaymentActivity.class);
                 intent.putExtra("RESERVATIONID", (Long)value);
-                intent.putExtra("USERNAME", (String)userName);
+                intent.putExtra("PROVIDERID", (Long)providerID);
                 intent.putExtra("PRICE", (String)Double.toString(timeInterval.price));
 
                 startActivityForResult(intent, 11);
@@ -446,6 +446,55 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
             }
         }
     }
+
+
+
+
+    private class RequestReviewTask extends AsyncTask<Void, Void, ArrayList<Review>> {
+        long parkingSpotID;
+
+        RequestReviewTask(long parkingSpotID) {
+            this.parkingSpotID = parkingSpotID;
+        }
+        @Override
+        protected ArrayList<Review> doInBackground(Void... params) {
+
+            ClientController clientController = ClientController.getInstance();
+
+            clientController.requestParkingSpotReview(parkingSpotID);
+            NetworkPackage NP = clientController.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if (key.equals("REVIEWFORPARKINGSPOT")) {
+                HashMap<String, Serializable> map = (HashMap<String, Serializable>)value;
+
+                ArrayList<Review> list = (ArrayList<Review>) map.get("REVIEWS");
+                Log.d("FETCHREVIEWLIST", "listsize: " + String.valueOf(list.size()));
+
+                return list;
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Review> list) {
+//            if (list != null) {
+////                clientController.reservations = list;
+//                reservationsFragment = new ReservationsFragment();
+//                fragmentTransaction = fm.beginTransaction();
+//                fragmentTransaction.replace(R.id.fragContainer, reservationsFragment);
+//                fragmentTransaction.addToBackStack(null);
+//                fragmentTransaction.commit();
+//            } else {
+//                Toast.makeText(getBaseContext(), "Error on get reservations! Please try again.", Toast.LENGTH_SHORT).show();
+//            }
+
+
+        }
+    }
+
 
     private class GetPublicProfileTask extends AsyncTask<Void, Void, HashMap<String, Serializable> >{
         private final long mProviderID;

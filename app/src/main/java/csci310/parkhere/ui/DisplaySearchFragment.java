@@ -105,8 +105,9 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
                     setSearchResultListview(newResult);
                 }
                 // Sort by provider rating
-                else {
-                    //
+                else if(position == 3){
+                    SearchResults newResult = controller.sortSearchResultByProviderRating();
+                    setSearchResultListview(newResult);
                 }
             }
 
@@ -193,7 +194,7 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
         _searchresultList.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, resultList));
         DiplayListViewHelper.getListViewSize(_searchresultList);
     }
-
+//
     public void setSearchResultListview(String[] inSearchResults, String startDate, String startTime, String endDate, String endTime) {
 //        _searchresultList.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, inSearchResults));
 //        DiplayListViewHelper.getListViewSize(_searchresultList);

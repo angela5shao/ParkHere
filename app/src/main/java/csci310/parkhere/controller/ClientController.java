@@ -387,11 +387,11 @@ public class ClientController {
 
     public SearchResults sortSearchResultByProviderRating() {
         if(searchResults != null) {
-//            Collections.sort(searchResults.searchResultList, new Comparator<ParkingSpot>() {
-//                public int compare(ParkingSpot p1, ParkingSpot p2) {
-//                    return Double.compare(p1.providerReview, p2.providerReview);
-//                }
-//            });
+            Collections.sort(searchResults.searchResultList, new Comparator<ParkingSpot>() {
+                public int compare(ParkingSpot p1, ParkingSpot p2) {
+                    return Double.compare(p1.providerReview, p2.providerReview);
+                }
+            });
         }
         return searchResults;
     }
@@ -417,12 +417,12 @@ public class ClientController {
         return false;
     }
 
-    public void postPaymentNonceToServer(String paymentMethodNonce, long resID, String userName, String price)
+    public void postPaymentNonceToServer(String paymentMethodNonce, long resID, long providerID, String price)
     {
         HashMap<String, Serializable> map = new HashMap<>();
         map.put("PAYMENTNONCE", paymentMethodNonce);
         map.put("RESERVATIONID", resID);
-        map.put("USERNAME", userName);
+        map.put("PROVIDERID", providerID);
         map.put("PRICE", price);
         try {
             clientCommunicator.send("PAYMENT_SUCCESS", map);
@@ -520,6 +520,20 @@ public class ClientController {
             }
         }
     }
+
+
+    public void requestParkingSpotReview(long parkingSpotid)
+    {
+        NetworkPackage NP = new NetworkPackage();
+        NP.addEntry("FETCHREVIEWSFORPARKINGSPOT", parkingSpotid);
+
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void requestAddTime(ParkingSpot spot, Time startTime, Time endTime, double price)
     {

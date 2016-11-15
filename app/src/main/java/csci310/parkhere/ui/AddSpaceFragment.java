@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,6 +61,7 @@ public class AddSpaceFragment extends Fragment {
     Spinner _cartypeSpinner, _cancelPolicySpinner;
     EditText  _in_descrip;
     TextView _addressText;
+    GridView _imageGridview;
 
     ProgressDialog progressDialog;
     ProviderAddSpaceTask addSpaceTask = null;
@@ -134,6 +136,9 @@ public class AddSpaceFragment extends Fragment {
         _in_descrip = (EditText)v.findViewById(R.id.in_descrip);
 
         _btn_upload_image =(Button)v.findViewById(R.id.btn_upload_image);
+        _imageGridview = (GridView)v.findViewById(R.id.grigitdview);
+        ImageAdapter adapter=new ImageAdapter(this);
+        _imageGridview.setAdapter(adapter);
         _btn_upload_image.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Intent intent = new Intent();

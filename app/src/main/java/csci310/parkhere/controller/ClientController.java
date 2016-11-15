@@ -23,6 +23,7 @@ import resource.SearchResults;
 import resource.Time;
 import resource.TimeInterval;
 import resource.User;
+import resource
 
 
 public class ClientController {
@@ -593,6 +594,7 @@ public class ClientController {
     public void sendImagetoServer(String DataURI, String Identifier, long ID)
     {
         CustomImage customImage = new CustomImage();
+        customImage.
         if(Identifier.equals("PARKINGSPACEIMAGE"))
         {
 

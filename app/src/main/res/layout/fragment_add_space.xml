@@ -91,6 +91,25 @@
                 android:paddingTop="12dp"
                 android:paddingBottom="12dp"/>
 
+            <GridView
+                android:id="@+id/gridview"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:columnWidth="100dip"
+            11
+            android:gravity='center'
+            12
+            android:horizontalSpacing='4dip'
+            13
+            android:numColumns='auto_fit'
+            14
+            android:stretchMode='columnWidth'
+            15
+            android:layout_above='@+id/button1'
+            16
+            android:verticalSpacing='2dip' />
+
+
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

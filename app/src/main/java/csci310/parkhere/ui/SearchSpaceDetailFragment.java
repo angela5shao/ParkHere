@@ -167,7 +167,7 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
                 TimeInterval timeInterval = new TimeInterval(startTime,endTime);
                 RenterReserveTask RRT = new RenterReserveTask(mParkingSpot.getParkingSpotID(),
                                                                 timeInterval,
-                                                                ClientController.getInstance().getUser().userName,
+                                                                mParkingSpot.getOwner(),
                                                                 ClientController.getInstance().getUser().userID);
                 RRT.execute((Void) null);
 
@@ -380,15 +380,15 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
     private class RenterReserveTask extends AsyncTask<Void, Void, Boolean> {
         private final long parkingSpotID;
         private final TimeInterval timeInterval;
+        private final long providerID;
         private final long userID;
-        private final String userName;
 
         private ProgressDialog progressDialog;
 
-        RenterReserveTask(long parkingSpotID, TimeInterval timeinterval, String userName, long userID){
+        RenterReserveTask(long parkingSpotID, TimeInterval timeinterval, long providerID, long userID){
             this.parkingSpotID = parkingSpotID;
             this.timeInterval = timeinterval;
-            this.userName = userName;
+            this.providerID = providerID;
             this.userID = userID;
         }
 
@@ -419,7 +419,7 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
             if(key.equals("RESERVE")) {
                 Intent intent = new Intent(getContext(), PaymentActivity.class);
                 intent.putExtra("RESERVATIONID", (Long)value);
-                intent.putExtra("USERNAME", (String)userName);
+                intent.putExtra("PROVIDERID", (Long)providerID);
                 intent.putExtra("PRICE", (String)Double.toString(timeInterval.price));
 
                 startActivityForResult(intent, 11);

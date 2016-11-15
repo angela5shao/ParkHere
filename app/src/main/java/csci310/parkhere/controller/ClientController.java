@@ -416,12 +416,12 @@ public class ClientController {
         return false;
     }
 
-    public void postPaymentNonceToServer(String paymentMethodNonce, long resID, String userName, String price)
+    public void postPaymentNonceToServer(String paymentMethodNonce, long resID, long providerID, String price)
     {
         HashMap<String, Serializable> map = new HashMap<>();
         map.put("PAYMENTNONCE", paymentMethodNonce);
         map.put("RESERVATIONID", resID);
-        map.put("USERNAME", userName);
+        map.put("PROVIDERID", providerID);
         map.put("PRICE", price);
         try {
             clientCommunicator.send("PAYMENT_SUCCESS", map);

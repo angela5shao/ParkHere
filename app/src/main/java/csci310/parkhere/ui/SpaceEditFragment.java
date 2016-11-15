@@ -261,16 +261,16 @@ public class SpaceEditFragment extends Fragment {
 
         @Override
         protected ParkingSpot doInBackground(Void... params ){
-//            ClientController clientController = ClientController.getInstance();
-//            clientController.editParkingSpot(address, description, cartype, cancelpolicy, picture);
-//            NetworkPackage NP = clientController.checkReceived();
-//            MyEntry<String, Serializable> entry = NP.getCommand();
-//            String key = entry.getKey();
-//            Object value = entry.getValue();
-//            if(key.equals("EDITPARKINGSPOT")){
-//                ParkingSpot spot = (ParkingSpot)value;
-//                return spot;
-//            }
+            ClientController clientController = ClientController.getInstance();
+            clientController.editParkingSpot(address, description, cartype, cancelpolicy, picture);
+            NetworkPackage NP = clientController.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if(key.equals("EDITPARKINGSPOT")){
+                ParkingSpot spot = (ParkingSpot)value;
+                return spot;
+            }
             return null;
         }
 

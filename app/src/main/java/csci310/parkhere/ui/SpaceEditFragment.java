@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -216,7 +218,14 @@ public class SpaceEditFragment extends Fragment {
 
 //            ImageView imageView = (ImageView) findViewById(R.id.imgView);
 //            imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+
+            Bitmap d = new BitmapDrawable(ctx.getResources() , w.photo.getAbsolutePath()).getBitmap();
+            int nh = (int) ( d.getHeight() * (512.0 / d.getWidth()) );
+            Bitmap scaled = Bitmap.createScaledBitmap(d, 512, nh, true);
+            iv.setImageBitmap(scaled);
+
             mSpacePic.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+            System.out.println("- - - SpaceEditFrag: setImage - -");
         }
     }
 

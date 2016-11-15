@@ -55,12 +55,8 @@ import resource.TimeInterval;
  * create an instance of this fragment.
  */
 public class SpaceDetailFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
     private int mParam1;
     private String mParam2;
 
@@ -68,6 +64,7 @@ public class SpaceDetailFragment extends Fragment {
     public ArrayList<TimeInterval> list;
     TextView _spacedetail_address;
     CustomCalendarView calendarView;
+
     final String disabledDateColor = "#c3c3c3";
     final String selectedDateColor = "#3e50b4";
     final String postedDateColor = "#009688";
@@ -104,9 +101,11 @@ public class SpaceDetailFragment extends Fragment {
 //    //*******************************************************************************
 
     Button _btn_add_time, _btn_start_time, _btn_end_time, _btn_add_confirm, _btn_delete_time,
-            _btn_editSpace, _btn_editTimeConfirm;
+            _btn_editSpace, _btn_editTimeConfirm, _btn_deleteSpace,
+            _btn_editStartTime, _btn_editEndTime;
     LinearLayout _addTimeForSpaceLayout, _editTimeForSpaceLayout;
-    EditText _in_start_date, _in_start_time, _in_end_date, _in_end_time, _in_price;
+    EditText _in_start_date, _in_start_time, _in_end_date, _in_end_time, _in_price,
+            _edit_start_time, _edit_end_time;
     ListView _timeList;
 
     ProgressDialog progressDialog;
@@ -182,8 +181,7 @@ public class SpaceDetailFragment extends Fragment {
             public void onClick(View view) {
                 if(_addTimeForSpaceLayout.getVisibility()==View.GONE) {
                     _addTimeForSpaceLayout.setVisibility(View.VISIBLE);
-                }
-                else {
+                } else {
                     _addTimeForSpaceLayout.setVisibility(View.GONE);
                 }
             }
@@ -194,6 +192,7 @@ public class SpaceDetailFragment extends Fragment {
         _in_end_date=(EditText)v.findViewById(R.id.in_end_date);
         _in_end_time=(EditText)v.findViewById(R.id.in_end_time);
         _in_price=(EditText)v.findViewById(R.id.in_price);
+
         _btn_start_time=(Button)v.findViewById(R.id.btn_start_time);
         _btn_start_time.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -243,6 +242,13 @@ public class SpaceDetailFragment extends Fragment {
             }
         });
 
+        _btn_deleteSpace = (Button)v.findViewById(R.id.deleteSpace_btn);
+        _btn_deleteSpace.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                // TODO: call DeleteSpaceTask
+            }
+        });
+
         //Initialize CustomCalendarView from layout
         calendarView = (CustomCalendarView) v.findViewById(R.id.calendar_view);
         //Initialize calendar with date
@@ -256,10 +262,6 @@ public class SpaceDetailFragment extends Fragment {
 
         selectedStartDate = null;
         selectedEndDate = null;
-
-
-
-//        System.out.println("SpaceDetailFragment for spaceID: " + thisParkingSpot.getParkingSpotID());
 
 
         // Handling custom calendar events
@@ -381,7 +383,6 @@ public class SpaceDetailFragment extends Fragment {
 
         _timeList = (ListView) v.findViewById(R.id.timeList);
         _timeList.setClickable(true);
-        _btn_delete_time = (Button) v.findViewById(R.id.btn_delete_time);
 
         _timeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -399,10 +400,54 @@ public class SpaceDetailFragment extends Fragment {
                 }
             }
         });
+        
+        _btn_delete_time = (Button) v.findViewById(R.id.btn_delete_time);
         _btn_delete_time.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 DeleteTimeTask = new DeleteTimeForSpaceTask(curr_selected_time_id);
                 DeleteTimeTask.execute((Void) null);
+            }
+        });
+
+        _edit_start_time = (EditText)v.findViewById(R.id.edit_start_time);
+        _edit_end_time = (EditText)v.findViewById(R.id.edit_end_time);
+
+        _btn_editStartTime=(Button)v.findViewById(R.id.editStartTime_btn);
+        _btn_editStartTime.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                // Get Current Time
+                final Calendar c = Calendar.getInstance();
+                curr_hour = c.get(Calendar.HOUR_OF_DAY);
+                curr_minute = c.get(Calendar.MINUTE);
+
+                // Launch Time Picker Dialog
+                TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                                _edit_start_time.setText(hourOfDay+"-"+minute);
+                            }
+                        }, curr_hour, curr_minute, false);
+                timePickerDialog.show();
+            }
+        });
+        _btn_editEndTime=(Button)v.findViewById(R.id.editEndTime_btn);
+        _btn_editEndTime.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                // Get Current Time
+                final Calendar c = Calendar.getInstance();
+                curr_hour = c.get(Calendar.HOUR_OF_DAY);
+                curr_minute = c.get(Calendar.MINUTE);
+
+                // Launch Time Picker Dialog
+                TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                                _edit_end_time.setText(hourOfDay + "-" + minute);
+                            }
+                        }, curr_hour, curr_minute, false);
+                timePickerDialog.show();
             }
         });
 
@@ -422,8 +467,9 @@ public class SpaceDetailFragment extends Fragment {
                     }
                 }
 
-                AddSpaceTask = new AddTimeForSpaceTask(_in_price.getText().toString());
-                AddSpaceTask.execute((Void) null);
+                // TODO: call EditTimeTask
+//                AddSpaceTask = new AddTimeForSpaceTask(_in_price.getText().toString());
+//                AddSpaceTask.execute((Void) null);
             }
         });
 
@@ -589,7 +635,6 @@ public class SpaceDetailFragment extends Fragment {
         AddTimeForSpaceTask(String price){
             mPrice = price;
 //            doInBackground((Void) null);
-            System.out.println(mPrice);
         }
         @Override
         protected void onPreExecute(){
@@ -605,10 +650,6 @@ public class SpaceDetailFragment extends Fragment {
         protected Boolean doInBackground(Void... params){
             // call client controller
             ClientController controller = ClientController.getInstance();
-
-
-
-
 
             System.out.println("BEFORE REQ Start:"+ inputedStartTime);
             System.out.println("BEFORE REQ End:" + inputedEndTime);

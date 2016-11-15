@@ -386,11 +386,11 @@ public class ClientController {
 
     public SearchResults sortSearchResultByProviderRating() {
         if(searchResults != null) {
-//            Collections.sort(searchResults.searchResultList, new Comparator<ParkingSpot>() {
-//                public int compare(ParkingSpot p1, ParkingSpot p2) {
-//                    return Double.compare(p1.providerReview, p2.providerReview);
-//                }
-//            });
+            Collections.sort(searchResults.searchResultList, new Comparator<ParkingSpot>() {
+                public int compare(ParkingSpot p1, ParkingSpot p2) {
+                    return Double.compare(p1.providerReview, p2.providerReview);
+                }
+            });
         }
         return searchResults;
     }
@@ -515,6 +515,20 @@ public class ClientController {
             }
         }
     }
+
+
+    public void requestParkingSpotReview(long parkingSpotid)
+    {
+        NetworkPackage NP = new NetworkPackage();
+        NP.addEntry("FETCHREVIEWSFORPARKINGSPOT", parkingSpotid);
+
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void requestAddTime(ParkingSpot spot, Time startTime, Time endTime, double price)
     {

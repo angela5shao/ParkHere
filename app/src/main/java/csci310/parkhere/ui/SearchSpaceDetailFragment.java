@@ -441,6 +441,55 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
         }
     }
 
+
+
+
+    private class RequestReviewTask extends AsyncTask<Void, Void, ArrayList<Review>> {
+        long parkingSpotID;
+
+        RequestReviewTask(long parkingSpotID) {
+            this.parkingSpotID = parkingSpotID;
+        }
+        @Override
+        protected ArrayList<Review> doInBackground(Void... params) {
+
+            ClientController clientController = ClientController.getInstance();
+
+            clientController.requestParkingSpotReview(parkingSpotID);
+            NetworkPackage NP = clientController.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if (key.equals("REVIEWFORPARKINGSPOT")) {
+                HashMap<String, Serializable> map = (HashMap<String, Serializable>)value;
+
+                ArrayList<Review> list = (ArrayList<Review>) map.get("REVIEWS");
+                Log.d("FETCHREVIEWLIST", "listsize: " + String.valueOf(list.size()));
+
+                return list;
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Review> list) {
+//            if (list != null) {
+////                clientController.reservations = list;
+//                reservationsFragment = new ReservationsFragment();
+//                fragmentTransaction = fm.beginTransaction();
+//                fragmentTransaction.replace(R.id.fragContainer, reservationsFragment);
+//                fragmentTransaction.addToBackStack(null);
+//                fragmentTransaction.commit();
+//            } else {
+//                Toast.makeText(getBaseContext(), "Error on get reservations! Please try again.", Toast.LENGTH_SHORT).show();
+//            }
+
+
+        }
+    }
+
+
     private class GetPublicProfileTask extends AsyncTask<Void, Void, HashMap<String, Serializable> >{
         private final long mProviderID;
         ProgressDialog progressDialog;

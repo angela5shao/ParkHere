@@ -45,6 +45,7 @@ import resource.ParkingSpot;
  */
 public class AddSpaceFragment extends Fragment {
     private int PLACE_AUTOCOMPLETE_REQUEST_CODE = 0;
+    private int PICK_IMAGE = 5;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -132,7 +133,18 @@ public class AddSpaceFragment extends Fragment {
 
         _in_descrip = (EditText)v.findViewById(R.id.in_descrip);
 
-        _btn_confirm=(Button)v.findViewById(R.id.btn_confirm);
+        _btn_upload_image =(Button)v.findViewById(R.id.btn_upload_image);
+        _btn_upload_image.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
+            }
+        });
+
+        _btn_confirm = (Button)v.findViewById(R.id.btn_confirm);
         _btn_confirm.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 addSpaceTask = new ProviderAddSpaceTask(_addressText.getText().toString(),
@@ -178,6 +190,15 @@ public class AddSpaceFragment extends Fragment {
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 // The user canceled the operation.
             }
+        }
+        else if(requestCode == PICK_IMAGE) {
+//            Uri selectedImageUri = data.getData();
+//            imgPerview.setBackgroundColor(Color.TRANSPARENT);
+//            LinearLayout.LayoutParams vp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+//            imgPerview.setLayoutParams(vp);
+//            imgPerview.setScaleType(ImageView.ScaleType.FIT_XY);
+//            imgPerview.setImageURI(selectedImageUri);
+//            uri = selectedImageUri;
         }
     }
 

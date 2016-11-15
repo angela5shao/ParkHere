@@ -237,7 +237,7 @@ public class SpaceDetailFragment extends Fragment {
         _btn_editSpace = (Button)v.findViewById(R.id.editSpace_btn);
         _btn_editSpace.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                // launch SpaceEditFragment
+                mListener.openSpaceEditFragment(thisParkingSpot);
             }
         });
 

@@ -57,6 +57,7 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
     ClientController clientController;
     requestParkingSpotListTask RPTask = null;
     requestSpotTimeIntervalTask RSTTask = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -291,7 +292,13 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
     }
 
     public void openSpaceEditFragment(ParkingSpot spot) {
+        SpaceEditFragment editSpaceFrag = new SpaceEditFragment();
+        // TODO: pass parkingspot
 
+        fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(R.id.fragContainer, editSpaceFrag);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     @Override

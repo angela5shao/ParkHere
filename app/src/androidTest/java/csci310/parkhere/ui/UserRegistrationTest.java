@@ -146,46 +146,15 @@ public class UserRegistrationTest {
     /*
     Tests that registration fails with unique email and password that's too short.
      */
-//    @Test
-//    public void uniqueEmailShortPasswordRegistration() {
-//        // From HomeActivity, click on Login
-//        onView(ViewMatchers.withId(R.id.registerButton)).perform(click());
-//
-//        // Type name, email, password, phone.
-//        onView(withId(R.id.nameText)).perform(typeText(NAME3_TO_BE_TYPED), closeSoftKeyboard());
-//        onView(withId(R.id.emailText)).perform(typeText(EMAIL3_TO_BE_TYPED), closeSoftKeyboard());
-//        onView(withId(R.id.passwordText)).perform(typeText(PASSWORD_SHORT_TO_BE_TYPED), closeSoftKeyboard());
-//        onView(withId(R.id.phoneText)).perform(typeText(PHONE_TO_BE_TYPED), closeSoftKeyboard());
-//
-//        // Select "Renter". Then press button.
-//        onView(withId(R.id.registerNextButton)).perform(click());
-//
-//        // Check that intent to Renter (same as Provider) Registration Activity is not called.
-//        intended(hasComponent(HomeActivity.class.getName()));
-//
-////        Instrumentation.ActivityResult intentResult = new Instrumentation.ActivityResult(Activity.RESULT_OK,new Intent());
-////
-////        intending(hasComponent(HomeActivity.class.getName())).respondWith(intentResult);
-////
-//////        onView(withId(R.id.view_id_to_perform_clicking)).check(matches(isDisplayed())).perform(click());
-////
-////        intended(allOf(hasComponent(HomeActivity.class.getName())));
-//////        onView(withText("Please input password longer than 10 digits")).inRoot(new ToastMatcher())
-//////                .check(matches(isDisplayed()));
-//    }
-
-    /*
-    Tests that registration fails with duplicate email.
-     */
     @Test
-    public void duplicateRegistration() {
+    public void uniqueEmailShortPasswordRegistration() {
         // From HomeActivity, click on Login
         onView(ViewMatchers.withId(R.id.registerButton)).perform(click());
 
         // Type name, email, password, phone.
-        onView(withId(R.id.nameText)).perform(typeText(NAME_TO_BE_TYPED), closeSoftKeyboard());
-        onView(withId(R.id.emailText)).perform(typeText(EMAIL_TO_BE_TYPED), closeSoftKeyboard());
-        onView(withId(R.id.passwordText)).perform(typeText(PASSWORD_LONG_TO_BE_TYPED), closeSoftKeyboard());
+        onView(withId(R.id.nameText)).perform(typeText(NAME3_TO_BE_TYPED), closeSoftKeyboard());
+        onView(withId(R.id.emailText)).perform(typeText(EMAIL3_TO_BE_TYPED), closeSoftKeyboard());
+        onView(withId(R.id.passwordText)).perform(typeText(PASSWORD_SHORT_TO_BE_TYPED), closeSoftKeyboard());
         onView(withId(R.id.phoneText)).perform(typeText(PHONE_TO_BE_TYPED), closeSoftKeyboard());
 
         // Select "Renter". Then press button.
@@ -193,5 +162,36 @@ public class UserRegistrationTest {
 
         // Check that intent to Renter (same as Provider) Registration Activity is not called.
         intended(hasComponent(HomeActivity.class.getName()));
+
+//        Instrumentation.ActivityResult intentResult = new Instrumentation.ActivityResult(Activity.RESULT_OK,new Intent());
+//
+//        intending(hasComponent(HomeActivity.class.getName())).respondWith(intentResult);
+//
+////        onView(withId(R.id.view_id_to_perform_clicking)).check(matches(isDisplayed())).perform(click());
+//
+//        intended(allOf(hasComponent(HomeActivity.class.getName())));
+////        onView(withText("Please input password longer than 10 digits")).inRoot(new ToastMatcher())
+////                .check(matches(isDisplayed()));
     }
+
+    /*
+    Tests that registration fails with duplicate email.
+     */
+//    @Test
+//    public void duplicateRegistration() {
+//        // From HomeActivity, click on Login
+//        onView(ViewMatchers.withId(R.id.registerButton)).perform(click());
+//
+//        // Type name, email, password, phone.
+//        onView(withId(R.id.nameText)).perform(typeText(NAME_TO_BE_TYPED), closeSoftKeyboard());
+//        onView(withId(R.id.emailText)).perform(typeText(EMAIL_TO_BE_TYPED), closeSoftKeyboard());
+//        onView(withId(R.id.passwordText)).perform(typeText(PASSWORD_LONG_TO_BE_TYPED), closeSoftKeyboard());
+//        onView(withId(R.id.phoneText)).perform(typeText(PHONE_TO_BE_TYPED), closeSoftKeyboard());
+//
+//        // Select "Renter". Then press button.
+//        onView(withId(R.id.registerNextButton)).perform(click());
+//
+//        // Check that intent to Renter (same as Provider) Registration Activity is not called.
+//        intended(hasComponent(HomeActivity.class.getName()));
+//    }
 }

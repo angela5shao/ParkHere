@@ -4,10 +4,147 @@
     android:layout_height="match_parent"
     tools:context="csci310.parkhere.ui.SpaceEditFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_gravity="center">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="@string/edit_profile_label"-->
+                    <!--android:textColor="@color/colorPrimaryDark"-->
+                    <!--android:textSize="36dp"-->
+                    <!--android:textAlignment="center"/>-->
+
+                <ImageView
+                    android:id="@+id/parkingSpotImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:adjustViewBounds="true"
+                    android:src="@mipmap/ic_space"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp"/>
+
+                <Button
+                    android:id="@+id/btn_upload_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="64dp"
+                    android:layout_marginRight="64dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:adjustViewBounds="true"
+                    android:text="Upload image"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp">
+                    <TextView
+                        android:id="@+id/address_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Address: "
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_weight="1"
+                        android:textAlignment="center"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:textColor="@color/colorMainFont"
+                        android:background="@color/colorPrimary"/>
+
+                    <EditText
+                        android:id="@+id/address_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="address"
+                        android:clickable="false"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColor="@color/colorSubAccent"
+                        android:layout_alignBottom="@+id/address_label"
+                        android:layout_toRightOf="@+id/address_label"
+                        android:layout_toEndOf="@+id/address_label"
+                        android:layout_weight="1"
+                        android:paddingTop="8dp"
+                        android:paddingLeft="8dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp">
+                    <TextView
+                        android:id="@+id/description_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Description: "
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_weight="1"
+                        android:textAlignment="center"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:textColor="@color/colorMainFont"
+                        android:background="@color/colorPrimary"/>
+
+                    <EditText
+                        android:id="@+id/description_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="description"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColor="@color/colorSubAccent"
+                        android:password="true"
+                        android:layout_alignBottom="@+id/description_label"
+                        android:layout_toRightOf="@+id/description_label"
+                        android:layout_toEndOf="@+id/description_label"
+                        android:layout_weight="1"
+                        android:paddingTop="8dp"
+                        android:paddingLeft="8dp"/>
+                </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+                <Button
+                    android:id="@+id/btn_save"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="64dp"
+                    android:layout_marginRight="64dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:adjustViewBounds="true"
+                    android:text="Save"
+                    android:background="@color/colorAccent"
+                    android:textColor="@color/colorMainFont"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </FrameLayout>

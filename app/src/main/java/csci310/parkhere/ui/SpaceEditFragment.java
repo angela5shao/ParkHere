@@ -126,7 +126,7 @@ public class SpaceEditFragment extends Fragment {
                 EditSpaceTask editProfileTask = new EditSpaceTask(mAddressText.getText().toString(),
                         mDescriptionText.getText().toString(),
                         mCartypeSpinner.getSelectedItem().toString(),
-                        mCancelPolicySpinner.getSelectedItem().toString(),
+                        mCancelPolicySpinner.getSelectedItemPosition(),
                         mSpacePic);
                 editProfileTask.execute((Void)null);
             }
@@ -246,16 +246,16 @@ public class SpaceEditFragment extends Fragment {
 
         @Override
         protected ParkingSpot doInBackground(Void... params ){
-            ClientController clientController = ClientController.getInstance();
-            clientController.editParkingSpot(address, description, cartype, cancelpolicy, picture);
-            NetworkPackage NP = clientController.checkReceived();
-            MyEntry<String, Serializable> entry = NP.getCommand();
-            String key = entry.getKey();
-            Object value = entry.getValue();
-            if(key.equals("EDITPARKINGSPOT")){
-                ParkingSpot spot = (ParkingSpot)value;
-                return spot;
-            }
+//            ClientController clientController = ClientController.getInstance();
+//            clientController.editParkingSpot(address, description, cartype, cancelpolicy, picture);
+//            NetworkPackage NP = clientController.checkReceived();
+//            MyEntry<String, Serializable> entry = NP.getCommand();
+//            String key = entry.getKey();
+//            Object value = entry.getValue();
+//            if(key.equals("EDITPARKINGSPOT")){
+//                ParkingSpot spot = (ParkingSpot)value;
+//                return spot;
+//            }
             return null;
         }
 
@@ -263,7 +263,7 @@ public class SpaceEditFragment extends Fragment {
         protected void onPostExecute(ParkingSpot spot) {
 
             if(spot!=null){
-
+                ((ProviderActivity)getActivity()).onEditSpace(spot);
             } else{
                 Toast.makeText(getContext(), "Error on edit space! Please try again.", Toast.LENGTH_SHORT).show();
                 // back to parking spot detail

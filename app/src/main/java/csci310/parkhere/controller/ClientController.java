@@ -620,4 +620,12 @@ public class ClientController {
             e.printStackTrace();
         }
     }
+
+//    public void deleteParkingSpot(long ){
+//
+//    }
+//
+//    public void editTime(){
+//
+//    }
 }

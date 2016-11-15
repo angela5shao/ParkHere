@@ -328,22 +328,8 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
     }
 
     public void onEditSpace(ParkingSpot ps) {
-        Bundle args = new Bundle();
-        args.putString("ADDRESS", ps.getStreetAddr());
-        args.putIntegerArrayList("START_YEARS", inStartYear);
-        args.putIntegerArrayList("START_MONTHS", inStartMonth);
-        args.putIntegerArrayList("START_DAYS", inStartDay);
-        args.putIntegerArrayList("START_HOURS", inStartHour);
-        args.putIntegerArrayList("START_MINS", inStartMin);
-        args.putIntegerArrayList("END_YEARS", inEndYear);
-        args.putIntegerArrayList("END_MONTHS", inEndMonth);
-        args.putIntegerArrayList("END_DAYS", inEndDay);
-        args.putIntegerArrayList("END_HOURS", inEndHour);
-        args.putIntegerArrayList("END_MINS", inEndMin);
-
         spaceDetailFragment = new SpaceDetailFragment();
-        ((SpaceDetailFragment)spaceDetailFragment).thisParkingSpot = parkingSpot;
-        spaceDetailFragment.setArguments(args);
+        ((SpaceDetailFragment)spaceDetailFragment).thisParkingSpot = ps;
         fm.beginTransaction().add(R.id.fragContainer, spaceDetailFragment).commit();
     }
 

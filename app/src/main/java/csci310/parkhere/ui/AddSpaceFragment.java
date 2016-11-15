@@ -136,18 +136,18 @@ public class AddSpaceFragment extends Fragment {
         _in_descrip = (EditText)v.findViewById(R.id.in_descrip);
 
         _btn_upload_image =(Button)v.findViewById(R.id.btn_upload_image);
-        _imageGridview = (GridView)v.findViewById(R.id.grigitdview);
-        ImageAdapter adapter=new ImageAdapter(this);
-        _imageGridview.setAdapter(adapter);
-        _btn_upload_image.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
-            }
-        });
+//        _imageGridview = (GridView)v.findViewById(R.id.grigitdview);
+//        ImageAdapter adapter=new ImageAdapter(this);
+//        _imageGridview.setAdapter(adapter);
+//        _btn_upload_image.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View view) {
+//                Intent intent = new Intent();
+//                intent.setType("image/*");
+//                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+//                intent.setAction(Intent.ACTION_GET_CONTENT);
+//                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
+//            }
+//        });
 
         _btn_confirm = (Button)v.findViewById(R.id.btn_confirm);
         _btn_confirm.setOnClickListener(new View.OnClickListener() {

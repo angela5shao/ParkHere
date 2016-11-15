@@ -290,6 +290,10 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         //you can leave it empty
     }
 
+    public void openSpaceEditFragment(ParkingSpot spot) {
+
+    }
+
     @Override
     public void returnToReservationsFragment() {
 

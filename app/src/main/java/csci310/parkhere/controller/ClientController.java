@@ -253,6 +253,7 @@ public class ClientController {
         return false;
     }
 
+    // TODO: include address, description, cartype, cancelpolicy, image, time interval(s)
     public boolean editSpace(long spaceID, TimeInterval interval) {
         return false;
     }

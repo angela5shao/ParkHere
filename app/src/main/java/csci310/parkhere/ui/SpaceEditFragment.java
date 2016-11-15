@@ -1,14 +1,39 @@
 package csci310.parkhere.ui;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.AutocompleteFilter;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.maps.model.LatLng;
+
+import java.io.Serializable;
 
 import csci310.parkhere.R;
+import csci310.parkhere.controller.ClientController;
+import resource.MyEntry;
+import resource.NetworkPackage;
+import resource.TimeInterval;
+import resource.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +52,15 @@ public class SpaceEditFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private int PLACE_AUTOCOMPLETE_REQUEST_CODE = 0;
+
+    private Button mDoneButton, mUploadPicButton, mEditAddressButton;
+    private EditText mAddressText, mDescriptionText;
+    private ImageView mSpacePic;
+    private Spinner mCartypeSpinner, mCancelPolicySpinner;
+
+    private LatLng mCurrLocation;
 
     private OnFragmentInteractionListener mListener;
 
@@ -64,8 +98,68 @@ public class SpaceEditFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_space_edit, container, false);
+
+        mAddressText = (EditText) v.findViewById(R.id.address_text);
+        mDescriptionText = (EditText) v.findViewById(R.id.description_text);
+        mSpacePic = (ImageView) v.findViewById(R.id.parkingSpotImage);
+        mCartypeSpinner = (Spinner)v.findViewById(R.id.editCartype_spinner);
+        mCancelPolicySpinner = (Spinner)v.findViewById(R.id.editCancelPolicy_spinner);
+
+        mDoneButton = (Button)v.findViewById(R.id.editSpaceSave_btn);
+        mUploadPicButton = (Button)v.findViewById(R.id.spacePicUpload_btn);
+        mEditAddressButton = (Button)v.findViewById(R.id.changeAddress_btn);
+
+        mDoneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                if(_pwText.getText().length() < 10) {
+//                    Toast.makeText(getContext(), "Please input password longer than 10 digits", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+
+                // Convert into TimeInterval
+                TimeInterval time = null;
+
+                EditSpaceTask editProfileTask = new EditSpaceTask(mAddressText.getText().toString(),
+                        mDescriptionText.getText().toString(),
+                        mCartypeSpinner.getSelectedItem().toString(),
+                        mCancelPolicySpinner.getSelectedItem().toString(),
+                        mSpacePic,
+                        time);
+                editProfileTask.execute((Void)null);
+
+            }
+        });
+
+        mUploadPicButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            // TODO
+            }
+        });
+
+
+        mEditAddressButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                try {
+                    AutocompleteFilter typeFilter = new AutocompleteFilter.Builder().setCountry("US").build();
+
+                    Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+                                    .setFilter(typeFilter)
+                                    .build(getActivity());
+
+                    startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
+
+                } catch (GooglePlayServicesRepairableException e) {
+                } catch (GooglePlayServicesNotAvailableException e) {
+                }
+            }
+
+        });
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_space_edit, container, false);
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -106,4 +200,63 @@ public class SpaceEditFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+    private class EditSpaceTask extends AsyncTask<Void, Void, Boolean> {
+        String address;
+        String description;
+        String cartype;
+        String cancelpolicy;
+        ImageView picture;
+        TimeInterval timeInterval;
+
+        EditSpaceTask(String addr, String description, String cartype, String cancelpolicy, ImageView pic, TimeInterval time){
+            this.address = addr;
+            this.description = description;
+            this.cartype = cartype;
+            this.cancelpolicy = cancelpolicy;
+            this.picture = pic;
+            this.timeInterval = time;
+            doInBackground((Void) null);
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params ){
+            ClientController clientController = ClientController.getInstance();
+            clientController.editProfile(username, pwText, licenseIdText, licenseplateText, phoneText);
+            NetworkPackage NP = clientController.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if(key.equals("EDITPROFILE")){
+                User user = (User) value;
+                clientController.setUser(user);
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+
+            if(result){
+                PrivateProfileFragment privateProfileFragment = new PrivateProfileFragment();
+                Bundle args = new Bundle();
+                args.putString("USERNAME", _usernameText.getText().toString() );
+                args.putString("PASSWORD", "");
+                args.putString("USERLICENSE", _licenseIDText.getText().toString());
+                args.putString("USERPLATE", _licenseplateText.getText().toString());
+                args.putString("PHONE", _phoneText.getText().toString());
+                privateProfileFragment.setArguments(args);
+                Activity ac = getActivity();
+                if(ac instanceof  RenterActivity)
+                    ((RenterActivity) getActivity()).switchToPrivateProfileFrag(privateProfileFragment);
+                else if(ac instanceof  ProviderActivity)
+                    ((ProviderActivity) getActivity()).switchToPrivateProfileFrag(privateProfileFragment);
+            } else{
+                Toast.makeText(getContext(), "Error on edit profile! Please try again.", Toast.LENGTH_SHORT).show();
+                // back to reservation detail
+            }
+        }
+    }
+
 }

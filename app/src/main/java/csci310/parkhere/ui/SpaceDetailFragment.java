@@ -103,7 +103,7 @@ public class SpaceDetailFragment extends Fragment {
 //    TimeInterval interval1 = new TimeInterval(start1, end1);
 //    //*******************************************************************************
 
-    Button _btn_add_time, _btn_start_time, _btn_end_time, _btn_add_confirm, _btn_delete_time;
+    Button _btn_add_time, _btn_start_time, _btn_end_time, _btn_add_confirm, _btn_delete_time, _btn_editSpace;
     LinearLayout _addTimeForSpaceLayout;
     EditText _in_start_date, _in_start_time, _in_end_date, _in_end_time, _in_price;
     ListView _timeList;
@@ -232,6 +232,12 @@ public class SpaceDetailFragment extends Fragment {
                             }
                         }, curr_hour, curr_minute, false);
                 timePickerDialog.show();
+            }
+        });
+        _btn_editSpace = (Button)v.findViewById(R.id.editSpace_btn);
+        _btn_editSpace.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                // launch SpaceEditFragment
             }
         });
 
@@ -366,8 +372,6 @@ public class SpaceDetailFragment extends Fragment {
                     return;
                 }
 
-
-
                 AddSpaceTask = new AddTimeForSpaceTask(_in_price.getText().toString());
                 AddSpaceTask.execute((Void) null);
             }
@@ -484,8 +488,8 @@ public class SpaceDetailFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+        void openSpaceEditFragment(ParkingSpot spot);
     }
 
     @Override

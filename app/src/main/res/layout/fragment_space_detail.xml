@@ -197,6 +197,14 @@
                         </LinearLayout>
                 </LinearLayout>
 
+                <Button
+                    android:id="@+id/editSpace_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorMainFont"
+                    android:clickable="false"
+                    android:text="Edit Space"/>
+
                 <ListView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

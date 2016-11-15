@@ -250,6 +250,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         bundle.putString("param4", endDate);
         bundle.putString("param5", endTime);
 
+        loadImages(bundle);
 
         Log.d("ONSEARCHSPACESELECTED", startDate + " " + startTime + " " + endDate + " " + endTime);
 
@@ -290,6 +291,20 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 //        privateProfileFragment.updateUserInfo(inUsername, inPw, inLicenseID, inLicensePlate);
 //        editProfileFragment.updateUserInfo(inUsername, inPw, inLicenseID, inLicensePlate);
 //    }
+
+    //************************************************************************
+    // FOR TESTING - load images to search space detail fragment
+    public void loadImages(Bundle bundle) {
+        ArrayList<String> images = new ArrayList<String>();
+        images.add("http://sourcey.com/images/stock/salvador-dali-metamorphosis-of-narcissus.jpg");
+        images.add("http://sourcey.com/images/stock/salvador-dali-the-dream.jpg");
+        images.add("http://sourcey.com/images/stock/salvador-dali-persistence-of-memory.jpg");
+        images.add("http://sourcey.com/images/stock/simpsons-persistence-of-memory.jpg");
+        images.add("http://sourcey.com/images/stock/salvador-dali-the-great-masturbator.jpg");
+
+        bundle.putStringArrayList("spot_images", images);
+    }
+    //************************************************************************
 
     public void onReservationSelected(int resPosition, boolean ifNotPassed) {
         System.out.println("RenterActivity onReservationSelected for: " + resPosition);
@@ -374,21 +389,5 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 
 
         }
-
-//        // Implements DisplaySearchFragment
-//        public void onSearchSpaceSelected(int position, String startDate, String startTime, String endDate, String endTime) {
-//            // Pass position in searchResultList to searchSpaceDetailFragment
-//            Bundle bundle = new Bundle();
-//            bundle.putInt("position", position);
-//            bundle.putString("param2", startDate);
-//            bundle.putString("param3", startTime);
-//            bundle.putString("param4", endDate);
-//            bundle.putString("param5", endTime);
-//            searchSpaceDetailFragment.setArguments(bundle);
-//0
-//            fragmentTransaction.replace(R.id.fragContainer, searchSpaceDetailFragment);
-//            fragmentTransaction.addToBackStack(null);
-//            fragmentTransaction.commit();
-//        }
     }
 }

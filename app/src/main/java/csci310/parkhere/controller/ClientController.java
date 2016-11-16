@@ -14,8 +14,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Vector;
 
 import resource.CarType;
+import resource.CustomImage;
 import resource.NetworkPackage;
 import resource.ParkingSpot;
 import resource.Reservation;
@@ -620,14 +622,35 @@ public class ClientController {
         }
     }
     //the editParkingSpot which will be called by the provider
-    public void editParkingSpot(String address, String description, String cartype, int inCancelPolicy, String imageString) {
-        HashMap<String, Serializable> map = new HashMap<>();
-        map.put("ADDRESS", address);
-        map.put("DESCRIPTION", description);
-        map.put("CARTYPE", cartype);
-        map.put("CANCELPOLICY", inCancelPolicy);
-        map.put("PICTURE", imageString);
-        NP.addEntry("EDITSPACE", map);
+    public void editParkingSpot(ParkingSpot ps) {
+        //map.put("PICTURE", imageStrings);
+        NP.addEntry("EDITSPACE", ps);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    //the somehow function created by Fred
+    public void sendImagetoServer(String DataURI, String Identifier, long ID)
+    {
+        CustomImage customImage = new CustomImage();
+        customImage.Data_URI = DataURI;
+        if(Identifier.equals("PARKINGSPACEIMAGE"))
+        {
+            customImage.parkingSpotID = ID;
+            customImage.UserID = -1;
+        }
+        else if(Identifier.equals("USERPROFILEIAMGE"))
+        {
+            customImage.parkingSpotID = -1;
+            customImage.UserID = ID;
+        }
+        else
+        {
+            Log.d("WRONG", "WRONG IDENTIFIER");
+        }
+        NP.addEntry("SENDIMAGE",customImage);
         try {
             clientCommunicator.sendPackage(NP);
         } catch (IOException e) {

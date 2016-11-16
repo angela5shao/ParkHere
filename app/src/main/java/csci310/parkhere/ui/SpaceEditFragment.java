@@ -41,6 +41,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.util.Vector;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
@@ -147,7 +148,7 @@ public class SpaceEditFragment extends Fragment {
 
                 EditSpaceTask editProfileTask = new EditSpaceTask(mAddressText.getText().toString(),
                         mDescriptionText.getText().toString(),
-                        mCartypeSpinner.getSelectedItem().toString(),
+                        mCartypeSpinner.getSelectedItemPosition(),
                         mCancelPolicySpinner.getSelectedItemPosition(),
                         encodedImage //ImageSource.uri(picturePath)
                 );
@@ -280,31 +281,39 @@ public class SpaceEditFragment extends Fragment {
     }
 
     private class EditSpaceTask extends AsyncTask<Void, Void, ParkingSpot> {
-        String address;
-        String description;
-        String cartype;
-        int cancelpolicy;
-        String encodedImage;
+        Vector<String> encodedImages;
+        ParkingSpot ps;
 
-        EditSpaceTask(String addr, String description, String cartype, int inCancelPolicy, String encodedImage){
-            this.address = addr;
-            this.description = description;
-            this.cartype = cartype;
-            this.cancelpolicy = inCancelPolicy;
-            this.encodedImage = encodedImage;
+        EditSpaceTask(LatLng mCurrLocation, String addr, String description, int cartype, int inCancelPolicy, Vector<String> encodedImage){
+            ps = thisParkingSpot;
+            ps.setDescription(description);
+            ps.setStreetAddr(addr);
+            ps.setCartype(cartype);
+            ps.setLat(mCurrLocation.latitude);
+            ps.setLon(mCurrLocation.longitude);
+            ps.cancelpolicy = inCancelPolicy;
+            this.encodedImages = encodedImage;
+
         }
 
         @Override
-        protected ParkingSpot doInBackground(Void... params ){
+        protected ParkingSpot doInBackground(Void... params ) {
             ClientController clientController = ClientController.getInstance();
-            clientController.editParkingSpot(address, description, cartype, cancelpolicy, encodedImage);
+            clientController.editParkingSpot(ps);
             NetworkPackage NP = clientController.checkReceived();
             MyEntry<String, Serializable> entry = NP.getCommand();
             String key = entry.getKey();
-            Object value = entry.getValue();
-            if(key.equals("EDITPARKINGSPOT")){
-                ParkingSpot spot = (ParkingSpot)value;
-                return spot;
+            if (key.equals("EDITPARKINGSPOT")) {
+                for (int i = 0; i < encodedImages.size(); i++) {
+                    clientController.sendImagetoServer(encodedImages.get(i), "PARKINGSPACEIMAGE", thisParkingSpot.getParkingSpotID());
+                    NP = clientController.checkReceived();
+                    entry = NP.getCommand();
+                    key = entry.getKey();
+                    while (!key.equals("STOREIMAGESUCCESS")) {
+                        clientController.sendImagetoServer(encodedImages.get(i), "PARKINGSPACEIMAGE", thisParkingSpot.getParkingSpotID());
+                    }
+                }
+                return ps;
             }
             return null;
         }

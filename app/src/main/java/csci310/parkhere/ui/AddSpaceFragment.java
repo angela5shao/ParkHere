@@ -4,10 +4,15 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -19,6 +24,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.davemorrissey.labs.subscaleview.ImageSource;
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
@@ -27,6 +34,8 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
 
 import csci310.parkhere.R;
@@ -51,6 +60,8 @@ public class AddSpaceFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    private int RESULT_LOAD_IMAGE = 1;
+
     // TODO: Rename and change types of parameters
     private long mParam1;
     private String mParam2;
@@ -59,6 +70,7 @@ public class AddSpaceFragment extends Fragment {
     Spinner _cartypeSpinner, _cancelPolicySpinner;
     EditText  _in_descrip;
     TextView _addressText;
+    private SubsamplingScaleImageView mSpacePic;
 
     ProgressDialog progressDialog;
     ProviderAddSpaceTask addSpaceTask = null;
@@ -143,6 +155,16 @@ public class AddSpaceFragment extends Fragment {
             }
         });
 
+        mSpacePic = (SubsamplingScaleImageView) v.findViewById(R.id.imageView);
+
+        _btn_upload_image = (Button) v.findViewById(R.id.btn_upload_image);
+        _btn_upload_image.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(i, RESULT_LOAD_IMAGE);
+            }
+        });
+
         return v;
     }
 
@@ -178,6 +200,43 @@ public class AddSpaceFragment extends Fragment {
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 // The user canceled the operation.
             }
+        } else if (requestCode == RESULT_LOAD_IMAGE && resultCode == Activity.RESULT_OK && null != data) {
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+            Cursor cursor = getContext().getContentResolver().query(selectedImage,filePathColumn, null, null, null);
+            cursor.moveToFirst();
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            cursor.close();
+
+//            ImageView imageView = (ImageView) findViewById(R.id.imgView);
+//            imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+//            mSpacePic.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+
+//            mSpacePic2.setImage(ImageSource.resource(R.drawable.monkey));
+//            mSpacePic2.setImage(ImageSource.asset("map.png"))
+//            mSpacePic2.setImage(ImageSource.uri("/sdcard/DCIM/DSCM00123.JPG"));
+//            mSpacePic2.setImage(ImageSource.bitmap(bitmap));
+            mSpacePic.setImage(ImageSource.uri(picturePath));
+
+
+
+//            Bitmap bmp = intent.getExtras().get("data");
+//            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//            bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+//            byte[] byteArray = stream.toByteArray();
+
+            Bitmap bitmap = null;
+            try {
+//                BitmapRegionDecoder decoder = BitmapRegionDecoder.newInstance(myStream, false);
+//                bitmap = decoder.decodeRegion(new Rect(10, 10, 50, 50), null);
+                bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), selectedImage);
+            } catch (IOException e) {
+            }
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] imageBytes = baos.toByteArray();
+            encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         }
     }
 

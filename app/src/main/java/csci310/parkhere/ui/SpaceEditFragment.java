@@ -121,18 +121,22 @@ public class SpaceEditFragment extends Fragment {
         mDescriptionText = (EditText) v.findViewById(R.id.description_text);
         mDescriptionText.setText(thisParkingSpot.getDescription());
         mSpacePic2 = (SubsamplingScaleImageView) v.findViewById(R.id.imageView);
-        InputStream stream = new ByteArrayInputStream(Base64.decode(thisParkingSpot.encodedImage.getBytes(), Base64.DEFAULT));
-
+        if (thisParkingSpot.encodedImage != null) { // If has picture, set it
+            byte[] byteArray = thisParkingSpot.encodedImage.getBytes();
+            Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+            mSpacePic2.setImage(ImageSource.bitmap(bmp));
+//        String base64Image = thisParkingSpot.encodedImage.split(",")[1];
+//        byte[] imageBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary(base64Image);
+//        InputStream stream = new ByteArrayInputStream(Base64.decode(thisParkingSpot.encodedImage.getBytes(), Base64.DEFAULT));
+        }
 
         mCartypeSpinner = (Spinner)v.findViewById(R.id.editCartype_spinner);
         mCartypeSpinner.setSelection(thisParkingSpot.getCartype());
         mCancelPolicySpinner = (Spinner)v.findViewById(R.id.editCancelPolicy_spinner);
         mCancelPolicySpinner.setSelection(thisParkingSpot.cancelpolicy);
 
-        mDoneButton = (Button)v.findViewById(R.id.editSpaceSave_btn);
-        mUploadPicButton = (Button)v.findViewById(R.id.spacePicUpload_btn);
-        mEditAddressButton = (Button)v.findViewById(R.id.changeAddress_btn);
 
+        mDoneButton = (Button)v.findViewById(R.id.editSpaceSave_btn);
         mDoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,7 +154,7 @@ public class SpaceEditFragment extends Fragment {
                 editProfileTask.execute((Void)null);
             }
         });
-
+        mUploadPicButton = (Button)v.findViewById(R.id.spacePicUpload_btn);
         mUploadPicButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,8 +162,7 @@ public class SpaceEditFragment extends Fragment {
                 startActivityForResult(i, RESULT_LOAD_IMAGE);
             }
         });
-
-
+        mEditAddressButton = (Button)v.findViewById(R.id.changeAddress_btn);
         mEditAddressButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 try {
@@ -308,7 +311,7 @@ public class SpaceEditFragment extends Fragment {
 
         @Override
         protected void onPostExecute(ParkingSpot spot) {
-
+            Log.d("EditSpaceTask", "onPostExecute!!!!! - - - - - ");
             if(spot!=null){
                 ((ProviderActivity)getActivity()).onEditSpace(spot);
             } else{

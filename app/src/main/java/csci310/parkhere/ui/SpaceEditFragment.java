@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,6 +42,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.util.Vector;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
@@ -75,7 +77,8 @@ public class SpaceEditFragment extends Fragment {
     private EditText mAddressText, mDescriptionText;
     private SubsamplingScaleImageView mSpacePic2;
     private Spinner mCartypeSpinner, mCancelPolicySpinner;
-    private String encodedImage;
+    private Vector<String> encodedImages;
+    private LinearLayout mImagesLayout;
 
     private LatLng mCurrLocation;
 
@@ -121,13 +124,19 @@ public class SpaceEditFragment extends Fragment {
         mDescriptionText = (EditText) v.findViewById(R.id.description_text);
         mDescriptionText.setText(thisParkingSpot.getDescription());
         mSpacePic2 = (SubsamplingScaleImageView) v.findViewById(R.id.imageView);
-        if (thisParkingSpot.encodedImage != null) { // If has picture, set it
-            byte[] byteArray = thisParkingSpot.encodedImage.getBytes();
-            Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-            mSpacePic2.setImage(ImageSource.bitmap(bmp));
-//        String base64Image = thisParkingSpot.encodedImage.split(",")[1];
-//        byte[] imageBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary(base64Image);
-//        InputStream stream = new ByteArrayInputStream(Base64.decode(thisParkingSpot.encodedImage.getBytes(), Base64.DEFAULT));
+        if (thisParkingSpot.encodedImages != null) { // If has picture, set it
+            for (String encodedimg : encodedImages) {
+                byte[] byteArray = encodedimg.getBytes();
+                Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+//                mSpacePic2.setImage(ImageSource.bitmap(bmp));
+
+                SubsamplingScaleImageView newImage = new SubsamplingScaleImageView(getContext());
+                newImage.setImage(ImageSource.bitmap(bmp));
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                newImage.setLayoutParams(lp);
+                // Add to layout of images
+                mImagesLayout.addView(newImage);
+            }
         }
 
         mCartypeSpinner = (Spinner)v.findViewById(R.id.editCartype_spinner);
@@ -180,6 +189,7 @@ public class SpaceEditFragment extends Fragment {
             }
 
         });
+        mImagesLayout = (LinearLayout) v.findViewById(R.id.linearLayout_images);
 
         // Inflate the layout for this fragment
         return v;
@@ -241,8 +251,13 @@ public class SpaceEditFragment extends Fragment {
 //            mSpacePic2.setImage(ImageSource.asset("map.png"))
 //            mSpacePic2.setImage(ImageSource.uri("/sdcard/DCIM/DSCM00123.JPG"));
 //            mSpacePic2.setImage(ImageSource.bitmap(bitmap));
-            mSpacePic2.setImage(ImageSource.uri(picturePath));
+//            mSpacePic2.setImage(ImageSource.uri(picturePath));
 
+            SubsamplingScaleImageView newImage = new SubsamplingScaleImageView(getContext());
+            newImage.setImage(ImageSource.uri(picturePath));
+            mImagesLayout.addView(newImage);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            newImage.setLayoutParams(lp);
 
 
 //            Bitmap bmp = intent.getExtras().get("data");
@@ -260,7 +275,8 @@ public class SpaceEditFragment extends Fragment {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] imageBytes = baos.toByteArray();
-            encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+            if (encodedImage == null) encodedImage = new Vector<String>();
+            encodedImage.add(Base64.encodeToString(imageBytes, Base64.DEFAULT));
         }
     }
 
@@ -284,20 +300,20 @@ public class SpaceEditFragment extends Fragment {
         String description;
         String cartype;
         int cancelpolicy;
-        String encodedImage;
+        Vector<String> encodedImages;
 
-        EditSpaceTask(String addr, String description, String cartype, int inCancelPolicy, String encodedImage){
+        EditSpaceTask(String addr, String description, String cartype, int inCancelPolicy, Vector<String> encodedImages){
             this.address = addr;
             this.description = description;
             this.cartype = cartype;
             this.cancelpolicy = inCancelPolicy;
-            this.encodedImage = encodedImage;
+            this.encodedImages = encodedImages;
         }
 
         @Override
         protected ParkingSpot doInBackground(Void... params ){
             ClientController clientController = ClientController.getInstance();
-            clientController.editParkingSpot(address, description, cartype, cancelpolicy, encodedImage);
+            clientController.editParkingSpot(address, description, cartype, cancelpolicy, encodedImages);
             NetworkPackage NP = clientController.checkReceived();
             MyEntry<String, Serializable> entry = NP.getCommand();
             String key = entry.getKey();

@@ -2,17 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="csci310.parkhere">
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- <uses-permission android:name="android.permission.RECORD_AUDIO"></uses-permission> -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-feature android:name="android.hardware.camera" />
-    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
 
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -26,41 +25,54 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyC6y-duGaR0wOji4UOR4S1LUBn5rO1ach0" />
 
-         <activity android:name=".ui.HomeActivity">
-             <!--HomeActivity-->
-            <intent-filter>
-               <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>
-         </activity>
+        <activity android:name=".ui.HomeActivity">
 
-        <activity
-            android:name=".ui.DisplaySearchActivity"
-            android:label="@string/title_activity_display_search"
-            android:theme="@style/AppTheme.NoActionBar" />
+            <!-- HomeActivity -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- <activity -->
+        <!-- android:name=".ui.DisplaySearchActivity" -->
+        <!-- android:label="@string/title_activity_display_search" -->
+        <!-- android:theme="@style/AppTheme.NoActionBar" /> -->
         <activity android:name=".ui.LoginActivity" />
-        <activity android:name=".ui.RegisterMainActivity"
-            android:label="RegisterMainActivity"/>
-        <activity android:name=".ui.RegisterRenterActivity"
-            android:label="RegisterRenterActivity"/>
-        <activity android:name=".ui.RegisterProviderActivity"
-            android:label="RegisterProviderActivity"/>
-         <activity android:name=".ui.RenterActivity"
-             android:theme="@style/AppTheme.NoActionBar"
-             android:label="RenterActivity"/>
+        <activity
+            android:name=".ui.RegisterMainActivity"
+            android:label="RegisterMainActivity" />
+        <activity
+            android:name=".ui.RegisterRenterActivity"
+            android:label="RegisterRenterActivity" />
+        <activity
+            android:name=".ui.RegisterProviderActivity"
+            android:label="RegisterProviderActivity" />
+        <activity
+            android:name=".ui.RenterActivity"
+            android:label="RenterActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.ProviderActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:label="ProviderActivity"/>
-        <activity android:name=".ui.PaymentActivity"
+            android:label="ProviderActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.PaymentActivity"
             android:label="PaymentActivity" />
-        
+        <activity
+            android:name="me.iwf.photopicker.PhotoPickerActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="me.iwf.photopicker.PhotoPagerActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name="com.braintreepayments.api.BraintreeBrowserSwitchActivity"
             android:launchMode="singleTask">
@@ -73,7 +85,10 @@
                 <data android:scheme="${applicationId}.braintree" />
             </intent-filter>
         </activity>
+
         <uses-library android:name="android.test.runner" />
+
+        <activity android:name=".ui.AddSpaceActivity"></activity>
     </application>
 
 </manifest>

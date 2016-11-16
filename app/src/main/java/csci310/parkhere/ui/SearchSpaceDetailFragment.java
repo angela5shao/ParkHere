@@ -38,7 +38,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import junit.framework.Assert;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -387,28 +386,28 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
         protected void onPreExecute() { }
         @Override
         protected ArrayList<String> doInBackground(Void... params ){
-            try {
-
-                ClientController clientController = ClientController.getInstance();
-                clientController.getParkingSpotImages("PARKINGSPOT", mSpotID);
-
-                NetworkPackage NP = clientController.checkReceived();
-                if(NP == null)
-                {
-                    Log.d("SearchSpaceDetail", " DOINBACKGROUND null");
-                }
-                MyEntry<String, Serializable> entry = NP.getCommand();
-                String key = entry.getKey();
-                Object value = entry.getValue();
-                if(key.equals(???)){
-                    return //;
-                }
-                else{
-                    return null;
-                }
-            } catch (IOException e) {
+//            try {
+//
+//                ClientController clientController = ClientController.getInstance();
+//                clientController.getParkingSpotImages("PARKINGSPOT", mSpotID);
+//
+//                NetworkPackage NP = clientController.checkReceived();
+//                if(NP == null)
+//                {
+//                    Log.d("SearchSpaceDetail", " DOINBACKGROUND null");
+//                }
+//                MyEntry<String, Serializable> entry = NP.getCommand();
+//                String key = entry.getKey();
+//                Object value = entry.getValue();
+//                if(key.equals(???)){
+//                    return //;
+//                }
+//                else{
+//                    return null;
+//                }
+//            } catch (IOException e) {
                 return null;
-            }
+//            }
         }
         @Override
         protected void onPostExecute(ArrayList<String> imagesURLs) {

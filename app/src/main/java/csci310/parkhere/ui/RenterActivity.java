@@ -346,6 +346,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
             args.putBoolean("IF_CANREVIEW", false);
         }
         args.putBoolean("IF_CANCANCEL", ifNotPassed);
+        args.putBoolean("IF_ISPAID", selectedRes.isPaid());
         resDetailfragment.setArguments(args);
 
         try {

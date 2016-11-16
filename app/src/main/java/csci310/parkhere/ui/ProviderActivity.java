@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.braintreepayments.api.BraintreeFragment;
 import com.braintreepayments.api.BraintreePaymentActivity;
@@ -41,7 +42,8 @@ import resource.User;
  */
 public class ProviderActivity extends AppCompatActivity implements SpacesFragment.OnFragmentInteractionListener,
         SpaceDetailFragment.OnFragmentInteractionListener, PrivateProfileFragment.OnFragmentInteractionListener,
-        ReservationDetailFragment.OnFragmentInteractionListener, EditProfileFragment.OnFragmentInteractionListener{
+        ReservationDetailFragment.OnFragmentInteractionListener, EditProfileFragment.OnFragmentInteractionListener,
+        SpaceEditFragment.OnFragmentInteractionListener {
 
     LinearLayout _spaceLink;
     ImageView _profilePic;
@@ -55,6 +57,7 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
     ClientController clientController;
     requestParkingSpotListTask RPTask = null;
     requestSpotTimeIntervalTask RSTTask = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -182,29 +185,33 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         fragmentTransaction.commit();
     }
 
-    public void showSpaceDetailFragment()
-    {
-        // TODO: Get ParkingSpot given position in list
-        if (clientController.parkingSpots.size() == 0) {
-            System.out.println("ProviderActivity: no spaces to select");
-            return;
-        }
-        ParkingSpot spotSelected = clientController.parkingSpots.get(clientController.currentIndexofSpaces);
-        if (spotSelected == null) {
-            System.out.println("Selected parking spot is null");
-            return;
-        }
+//    public void showSpaceDetailFragment()
+//    {
+//        // TODO: Get ParkingSpot given position in list
+//        if (clientController.parkingSpots.size() == 0) {
+//            System.out.println("ProviderActivity: no spaces to select");
+//            return;
+//        }
+//        ParkingSpot spotSelected = clientController.parkingSpots.get(clientController.currentIndexofSpaces);
+//        if (spotSelected == null) {
+//            System.out.println("Selected parking spot is null");
+//            return;
+//        }
+//
+//        spaceDetailFragment = new SpaceDetailFragment();
+//        System.out.print("Show space detail " + spotSelected.getDescription());
+//
+//
+//        try {
+//            getSupportFragmentManager().beginTransaction()
+//                    .replace(R.id.fragContainer, spaceDetailFragment).commit();
+//        } catch (Exception e) {
+//            System.out.println("Spaces tab item exception");
+//        }
+//    }
 
-        spaceDetailFragment = new SpaceDetailFragment();
-        System.out.print("Show space detail " + spotSelected.getDescription());
+    public void showSpaceDetailFragment(ParkingSpot ps){
 
-
-        try {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragContainer, spaceDetailFragment).commit();
-        } catch (Exception e) {
-            System.out.println("Spaces tab item exception");
-        }
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -288,6 +295,21 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         //you can leave it empty
     }
 
+    public void openSpaceEditFragment(ParkingSpot spot) {
+        SpaceEditFragment editSpaceFrag = new SpaceEditFragment();
+
+        Bundle args = new Bundle();
+        args.putSerializable("spot", spot);
+        editSpaceFrag.setArguments(args);
+
+        // TODO: pass parkingspot
+
+        fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(R.id.fragContainer, editSpaceFrag);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
     @Override
     public void returnToReservationsFragment() {
 
@@ -305,7 +327,10 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 
     }
 
-    public void onEditSpace(long spaceID) {
+    public void onEditSpace(ParkingSpot ps) {
+        spaceDetailFragment = new SpaceDetailFragment();
+        ((SpaceDetailFragment)spaceDetailFragment).thisParkingSpot = ps;
+        fm.beginTransaction().add(R.id.fragContainer, spaceDetailFragment).commit();
     }
 
     // Called by SpacesFragment's "add" button
@@ -375,13 +400,25 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         }
         @Override
         protected void onPostExecute(ArrayList<ParkingSpot> list) {
+            if(list == null) {
+                Toast.makeText(getBaseContext(), "Error get parkingspots Please try again.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+
             clientController.providerToshowSpaces = true;
             clientController.parkingSpots = list;
 
-//            spacesFragment = new SpacesFragment();
+            spacesFragment = new SpacesFragment();
+            fragmentTransaction.replace(R.id.fragContainer, spacesFragment);
+            fragmentTransaction.addToBackStack(null);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragContainer, spacesFragment).commit();
+
+
 
             Log.d("requestParkingSpots", "onPostExecute");
-            showSpaceFragment();
+//            showSpaceFragment();
         }
 
     }

@@ -85,46 +85,46 @@ public class ReservationTest {
         onView(withId(R.id.passedList)).check(matches(ListMatcher.withListSize(SIZE_OF_PASSED_RES_LIST)));
     }
 
-    @Test
-    public void checkReviewReservationDialog() {
-        //get the text which the fragment shows
-        ViewInteraction resDetailFragmentText = onView(withId(R.id.reservationDetailTextView));
+//    @Test
+//    public void checkReviewReservationDialog() {
+//        //get the text which the fragment shows
+//        ViewInteraction resDetailFragmentText = onView(withId(R.id.reservationDetailTextView));
+//
+//        //click on first item on reservation list
+//        onData(anything()).inAdapterView(withId(R.id.passedList)).atPosition(3).perform(click());
+//
+//        //check the fragments text is now visible in the activity
+//        resDetailFragmentText.check(matches(isDisplayed()));
+//
+//        //try if there is review button
+//        try {
+//            onView(withId(R.id.btn_review)).check(matches(isDisplayed()));
+//        } catch(AssertionError ae) {
+//            return;
+//        }
+//
+//        //if there is review button
+//        onView(withId(R.id.btn_review)).perform(click());
+//
+//        //check review dialog
+//        onView(withId(R.id.review_label)).check(matches(isDisplayed()));
+//    }
 
-        //click on first item on reservation list
-        onData(anything()).inAdapterView(withId(R.id.passedList)).atPosition(3).perform(click());
-
-        //check the fragments text is now visible in the activity
-        resDetailFragmentText.check(matches(isDisplayed()));
-
-        //try if there is review button
-        try {
-            onView(withId(R.id.btn_review)).check(matches(isDisplayed()));
-        } catch(AssertionError ae) {
-            return;
-        }
-
-        //if there is review button
-        onView(withId(R.id.btn_review)).perform(click());
-
-        //check review dialog
-        onView(withId(R.id.review_label)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void checkPassedReservationDetail() {
-        //get the text which the fragment shows
-        ViewInteraction resDetailFragmentText = onView(withId(R.id.reservationDetailTextView));
-
-        //click on first item on reservation list
-        onData(anything()).inAdapterView(withId(R.id.passedList)).atPosition(0).perform(click());
-
-        //check the fragments text is now visible in the activity
-        resDetailFragmentText.check(matches(isDisplayed()));
-
-        //check if there is no cancel button
-        onView(withId(R.id.btn_cancel)).check(matches(not(isDisplayed())));
-    }
-
+//    @Test
+//    public void checkPassedReservationDetail() {
+//        //get the text which the fragment shows
+//        ViewInteraction resDetailFragmentText = onView(withId(R.id.reservationDetailTextView));
+//
+//        //click on first item on reservation list
+//        onData(anything()).inAdapterView(withId(R.id.passedList)).atPosition(0).perform(click());
+//
+//        //check the fragments text is now visible in the activity
+//        resDetailFragmentText.check(matches(isDisplayed()));
+//
+//        //check if there is no cancel button
+//        onView(withId(R.id.btn_cancel)).check(matches(not(isDisplayed())));
+//    }
+//
     @Test
     public void checkFutureReservationDetail() {
         //get the text which the fragment shows

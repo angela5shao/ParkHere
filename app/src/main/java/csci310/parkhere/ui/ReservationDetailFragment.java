@@ -73,7 +73,7 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
     private String end_time = "[end time]";
     private String renter_username = "[renter username]";
     private long res_id = 0;
-    private boolean if_canReview, if_canCancel;
+    private boolean if_canReview, if_canCancel, if_ispaid;
 
     public ReservationDetailFragment() {
         // Required empty public constructor
@@ -113,6 +113,7 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
             res_id = b.getLong("RES_ID");
             if_canReview = b.getBoolean("IF_CANREVIEW");
             if_canCancel = b.getBoolean("IF_CANCANCEL");
+            if_ispaid = b.getBoolean("IF_ISPAID");
         }
     }
 
@@ -134,28 +135,13 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
         Log.d("Reservation detail ","if_canCancel = "+if_canCancel);
 
         if(!if_canReview) {
-
-
-
-
-
-
-
-
-
-
-
-
-
-            
             _btn_review.setVisibility(View.GONE);
         }
         if(!if_canCancel) {
             _btn_cancel.setVisibility(View.GONE);
         }
 
-        // TODO: Check if it has been confirmed
-        if(!if_notConfirmed) {
+        if(if_ispaid) {
             _btn_confirm.setVisibility(View.GONE);
         }
         else {
@@ -193,7 +179,7 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
             @Override
             public void onClick(View v) {
                 // TODO: confirm the server for payment
-
+                
             }
         });
 

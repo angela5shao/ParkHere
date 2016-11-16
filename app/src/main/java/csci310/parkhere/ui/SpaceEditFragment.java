@@ -124,7 +124,7 @@ public class SpaceEditFragment extends Fragment {
         mDescriptionText = (EditText) v.findViewById(R.id.description_text);
         mDescriptionText.setText(thisParkingSpot.getDescription());
         mSpacePic2 = (SubsamplingScaleImageView) v.findViewById(R.id.imageView);
-        if (thisParkingSpot.encodedImages != null) { // If has picture, set it
+        if (thisParkingSpot.encodedImages != null) { // If has pictures, set them
             for (String encodedimg : encodedImages) {
                 byte[] byteArray = encodedimg.getBytes();
                 Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
@@ -222,7 +222,6 @@ public class SpaceEditFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-//        Log.d("ONACTIVITYRESULT", "START");
         if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 Place place = PlaceAutocomplete.getPlace(getContext(), data);
@@ -243,13 +242,8 @@ public class SpaceEditFragment extends Fragment {
             String picturePath = cursor.getString(columnIndex);
             cursor.close();
 
-//            ImageView imageView = (ImageView) findViewById(R.id.imgView);
-//            imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-//            mSpacePic.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-
 //            mSpacePic2.setImage(ImageSource.resource(R.drawable.monkey));
 //            mSpacePic2.setImage(ImageSource.asset("map.png"))
-//            mSpacePic2.setImage(ImageSource.uri("/sdcard/DCIM/DSCM00123.JPG"));
 //            mSpacePic2.setImage(ImageSource.bitmap(bitmap));
 //            mSpacePic2.setImage(ImageSource.uri(picturePath));
 
@@ -259,11 +253,6 @@ public class SpaceEditFragment extends Fragment {
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
             newImage.setLayoutParams(lp);
 
-
-//            Bitmap bmp = intent.getExtras().get("data");
-//            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//            bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-//            byte[] byteArray = stream.toByteArray();
 
             Bitmap bitmap = null;
             try {

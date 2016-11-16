@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -374,9 +375,13 @@ public class SpaceDetailFragment extends Fragment {
                     }
                 }
 
-                if(!valid)
-                {
-                    Toast.makeText(getContext(), "Please input valid time interval", Toast.LENGTH_SHORT).show();
+                if(!valid) {
+                    Toast.makeText(getContext(), "Please input valid time interval.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                // Check that rate is provided
+                if(_in_price.getText().toString().length() == 0) {
+                    Toast.makeText(getContext(), "Please input price (per hour).", Toast.LENGTH_SHORT).show();
                     return;
                 }
 

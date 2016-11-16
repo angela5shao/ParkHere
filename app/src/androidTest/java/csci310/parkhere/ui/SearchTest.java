@@ -128,50 +128,50 @@ public class SearchTest { //extends ActivityInstrumentationTestCase2<RenterActiv
         onView(withId(R.id.in_end_date)).check(matches(withText(END_DAY + "-" + END_MONTH + "-" + END_YEAR)));
     }
 
-    @Test
-    public void canSearchWithDatesOnly() {
-        //get the text which the fragment shows
-        ViewInteraction fragmentText = onView(withId(R.id.displaySearchTextView));
-
-        //check the fragment text does not exist on fresh activity start
-        fragmentText.check(ViewAssertions.doesNotExist());
-
-        //click the search button to show the search result fragment
-        onView(withId(R.id.btn_confirm)).perform(scrollTo(), click());
-
-        //check the fragments text is now visible in the activity
-        fragmentText.check(ViewAssertions.matches(isDisplayed()));
-
-        // Logout
-        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
-        onView(withText("Log Out")).perform(click());
-    }
-
-    @Test
-    public void canSearchWithDatesAndTimes() {
-        // Select start time & end time
-        onView(withId(R.id.btn_start_time)).perform(scrollTo(),click());
-        onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(START_HOUR, START_MINUTE));
-        onView(withText("OK")).perform(click());
-        onView(withId(R.id.in_start_time)).check(matches(withText(START_HOUR + ":" + START_MINUTE)));
-
-        onView(withId(R.id.btn_end_time)).perform(scrollTo(),click());
-        onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(END_HOUR, END_MINUTE));
-        onView(withText("OK")).perform(click());
-        onView(withId(R.id.in_end_time)).check(matches(withText(END_HOUR + ":" + END_MINUTE)));
-
-        //click the search button to show the search result fragment
-        onView(withId(R.id.btn_confirm)).perform(scrollTo(), click());
-
-        //check the fragments text in search result fragment is now visible in the activity (ie check fragment is displayed)
-        ViewInteraction fragmentText = onView(withId(R.id.displaySearchTextView));
-        fragmentText.check(ViewAssertions.matches(isDisplayed()));
-
-        // Logout
-        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
-        onView(withText("Log Out")).perform(click());
-    }
-
+//    @Test
+//    public void canSearchWithDatesOnly() {
+//        //get the text which the fragment shows
+//        ViewInteraction fragmentText = onView(withId(R.id.displaySearchTextView));
+//
+//        //check the fragment text does not exist on fresh activity start
+//        fragmentText.check(ViewAssertions.doesNotExist());
+//
+//        //click the search button to show the search result fragment
+//        onView(withId(R.id.btn_confirm)).perform(scrollTo(), click());
+//
+//        //check the fragments text is now visible in the activity
+//        fragmentText.check(ViewAssertions.matches(isDisplayed()));
+//
+//        // Logout
+//        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+//        onView(withText("Log Out")).perform(click());
+//    }
+//
+//    @Test
+//    public void canSearchWithDatesAndTimes() {
+//        // Select start time & end time
+//        onView(withId(R.id.btn_start_time)).perform(scrollTo(),click());
+//        onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(START_HOUR, START_MINUTE));
+//        onView(withText("OK")).perform(click());
+//        onView(withId(R.id.in_start_time)).check(matches(withText(START_HOUR + ":" + START_MINUTE)));
+//
+//        onView(withId(R.id.btn_end_time)).perform(scrollTo(),click());
+//        onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(END_HOUR, END_MINUTE));
+//        onView(withText("OK")).perform(click());
+//        onView(withId(R.id.in_end_time)).check(matches(withText(END_HOUR + ":" + END_MINUTE)));
+//
+//        //click the search button to show the search result fragment
+//        onView(withId(R.id.btn_confirm)).perform(scrollTo(), click());
+//
+//        //check the fragments text in search result fragment is now visible in the activity (ie check fragment is displayed)
+//        ViewInteraction fragmentText = onView(withId(R.id.displaySearchTextView));
+//        fragmentText.check(ViewAssertions.matches(isDisplayed()));
+//
+//        // Logout
+//        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+//        onView(withText("Log Out")).perform(click());
+//    }
+//
     @Test
     public void checkPublicProfile() {
         //click the search button to show the search result fragment

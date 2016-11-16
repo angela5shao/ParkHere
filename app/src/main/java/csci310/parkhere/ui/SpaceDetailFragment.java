@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -55,12 +56,8 @@ import resource.TimeInterval;
  * create an instance of this fragment.
  */
 public class SpaceDetailFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
     private int mParam1;
     private String mParam2;
 
@@ -68,6 +65,7 @@ public class SpaceDetailFragment extends Fragment {
     public ArrayList<TimeInterval> list;
     TextView _spacedetail_address;
     CustomCalendarView calendarView;
+
     final String disabledDateColor = "#c3c3c3";
     final String selectedDateColor = "#3e50b4";
     final String postedDateColor = "#009688";
@@ -93,6 +91,8 @@ public class SpaceDetailFragment extends Fragment {
     SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
     Time inputedStartTime;
     Time inputedEndTime;
+    Time inputedEditStartTime;
+    Time inputedEditEndTime;
 
 //    //*******************************************************************************
 //    // FOR TESTING DELETE LATER!!!
@@ -103,9 +103,12 @@ public class SpaceDetailFragment extends Fragment {
 //    TimeInterval interval1 = new TimeInterval(start1, end1);
 //    //*******************************************************************************
 
-    Button _btn_add_time, _btn_start_time, _btn_end_time, _btn_add_confirm, _btn_delete_time;
-    LinearLayout _addTimeForSpaceLayout;
-    EditText _in_start_date, _in_start_time, _in_end_date, _in_end_time, _in_price;
+    Button _btn_add_time, _btn_start_time, _btn_end_time, _btn_add_confirm, _btn_delete_time,
+            _btn_editSpace, _btn_editTimeConfirm, _btn_deleteSpace,
+            _btn_editStartTime, _btn_editEndTime;
+    LinearLayout _addTimeForSpaceLayout, _editTimeForSpaceLayout;
+    EditText _in_start_date, _in_start_time, _in_end_date, _in_end_time, _in_price,
+            _edit_start_date, _edit_end_date, _edit_start_time, _edit_end_time, _edit_price;
     ListView _timeList;
 
     ProgressDialog progressDialog;
@@ -174,14 +177,14 @@ public class SpaceDetailFragment extends Fragment {
         _spacedetail_address.setText(address);
 
         _addTimeForSpaceLayout = (LinearLayout) v.findViewById(R.id.addTimeForSpaceLayout);
+        _editTimeForSpaceLayout = (LinearLayout) v.findViewById(R.id.editTimeForSpaceLayout);
 
         _btn_add_time=(Button)v.findViewById(R.id.btn_add_time);
         _btn_add_time.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 if(_addTimeForSpaceLayout.getVisibility()==View.GONE) {
                     _addTimeForSpaceLayout.setVisibility(View.VISIBLE);
-                }
-                else {
+                } else {
                     _addTimeForSpaceLayout.setVisibility(View.GONE);
                 }
             }
@@ -192,6 +195,7 @@ public class SpaceDetailFragment extends Fragment {
         _in_end_date=(EditText)v.findViewById(R.id.in_end_date);
         _in_end_time=(EditText)v.findViewById(R.id.in_end_time);
         _in_price=(EditText)v.findViewById(R.id.in_price);
+
         _btn_start_time=(Button)v.findViewById(R.id.btn_start_time);
         _btn_start_time.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -234,6 +238,19 @@ public class SpaceDetailFragment extends Fragment {
                 timePickerDialog.show();
             }
         });
+        _btn_editSpace = (Button)v.findViewById(R.id.editSpace_btn);
+        _btn_editSpace.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                mListener.openSpaceEditFragment(thisParkingSpot);
+            }
+        });
+
+        _btn_deleteSpace = (Button)v.findViewById(R.id.deleteSpace_btn);
+        _btn_deleteSpace.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                // TODO: call DeleteSpaceTask
+            }
+        });
 
         //Initialize CustomCalendarView from layout
         calendarView = (CustomCalendarView) v.findViewById(R.id.calendar_view);
@@ -250,10 +267,6 @@ public class SpaceDetailFragment extends Fragment {
         selectedEndDate = null;
 
 
-
-//        System.out.println("SpaceDetailFragment for spaceID: " + thisParkingSpot.getParkingSpotID());
-
-
         // Handling custom calendar events
         calendarView.setCalendarListener(new CalendarListener() {
             @Override
@@ -267,6 +280,7 @@ public class SpaceDetailFragment extends Fragment {
                     if (selectedStartDate == null) {
                         selectedStartDate = date;
                         _in_start_date.setText(dateFormat.format(selectedStartDate));
+                        _edit_start_date.setText(dateFormat.format(selectedStartDate));
 
                         decorators.clear();
                         decorators.add(new DisabledColorDecorator());
@@ -282,9 +296,11 @@ public class SpaceDetailFragment extends Fragment {
                     if (selectedStartDate.compareTo(date) >= 0) {
                         selectedStartDate = date;
                         _in_start_date.setText(dateFormat.format(selectedStartDate));
+                        _edit_start_date.setText(dateFormat.format(selectedStartDate));
                     } else {
                         selectedEndDate = date;
                         _in_end_date.setText(dateFormat.format(selectedEndDate));
+                        _edit_end_date.setText(dateFormat.format(selectedEndDate));
 
                         Calendar cal = Calendar.getInstance();
                         cal.setTime(selectedStartDate);
@@ -294,9 +310,8 @@ public class SpaceDetailFragment extends Fragment {
                         Time timeEnd = new Time(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
 
     //                    Log.d("time", selectedStartDate.toString() + " " + selectedEndDate.toString());
-                        Log.d("Month", String.valueOf(cal.get(Calendar.MONTH)) + " " + selectedEndDate.toString());
-
-                        Log.d("time", timeStart.toString() + " " + timeEnd.toString());
+//                        Log.d("Month", String.valueOf(cal.get(Calendar.MONTH)) + " " + selectedEndDate.toString());
+//                        Log.d("time", timeStart.toString() + " " + timeEnd.toString());
                         inputedStartTime = timeStart;
                         inputedEndTime = timeEnd;
 
@@ -360,13 +375,15 @@ public class SpaceDetailFragment extends Fragment {
                     }
                 }
 
-                if(!valid)
-                {
-                    Toast.makeText(getContext(), "Please input valid time interval", Toast.LENGTH_SHORT).show();
+                if(!valid) {
+                    Toast.makeText(getContext(), "Please input valid time interval.", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
-
+                // Check that rate is provided
+                if(_in_price.getText().toString().length() == 0) {
+                    Toast.makeText(getContext(), "Please input price (per hour).", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 AddSpaceTask = new AddTimeForSpaceTask(_in_price.getText().toString());
                 AddSpaceTask.execute((Void) null);
@@ -375,20 +392,97 @@ public class SpaceDetailFragment extends Fragment {
 
         _timeList = (ListView) v.findViewById(R.id.timeList);
         _timeList.setClickable(true);
-        _btn_delete_time = (Button) v.findViewById(R.id.btn_delete_time);
 
         _timeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
-                _btn_delete_time.setVisibility(View.VISIBLE);
                 curr_selected_time_id = (long)position;
+
+                if(_editTimeForSpaceLayout.getVisibility()==View.GONE) {
+                    _btn_delete_time.setVisibility(View.VISIBLE);
+                    _editTimeForSpaceLayout.setVisibility(View.VISIBLE);
+                }
+                else {
+                    _btn_delete_time.setVisibility(View.GONE);
+                    _editTimeForSpaceLayout.setVisibility(View.GONE);
+                }
             }
         });
+        
+        _btn_delete_time = (Button) v.findViewById(R.id.btn_delete_time);
         _btn_delete_time.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 DeleteTimeTask = new DeleteTimeForSpaceTask(curr_selected_time_id);
                 DeleteTimeTask.execute((Void) null);
+            }
+        });
+
+        _edit_start_date = (EditText)v.findViewById(R.id.edit_start_date);
+        _edit_end_date = (EditText)v.findViewById(R.id.edit_end_date);
+        _edit_start_time = (EditText)v.findViewById(R.id.edit_start_time);
+        _edit_end_time = (EditText)v.findViewById(R.id.edit_end_time);
+        _edit_price = (EditText)v.findViewById(R.id.editPrice_text);
+
+        _edit_price = (EditText)v.findViewById(R.id.editPrice_text);
+
+        _btn_editStartTime=(Button)v.findViewById(R.id.editStartTime_btn);
+        _btn_editStartTime.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                // Get Current Time
+                final Calendar c = Calendar.getInstance();
+                curr_hour = c.get(Calendar.HOUR_OF_DAY);
+                curr_minute = c.get(Calendar.MINUTE);
+
+                // Launch Time Picker Dialog
+                TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                                _edit_start_time.setText(hourOfDay+"-"+minute);
+                            }
+                        }, curr_hour, curr_minute, false);
+                timePickerDialog.show();
+            }
+        });
+        _btn_editEndTime=(Button)v.findViewById(R.id.editEndTime_btn);
+        _btn_editEndTime.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                // Get Current Time
+                final Calendar c = Calendar.getInstance();
+                curr_hour = c.get(Calendar.HOUR_OF_DAY);
+                curr_minute = c.get(Calendar.MINUTE);
+
+                // Launch Time Picker Dialog
+                TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                                _edit_end_time.setText(hourOfDay + "-" + minute);
+                            }
+                        }, curr_hour, curr_minute, false);
+                timePickerDialog.show();
+            }
+        });
+
+        _btn_editTimeConfirm = (Button) v.findViewById(R.id.editTimeConfirm_btn);
+        _btn_editTimeConfirm.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+//                ArrayList<TimeInterval> intervals = thisParkingSpot.getTimeIntervalList();
+//                for(int i = 0; i < intervals.size(); i++) {
+//                    Time start = intervals.get(i).startTime;
+//                    Time end = intervals.get(i).endTime;
+//                    if((start.compareTo(inputedStartTime) <= 0 && end.compareTo(inputedEndTime) >=0) ||
+//                            (start.compareTo(inputedStartTime) >= 0 && start.compareTo(inputedEndTime) <=0) ||
+//                            (end.compareTo(inputedStartTime) >= 0 && end.compareTo(inputedEndTime) <=0) ||
+//                            (start.compareTo(inputedStartTime) >= 0 && end.compareTo(inputedEndTime) <=0)) {
+//                        Toast.makeText(getContext(), "Please input valid time interval", Toast.LENGTH_SHORT).show();
+//                        return;
+//                    }
+//                }
+                //TODO: get the timeslotID
+                EditTimeTask editTimeTask = new EditTimeTask(_edit_price.getText().toString(), 1);
+                editTimeTask.execute((Void)null);
             }
         });
 
@@ -484,8 +578,8 @@ public class SpaceDetailFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+        void openSpaceEditFragment(ParkingSpot spot);
     }
 
     @Override
@@ -553,8 +647,6 @@ public class SpaceDetailFragment extends Fragment {
 
         AddTimeForSpaceTask(String price){
             mPrice = price;
-//            doInBackground((Void) null);
-            System.out.println(mPrice);
         }
         @Override
         protected void onPreExecute(){
@@ -570,10 +662,6 @@ public class SpaceDetailFragment extends Fragment {
         protected Boolean doInBackground(Void... params){
             // call client controller
             ClientController controller = ClientController.getInstance();
-
-
-
-
 
             System.out.println("BEFORE REQ Start:"+ inputedStartTime);
             System.out.println("BEFORE REQ End:" + inputedEndTime);
@@ -712,6 +800,106 @@ public class SpaceDetailFragment extends Fragment {
             }
         }
 
+    }
+
+    private class EditTimeTask extends AsyncTask<Void, Void, Boolean>{
+        private final String mPrice;
+        private final long timeSlotID;
+
+        EditTimeTask(String price, long timeSlotID){
+            mPrice = price;
+            this.timeSlotID = timeSlotID;
+        }
+
+        @Override
+        protected void onPreExecute(){
+            //Display a progress dialog
+            progressDialog = new ProgressDialog(getContext(), R.style.AppTheme);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Editing...");
+            progressDialog.show();
+        }
+        @Override
+        protected Boolean doInBackground(Void... params){
+            // call client controller
+            ClientController controller = ClientController.getInstance();
+
+            controller.requestEditTime(timeSlotID, inputedEditStartTime, inputedEditEndTime, Integer.valueOf(mPrice));
+
+            NetworkPackage NP = controller.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if(key.equals("EDITTIME")) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        @Override
+        protected void onPostExecute(Boolean success) {
+            if(success) {
+                // Back to SpacesFragment
+                ((ProviderActivity)getActivity()).showSpaceFragment();
+                Toast.makeText(getContext(), "Edited time!", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+
+            } else{
+                progressDialog.dismiss();
+                Toast.makeText(getContext(), "Edit time failed! Please try agian.", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+
+
+    }
+
+    private class DeleteSpaceTask extends AsyncTask<Void, Void, Boolean>{
+        private long parkingSpaceID;
+        DeleteSpaceTask(ParkingSpot parkingSpot){
+            parkingSpaceID = parkingSpot.getParkingSpotID();
+        }
+
+        @Override
+        protected void onPreExecute(){
+            //Display a progress dialog
+            progressDialog = new ProgressDialog(getContext(), R.style.AppTheme);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Deleting...");
+            progressDialog.show();
+        }
+        @Override
+        protected Boolean doInBackground(Void... params){
+            // call client controller
+            ClientController controller = ClientController.getInstance();
+
+            controller.deleteSpace(parkingSpaceID);
+
+            NetworkPackage NP = controller.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if(key.equals("DELETESPACE")) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        @Override
+        protected void onPostExecute(Boolean success) {
+            if(success) {
+                // Back to SpacesFragment
+                ((ProviderActivity)getActivity()).showSpaceFragment();
+                Toast.makeText(getContext(), "Deleted time!", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+
+            } else{
+                progressDialog.dismiss();
+                Toast.makeText(getContext(), "Delete time failed! Please try agian.", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
 }

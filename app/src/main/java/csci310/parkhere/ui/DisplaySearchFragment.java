@@ -12,9 +12,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
+import resource.ParkingSpot;
 import resource.SearchResults;
 
 /**
@@ -43,9 +47,11 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
     private OnFragmentInteractionListener mListener;
 
     Spinner _sortOptionSpinner;
+
     ListView _searchresultList;
-    //    ArrayList<ParkingSpot> searchResults;
-    String[] searchResults={};
+    ArrayList<ParkingSpot> _spots;
+    String[] _searchDescriptions;
+
 
     public DisplaySearchFragment() {
         // Required empty public constructor
@@ -117,25 +123,22 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
             }
         });
 
-
         _searchresultList = (ListView) v.findViewById(R.id.searchresultList);
 
         // Get list of search results
         ClientController controller = ClientController.getInstance();
         SearchResults result = controller.searchResults;
 
-        String[] resultList = new String[result.searchResultList.size()];
-
-        for(int i = 0; i < result.searchResultList.size(); i++) {
-            resultList[i] = result.searchResultList.get(i).getDescription();
-        }
-
-//        setSearchResultListview(resultList);
-
         _searchresultList.setOnItemClickListener(this);
+        setSearchResultListview(result);
 
-        _searchresultList.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, resultList));
-        DiplayListViewHelper.getListViewSize(_searchresultList);
+//        String[] resultList = new String[result.searchResultList.size()];
+//        for(int i = 0; i < result.searchResultList.size(); i++) {
+//            resultList[i] = result.searchResultList.get(i).getDescription();
+//        }
+
+//        _searchresultList.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, resultList));
+//        DiplayListViewHelper.getListViewSize(_searchresultList);
 
 
 //        _searchresultList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -151,7 +154,6 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
 ////                        "Position :" + itemPosition + "  ListItem : " + itemValue, Toast.LENGTH_LONG)
 ////                        .show();
 //            }
-//
 //        });
         //***********************************************
 
@@ -184,23 +186,33 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
 
     public void setSearchResultListview(SearchResults result) {
         Log.d("DisplaySearchFragment", "setSearchResultListview CALLED AFTER SORTING");
+        _spots = result.searchResultList;
 
-        String[] resultList = new String[result.searchResultList.size()];
-
-        for(int i = 0; i < result.searchResultList.size(); i++) {
-            resultList[i] = result.searchResultList.get(i).getDescription();
+        if(_spots.isEmpty())
+        {
+            Toast.makeText(getContext(), "Cannot find space Please try again.", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        _searchresultList.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, resultList));
+
+        // Populate string array of descriptions to display
+        _searchDescriptions = new String[result.searchResultList.size()];
+        for(int i = 0; i < result.searchResultList.size(); i++) {
+            _searchDescriptions[i] = result.searchResultList.get(i).getDescription();
+        }
+
+        // Setup list adapter using customSearchListAdapter
+//        _searchresultList.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, resultList));
+        // TODO: pass array of image IDs (int)
+        CustomSearchListAdapter adapter = new CustomSearchListAdapter(getActivity(), _searchDescriptions, null);
+        _searchresultList.setAdapter(adapter);
         DiplayListViewHelper.getListViewSize(_searchresultList);
     }
 //
     public void setSearchResultListview(String[] inSearchResults, String startDate, String startTime, String endDate, String endTime) {
 //        _searchresultList.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, inSearchResults));
 //        DiplayListViewHelper.getListViewSize(_searchresultList);
-
         Log.d("setSearchResultListview", startDate + " " + startTime + " " + endDate + " " + endTime);
-
 
         mStartDate = startDate;
         mStartTime = startTime;
@@ -227,6 +239,7 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
                             long id) {
+//        String selectedItem= itemname[+position];
         mListener.onSearchSpaceSelected(position, mStartDate, mStartTime, mEndDate, mEndTime);
     }
 }

@@ -509,7 +509,7 @@ public class SearchFragment extends Fragment {
     Spinner  _distSpinner, _cartypeSpinner;
 
     private int startYear, startMonth, startDay, startHour, startMinute,
-            endYear, endMonth, endDay, endHour, endMinute;
+            endYear, endMonth, endDay, endHour, endMinute = -1;
 
     private Calendar startDate = Calendar.getInstance();
     private Calendar endDate = Calendar.getInstance();
@@ -722,6 +722,13 @@ public class SearchFragment extends Fragment {
                     Double mLat = Double.parseDouble(_in_lat.getText().toString());
                     Double mLong = Double.parseDouble(_in_long.getText().toString());
                     curr_location = new LatLng(mLat, mLong);
+                }
+
+
+                if(curr_location == null || startMonth == -1 || startDay == -1 || startYear == -1 || startHour == -1 || startMinute == -1
+                        || endMonth == -1 || endDay == -1 || endYear == -1 || endHour == -1 || endMinute == -1){
+                    Toast.makeText(getContext(), "Please input valid search infogi! Please try again.", Toast.LENGTH_SHORT).show();
+                    return;
                 }
 
                 ClientController clientController = ClientController.getInstance();

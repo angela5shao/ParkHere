@@ -24,17 +24,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
 
-                <ImageView
-                    android:id="@+id/parkingSpotImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="120dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:adjustViewBounds="true"
-                    android:src="@mipmap/ic_space"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginBottom="12dp"/>
-
                 <Button
                     android:id="@+id/spacePicUpload_btn"
                     android:layout_width="match_parent"

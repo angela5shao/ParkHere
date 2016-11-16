@@ -36,8 +36,10 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 
 import csci310.parkhere.R;
@@ -71,7 +73,6 @@ public class SpaceEditFragment extends Fragment {
 
     private Button mDoneButton, mUploadPicButton, mEditAddressButton;
     private EditText mAddressText, mDescriptionText;
-    private ImageView mSpacePic;
     private SubsamplingScaleImageView mSpacePic2;
     private Spinner mCartypeSpinner, mCancelPolicySpinner;
     private String encodedImage;
@@ -119,9 +120,9 @@ public class SpaceEditFragment extends Fragment {
         mAddressText.setText(thisParkingSpot.getStreetAddr());
         mDescriptionText = (EditText) v.findViewById(R.id.description_text);
         mDescriptionText.setText(thisParkingSpot.getDescription());
-        mSpacePic = (ImageView) v.findViewById(R.id.parkingSpotImage);
-        // TODO: Set image of parking spot
         mSpacePic2 = (SubsamplingScaleImageView) v.findViewById(R.id.imageView);
+        InputStream stream = new ByteArrayInputStream(Base64.decode(thisParkingSpot.encodedImage.getBytes(), Base64.DEFAULT));
+
 
         mCartypeSpinner = (Spinner)v.findViewById(R.id.editCartype_spinner);
         mCartypeSpinner.setSelection(thisParkingSpot.getCartype());
@@ -229,6 +230,18 @@ public class SpaceEditFragment extends Fragment {
             String picturePath = cursor.getString(columnIndex);
             cursor.close();
 
+//            ImageView imageView = (ImageView) findViewById(R.id.imgView);
+//            imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+//            mSpacePic.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+
+//            mSpacePic2.setImage(ImageSource.resource(R.drawable.monkey));
+//            mSpacePic2.setImage(ImageSource.asset("map.png"))
+//            mSpacePic2.setImage(ImageSource.uri("/sdcard/DCIM/DSCM00123.JPG"));
+//            mSpacePic2.setImage(ImageSource.bitmap(bitmap));
+            mSpacePic2.setImage(ImageSource.uri(picturePath));
+
+
+
 //            Bitmap bmp = intent.getExtras().get("data");
 //            ByteArrayOutputStream stream = new ByteArrayOutputStream();
 //            bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
@@ -240,32 +253,11 @@ public class SpaceEditFragment extends Fragment {
 //                bitmap = decoder.decodeRegion(new Rect(10, 10, 50, 50), null);
                 bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), selectedImage);
             } catch (IOException e) {
-
             }
-
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] imageBytes = baos.toByteArray();
             encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-
-//            ImageView imageView = (ImageView) findViewById(R.id.imgView);
-//            imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-
-//            Bitmap d = new BitmapDrawable(ctx.getResources() , w.photo.getAbsolutePath()).getBitmap();
-//            int nh = (int) ( d.getHeight() * (512.0 / d.getWidth()) );
-//            Bitmap scaled = Bitmap.createScaledBitmap(d, 512, nh, true);
-//            iv.setImageBitmap(scaled);
-
-//            mSpacePic2.setImage(ImageSource.resource(R.drawable.monkey));
-//// ... or ...
-//            mSpacePic2.setImage(ImageSource.asset("map.png"))
-//// ... or ...
-//            mSpacePic2.setImage(ImageSource.uri("/sdcard/DCIM/DSCM00123.JPG"));
-//            mSpacePic2.setImage(ImageSource.bitmap(bitmap));
-            mSpacePic2.setImage(ImageSource.uri(picturePath));
-
-//            mSpacePic.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-            System.out.println("- - - SpaceEditFrag: setImage - -");
         }
     }
 

@@ -205,6 +205,16 @@
                     android:clickable="false"
                     android:text="Edit Space"/>
 
+                <Button
+                    android:id="@+id/deleteSpace_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:text="delete this space"
+                    android:textColor="@color/colorMainFont"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp"/>
+
                 <ListView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -332,15 +342,6 @@
                     android:layout_marginBottom="12dp"
                     android:visibility="gone"/>
 
-                <Button
-                    android:id="@+id/deleteSpace_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:text="delete this space"
-                    android:textColor="@color/colorMainFont"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginBottom="12dp"/>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

@@ -637,7 +637,7 @@ public class ClientController {
         {
             Log.d("WRONG", "WRONG IDENTIFIER");
         }
-        NP.addEntry("FETCHIMAGE",customImage);
+        NP.addEntry("SENDIMAGE",customImage);
         try {
             clientCommunicator.sendPackage(NP);
         } catch (IOException e) {

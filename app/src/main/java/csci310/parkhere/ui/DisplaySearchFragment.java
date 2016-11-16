@@ -170,8 +170,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import java.util.ArrayList;
+
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
+import resource.ParkingSpot;
 import resource.SearchResults;
 
 /**
@@ -351,8 +354,14 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
         for(int i = 0; i < result.searchResultList.size(); i++) {
             resultList[i] = result.searchResultList.get(i).getDescription();
         }
+        ArrayList<ParkingSpot> spots = result.searchResultList;
 
-        _searchresultList.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, resultList));
+        // TODO: pass array of image IDs (int)
+        CustomSearchListAdapter adapter = new CustomSearchListAdapter(getActivity(), resultList, null);
+        _searchresultList.setAdapter(adapter);
+
+//        _searchresultList.setAdapter(new ArrayAdapter<String>(
+//                getContext(), android.R.layout.simple_list_item_1, resultList));
         DiplayListViewHelper.getListViewSize(_searchresultList);
     }
 
@@ -388,6 +397,7 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
                             long id) {
+        String selectedItem= itemname[+position];
         mListener.onSearchSpaceSelected(position, mStartDate, mStartTime, mEndDate, mEndTime);
     }
 }

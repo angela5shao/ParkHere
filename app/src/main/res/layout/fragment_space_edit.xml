@@ -19,6 +19,11 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
                 <ImageView
                     android:id="@+id/parkingSpotImage"
                     android:layout_width="match_parent"

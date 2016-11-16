@@ -23,6 +23,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.davemorrissey.labs.subscaleview.ImageSource;
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
@@ -65,7 +67,9 @@ public class SpaceEditFragment extends Fragment {
     private Button mDoneButton, mUploadPicButton, mEditAddressButton;
     private EditText mAddressText, mDescriptionText;
     private ImageView mSpacePic;
+    private SubsamplingScaleImageView mSpacePic2;
     private Spinner mCartypeSpinner, mCancelPolicySpinner;
+    private String picturePath;
 
     private LatLng mCurrLocation;
 
@@ -112,6 +116,8 @@ public class SpaceEditFragment extends Fragment {
         mDescriptionText.setText(thisParkingSpot.getDescription());
         mSpacePic = (ImageView) v.findViewById(R.id.parkingSpotImage);
         // TODO: Set image of parking spot
+        mSpacePic2 = (SubsamplingScaleImageView) v.findViewById(R.id.imageView);
+
         mCartypeSpinner = (Spinner)v.findViewById(R.id.editCartype_spinner);
         mCartypeSpinner.setSelection(thisParkingSpot.getCartype());
         mCancelPolicySpinner = (Spinner)v.findViewById(R.id.editCancelPolicy_spinner);
@@ -133,7 +139,8 @@ public class SpaceEditFragment extends Fragment {
                         mDescriptionText.getText().toString(),
                         mCartypeSpinner.getSelectedItem().toString(),
                         mCancelPolicySpinner.getSelectedItemPosition(),
-                        mSpacePic);
+                        ImageSource.uri(picturePath)
+                );
                 editProfileTask.execute((Void)null);
             }
         });
@@ -141,7 +148,6 @@ public class SpaceEditFragment extends Fragment {
         mUploadPicButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO
                 Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(i, RESULT_LOAD_IMAGE);
             }
@@ -213,7 +219,7 @@ public class SpaceEditFragment extends Fragment {
             Cursor cursor = getContext().getContentResolver().query(selectedImage,filePathColumn, null, null, null);
             cursor.moveToFirst();
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
+            picturePath = cursor.getString(columnIndex);
             cursor.close();
 
 //            ImageView imageView = (ImageView) findViewById(R.id.imgView);
@@ -224,7 +230,15 @@ public class SpaceEditFragment extends Fragment {
 //            Bitmap scaled = Bitmap.createScaledBitmap(d, 512, nh, true);
 //            iv.setImageBitmap(scaled);
 
-            mSpacePic.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+//            mSpacePic2.setImage(ImageSource.resource(R.drawable.monkey));
+//// ... or ...
+//            mSpacePic2.setImage(ImageSource.asset("map.png"))
+//// ... or ...
+//            mSpacePic2.setImage(ImageSource.uri("/sdcard/DCIM/DSCM00123.JPG"));
+//            mSpacePic2.setImage(ImageSource.bitmap(bitmap));
+            mSpacePic2.setImage(ImageSource.uri(picturePath));
+
+//            mSpacePic.setImageBitmap(BitmapFactory.decodeFile(picturePath));
             System.out.println("- - - SpaceEditFrag: setImage - -");
         }
     }

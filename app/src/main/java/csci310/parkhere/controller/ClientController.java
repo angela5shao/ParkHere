@@ -15,6 +15,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 
 import resource.CarType;
+import resource.CustomImage;
 import resource.NetworkPackage;
 import resource.ParkingSpot;
 import resource.Reservation;
@@ -609,6 +610,32 @@ public class ClientController {
         map.put("USER", user);
         map.put("PASSWORD", password);
         NP.addEntry("EDITPROFILE", map);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendImagetoServer(String DataURI, String Identifier, long ID)
+    {
+        CustomImage customImage = new CustomImage();
+        customImage.Data_URI = DataURI;
+        if(Identifier.equals("PARKINGSPACEIMAGE"))
+        {
+            customImage.parkingSpotID = ID;
+            customImage.UserID = -1;
+        }
+        else if(Identifier.equals("USERPROFILEIAMGE"))
+        {
+            customImage.parkingSpotID = -1;
+            customImage.UserID = ID;
+        }
+        else
+        {
+            Log.d("WRONG", "WRONG IDENTIFIER");
+        }
+        NP.addEntry("FETCHIMAGE",customImage);
         try {
             clientCommunicator.sendPackage(NP);
         } catch (IOException e) {

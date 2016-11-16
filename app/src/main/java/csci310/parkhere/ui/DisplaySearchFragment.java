@@ -131,7 +131,6 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
         _searchresultList.setOnItemClickListener(this);
         setSearchResultListview(result);
 
-<<<<<<< HEAD
 //        String[] resultList = new String[result.searchResultList.size()];
 //        for(int i = 0; i < result.searchResultList.size(); i++) {
 //            resultList[i] = result.searchResultList.get(i).getDescription();
@@ -139,10 +138,6 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
 
 //        _searchresultList.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, resultList));
 //        DiplayListViewHelper.getListViewSize(_searchresultList);
-=======
-        _searchresultList.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, resultList));
-        DiplayListViewHelper.getListViewSize(_searchresultList);
->>>>>>> a61b03c58b2006bb9ce15c2197a3e2a26991a100
 
 
 //        _searchresultList.setOnItemClickListener(new AdapterView.OnItemClickListener() {

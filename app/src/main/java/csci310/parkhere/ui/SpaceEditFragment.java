@@ -154,13 +154,16 @@ public class SpaceEditFragment extends Fragment {
                     return;
                 }
 
-                EditSpaceTask editProfileTask = new EditSpaceTask(mAddressText.getText().toString(),
+                EditSpaceTask editProfileTask = new EditSpaceTask(
+                        mCurrLocation,
+                        mAddressText.getText().toString(),
                         mDescriptionText.getText().toString(),
                         mCartypeSpinner.getSelectedItemPosition(),
                         mCancelPolicySpinner.getSelectedItemPosition(),
                         encodedImages //ImageSource.uri(picturePath)
                 );
-                editProfileTask.execute((Void)null);
+
+                    editProfileTask.execute((Void)null);
             }
         });
         mUploadPicButton = (Button)v.findViewById(R.id.spacePicUpload_btn);
@@ -302,11 +305,8 @@ public class SpaceEditFragment extends Fragment {
         @Override
         protected ParkingSpot doInBackground(Void... params ) {
             ClientController clientController = ClientController.getInstance();
-<<<<<<< HEAD
 //            clientController.editParkingSpot(address, description, cartype, cancelpolicy, encodedImages);
-=======
             clientController.editParkingSpot(ps);
->>>>>>> a61b03c58b2006bb9ce15c2197a3e2a26991a100
             NetworkPackage NP = clientController.checkReceived();
             MyEntry<String, Serializable> entry = NP.getCommand();
             String key = entry.getKey();

@@ -1,6 +1,7 @@
 package csci310.parkhere.controller;
 
 import android.app.Activity;
+import android.net.Network;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
@@ -16,6 +17,7 @@ import java.util.HashMap;
 
 import resource.CarType;
 import resource.CustomImage;
+import resource.MyEntry;
 import resource.NetworkPackage;
 import resource.ParkingSpot;
 import resource.Reservation;
@@ -662,9 +664,15 @@ public class ClientController {
     }
 
     public void sendImagesToServer(ArrayList<String> images, String Identifier, long ID){
+        NetworkPackage NP1;
         for(int i = 0 ; i< images.size();i++){
             sendImagetoServer(images.get(i), Identifier, ID);
-
+            NP1 = checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            while (!key.equals("STOREIMAGESUCCESS")) {
+                sendImagetoServer(images.get(i), Identifier, ID);
+            }
         }
     }
 }

@@ -6,12 +6,15 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapRegionDecoder;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +36,8 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
 
 import csci310.parkhere.R;
@@ -69,7 +74,7 @@ public class SpaceEditFragment extends Fragment {
     private ImageView mSpacePic;
     private SubsamplingScaleImageView mSpacePic2;
     private Spinner mCartypeSpinner, mCancelPolicySpinner;
-    private String picturePath;
+    private String encodedImage;
 
     private LatLng mCurrLocation;
 
@@ -139,7 +144,7 @@ public class SpaceEditFragment extends Fragment {
                         mDescriptionText.getText().toString(),
                         mCartypeSpinner.getSelectedItem().toString(),
                         mCancelPolicySpinner.getSelectedItemPosition(),
-                        ImageSource.uri(picturePath)
+                        encodedImage //ImageSource.uri(picturePath)
                 );
                 editProfileTask.execute((Void)null);
             }
@@ -201,6 +206,8 @@ public class SpaceEditFragment extends Fragment {
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
 //        Log.d("ONACTIVITYRESULT", "START");
         if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
@@ -219,8 +226,27 @@ public class SpaceEditFragment extends Fragment {
             Cursor cursor = getContext().getContentResolver().query(selectedImage,filePathColumn, null, null, null);
             cursor.moveToFirst();
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            picturePath = cursor.getString(columnIndex);
+            String picturePath = cursor.getString(columnIndex);
             cursor.close();
+
+//            Bitmap bmp = intent.getExtras().get("data");
+//            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//            bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+//            byte[] byteArray = stream.toByteArray();
+
+            Bitmap bitmap = null;
+            try {
+//                BitmapRegionDecoder decoder = BitmapRegionDecoder.newInstance(myStream, false);
+//                bitmap = decoder.decodeRegion(new Rect(10, 10, 50, 50), null);
+                bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), selectedImage);
+            } catch (IOException e) {
+
+            }
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] imageBytes = baos.toByteArray();
+            encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
 
 //            ImageView imageView = (ImageView) findViewById(R.id.imgView);
 //            imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
@@ -263,20 +289,20 @@ public class SpaceEditFragment extends Fragment {
         String description;
         String cartype;
         int cancelpolicy;
-        ImageView picture;
+        String encodedImage;
 
-        EditSpaceTask(String addr, String description, String cartype, int inCancelPolicy, ImageView pic){
+        EditSpaceTask(String addr, String description, String cartype, int inCancelPolicy, String encodedImage){
             this.address = addr;
             this.description = description;
             this.cartype = cartype;
             this.cancelpolicy = inCancelPolicy;
-            this.picture = pic;
+            this.encodedImage = encodedImage;
         }
 
         @Override
         protected ParkingSpot doInBackground(Void... params ){
             ClientController clientController = ClientController.getInstance();
-            clientController.editParkingSpot(address, description, cartype, cancelpolicy, picture);
+            clientController.editParkingSpot(address, description, cartype, cancelpolicy, encodedImage);
             NetworkPackage NP = clientController.checkReceived();
             MyEntry<String, Serializable> entry = NP.getCommand();
             String key = entry.getKey();

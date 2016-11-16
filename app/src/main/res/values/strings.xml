@@ -3,6 +3,7 @@
     <string name="login_signuplink"><u>No account yet? Sign up!</u></string>
     <string name="login_forgotpwlink"><u>Forgot password</u></string>
     <string name="confirm_label">Confirm</string>
+    <string name="authen_label">Authentication</string>
     <string name="first_name_label">First Name: </string>
     <string name="phone_label">Phone #: </string>
     <string name="email_label">Email: </string>

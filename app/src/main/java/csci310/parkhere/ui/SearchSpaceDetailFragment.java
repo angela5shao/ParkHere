@@ -4,18 +4,29 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.davemorrissey.labs.subscaleview.ImageSource;
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
@@ -24,6 +35,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import junit.framework.Assert;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -55,6 +68,7 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
     private static final String ARG_PARAM3 = "param3";
     private static final String ARG_PARAM4 = "param4";
     private static final String ARG_PARAM5 = "param5";
+    private static final String ARG_PARAM6 = "spot_images";
     View mView;
 
     // TODO: Rename and change types of parameters
@@ -63,10 +77,14 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
     private String mParam3;
     private String mParam4;
     private String mParam5;
+    private ArrayList<String> mImagesURLs;
+    private GalleryPagerAdapter mImageAdapter;
 
     private ParkingSpot mParkingSpot;
     private OnFragmentInteractionListener mListener;
 
+    ViewPager _pager;
+    LinearLayout _thumbnails;
     Button _searchspacedetail_reservebutton;
 
     SupportMapFragment mMapView;
@@ -99,51 +117,25 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
         return fragment;
     }
 
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//            m = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-//        }
-//    }
-@Override
-public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    if (getArguments() != null) {
-        mPosition = getArguments().getInt(ARG_PARAM1);
-        mParam2 = getArguments().getString(ARG_PARAM2);
-        mParam3 = getArguments().getString(ARG_PARAM3);
-        mParam4 = getArguments().getString(ARG_PARAM4);
-        mParam5 = getArguments().getString(ARG_PARAM5);
-    }
-}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mPosition = getArguments().getInt(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+            mParam3 = getArguments().getString(ARG_PARAM3);
+            mParam4 = getArguments().getString(ARG_PARAM4);
+            mParam5 = getArguments().getString(ARG_PARAM5);
 
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//        // Inflate the layout for this fragment
-//        mView = inflater.inflate(R.layout.fragment_search_space_detail, container, false);
-//
-//        _searchspacedetail_reservebutton=(Button)mView.findViewById(R.id.searchspacedetail_reservebutton);
-//        _searchspacedetail_reservebutton.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View view) {
-//                RenterReserveTask RRT = new RenterReserveTask(parkingSpotID, userID, timeInterval);
-//                RRT.execute((Void) null);
-//                Intent intent = new Intent(getContext(), PaymentActivity.class);
-//                startActivityForResult(intent, 11);
-//            }
-//        });
-//
-//        return mView;
-//    }
+            mImagesURLs = getArguments().getStringArrayList(ARG_PARAM6);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_search_space_detail, container, false);
-
 
         String[] startDate1 = mParam2.split("\\D");
         String[] endDate1 = mParam4.split("\\D");
@@ -173,7 +165,10 @@ public void onCreate(Bundle savedInstanceState) {
                 Time startTime = new Time(startDateStr+" "+mParam3 + "-0");
                 Time endTime = new Time(endDateStr+" "+mParam5+"-0");
                 TimeInterval timeInterval = new TimeInterval(startTime,endTime);
-                RenterReserveTask RRT = new RenterReserveTask(mParkingSpot.getParkingSpotID(), timeInterval,  ClientController.getInstance().getUser().userID);
+                RenterReserveTask RRT = new RenterReserveTask(mParkingSpot.getParkingSpotID(),
+                                                                timeInterval,
+                                                                mParkingSpot.getOwner(),
+                                                                ClientController.getInstance().getUser().userID);
                 RRT.execute((Void) null);
 
 
@@ -235,6 +230,16 @@ public void onCreate(Bundle savedInstanceState) {
         ((TextView) mView.findViewById(R.id.searchspacedetail_cartype)).setText(new Integer(mParkingSpot.getCartype()).toString());
         ((TextView) mView.findViewById(R.id.searchspacedetail_cancelpolicy)).setText(new Integer(mParkingSpot.cancelpolicy).toString());
 
+        //Display parking spot images from URLs
+        _pager = (ViewPager) mView.findViewById(R.id.pager);
+         _thumbnails = (LinearLayout) mView.findViewById(R.id.thumbnails);
+        //Assert.assertNotNull() methods checks that the object is null or not.
+        //      If it is null then it throws an AssertionError.
+        Assert.assertNotNull(mImagesURLs);
+        mImageAdapter = new GalleryPagerAdapter(getContext());
+        _pager.setAdapter(mImageAdapter);
+        _pager.setOffscreenPageLimit(6); // how many images to load into memory
+
         return mView;
     }
 
@@ -276,6 +281,87 @@ public void onCreate(Bundle savedInstanceState) {
                 .newCameraPosition(cameraPosition));
     }
 
+    // For mImageAdapter - Image horizontal scroll
+    //      Source: https://github.com/sourcey/imagegallerydemo
+    class GalleryPagerAdapter extends PagerAdapter {
+        Context _context;
+        LayoutInflater _inflater;
+
+        public GalleryPagerAdapter(Context context) {
+            _context = context;
+            _inflater = (LayoutInflater) _context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        }
+
+        @Override
+        public int getCount() {
+            return mImagesURLs.size();
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return view == ((LinearLayout) object);
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, final int position) {
+            View itemView = _inflater.inflate(R.layout.pager_gallery_item, container, false);
+            container.addView(itemView);
+
+            // Get the border size to show around each image
+            int borderSize = _thumbnails.getPaddingTop();
+
+            // Get the size of the actual thumbnail image
+            int thumbnailSize = ((FrameLayout.LayoutParams)
+                    _pager.getLayoutParams()).bottomMargin - (borderSize);
+
+            // Set the thumbnail layout parameters. Adjust as required
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(thumbnailSize, thumbnailSize);
+            params.setMargins(0, 0, borderSize, 0);
+
+            // You could also set like so to remove borders
+//            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
+//                    ViewGroup.LayoutParams.WRAP_CONTENT,
+//                    ViewGroup.LayoutParams.WRAP_CONTENT);
+
+            final ImageView thumbView = new ImageView(_context);
+            thumbView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            thumbView.setLayoutParams(params);
+            thumbView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("Search Space Detail ", "- Thumbnail clicked @"+position);
+
+                    // Set the pager position when thumbnail clicked
+                    _pager.setCurrentItem(position);
+                }
+            });
+            _thumbnails.addView(thumbView);
+
+            // Source: https://github.com/davemorrissey/subsampling-scale-image-view
+            final SubsamplingScaleImageView imageView =
+                    (SubsamplingScaleImageView) itemView.findViewById(R.id.image);
+
+            // Asynchronously load the image and set the thumbnail and pager view
+            Glide.with(_context)
+                    .load(mImagesURLs.get(position))
+                    .asBitmap()
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
+                            imageView.setImage(ImageSource.bitmap(bitmap));
+                            thumbView.setImageBitmap(bitmap);
+                        }
+                    });
+
+            return itemView;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            container.removeView((LinearLayout) object);
+        }
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -294,13 +380,15 @@ public void onCreate(Bundle savedInstanceState) {
     private class RenterReserveTask extends AsyncTask<Void, Void, Boolean> {
         private final long parkingSpotID;
         private final TimeInterval timeInterval;
+        private final long providerID;
         private final long userID;
 
         private ProgressDialog progressDialog;
 
-        RenterReserveTask(long parkingSpotID, TimeInterval timeinterval, long userID){
+        RenterReserveTask(long parkingSpotID, TimeInterval timeinterval, long providerID, long userID){
             this.parkingSpotID = parkingSpotID;
             this.timeInterval = timeinterval;
+            this.providerID = providerID;
             this.userID = userID;
         }
 
@@ -329,9 +417,10 @@ public void onCreate(Bundle savedInstanceState) {
             Log.d("SEARCHRESERVE", "key :" + key);
 
             if(key.equals("RESERVE")) {
-
                 Intent intent = new Intent(getContext(), PaymentActivity.class);
                 intent.putExtra("RESERVATIONID", (Long)value);
+                intent.putExtra("PROVIDERID", (Long)providerID);
+                intent.putExtra("PRICE", (String)Double.toString(timeInterval.price));
 
                 startActivityForResult(intent, 11);
                 return true;
@@ -357,6 +446,55 @@ public void onCreate(Bundle savedInstanceState) {
             }
         }
     }
+
+
+
+
+    private class RequestReviewTask extends AsyncTask<Void, Void, ArrayList<Review>> {
+        long parkingSpotID;
+
+        RequestReviewTask(long parkingSpotID) {
+            this.parkingSpotID = parkingSpotID;
+        }
+        @Override
+        protected ArrayList<Review> doInBackground(Void... params) {
+
+            ClientController clientController = ClientController.getInstance();
+
+            clientController.requestParkingSpotReview(parkingSpotID);
+            NetworkPackage NP = clientController.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if (key.equals("REVIEWFORPARKINGSPOT")) {
+                HashMap<String, Serializable> map = (HashMap<String, Serializable>)value;
+
+                ArrayList<Review> list = (ArrayList<Review>) map.get("REVIEWS");
+                Log.d("FETCHREVIEWLIST", "listsize: " + String.valueOf(list.size()));
+
+                return list;
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Review> list) {
+//            if (list != null) {
+////                clientController.reservations = list;
+//                reservationsFragment = new ReservationsFragment();
+//                fragmentTransaction = fm.beginTransaction();
+//                fragmentTransaction.replace(R.id.fragContainer, reservationsFragment);
+//                fragmentTransaction.addToBackStack(null);
+//                fragmentTransaction.commit();
+//            } else {
+//                Toast.makeText(getBaseContext(), "Error on get reservations! Please try again.", Toast.LENGTH_SHORT).show();
+//            }
+
+
+        }
+    }
+
 
     private class GetPublicProfileTask extends AsyncTask<Void, Void, HashMap<String, Serializable> >{
         private final long mProviderID;

@@ -1,6 +1,7 @@
 package csci310.parkhere.ui;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -32,6 +33,7 @@ public class RegisterRenterActivity extends Activity {
     private static final int REQUEST_SIGNUP = 0;
 
     ProgressDialog progressDialog;
+    UserVerifyRegisterTask VeifyRegTask = null;
     UserRegisterTask RegTask = null;
 
     @Override
@@ -72,8 +74,8 @@ public class RegisterRenterActivity extends Activity {
         String licenseID = _liscenseIdText.getText().toString();
         String licensePlate = _liscensePlateNumText.getText().toString();
 
-        RegTask = new UserRegisterTask(email, password, phonenum, licenseID,_liscensePlateNumText.getText().toString(), "provider", name);
-        RegTask.execute((Void) null);
+        VeifyRegTask = new UserVerifyRegisterTask(email, password, phonenum, licenseID,_liscensePlateNumText.getText().toString(), "renter", name);
+        VeifyRegTask.execute((Void) null);
     }
 
     @Override
@@ -119,19 +121,94 @@ public class RegisterRenterActivity extends Activity {
         super.onDestroy();
     }
 
-    public void onRegisterSuccess(Context c) {
-        progressDialog.dismiss();
-        Intent intent = new Intent(c, RenterActivity.class);
-        startActivityForResult(intent, 0);
-    }
+    private class UserVerifyRegisterTask extends AsyncTask<Void, Void, String> {
+        private final String mUsername;
+        private final String mPassword;
+        private final String mlicenseID;
+        private final String mphonenum;
+        private final String mplatenum;
+        private final String mcat;
+        private final String mname;
 
+        UserVerifyRegisterTask(String email, String password, String phonenum, String licenseID, String platenum, String cat, String name){
+            mUsername = email;
+            mPassword = password;
+            mlicenseID = licenseID;
+            mphonenum = phonenum ;
+            mplatenum = platenum;
+            mcat = cat;
+            mname = name;
 
-    public void onRegisterFailed(Context c) {
-//        progressDialog.setMessage("Register failed");
-        progressDialog.dismiss();
+//            mVerificationCode = ""; // Undefined verification code
+        }
+        @Override
+        protected void onPreExecute(){
+            //Display a progress dialog
+            progressDialog = new ProgressDialog(RegisterRenterActivity.this,
+                    R.style.AppTheme);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Verifying...");
+            progressDialog.show();
+        }
+        @Override
+        protected String doInBackground(Void... params ){
+            try {
+                clientController.verifyRegister(mUsername);
+                NetworkPackage NP = clientController.checkReceived();
+                MyEntry<String, Serializable> entry = NP.getCommand();
+                String key = entry.getKey();
+                Object value = entry.getValue();
+                if(key.equals("VERIFICATION")) {
+                    return (String) value;
+                }
+                return null;
+            } catch (IOException e) {
+                return null;
+            }
+        }
+        @Override
+        protected void onPostExecute(String code) {
+            Context c = getBaseContext();
+            if(code != null) {
+                progressDialog.dismiss();
 
-        Intent intent = new Intent(c, HomeActivity.class);
-        startActivityForResult(intent, 0);
+                // Create custom dialog object
+                final String verifyCode = code;
+                final Dialog reviewDialog = new Dialog(RegisterRenterActivity.this);
+                reviewDialog.setContentView(R.layout.dialog_authen);
+                reviewDialog.setTitle("Authentication");
+
+                final EditText _codeDialog=(EditText)reviewDialog.findViewById(R.id.codeDialog);
+                Button _btn_confirm=(Button)reviewDialog.findViewById(R.id.btn_confirm);
+                _btn_confirm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (verifyCode.equals(_codeDialog.getText().toString())) {
+                            Log.d("Register", " Verify TRUE!!!");
+
+                            RegTask = new UserRegisterTask(mUsername, mPassword, mphonenum, mlicenseID, mplatenum, mcat, mname);
+                            RegTask.execute((Void) null);
+                        } else {
+                            Log.d("Register", " Verify FALSE!!!");
+
+                            Intent intent = new Intent(getBaseContext(), RegisterMainActivity.class);
+                            startActivity(intent);
+                            Toast.makeText(getBaseContext(), "Verification Error!", Toast.LENGTH_SHORT).show();
+                        }
+
+                        // Close dialog
+                        reviewDialog.dismiss();
+                    }
+                });
+                reviewDialog.show();
+
+            } else{
+                progressDialog.dismiss();
+                Intent intent = new Intent(c, RegisterMainActivity.class);
+                startActivityForResult(intent, 0);
+                Toast.makeText(getBaseContext(), "Verification Error!", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
@@ -151,7 +228,6 @@ public class RegisterRenterActivity extends Activity {
             mplatenum = platenum;
             mcat = cat;
             mname = name;
-//            doInBackground((Void) null);
         }
         @Override
         protected void onPreExecute(){
@@ -165,16 +241,16 @@ public class RegisterRenterActivity extends Activity {
         @Override
         protected Boolean doInBackground(Void... params ){
             try {
-                clientController.register(mUsername, mPassword, phonenum, mlicenseID, mplatenum, mcat, mname);
+                clientController.register(mUsername, mPassword, mphonenum, mlicenseID, mplatenum, mcat, mname);
                 NetworkPackage NP = clientController.checkReceived();
                 MyEntry<String, Serializable> entry = NP.getCommand();
                 String key = entry.getKey();
                 Object value = entry.getValue();
+
                 if(key.equals("RF")){
                     return false;
                 } else if(key.equals("REGISTER")){
                     User result = (User) value;
-                    Log.d("REGISTER", result.userName);
                     clientController.setUser(result);
                     return true;
                 } else{
@@ -188,16 +264,16 @@ public class RegisterRenterActivity extends Activity {
         protected void onPostExecute(Boolean success) {
             Context c = getBaseContext();
             if(success) {
-                Log.d("LOGIN TEST 1", "yeah");
                 progressDialog.dismiss();
-                Intent intent = new Intent(c, RenterActivity.class);
+
+                Intent intent = new Intent(getBaseContext(), RenterActivity.class);
                 startActivityForResult(intent, 0);
             } else{
                 progressDialog.dismiss();
                 Intent intent = new Intent(c, HomeActivity.class);
                 startActivityForResult(intent, 0);
+                Toast.makeText(getBaseContext(), "Register Fail!", Toast.LENGTH_SHORT).show();
             }
         }
-
     }
 }

@@ -86,8 +86,6 @@ public class ClientCommunicator extends Thread {
 
     public void sendPackage(NetworkPackage np) throws IOException {
         Log.d("SENDPACAGE", "send once");
-
-
         oos.writeObject(np);
         oos.flush();
     }

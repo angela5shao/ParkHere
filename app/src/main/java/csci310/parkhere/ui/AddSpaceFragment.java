@@ -8,6 +8,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.OrientationHelper;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -28,9 +31,13 @@ import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
+import me.iwf.photopicker.PhotoPicker;
+import me.iwf.photopicker.PhotoPreview;
 import resource.MyEntry;
 import resource.NetworkPackage;
 import resource.ParkingSpot;
@@ -59,6 +66,9 @@ public class AddSpaceFragment extends Fragment {
     Spinner _cartypeSpinner, _cancelPolicySpinner;
     EditText  _in_descrip;
     TextView _addressText;
+
+    private PhotoAdapter photoAdapter;
+    private ArrayList<String> selectedPhotos = new ArrayList<>();
 
     ProgressDialog progressDialog;
     ProviderAddSpaceTask addSpaceTask = null;
@@ -132,7 +142,46 @@ public class AddSpaceFragment extends Fragment {
 
         _in_descrip = (EditText)v.findViewById(R.id.in_descrip);
 
-        _btn_confirm=(Button)v.findViewById(R.id.btn_confirm);
+        _btn_upload_image =(Button)v.findViewById(R.id.btn_upload_image);
+        RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
+        photoAdapter = new PhotoAdapter(getContext(), selectedPhotos);
+
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(4, OrientationHelper.VERTICAL));
+        recyclerView.setAdapter(photoAdapter);
+//        _imageGridview = (GridView)v.findViewById(R.id.gridview);
+//        ImageAdapter adapter=new ImageAdapter(getContext(), imagesPathList);
+//        _imageGridview.setAdapter(adapter);
+
+        _btn_upload_image.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                PhotoPicker.builder()
+                        .setPhotoCount(6)
+                        .setShowCamera(true)
+                        .setSelected(selectedPhotos)
+                        .start(getActivity());
+            }
+        });
+
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getContext(), new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        PhotoPreview.builder()
+                                .setPhotos(selectedPhotos)
+                                .setCurrentItem(position)
+                                .start(getActivity());
+                    }
+                })
+        );
+//        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this,
+//                (view, position) ->
+//                        PhotoPreview.builder()
+//                                .setPhotos(selectedPhotos)
+//                                .setCurrentItem(position)
+//                                .start(curr_activity)
+//        ));
+
+        _btn_confirm = (Button)v.findViewById(R.id.btn_confirm);
         _btn_confirm.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 addSpaceTask = new ProviderAddSpaceTask(_addressText.getText().toString(),
@@ -156,6 +205,8 @@ public class AddSpaceFragment extends Fragment {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d("ONACTIVITYRESULT", "START");
+        super.onActivityResult(requestCode, resultCode, data);
+
         if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 Place place = PlaceAutocomplete.getPlace(getContext(), data);
@@ -178,6 +229,26 @@ public class AddSpaceFragment extends Fragment {
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 // The user canceled the operation.
             }
+        }
+
+        if (resultCode == Activity.RESULT_OK &&
+                (requestCode == PhotoPicker.REQUEST_CODE || requestCode == PhotoPreview.REQUEST_CODE)) {
+
+            List<String> photos = null;
+            if (data != null) {
+                photos = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
+
+                for(String s : photos) {
+                    Log.d("!!!!!!!!!!!", "data.getStringArrayListExtra = "+s);
+                }
+            }
+            selectedPhotos.clear();
+
+            if (photos != null) {
+
+                selectedPhotos.addAll(photos);
+            }
+            photoAdapter.notifyDataSetChanged();
         }
     }
 

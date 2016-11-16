@@ -42,15 +42,14 @@ import resource.User;
  */
 public class ProviderActivity extends AppCompatActivity implements SpacesFragment.OnFragmentInteractionListener,
         SpaceDetailFragment.OnFragmentInteractionListener, PrivateProfileFragment.OnFragmentInteractionListener,
-        ReservationDetailFragment.OnFragmentInteractionListener, AddSpaceFragment.OnFragmentInteractionListener,
-        EditProfileFragment.OnFragmentInteractionListener, SpaceEditFragment.OnFragmentInteractionListener {
+        ReservationDetailFragment.OnFragmentInteractionListener, EditProfileFragment.OnFragmentInteractionListener{
 
     LinearLayout _spaceLink;
     ImageView _profilePic;
 
     FragmentManager fm;
     FragmentTransaction fragmentTransaction;
-    Fragment spacesFragment, privateProfileFragment, addSpaceFragment, spaceDetailFragment;
+    Fragment spacesFragment, privateProfileFragment, spaceDetailFragment;
     BraintreeFragment mBraintreeFragment;
     String mAuthorization = "clientToken";
 
@@ -93,7 +92,7 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 ////        spacesFragment.setParkingSpots(parkingSpots);
 
         privateProfileFragment = new PrivateProfileFragment();
-        addSpaceFragment = new AddSpaceFragment();
+//        addSpaceFragment = new AddSpaceFragment();
 
         spaceDetailFragment = new SpaceDetailFragment();
 
@@ -335,19 +334,22 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 
     // Called by SpacesFragment's "add" button
     public void onAddSpaceClick(View v) {
-        System.out.println("ProviderActivity onAddSpaceClick() called");
-        AddSpaceFragment addSpaceFragment = new AddSpaceFragment();
-        Bundle args = new Bundle();
-        args.putLong("param1", 012345);
-        addSpaceFragment.setArguments(args);
+        Intent intent = new Intent(v.getContext(), AddSpaceActivity.class);
+        startActivity(intent);
 
-        try {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragContainer, addSpaceFragment).commit();
-            System.out.println("onReservationSelected, replaced with reservationDetailFragment");
-        } catch (Exception e) {
-            System.out.println("Reservation item exception");
-        }
+//        System.out.println("ProviderActivity onAddSpaceClick() called");
+//        AddSpaceFragment addSpaceFragment = new AddSpaceFragment();
+//        Bundle args = new Bundle();
+//        args.putLong("param1", 012345);
+//        addSpaceFragment.setArguments(args);
+//
+//        try {
+//            getSupportFragmentManager().beginTransaction()
+//                    .replace(R.id.fragContainer, addSpaceFragment).commit();
+//            System.out.println("onReservationSelected, replaced with reservationDetailFragment");
+//        } catch (Exception e) {
+//            System.out.println("Reservation item exception");
+//        }
     }
 
     public void returnToSpaces() {

@@ -288,7 +288,7 @@ public class SpaceEditFragment extends Fragment {
         Vector<String> encodedImages;
         ParkingSpot ps;
 
-        EditSpaceTask(LatLng mCurrLocation, String addr, String description, int cartype, int inCancelPolicy, Vector<String> encodedImage){
+        EditSpaceTask(LatLng mCurrLocation, String addr, String description, int cartype, int inCancelPolicy, Vector<String> encodedImage) {
             ps = thisParkingSpot;
             ps.setDescription(description);
             ps.setStreetAddr(addr);
@@ -297,13 +297,6 @@ public class SpaceEditFragment extends Fragment {
             ps.setLon(mCurrLocation.longitude);
             ps.cancelpolicy = inCancelPolicy;
             this.encodedImages = encodedImage;
-
-        EditSpaceTask(String addr, String description, String cartype, int inCancelPolicy, Vector<String> encodedImages){
-            this.address = addr;
-            this.description = description;
-            this.cartype = cartype;
-            this.cancelpolicy = inCancelPolicy;
-            this.encodedImages = encodedImages;
         }
 
         @Override

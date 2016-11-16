@@ -130,6 +130,16 @@ public class ClientController {
         clientCommunicator.send("LOGIN", entry);
     }
 
+    public void verifyRegister(String username) throws IOException {
+        NetworkPackage NP = new NetworkPackage();
+        NP.addEntry("VERIFICATION", username);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void register(String username, String pw, String phone, String license, String plate, String usertype, String name) throws IOException {
         HashMap<String, Serializable> entry = new HashMap<>();
         entry.put("USERNAME", username);
@@ -385,17 +395,18 @@ public class ClientController {
 
     public SearchResults sortSearchResultByProviderRating() {
         if(searchResults != null) {
-//            Collections.sort(searchResults.searchResultList, new Comparator<ParkingSpot>() {
-//                public int compare(ParkingSpot p1, ParkingSpot p2) {
-//                    return Double.compare(p1.providerReview, p2.providerReview);
-//                }
-//            });
+            Collections.sort(searchResults.searchResultList, new Comparator<ParkingSpot>() {
+                public int compare(ParkingSpot p1, ParkingSpot p2) {
+                    return Double.compare(p1.providerReview, p2.providerReview);
+                }
+            });
         }
         return searchResults;
     }
 
     public void addSpace(LatLng location, String streetAddress, String description, String carType, int cancelPolicy)
     {
+        Log.d("@@@Controller", " addSpace called!");
         if(location == null)
             return;
 
@@ -403,6 +414,7 @@ public class ClientController {
         ParkingSpot spot = new ParkingSpot(user.userID,null,location.latitude,location.longitude,streetAddress,description, "",mCarType,cancelPolicy);
         //public ParkingSpot(long userID, ArrayList<TimeInterval> time, double lat, double lon, String streetAddr, String description, String zipcode, int cartype) {
         try {
+            Log.d("@@@Controller", " ADD_PARKINGSPOT");
             clientCommunicator.send("ADD_PARKINGSPOT", spot);
         } catch (IOException e) {
             e.printStackTrace();
@@ -415,11 +427,15 @@ public class ClientController {
 //        return false;
 //    }
 
-    public void postPaymentNonceToServer(String paymentMethodNonce, long resID)
+    public void postPaymentNonceToServer(String paymentMethodNonce, long resID, long providerID, String price)
     {
+        HashMap<String, Serializable> map = new HashMap<>();
+        map.put("PAYMENTNONCE", paymentMethodNonce);
+        map.put("RESERVATIONID", resID);
+        map.put("PROVIDERID", providerID);
+        map.put("PRICE", price);
         try {
-
-            clientCommunicator.send("PAYMENT_SUCCESS", resID);
+            clientCommunicator.send("PAYMENT_SUCCESS", map);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -533,6 +549,17 @@ public class ClientController {
         }
     }
 
+    public void requestParkingSpotReview(long parkingSpotid)
+    {
+        NetworkPackage NP = new NetworkPackage();
+        NP.addEntry("FETCHREVIEWSFORPARKINGSPOT", parkingSpotid);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void requestAddTime(ParkingSpot spot, Time startTime, Time endTime, double price)
     {
         TimeInterval timeInterval = new TimeInterval(startTime, endTime);
@@ -604,6 +631,32 @@ public class ClientController {
         }
     }
 
+    public void sendImagetoServer(String DataURI, String Identifier, long ID)
+    {
+        CustomImage customImage = new CustomImage();
+        customImage.Data_URI = DataURI;
+        if(Identifier.equals("PARKINGSPACEIMAGE"))
+        {
+            customImage.parkingSpotID = ID;
+            customImage.UserID = -1;
+        }
+        else if(Identifier.equals("USERPROFILEIAMGE"))
+        {
+            customImage.parkingSpotID = -1;
+            customImage.UserID = ID;
+        }
+        else
+        {
+            Log.d("WRONG", "WRONG IDENTIFIER");
+        }
+        NP.addEntry("FETCHIMAGE",customImage);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void fetchReviewsForUser(long providerID){
         NP.addEntry("FETCHREVIEWSFORUSER", providerID);
         try {
@@ -631,32 +684,32 @@ public class ClientController {
             e.printStackTrace();
         }
     }
-    //the somehow function created by Fred
-    public void sendImagetoServer(String DataURI, String Identifier, long ID)
-    {
-        CustomImage customImage = new CustomImage();
-        customImage.Data_URI = DataURI;
-        if(Identifier.equals("PARKINGSPACEIMAGE"))
-        {
-            customImage.parkingSpotID = ID;
-            customImage.UserID = -1;
-        }
-        else if(Identifier.equals("USERPROFILEIAMGE"))
-        {
-            customImage.parkingSpotID = -1;
-            customImage.UserID = ID;
-        }
-        else
-        {
-            Log.d("WRONG", "WRONG IDENTIFIER");
-        }
-        NP.addEntry("SENDIMAGE",customImage);
-        try {
-            clientCommunicator.sendPackage(NP);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    //the somehow function created by Fred
+//    public void sendImagetoServer(String DataURI, String Identifier, long ID)
+//    {
+//        CustomImage customImage = new CustomImage();
+//        customImage.Data_URI = DataURI;
+//        if(Identifier.equals("PARKINGSPACEIMAGE"))
+//        {
+//            customImage.parkingSpotID = ID;
+//            customImage.UserID = -1;
+//        }
+//        else if(Identifier.equals("USERPROFILEIAMGE"))
+//        {
+//            customImage.parkingSpotID = -1;
+//            customImage.UserID = ID;
+//        }
+//        else
+//        {
+//            Log.d("WRONG", "WRONG IDENTIFIER");
+//        }
+//        NP.addEntry("SENDIMAGE",customImage);
+//        try {
+//            clientCommunicator.sendPackage(NP);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 //    public void deleteParkingSpot(long ){
 //

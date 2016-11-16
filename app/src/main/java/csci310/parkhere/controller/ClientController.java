@@ -242,37 +242,32 @@ public class ClientController {
 //            }
 //        }
 //    }
+//
+//    public User getProfile(long userID) {
+//        return null;
+//    }
+//
+//    TODO: Functions for provider
+//
+//
+//    public boolean addSpace(TimeInterval interval, String address, long userID) {
+//        return false;
+//    }
+//
+//    // TODO: include address, description, cartype, cancelpolicy, image, time interval(s)
+//    public boolean editSpace(long spaceID, TimeInterval interval) {
+//        return false;
+//    }
+//
+//    public void publishSpace(long spaceID) {
+//
+//    }
 
-    public User getProfile(long userID) {
-        return null;
-    }
-
-    // TODO: Functions for provider
-//    public ArrayList<>
-
-    public boolean addSpace(TimeInterval interval, String address, long userID) {
-        return false;
-    }
-
-    // TODO: include address, description, cartype, cancelpolicy, image, time interval(s)
-    public boolean editSpace(long spaceID, TimeInterval interval) {
-        return false;
-    }
-
-    public void publishSpace(long spaceID) {
-
-    }
-
-    public void unpublishSpace(long spaceID) {
-
-    }
+//    public void unpublishSpace(long spaceID) {
+//
+//    }
 
     // TODO: Functions for renter
-
-    public boolean editReservation(long resID) {
-        return false;
-    }
-
     public void ProviderCancel(long timeIntervalID) {
         NetworkPackage NP = new NetworkPackage();
         NP.addEntry("PROVIDERCANCEL", timeIntervalID);
@@ -293,9 +288,9 @@ public class ClientController {
         }
     }
 
-    public Reservation getReservationDetail(int position) {
-        return reservations.get(position);
-    }
+//    public Reservation getReservationDetail(int position) {
+//        return reservations.get(position);
+//    }
 
     public void submitReview(long reservationID, int rating, String comment) {
         HashMap<String, Serializable> map = new HashMap<>();
@@ -308,10 +303,10 @@ public class ClientController {
             e.printStackTrace();
         }
     }
-
-    public void report(Reservation res) {
-
-    }
+//
+//    public void report(Reservation res) {
+//
+//    }
 
     public void search(LatLng location, String startDate, String startTime, String endDate, String endTime, String carType, String distance) throws IOException {
         currLocation = location;
@@ -518,6 +513,7 @@ public class ClientController {
         }
     }
 
+    //the EditTime for provider
     public void requestEditTime(long timeSlotID, Time startTime, Time endTime, double price){
         TimeInterval timeInterval = new TimeInterval(startTime, endTime);
         NetworkPackage NP = new NetworkPackage();
@@ -623,14 +619,14 @@ public class ClientController {
             e.printStackTrace();
         }
     }
-
-    public void editParkingSpot(String address, String description, String cartype, int inCancelPolicy, ImageView picture) {
+    //the editParkingSpot which will be called by the provider
+    public void editParkingSpot(String address, String description, String cartype, int inCancelPolicy, String imageString) {
         HashMap<String, Serializable> map = new HashMap<>();
         map.put("ADDRESS", address);
         map.put("DESCRIPTION", description);
         map.put("CARTYPE", cartype);
         map.put("CANCELPOLICY", inCancelPolicy);
-        map.put("PICTURE", (Serializable) picture);
+        map.put("PICTURE", imageString);
         NP.addEntry("EDITSPACE", map);
         try {
             clientCommunicator.sendPackage(NP);

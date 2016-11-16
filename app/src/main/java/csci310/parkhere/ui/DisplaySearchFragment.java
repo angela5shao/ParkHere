@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -186,6 +187,13 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
     public void setSearchResultListview(SearchResults result) {
         Log.d("DisplaySearchFragment", "setSearchResultListview CALLED AFTER SORTING");
         _spots = result.searchResultList;
+
+        if(_spots.isEmpty())
+        {
+            Toast.makeText(getContext(), "Cannot find space Please try again.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
 
         // Populate string array of descriptions to display
         _searchDescriptions = new String[result.searchResultList.size()];

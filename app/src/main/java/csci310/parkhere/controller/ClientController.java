@@ -660,4 +660,11 @@ public class ClientController {
             e.printStackTrace();
         }
     }
+
+    public void sendImagesToServer(ArrayList<String> images, String Identifier, long ID){
+        for(int i = 0 ; i< images.size();i++){
+            sendImagetoServer(images.get(i), Identifier, ID);
+
+        }
+    }
 }

@@ -38,6 +38,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import junit.framework.Assert;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -128,6 +129,8 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
             mParam5 = getArguments().getString(ARG_PARAM5);
 
             mImagesURLs = getArguments().getStringArrayList(ARG_PARAM6);
+            LoadSpotImageTask LSIT = new LoadSpotImageTask(mParkingSpot.getParkingSpotID());
+            LSIT.execute((Void) null);
         }
     }
 
@@ -370,6 +373,56 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private class LoadSpotImageTask extends AsyncTask<Void, Void, ArrayList<String> >{
+        private final long mSpotID;
+//        private ArrayList<String> mImagesURLs;
+
+        LoadSpotImageTask(long spotID){
+            mSpotID = spotID;
+            System.out.println(mSpotID);
+        }
+        @Override
+        protected void onPreExecute() { }
+        @Override
+        protected ArrayList<String> doInBackground(Void... params ){
+            try {
+
+                ClientController clientController = ClientController.getInstance();
+                clientController.getParkingSpotImages("PARKINGSPOT", mSpotID);
+
+                NetworkPackage NP = clientController.checkReceived();
+                if(NP == null)
+                {
+                    Log.d("SearchSpaceDetail", " DOINBACKGROUND null");
+                }
+                MyEntry<String, Serializable> entry = NP.getCommand();
+                String key = entry.getKey();
+                Object value = entry.getValue();
+                if(key.equals(???)){
+                    return //;
+                }
+                else{
+                    return null;
+                }
+            } catch (IOException e) {
+                return null;
+            }
+        }
+        @Override
+        protected void onPostExecute(ArrayList<String> imagesURLs) {
+            if(imagesURLs != null) {
+                Log.d("LoadSpotImageTask", " post execute imagesURLs != null");
+
+                mImagesURLs = new ArrayList<String>(imagesURLs);
+
+            } else{
+                // TODO: WHAT TO DISPLAY WHEN NO IMAGE
+                //
+            }
+        }
+
     }
 
     private class RenterReserveTask extends AsyncTask<Void, Void, Boolean> {

@@ -283,11 +283,13 @@ public class AddSpaceActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+//        Bitmap bm = BitmapFactory.decodeFile(imagefile);
         Bitmap bm = BitmapFactory.decodeStream(fis);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bm.compress(Bitmap.CompressFormat.JPEG, 100 , baos);
         byte[] b = baos.toByteArray();
         String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+        Log.d("@@@ADDSPACE", "encodedImage = "+ encodedImage);
         return encodedImage;
     }
 }

@@ -678,7 +678,9 @@ public class ClientController {
 
     public void getParkingSpotImages(String identifier, long id) {
         if(identifier.equals("PARKINGSPOT")) {
-            NP.addEntry("GETIMAGES", id);
+            NP.addEntry("GETPARKINGSPOTIMAGES", id);
+        } else{
+            NP.addEntry("GETUSERIMAGES", id);
         }
         try{
             clientCommunicator.sendPackage(NP);

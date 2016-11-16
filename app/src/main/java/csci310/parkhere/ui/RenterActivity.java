@@ -296,6 +296,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
     // FOR TESTING - load images to search space detail fragment
     public void loadImages(Bundle bundle) {
         ArrayList<String> images = new ArrayList<String>();
+
         images.add("http://sourcey.com/images/stock/salvador-dali-metamorphosis-of-narcissus.jpg");
         images.add("http://sourcey.com/images/stock/salvador-dali-the-dream.jpg");
         images.add("http://sourcey.com/images/stock/salvador-dali-persistence-of-memory.jpg");

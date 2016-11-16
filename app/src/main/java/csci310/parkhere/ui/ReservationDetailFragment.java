@@ -63,7 +63,7 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
     CameraPosition cameraPosition;
 
     TextView _spacedetail_address, _start_time_label, _end_time_label, _renter_username_label;
-    Button _btn_review, _btn_cancel;
+    Button _btn_confirm, _btn_review, _btn_cancel;
 
     // latitude and longitude (default as USC)
     private double curr_lat = 34.0224;
@@ -126,6 +126,7 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
         _start_time_label=(TextView)v.findViewById(R.id.start_time_label);
         _end_time_label=(TextView)v.findViewById(R.id.end_time_label);
         _renter_username_label=(TextView)v.findViewById(R.id.renter_username_label);
+        _btn_confirm=(Button)v.findViewById(R.id.btn_confirm);
         _btn_review=(Button)v.findViewById(R.id.btn_review);
         _btn_cancel=(Button)v.findViewById(R.id.btn_cancel);
 
@@ -133,10 +134,32 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
         Log.d("Reservation detail ","if_canCancel = "+if_canCancel);
 
         if(!if_canReview) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
             _btn_review.setVisibility(View.GONE);
         }
         if(!if_canCancel) {
             _btn_cancel.setVisibility(View.GONE);
+        }
+
+        // TODO: Check if it has been confirmed
+        if(!if_notConfirmed) {
+            _btn_confirm.setVisibility(View.GONE);
+        }
+        else {
+            Toast.makeText(getContext(), "Please confirme your ended reservation!", Toast.LENGTH_SHORT).show();
         }
 
         _spacedetail_address.setText(address);
@@ -166,6 +189,14 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
         cameraPosition = new CameraPosition.Builder()
                 .target(new LatLng(curr_lat, curr_long)).zoom(12).build();
 
+        _btn_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: confirm the server for payment
+
+            }
+        });
+
         _btn_review.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -174,18 +205,18 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
                 reviewDialog.setContentView(R.layout.dialog_review);
                 reviewDialog.setTitle("Review");
 
-                final RatingBar _ratingBar=(RatingBar)reviewDialog.findViewById(R.id.ratingBar);
+                final RatingBar _ratingBar = (RatingBar) reviewDialog.findViewById(R.id.ratingBar);
 //                Drawable drawable = _ratingBar.getProgressDrawable();
 //                drawable.setColorFilter(Color.parseColor("#FFCC00"), PorterDuff.Mode.SRC_ATOP);
-                final EditText _commentDialog=(EditText)reviewDialog.findViewById(R.id.commentDialog);
-                Button _btn_confirm=(Button)reviewDialog.findViewById(R.id.btn_confirm);
+                final EditText _commentDialog = (EditText) reviewDialog.findViewById(R.id.commentDialog);
+                Button _btn_confirm = (Button) reviewDialog.findViewById(R.id.btn_confirm);
                 _btn_confirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Time end = new Time(end_time);
                         Calendar cal = Calendar.getInstance();
-                        Time currentTime = new Time(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH),cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
-                        if(currentTime.compareTo(end)>=0) {
+                        Time currentTime = new Time(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
+                        if (currentTime.compareTo(end) >= 0) {
                             // Send to controller
                             AddReviewTask ART = new AddReviewTask(_ratingBar.getRating(),
                                     _commentDialog.getText().toString());
@@ -193,7 +224,7 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
 
                             // Close dialog
                             reviewDialog.dismiss();
-                        } else{
+                        } else {
                             Toast.makeText(getContext(), "Can not cancel the reservation which hasn't ended!", Toast.LENGTH_SHORT).show();
                         }
                     }

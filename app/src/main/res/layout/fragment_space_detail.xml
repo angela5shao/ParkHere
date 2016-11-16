@@ -184,7 +184,8 @@
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentStart="true"
                             android:hint="enter price ($/hr)"
-                            android:textColor="@color/colorSubFont"/>
+                            android:textColor="@color/colorSubFont"
+                            android:inputType="number"/>
 
                         <Button
                             android:layout_width="match_parent"
@@ -318,7 +319,8 @@
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentStart="true"
                             android:hint="enter price ($/hr)"
-                            android:textColor="@color/colorSubFont"/>
+                            android:textColor="@color/colorSubFont"
+                            android:inputType="number"/>
 
                         <Button
                             android:id="@+id/editTimeConfirm_btn"

@@ -34,10 +34,10 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> {
         View rowView=inflater.inflate(R.layout.mylist, null,true);
 
         ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
-        TextView txtTitle = (TextView) rowView.findViewById(R.id.textView1);
+        TextView itemNameView = (TextView) rowView.findViewById(R.id.Itemname);
 
-        txtTitle.setText(itemname[position]);
         imageView.setImageResource(imgid[position]);
+        itemNameView.setText(itemname[position]);
         return rowView;
     };
 }

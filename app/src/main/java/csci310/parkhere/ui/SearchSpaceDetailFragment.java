@@ -318,11 +318,6 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(thumbnailSize, thumbnailSize);
             params.setMargins(0, 0, borderSize, 0);
 
-            // You could also set like so to remove borders
-//            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
-//                    ViewGroup.LayoutParams.WRAP_CONTENT,
-//                    ViewGroup.LayoutParams.WRAP_CONTENT);
-
             final ImageView thumbView = new ImageView(_context);
             thumbView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             thumbView.setLayoutParams(params);

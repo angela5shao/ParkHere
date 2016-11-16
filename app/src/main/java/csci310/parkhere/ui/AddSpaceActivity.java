@@ -3,12 +3,15 @@ package csci310.parkhere.ui;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +28,11 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +89,6 @@ public class AddSpaceActivity extends AppCompatActivity {
             }
 
         });
-        // Inflate the layout for this fragment
 
         _in_descrip = (EditText)findViewById(R.id.in_descrip);
 
@@ -91,9 +98,6 @@ public class AddSpaceActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(4, OrientationHelper.VERTICAL));
         recyclerView.setAdapter(photoAdapter);
-//        _imageGridview = (GridView)v.findViewById(R.id.gridview);
-//        ImageAdapter adapter=new ImageAdapter(getContext(), imagesPathList);
-//        _imageGridview.setAdapter(adapter);
 
         _btn_upload_image.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -125,7 +129,8 @@ public class AddSpaceActivity extends AppCompatActivity {
                 addSpaceTask = new ProviderAddSpaceTask(_addressText.getText().toString(),
                         _in_descrip.getText().toString(),
                         _cartypeSpinner.getSelectedItem().toString(),
-                        _cancelPolicySpinner.getSelectedItemPosition());
+                        _cancelPolicySpinner.getSelectedItemPosition(),
+                        selectedPhotos);
                 addSpaceTask.execute((Void) null);
             }
         });
@@ -148,7 +153,6 @@ public class AddSpaceActivity extends AppCompatActivity {
                 selectedPhotos.clear();
 
                 if (photos != null) {
-
                     selectedPhotos.addAll(photos);
                 }
                 photoAdapter.notifyDataSetChanged();
@@ -186,16 +190,26 @@ public class AddSpaceActivity extends AppCompatActivity {
         private final String mDescrip;
         private final String mCarType;
         private final int mCancelPolicy;
+        private final ArrayList<String> encodeImages = new ArrayList<String>();
 
         ProgressDialog progressDialog;
 
-        ProviderAddSpaceTask(String inAddressText, String inDescrip, String inCarType, int inCancelPolicy) {
+        ProviderAddSpaceTask(String inAddressText, String inDescrip, String inCarType, int inCancelPolicy, ArrayList<String> inImagePaths) {
             Log.d("@@@ADDSPACE", "add space construct");
 
             mAddressText = inAddressText;
             mDescrip = inDescrip;
             mCarType = inCarType;
             mCancelPolicy = inCancelPolicy;
+
+            for(String s : inImagePaths) {
+                try {
+                    Log.d("@@@ADDSPACE", "inImagePaths - "+s);
+                    encodeImages.add(readEncodeImage(s));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
             System.out.println(mAddressText);
             System.out.println(mDescrip);
@@ -239,7 +253,7 @@ public class AddSpaceActivity extends AppCompatActivity {
                 Log.d("Result", "add space " + String.valueOf(spot.getParkingSpotID()));
 
                 clientController.parkingSpots.add(spot);
-
+                clientController.sendImagesToServer(encodeImages, "PARKINGSPACEIMAGE", spot.getParkingSpotID());
                 return true;
             } else {
                 return false;
@@ -258,5 +272,22 @@ public class AddSpaceActivity extends AppCompatActivity {
                 // back to add space?
             }
         }
+    }
+
+    public String readEncodeImage(String filepath) throws IOException {
+        File imagefile = new File(filepath);
+        FileInputStream fis = null;
+        try {
+            fis = new FileInputStream(imagefile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        Bitmap bm = BitmapFactory.decodeStream(fis);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.JPEG, 100 , baos);
+        byte[] b = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+        return encodedImage;
     }
 }

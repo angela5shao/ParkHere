@@ -1,7 +1,6 @@
 package csci310.parkhere.controller;
 
 import android.app.Activity;
-import android.net.Network;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
@@ -671,8 +670,20 @@ public class ClientController {
             MyEntry<String, Serializable> entry = NP.getCommand();
             String key = entry.getKey();
             while (!key.equals("STOREIMAGESUCCESS")) {
+                Log.d("dame:", "zhende");
                 sendImagetoServer(images.get(i), Identifier, ID);
             }
+        }
+    }
+
+    public void getParkingSpotImages(String identifier, long id) {
+        if(identifier.equals("PARKINGSPOT")) {
+            NP.addEntry("GETIMAGES", id);
+        }
+        try{
+            clientCommunicator.sendPackage(NP);
+        } catch(IOException e){
+            e.printStackTrace();
         }
     }
 }

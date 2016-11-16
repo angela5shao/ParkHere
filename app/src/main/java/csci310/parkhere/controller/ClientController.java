@@ -127,6 +127,16 @@ public class ClientController {
         clientCommunicator.send("LOGIN", entry);
     }
 
+    public void verifyRegister(String username) throws IOException {
+        NetworkPackage NP = new NetworkPackage();
+        NP.addEntry("VERIFICATION", username);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void register(String username, String pw, String phone, String license, String plate, String usertype, String name) throws IOException {
         HashMap<String, Serializable> entry = new HashMap<>();
         entry.put("USERNAME", username);
@@ -397,6 +407,7 @@ public class ClientController {
 
     public void addSpace(LatLng location, String streetAddress, String description, String carType, int cancelPolicy)
     {
+        Log.d("@@@Controller", " addSpace called!");
         if(location == null)
             return;
 
@@ -404,6 +415,7 @@ public class ClientController {
         ParkingSpot spot = new ParkingSpot(user.userID,null,location.latitude,location.longitude,streetAddress,description, "",mCarType,cancelPolicy);
         //public ParkingSpot(long userID, ArrayList<TimeInterval> time, double lat, double lon, String streetAddr, String description, String zipcode, int cartype) {
         try {
+            Log.d("@@@Controller", " ADD_PARKINGSPOT");
             clientCommunicator.send("ADD_PARKINGSPOT", spot);
         } catch (IOException e) {
             e.printStackTrace();

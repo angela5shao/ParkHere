@@ -110,9 +110,6 @@ public class LoginActivity extends Activity {
                 }
                 MyEntry<String, Serializable> entry = NP.getCommand();
 
-
-
-
                 String key = entry.getKey();
                 Object value = entry.getValue();
                 if(key.equals("LF")){

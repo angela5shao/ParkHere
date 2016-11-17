@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import csci310.parkhere.R;
@@ -261,19 +262,83 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         bundle.putString("param4", endDate);
         bundle.putString("param5", endTime);
 
-        loadImages(bundle);
+//        loadImages(bundle);
 
         Log.d("ONSEARCHSPACESELECTED", startDate + " " + startTime + " " + endDate + " " + endTime);
+        ClientController controller = ClientController.getInstance();
 
-        fragmentTransaction = fm.beginTransaction();
+        LoadSpotImageTask lsit = new LoadSpotImageTask(controller.searchResults.searchResultList.get(position).getParkingSpotID(), bundle);
+        lsit.execute();
 
-        searchSpaceDetailFragment = new SearchSpaceDetailFragment();
-        searchSpaceDetailFragment.setArguments(bundle);
+    }
 
 
-        fragmentTransaction.replace(R.id.fragContainer, searchSpaceDetailFragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+
+    private class LoadSpotImageTask extends AsyncTask<Void, Void, ArrayList<String> >{
+        private final long mSpotID;
+        private final Bundle bundle;
+
+        LoadSpotImageTask(long spotID, Bundle bundle){
+            mSpotID = spotID;
+            this.bundle = bundle;
+            System.out.println(mSpotID);
+        }
+        @Override
+        protected void onPreExecute() { }
+        @Override
+        protected ArrayList<String> doInBackground(Void... params ){
+//            try {
+//
+            ClientController clientController = ClientController.getInstance();
+            clientController.getParkingSpotImages("PARKINGSPOT", mSpotID);
+
+            NetworkPackage NP = clientController.checkReceived();
+
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            if(entry.getKey().equals("PARKINGSPOTIMAGESURLS"))
+            {
+                ArrayList<String> urls = (ArrayList<String>) entry.getValue();
+
+
+                for(String url : urls)
+                {
+                    Log.d("FETCHIMAGE", url);
+                }
+                return urls;
+            }
+
+            return null;
+
+        }
+        @Override
+        protected void onPostExecute(ArrayList<String> imagesURLs) {
+            if(imagesURLs != null) {
+                Log.d("LoadSpotImageTask", " post execute imagesURLs != null");
+
+                ArrayList<String> mImagesURLs = new ArrayList<String>(imagesURLs);
+                loadImages(this.bundle, mImagesURLs);
+
+
+
+
+                fragmentTransaction = fm.beginTransaction();
+
+                searchSpaceDetailFragment = new SearchSpaceDetailFragment();
+                searchSpaceDetailFragment.setArguments(bundle);
+
+
+                fragmentTransaction.replace(R.id.fragContainer, searchSpaceDetailFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+
+            } else{
+                // TODO: WHAT TO DISPLAY WHEN NO IMAGE
+                //
+                Toast.makeText(getBaseContext(), "Cannot find images", Toast.LENGTH_SHORT).show();
+
+            }
+        }
+
     }
 
     public void switchToListViewFrag(DisplaySearchFragment displaySearchFragment) {
@@ -319,16 +384,10 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 
     //************************************************************************
     // FOR TESTING - load images to search space detail fragment
-    public void loadImages(Bundle bundle) {
-        ArrayList<String> images = new ArrayList<String>();
+    public void loadImages(Bundle bundle, ArrayList<String> inputURL) {
 
-        images.add("http://sourcey.com/images/stock/salvador-dali-metamorphosis-of-narcissus.jpg");
-        images.add("http://sourcey.com/images/stock/salvador-dali-the-dream.jpg");
-        images.add("http://sourcey.com/images/stock/salvador-dali-persistence-of-memory.jpg");
-        images.add("http://sourcey.com/images/stock/simpsons-persistence-of-memory.jpg");
-        images.add("http://sourcey.com/images/stock/salvador-dali-the-great-masturbator.jpg");
 
-        bundle.putStringArrayList("spot_images", images);
+        bundle.putStringArrayList("spot_images", inputURL);
     }
     //************************************************************************
 

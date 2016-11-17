@@ -7,9 +7,9 @@
     android:fitsSystemWindows="true"
     android:background="@color/colorLightBackground"
     android:id="@+id/provider_ui"
-    tools:context=".ui.ProviderActivity">
+    tools:context=".ui.activities.ProviderActivity">
 
-    <!--<fragment android:name="csci310.parkhere.ui.SpacesFragment"-->
+    <!--<fragment android:name="csci310.parkhere.ui.fragments.SpacesFragment"-->
         <!--android:id="@+id/fragment_spaces"-->
         <!--android:layout_weight="1"-->
         <!--android:layout_width="0dp"-->

@@ -9,6 +9,8 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import csci310.parkhere.R;
+import csci310.parkhere.ui.activities.HomeActivity;
+import csci310.parkhere.ui.activities.RenterActivity;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onData;

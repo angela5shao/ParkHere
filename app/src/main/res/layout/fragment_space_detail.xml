@@ -4,23 +4,12 @@
     android:layout_height="match_parent"
     android:background="@color/colorLightBackground"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="csci310.parkhere.ui.SpaceDetailFragment">
+    tools:context=".ui.fragments.SpaceDetailFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <!--<TextView-->
-            <!--android:id="@+id/text_detail"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="Detail text" />-->
-        <!--<Button-->
-            <!--android:id="@+id/searchspacedetail_reservebutton"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:text="Edit"-->
-            <!--android:onClick="editSpace"/>-->
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

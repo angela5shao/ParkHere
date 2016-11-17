@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="csci310.parkhere.ui.SearchSpaceDetailFragment">
+    tools:context=".ui.fragments.SearchSpaceDetailFragment">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

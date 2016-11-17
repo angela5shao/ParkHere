@@ -79,7 +79,14 @@ public class RegisterMainActivity extends Activity {
                     return;
                 }
 
+                Pattern p = Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE);
+                Matcher m = p.matcher(password);
+                boolean hasSpecialChar = m.find();
 
+                if (!hasSpecialChar) {
+                    Toast.makeText(getBaseContext(), "Please input a password with a special character (ex: @#$%)", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 if(!isNumeric(phonenum) || phonenum.length() != 10)
                 {

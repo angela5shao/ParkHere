@@ -311,17 +311,19 @@ public class SpaceEditFragment extends Fragment {
             MyEntry<String, Serializable> entry = NP.getCommand();
             String key = entry.getKey();
             if (key.equals("EDITPARKINGSPOT")) {
-                for (int i = 0; i < encodedImages.size(); i++) {
-                    clientController.sendImagetoServer(encodedImages.get(i), "PARKINGSPACEIMAGE", thisParkingSpot.getParkingSpotID());
-                    NP = clientController.checkReceived();
-                    entry = NP.getCommand();
-                    key = entry.getKey();
-                    while (!key.equals("STOREIMAGESUCCESS")) {
-                        clientController.sendImagetoServer(encodedImages.get(i), "PARKINGSPACEIMAGE", thisParkingSpot.getParkingSpotID());
-                    }
-                }
+//                for (int i = 0; i < encodedImages.size(); i++) {
+//                    clientController.sendImagetoServer(encodedImages.get(i), "PARKINGSPACEIMAGE", thisParkingSpot.getParkingSpotID());
+//                    NP = clientController.checkReceived();
+//                    entry = NP.getCommand();
+//                    key = entry.getKey();
+//                    while (!key.equals("STOREIMAGESUCCESS")) {
+//                        clientController.sendImagetoServer(encodedImages.get(i), "PARKINGSPACEIMAGE", thisParkingSpot.getParkingSpotID());
+//                    }
+//                }
+                Log.d("SpaceEdit", "doInBackground 1");
                 return ps;
             }
+            Log.d("SpaceEdit", "doInBackground 2");
             return null;
         }
 

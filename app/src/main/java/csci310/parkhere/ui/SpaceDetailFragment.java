@@ -523,10 +523,12 @@ public class SpaceDetailFragment extends Fragment {
                 String[] sDate = _edit_start_date.getText().toString().split("/");
                 String[] eDate = _edit_end_date.getText().toString().split("/");
                 EditTimeTask editTimeTask = new EditTimeTask(
-                        //sDate[1]+"/"+Integer.toString(Integer.valueOf(sDate[0])-1)+"/"+sDate[2],//_edit_start_date.getText().toString(),
-                        sDate[1]+"/"+sDate[0]+"/"+sDate[2],
+                        
+                        sDate[1]+"/"+Integer.toString(Integer.valueOf(sDate[0])-1)+"/"+sDate[2],//_edit_start_date.getText().toString(),
+//                        sDate[1]+"/"+sDate[0]+"/"+sDate[2],
                         _edit_start_time.getText().toString()+"-0",
-                        eDate[1]+"/"+eDate[0]+"/"+eDate[2],//_edit_end_date.getText().toString(),
+                        eDate[1]+"/"+Integer.toString(Integer.valueOf(eDate[0])-1)+"/"+eDate[2],
+//                        eDate[1]+"/"+eDate[0]+"/"+eDate[2],//_edit_end_date.getText().toString(),
                         _edit_end_time.getText().toString()+"-0",
                         _edit_price.getText().toString(),
                         list.get((int) curr_selected_time_id).TimeIntervalID);

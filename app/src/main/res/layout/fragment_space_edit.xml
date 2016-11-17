@@ -136,7 +136,6 @@
                         android:hint="description"
                         android:textColorHint="@color/colorAccent"
                         android:textColor="@color/colorSubAccent"
-                        android:password="true"
                         android:layout_alignBottom="@+id/description_label"
                         android:layout_toRightOf="@+id/description_label"
                         android:layout_toEndOf="@+id/description_label"

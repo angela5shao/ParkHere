@@ -137,15 +137,19 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
         if(!if_canReview) {
             _btn_review.setVisibility(View.GONE);
         }
+
         if(!if_canCancel) {
             _btn_cancel.setVisibility(View.GONE);
-        }
 
-        if(if_ispaid) {
-            _btn_confirm.setVisibility(View.GONE);
+            if(if_ispaid) {
+                _btn_confirm.setVisibility(View.GONE);
+            }
+            else {
+                Toast.makeText(getContext(), "Please confirme your ended reservation!", Toast.LENGTH_SHORT).show();
+            }
         }
         else {
-            Toast.makeText(getContext(), "Please confirme your ended reservation!", Toast.LENGTH_SHORT).show();
+            _btn_confirm.setVisibility(View.GONE);
         }
 
         _spacedetail_address.setText(address);

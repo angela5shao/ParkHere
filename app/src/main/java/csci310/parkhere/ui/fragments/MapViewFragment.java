@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 
 import csci310.parkhere.R;
+import csci310.parkhere.controller.ClientController;
 import csci310.parkhere.ui.activities.OnInfoWindowElemTouchListener;
 import csci310.parkhere.ui.activities.RenterActivity;
 import csci310.parkhere.ui.layout.MapWrapperLayout;
@@ -32,6 +33,7 @@ import resource.ParkingSpot;
 
 public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     private double searchLat, searchLon;
+    private String startDate, startTime, endDate, endTime;
     private ArrayList<ParkingSpot> _spots;
 
     Button _ListviewSwitch;
@@ -40,6 +42,8 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     private TextView infoSnippet;
     private Button infoButton;
     private OnInfoWindowElemTouchListener infoButtonListener;
+
+    MapWrapperLayout mapWrapperLayout;
 
     SupportMapFragment mMapView;
     private GoogleMap googleMap;
@@ -51,6 +55,13 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         if (getArguments() != null) {
             searchLat = getArguments().getDouble("SEARCH_LAT");
             searchLon = getArguments().getDouble("SEARCH_LON");
+            startDate = getArguments().getString("START_DATE");
+            startTime = getArguments().getString("START_TIME");
+            endDate = getArguments().getString("END_DATE");
+            endTime = getArguments().getString("END_TIME");
+
+            ClientController controller = ClientController.getInstance();
+            _spots = controller.searchResults.searchResultList;
 
             Log.d("MapViewFrag", " SEARCH_LAT = "+searchLat);
             Log.d("MapViewFrag", " SEARCH_LON = "+searchLon);
@@ -78,29 +89,13 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
-        mMapView = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.map));
+        mMapView = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map));
+//        if (mMapView == null) {
+//            mMapView = SupportMapFragment.newInstance();
+//            getChildFragmentManager().beginTransaction().replace(R.id.map, mMapView).commit();
+//        }
         mMapView.onCreate(savedInstanceState);
-
-        final MapWrapperLayout mapWrapperLayout = (MapWrapperLayout)v.findViewById(R.id.map_relative_layout);
-        mapWrapperLayout.init(googleMap, getPixelsFromDp(getContext(), 39 + 20));
-
-        this.infoWindow = (ViewGroup)inflater.inflate(R.layout.info_window, null);
-        this.infoTitle = (TextView)infoWindow.findViewById(R.id.title);
-        this.infoSnippet = (TextView)infoWindow.findViewById(R.id.snippet);
-        this.infoButton = (Button)infoWindow.findViewById(R.id.button);
-
-        this.infoButtonListener = new OnInfoWindowElemTouchListener(infoButton){
-            @Override
-            protected void onClickConfirmed(View v, Marker marker) {
-                // TODO: Here we can perform some action triggered after clicking the button
-
-                Toast.makeText(getActivity(), marker.getTitle() + "'s button clicked!", Toast.LENGTH_SHORT).show();
-            }
-        };
-        this.infoButton.setOnTouchListener(infoButtonListener);
-
         mMapView.onResume(); // needed to get the map to display immediately
-
         try {
             MapsInitializer.initialize(getActivity().getApplicationContext());
         } catch (Exception e) {
@@ -109,52 +104,24 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
         mMapView.getMapAsync(this);
 
-        googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+        mapWrapperLayout = (MapWrapperLayout) v.findViewById(R.id.map_relative_layout);
+
+        this.infoWindow = (ViewGroup) inflater.inflate(R.layout.info_window, null);
+        this.infoTitle = (TextView)infoWindow.findViewById(R.id.title);
+        this.infoSnippet = (TextView)infoWindow.findViewById(R.id.snippet);
+        this.infoButton = (Button)infoWindow.findViewById(R.id.button);
+
+        this.infoButtonListener = new OnInfoWindowElemTouchListener(infoButton){
             @Override
-            public View getInfoWindow(Marker marker) {
-                return null;
+            protected void onClickConfirmed(View v, Marker marker) {
+                // TODO: Here we can perform some action triggered after clicking the button
+                Log.d("MapViewFrag ", "marker get @ pos "+((int) marker.getTag()));
+                ((RenterActivity) getActivity()).onSearchSpaceSelected((int) marker.getTag(), startDate, startTime, endDate, endTime);
+
+                Toast.makeText(getActivity(), marker.getTitle() + "'s button clicked!", Toast.LENGTH_SHORT).show();
             }
-
-            @Override
-            public View getInfoContents(Marker marker) {
-                // Setting up the infoWindow with current's marker info
-                infoTitle.setText(marker.getTitle());
-                infoSnippet.setText(marker.getSnippet());
-                infoButtonListener.setMarker(marker);
-
-                // We must call this to set the current marker and infoWindow references
-                // to the MapWrapperLayout
-                mapWrapperLayout.setMarkerWithInfoWindow(marker, infoWindow);
-                return infoWindow;
-            }
-        });
-
-//        addMarkers(_spots);
-
-//        if ( ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION)
-//                != PackageManager.PERMISSION_GRANTED ) {
-//            ActivityCompat.requestPermissions(this,
-//                    new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION},
-//                    LocationService.MY_PERMISSION_ACCESS_COURSE_LOCATION);
-//        }
-//
-//        mMapView.getMapAsync(new OnMapReadyCallback() {
-//            @Override
-//            public void onMapReady(GoogleMap mMap) {
-//                googleMap = mMap;
-//
-//                // For showing a move to my location button
-//                googleMap.setMyLocationEnabled(true);
-//
-//                // For dropping a marker at a point on the Map
-//                LatLng sydney = new LatLng(-34, 151);
-//                googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker Title").snippet("Marker Description"));
-//
-//                // For zooming automatically to the location of the marker
-//                CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
-//                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-//            }
-//        });
+        };
+        this.infoButton.setOnTouchListener(infoButtonListener);
 
         return v;
     }
@@ -185,7 +152,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap inGoogleMap) {
-
         Log.d("ONMAPREADY", "inGoogleMap");
 
         googleMap = inGoogleMap;
@@ -193,20 +159,42 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         cameraPosition = new CameraPosition.Builder()
                 .target(new LatLng(searchLat, searchLon)).zoom(12).build();
 
-        addMarkers(_spots);
-
         googleMap.animateCamera(CameraUpdateFactory
                 .newCameraPosition(cameraPosition));
+
+            mapWrapperLayout.init(googleMap, getPixelsFromDp(getContext(), 39 + 20));
+
+            googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                @Override
+                public View getInfoWindow(Marker marker) {
+                    return null;
+                }
+
+                @Override
+                public View getInfoContents(Marker marker) {
+                    // Setting up the infoWindow with current's marker info
+                    infoTitle.setText(marker.getTitle());
+                    infoSnippet.setText(marker.getSnippet());
+                    infoButtonListener.setMarker(marker);
+
+                    // We must call this to set the current marker and infoWindow references
+                    // to the MapWrapperLayout
+                    mapWrapperLayout.setMarkerWithInfoWindow(marker, infoWindow);
+                    return infoWindow;
+            }
+        });
+
+        addMarkers(_spots);
     }
 
     public void addMarkers(ArrayList<ParkingSpot> spots) {
         if(googleMap != null) {
-            for (ParkingSpot spot : spots) {
-
-                googleMap.addMarker(new MarkerOptions()
-                        .title(Double.toString(spot.search_price))
-                        .snippet(spot.getStreetAddr())
-                        .position(new LatLng(spot.getLat(), spot.getLon())));
+            for (int i=0; i<spots.size(); ++i) {
+                Marker marker = googleMap.addMarker(new MarkerOptions()
+                        .title(("$" + Double.toString(spots.get(i).search_price) + "/hr"))
+                        .snippet(spots.get(i).getStreetAddr())
+                        .position(new LatLng(spots.get(i).getLat(), spots.get(i).getLon())));
+                marker.setTag(i);
             }
         }
     }

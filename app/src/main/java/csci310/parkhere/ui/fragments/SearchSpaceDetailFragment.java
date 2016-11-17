@@ -192,7 +192,7 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
 
 
         mMapView = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map));
-//        mMapView.onCreate(savedInstanceState);
+        mMapView.onCreate(savedInstanceState);
 
 
         mMapView.onResume();// needed to get the map to display immediately

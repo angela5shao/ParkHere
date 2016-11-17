@@ -108,6 +108,10 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
                 //*********************************************************
                 args.putDouble("SEARCH_LAT", mSearchLoc.latitude);
                 args.putDouble("SEARCH_LON", mSearchLoc.longitude);
+                args.putString("START_DATE", mStartDate);
+                args.putString("START_TIME", mStartTime);
+                args.putString("END_DATE", mEndDate);
+                args.putString("END_TIME", mEndTime);
                 //*********************************************************
 
                 mapViewFragment.setArguments(args);

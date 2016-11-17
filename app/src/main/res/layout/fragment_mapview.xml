@@ -1,45 +1,39 @@
-<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.fragments.MapViewFragment">
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp">
-        <LinearLayout
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/displaySearchTextView"
-                android:text="@string/search_label"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="36dp"
-                android:textAlignment="center"/>
+            android:id="@+id/displaySearchTextView"
+            android:text="@string/search_label"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="36dp"
+            android:textAlignment="center"/>
 
-            <Button
-                android:id="@+id/ListviewSwitch"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:textColor="@color/colorMainFont"
-                android:text="@string/listview_label" />
+        <Button
+            android:id="@+id/ListviewSwitch"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:textColor="@color/colorMainFont"
+            android:text="@string/listview_label" />
 
-            <csci310.parkhere.ui.layout.MapWrapperLayout
-                android:id="@+id/map_relative_layout"
+        <csci310.parkhere.ui.layout.MapWrapperLayout
+            android:id="@+id/map_relative_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+            <fragment
+                android:id="@+id/map"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-                <fragment
-                    android:id="@+id/map"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    class="com.google.android.gms.maps.MapFragment" />
-            </csci310.parkhere.ui.layout.MapWrapperLayout>
-        </LinearLayout>
-    </ScrollView>
+                android:layout_height="match_parent"
+                class="com.google.android.gms.maps.SupportMapFragment" />
+        </csci310.parkhere.ui.layout.MapWrapperLayout>
+    </LinearLayout>
 </FrameLayout>

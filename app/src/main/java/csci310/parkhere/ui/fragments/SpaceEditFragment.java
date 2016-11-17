@@ -149,8 +149,8 @@ public class SpaceEditFragment extends Fragment {
                         mAddressText.getText().toString(),
                         mDescriptionText.getText().toString(),
                         mCartypeSpinner.getSelectedItemPosition(),
-                        mCancelPolicySpinner.getSelectedItemPosition(),
-                        encodedImages //ImageSource.uri(picturePath)
+                        mCancelPolicySpinner.getSelectedItemPosition()
+//                        encodedImages //ImageSource.uri(picturePath)
                 );
 
                     editProfileTask.execute((Void)null);
@@ -278,10 +278,10 @@ public class SpaceEditFragment extends Fragment {
     }
 
     private class EditSpaceTask extends AsyncTask<Void, Void, ParkingSpot> {
-        Vector<String> encodedImages;
+//        Vector<String> encodedImages;
         ParkingSpot ps;
 
-        EditSpaceTask(LatLng mCurrLocation, String addr, String description, int cartype, int inCancelPolicy, Vector<String> encodedImage) {
+        EditSpaceTask(LatLng mCurrLocation, String addr, String description, int cartype, int inCancelPolicy) {
             ps = thisParkingSpot;
             ps.setDescription(description);
             ps.setStreetAddr(addr);
@@ -289,7 +289,7 @@ public class SpaceEditFragment extends Fragment {
             ps.setLat(mCurrLocation.latitude);
             ps.setLon(mCurrLocation.longitude);
             ps.cancelpolicy = inCancelPolicy;
-            this.encodedImages = encodedImage;
+//            this.encodedImages = encodedImage;
         }
 
         @Override
@@ -300,15 +300,15 @@ public class SpaceEditFragment extends Fragment {
             NetworkPackage NP = clientController.checkReceived();
             MyEntry<String, Serializable> entry = NP.getCommand();
             String key = entry.getKey();
-            if (key.equals("EDITPARKINGSPOT")) {
+            if (key.equals("EDITSPACE")) {
                 for (int i = 0; i < encodedImages.size(); i++) {
-                    clientController.sendImagetoServer(encodedImages.get(i), "PARKINGSPACEIMAGE", thisParkingSpot.getParkingSpotID());
+                    //clientController.sendImagetoServer(encodedImages.get(i), "PARKINGSPACEIMAGE", thisParkingSpot.getParkingSpotID());
                     NP = clientController.checkReceived();
                     entry = NP.getCommand();
                     key = entry.getKey();
-                    while (!key.equals("STOREIMAGESUCCESS")) {
-                        clientController.sendImagetoServer(encodedImages.get(i), "PARKINGSPACEIMAGE", thisParkingSpot.getParkingSpotID());
-                    }
+//                    while (!key.equals("STOREIMAGESUCCESS")) {
+//                        clientController.sendImagetoServer(encodedImages.get(i), "PARKINGSPACEIMAGE", thisParkingSpot.getParkingSpotID());
+//                    }
                 }
                 return ps;
             }

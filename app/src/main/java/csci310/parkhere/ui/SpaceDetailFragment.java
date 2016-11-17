@@ -400,11 +400,14 @@ public class SpaceDetailFragment extends Fragment {
                 curr_selected_time_id = (long)position;
 
                 // Prepopulate edit start & end dates/times with existing dates/times
-                _edit_start_date.setText(list.get((int) curr_selected_time_id).startTime.toDateString());
-                _edit_end_date.setText(list.get((int) curr_selected_time_id).endTime.toDateString());
                 TimeInterval t = list.get((int) curr_selected_time_id);
+                String startDate = t.startTime.month + "/" + t.startTime.dayOfMonth + "/" + t.startTime.year;
                 String startTime = t.startTime.hourOfDay + "-" + t.startTime.minute;
+                String endDate = t.endTime.month + "/" + t.endTime.dayOfMonth + "/" + t.endTime.year;
                 String endTime = t.endTime.hourOfDay + "-" + t.endTime.minute;
+
+                _edit_start_date.setText(startDate);
+                _edit_end_date.setText(endDate);
                 _edit_start_time.setText(startTime);
                 _edit_end_time.setText(endTime);
 
@@ -499,7 +502,14 @@ public class SpaceDetailFragment extends Fragment {
                 }
 
                 //TODO: get the timeslotID
-                EditTimeTask editTimeTask = new EditTimeTask(_edit_price.getText().toString(), 1);
+                //TODO: change EditTimeTask to (String: startDate, startTime, endDate, endTime, price)
+//                EditTimeTask editTimeTask = new EditTimeTask(_edit_price.getText().toString(), 1);
+                EditTimeTask editTimeTask = new EditTimeTask(
+                        _edit_start_date.getText().toString(),
+                        _edit_start_time.getText().toString(),
+                        _edit_end_date.getText().toString(),
+                        _edit_end_time.getText().toString(),
+                        _edit_price.getText().toString());
                 editTimeTask.execute((Void)null);
             }
         });
@@ -820,6 +830,8 @@ public class SpaceDetailFragment extends Fragment {
 
     }
 
+
+
     private class EditTimeTask extends AsyncTask<Void, Void, Boolean>{
         private final String mPrice;
         private final long timeSlotID;
@@ -868,10 +880,9 @@ public class SpaceDetailFragment extends Fragment {
                 Toast.makeText(getContext(), "Edit time failed! Please try agian.", Toast.LENGTH_SHORT).show();
             }
         }
-
-
-
     }
+
+
 
     private class DeleteSpaceTask extends AsyncTask<Void, Void, Boolean>{
         private long parkingSpaceID;

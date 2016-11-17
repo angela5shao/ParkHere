@@ -1,7 +1,9 @@
 package csci310.parkhere.ui.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import csci310.parkhere.R;
@@ -23,6 +26,8 @@ import csci310.parkhere.controller.ClientController;
 import csci310.parkhere.ui.activities.RenterActivity;
 import csci310.parkhere.ui.adapters.CustomSearchListAdapter;
 import csci310.parkhere.ui.helpers.DiplayListViewHelper;
+import resource.MyEntry;
+import resource.NetworkPackage;
 import resource.ParkingSpot;
 import resource.SearchResults;
 
@@ -58,6 +63,7 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
     ListView _searchresultList;
     ArrayList<ParkingSpot> _spots;
     String[] _searchDescriptions;
+    Uri[] uriArr;
 
 
     public DisplaySearchFragment() {
@@ -230,21 +236,110 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
             _searchDescriptions[i] = result.searchResultList.get(i).getDescription();
         }
 
-
-        Uri[] uriArr = new Uri[result.searchResultList.size()];
-        for(int i = 0; i < uriArr.length; i++)
+        ArrayList<Long> idlist = new ArrayList<>();
+        for(ParkingSpot p : result.searchResultList)
         {
-            uriArr[i] =  Uri.parse("http://sourcey.com/images/stock/salvador-dali-metamorphosis-of-narcissus.jpg");
+            idlist.add(p.getParkingSpotID());
         }
-//        var imageBitmap = GetImageBitmapFromUrl("http://xamarin.com/resources/design/home/devices.png");
-        // Setup list adapter using customSearchListAdapter
-//        _searchresultList.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, resultList));
-        // TODO: pass array of image IDs (int)
-        CustomSearchListAdapter adapter = new CustomSearchListAdapter(getActivity(), _searchDescriptions, uriArr);
-        _searchresultList.setAdapter(adapter);
-        DiplayListViewHelper.getListViewSize(_searchresultList);
+
+
+        uriArr = new Uri[result.searchResultList.size()];
+//        for(int i = 0; i < uriArr.length; i++)
+//        {
+//            uriArr[i] =  Uri.parse("http://sourcey.com/images/stock/salvador-dali-metamorphosis-of-narcissus.jpg");
+//        }
+////        var imageBitmap = GetImageBitmapFromUrl("http://xamarin.com/resources/design/home/devices.png");
+//        // Setup list adapter using customSearchListAdapter
+////        _searchresultList.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, resultList));
+//        // TODO: pass array of image IDs (int)
+//        CustomSearchListAdapter adapter = new CustomSearchListAdapter(getActivity(), _searchDescriptions, uriArr);
+//        _searchresultList.setAdapter(adapter);
+//        DiplayListViewHelper.getListViewSize(_searchresultList);
+
+
+        LoadSpotThumbImageTask lstit = new LoadSpotThumbImageTask(idlist);
+        lstit.execute();
     }
 //
+
+
+    private class LoadSpotThumbImageTask extends AsyncTask<Void, Void, ArrayList<String> > {
+        private final ArrayList<Long> idList;
+        private ProgressDialog progressDialog;
+
+
+        LoadSpotThumbImageTask(ArrayList<Long> list){
+            idList = list;
+        }
+        @Override
+        protected void onPreExecute() {
+            progressDialog = new ProgressDialog(getContext(), R.style.AppTheme);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Searching...");
+            progressDialog.show();
+        }
+        @Override
+        protected ArrayList<String> doInBackground(Void... params ){
+//            try {
+//
+            ClientController clientController = ClientController.getInstance();
+            clientController.fetchThumbNailImg(idList);
+
+
+            NetworkPackage NP = clientController.checkReceived();
+
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            if(entry.getKey().equals("PARKINGSPOTTHUMBNAILURLS"))
+            {
+                ArrayList<String> urls = (ArrayList<String>) entry.getValue();
+
+
+                for(String url : urls)
+                {
+                    Log.d("FETCHIMAGE", url);
+                }
+                return urls;
+            }
+
+            return null;
+
+        }
+        @Override
+        protected void onPostExecute(ArrayList<String> imagesURLs) {
+            if(imagesURLs != null) {
+                for(int i = 0; i < uriArr.length; i++)
+                {
+
+                    if(imagesURLs.get(i).length() > 0)
+                    {
+                        uriArr[i] = Uri.parse(imagesURLs.get(i));
+                    }
+                    else
+                    {
+                        uriArr[i] =  Uri.parse("http://sourcey.com/images/stock/salvador-dali-metamorphosis-of-narcissus.jpg");
+
+                    }
+                }
+//        var imageBitmap = GetImageBitmapFromUrl("http://xamarin.com/resources/design/home/devices.png");
+                // Setup list adapter using customSearchListAdapter
+//        _searchresultList.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, resultList));
+                // TODO: pass array of image IDs (int)
+                CustomSearchListAdapter adapter = new CustomSearchListAdapter(getActivity(), _searchDescriptions, uriArr);
+                _searchresultList.setAdapter(adapter);
+                DiplayListViewHelper.getListViewSize(_searchresultList);
+                progressDialog.dismiss();
+
+            } else{
+                // TODO: WHAT TO DISPLAY WHEN NO IMAGE
+                //
+                progressDialog.dismiss();
+
+                Toast.makeText(getContext(), "Cannot find images", Toast.LENGTH_SHORT).show();
+
+            }
+        }
+
+    }
 
 
 

@@ -685,6 +685,18 @@ public class ClientController {
         }
     }
 
+
+
+    public void fetchThumbNailImg(ArrayList<Long> listParkingSpotID)
+    {
+        NP.addEntry("GETTHUMBNAILIMG", listParkingSpotID);
+        try{
+            clientCommunicator.sendPackage(NP);
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
     public void sendImagesToServer(ArrayList<String> images, String Identifier, long ID){
         NetworkPackage NP1;
         for(int i = 0 ; i< images.size();i++){
@@ -701,7 +713,7 @@ public class ClientController {
 
     public void getParkingSpotImages(String identifier, long id) {
         if(identifier.equals("PARKINGSPOT")) {
-            NP.addEntry("GETPARKINGSPOTIMAGES", id);
+            NP.addEntry("GETSPOTIMAGES", id);
         } else{
             NP.addEntry("GETUSERIMAGES", id);
         }

@@ -15,10 +15,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -96,6 +99,10 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
     Time displaySearchStartTime;
     Time displaySearchEndTime;
 
+    ListView spotReviewList;
+    ArrayAdapter spotReivewListAdapter;
+    ArrayList<String> spotReviewStringList;
+
 
     public SearchSpaceDetailFragment() {
         // Required empty public constructor
@@ -162,6 +169,8 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
         displaySearchStartTime.month+=1;
         displaySearchEndTime.month+=1;
 
+
+        spotReviewList = (ListView) mView.findViewById(R.id.spot_review_list);
 
         _searchspacedetail_reservebutton=(Button)mView.findViewById(R.id.searchspacedetail_reservebutton);
         _searchspacedetail_reservebutton.setOnClickListener(new View.OnClickListener() {
@@ -230,6 +239,10 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
         ((TextView) mView.findViewById(R.id.searchspacedetail_cartype)).setText(new Integer(mParkingSpot.getCartype()).toString());
         ((TextView) mView.findViewById(R.id.searchspacedetail_cancelpolicy)).setText(new Integer(mParkingSpot.cancelpolicy).toString());
 
+        ((TextView) mView.findViewById(R.id.searchspacedetail_rating)).setText(String.valueOf(mParkingSpot.review));
+
+
+
         //Display parking spot images from URLs
         _pager = (ViewPager) mView.findViewById(R.id.pager);
          _thumbnails = (LinearLayout) mView.findViewById(R.id.thumbnails);
@@ -239,6 +252,15 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
         mImageAdapter = new GalleryPagerAdapter(getContext());
         _pager.setAdapter(mImageAdapter);
         _pager.setOffscreenPageLimit(6); // how many images to load into memory
+
+        spotReviewStringList = new ArrayList<>();
+
+        spotReivewListAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1,  spotReviewStringList);
+        spotReviewList.setAdapter(spotReivewListAdapter);
+
+
+        RequestReviewTask rrt = new RequestReviewTask(mParkingSpot.getParkingSpotID());
+        rrt.execute();
 
         return mView;
     }
@@ -372,55 +394,7 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
         void onFragmentInteraction(Uri uri);
     }
 
-    private class LoadSpotImageTask extends AsyncTask<Void, Void, ArrayList<String> >{
-        private final long mSpotID;
-//        private ArrayList<String> mImagesURLs;
 
-        LoadSpotImageTask(long spotID){
-            mSpotID = spotID;
-            System.out.println(mSpotID);
-        }
-        @Override
-        protected void onPreExecute() { }
-        @Override
-        protected ArrayList<String> doInBackground(Void... params ){
-//            try {
-//
-//                ClientController clientController = ClientController.getInstance();
-//                clientController.getParkingSpotImages("PARKINGSPOT", mSpotID);
-//
-//                NetworkPackage NP = clientController.checkReceived();
-//                if(NP == null)
-//                {
-//                    Log.d("SearchSpaceDetail", " DOINBACKGROUND null");
-//                }
-//                MyEntry<String, Serializable> entry = NP.getCommand();
-//                String key = entry.getKey();
-//                Object value = entry.getValue();
-//                if(key.equals(???)){
-//                    return //;
-//                }
-//                else{
-//                    return null;
-//                }
-//            } catch (IOException e) {
-                return null;
-//            }
-        }
-        @Override
-        protected void onPostExecute(ArrayList<String> imagesURLs) {
-            if(imagesURLs != null) {
-                Log.d("LoadSpotImageTask", " post execute imagesURLs != null");
-
-                mImagesURLs = new ArrayList<String>(imagesURLs);
-
-            } else{
-                // TODO: WHAT TO DISPLAY WHEN NO IMAGE
-                //
-            }
-        }
-
-    }
 
     private class RenterReserveTask extends AsyncTask<Void, Void, Boolean> {
         private final long parkingSpotID;
@@ -496,6 +470,29 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
 
 
 
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null)
+            return;
+
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+        int totalHeight = 0;
+        View view = null;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            view = listAdapter.getView(i, view, listView);
+            if (i == 0)
+                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewPager.LayoutParams.WRAP_CONTENT));
+
+            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += view.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+    }
+
+
+
 
     private class RequestReviewTask extends AsyncTask<Void, Void, ArrayList<Review>> {
         long parkingSpotID;
@@ -519,6 +516,11 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
                 ArrayList<Review> list = (ArrayList<Review>) map.get("REVIEWS");
                 Log.d("FETCHREVIEWLIST", "listsize: " + String.valueOf(list.size()));
 
+
+
+
+
+
                 return list;
             } else {
                 return null;
@@ -527,6 +529,24 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
 
         @Override
         protected void onPostExecute(ArrayList<Review> list) {
+
+
+            if(list != null)
+            {
+                spotReviewStringList.clear();
+
+                for(Review r : list)
+                {
+                    Log.d("FETCHREVIEW", r.comment);
+                    spotReviewStringList.add(r.comment);
+                }
+
+
+                spotReivewListAdapter.notifyDataSetChanged();
+                setListViewHeightBasedOnChildren(spotReviewList);
+
+
+            }
 //            if (list != null) {
 ////                clientController.reservations = list;
 //                reservationsFragment = new ReservationsFragment();

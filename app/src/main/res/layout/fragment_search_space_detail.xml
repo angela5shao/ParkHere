@@ -19,6 +19,15 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_marginTop="12dp">
+
+                    <Button
+                        android:id="@+id/searchspacedetail_reservebutton"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="36dp"
+                        android:layout_marginRight="36dp"
+                        android:text="Reserve" />
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -354,15 +363,26 @@
                         android:background="@color/colorAccent"/>
                 </LinearLayout>
 
-                <Button
-                    android:id="@+id/searchspacedetail_reservebutton"
-                    android:layout_height="wrap_content"
+
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_marginLeft="36dp"
-                    android:layout_marginRight="36dp"
-                    android:text="Reserve" />
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ListView
+                        android:id="@+id/spot_review_list"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="12dp"
+                        android:textColor="@color/colorMainFont"
+                        android:background="@color/colorAccent"/>
+                </LinearLayout>
 
             </LinearLayout>
         </ScrollView>
+
+
+
     </LinearLayout>
 </FrameLayout>

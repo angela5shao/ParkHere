@@ -21,7 +21,6 @@ public class CustomSearchListAdapter extends ArrayAdapter<String> {
 
     private final Activity context;
     private final String[] itemname;
-//    private final Integer[] imgid;
     private final Uri[] imgUri;
 
     public CustomSearchListAdapter(Activity context, String[] itemname, Uri[] uri) {

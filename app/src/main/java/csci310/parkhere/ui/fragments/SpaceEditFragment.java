@@ -139,10 +139,13 @@ public class SpaceEditFragment extends Fragment {
         mDoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if(mAddressText.getText().length() == 0) {
                     Toast.makeText(getContext(), "Please enter address.", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                Log.d("SpaceEdit", "mDoneButton ***** ***** ***");
+
 
                 EditSpaceTask editProfileTask = new EditSpaceTask(
                         mCurrLocation,
@@ -153,7 +156,7 @@ public class SpaceEditFragment extends Fragment {
 //                        encodedImages //ImageSource.uri(picturePath)
                 );
 
-                    editProfileTask.execute((Void)null);
+                editProfileTask.execute((Void)null);
             }
         });
         mUploadPicButton = (Button)v.findViewById(R.id.spacePicUpload_btn);
@@ -300,18 +303,24 @@ public class SpaceEditFragment extends Fragment {
             NetworkPackage NP = clientController.checkReceived();
             MyEntry<String, Serializable> entry = NP.getCommand();
             String key = entry.getKey();
+
+
+            Log.d("EditSpaceTask", key);
+
             if (key.equals("EDITSPACE")) {
-                for (int i = 0; i < encodedImages.size(); i++) {
-                    //clientController.sendImagetoServer(encodedImages.get(i), "PARKINGSPACEIMAGE", thisParkingSpot.getParkingSpotID());
-                    NP = clientController.checkReceived();
-                    entry = NP.getCommand();
-                    key = entry.getKey();
+//                for (int i = 0; i < encodedImages.size(); i++) {
+//                    clientController.sendImagetoServer(encodedImages.get(i), "PARKINGSPACEIMAGE", thisParkingSpot.getParkingSpotID());
+//                    NP = clientController.checkReceived();
+//                    entry = NP.getCommand();
+//                    key = entry.getKey();
 //                    while (!key.equals("STOREIMAGESUCCESS")) {
 //                        clientController.sendImagetoServer(encodedImages.get(i), "PARKINGSPACEIMAGE", thisParkingSpot.getParkingSpotID());
 //                    }
-                }
+//                }
+                Log.d("SpaceEdit", "doInBackground 1");
                 return ps;
             }
+            Log.d("SpaceEdit", "doInBackground 2");
             return null;
         }
 
@@ -319,6 +328,8 @@ public class SpaceEditFragment extends Fragment {
         protected void onPostExecute(ParkingSpot spot) {
             Log.d("EditSpaceTask", "onPostExecute!!!!! - - - - - ");
             if(spot!=null){
+
+
                 ((ProviderActivity)getActivity()).onEditSpace(spot);
             } else{
                 Toast.makeText(getContext(), "Error on edit space! Please try again.", Toast.LENGTH_SHORT).show();

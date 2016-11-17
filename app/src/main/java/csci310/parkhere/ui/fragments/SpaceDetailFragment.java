@@ -249,7 +249,8 @@ public class SpaceDetailFragment extends Fragment {
         _btn_deleteSpace = (Button)v.findViewById(R.id.deleteSpace_btn);
         _btn_deleteSpace.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                // TODO: call DeleteSpaceTask
+                DeleteSpaceTask dst = new DeleteSpaceTask(thisParkingSpot);
+                dst.execute((Void) null);
             }
         });
 
@@ -276,12 +277,20 @@ public class SpaceDetailFragment extends Fragment {
                 GetPostedTimeOnDateTask GPTODTask = new GetPostedTimeOnDateTask(currSelectedDate);
                 GPTODTask.execute((Void) null);
 
+
                 // Check if date is not pasted first
 //                if (!CalendarUtils.isPastDay(date)) {
                     if (selectedStartDate == null) {
                         selectedStartDate = date;
-                        _in_start_date.setText(dateFormat.format(selectedStartDate));
-                        _edit_start_date.setText(dateFormat.format(selectedStartDate));
+
+//                        _in_start_date.setText(dateFormat.format(selectedStartDate));
+//                        _edit_start_date.setText(dateFormat.format(selectedStartDate));
+
+                        // Build string with incremented month (because month selected on calendar is -1 of actual month)
+                        String updatedStartDate = Integer.toString(selectedStartDate.getMonth()+1)+"/"+selectedStartDate.getDate()+"/"+Integer.toString(selectedStartDate.getYear()+1900);
+
+                        _in_start_date.setText(updatedStartDate);
+                        _edit_start_date.setText(updatedStartDate);
 
                         decorators.clear();
                         decorators.add(new DisabledColorDecorator());
@@ -296,12 +305,20 @@ public class SpaceDetailFragment extends Fragment {
 
                     if (selectedStartDate.compareTo(date) >= 0) {
                         selectedStartDate = date;
-                        _in_start_date.setText(dateFormat.format(selectedStartDate));
-                        _edit_start_date.setText(dateFormat.format(selectedStartDate));
+
+                        // Build string with incremented month (because month selected on calendar is -1 of actual month)
+                        String updatedStartDate = Integer.toString(selectedStartDate.getMonth()+1)+"/"+selectedStartDate.getDate()+"/"+Integer.toString(selectedStartDate.getYear()+1900);
+
+                        _in_start_date.setText(updatedStartDate);//dateFormat.format(updatedStartDate));
+                        _edit_start_date.setText(updatedStartDate);//dateFormat.format(selectedStartDate));
                     } else {
                         selectedEndDate = date;
-                        _in_end_date.setText(dateFormat.format(selectedEndDate));
-                        _edit_end_date.setText(dateFormat.format(selectedEndDate));
+
+                        // Build string with incremented month (because month selected on calendar is -1 of actual month)
+                        String updatedEndDate = Integer.toString(selectedEndDate.getMonth()+1)+"/"+selectedEndDate.getDate()+"/"+Integer.toString(selectedEndDate.getYear()+1900);
+
+                        _in_end_date.setText(updatedEndDate);//dateFormat.format(selectedEndDate));
+                        _edit_end_date.setText(updatedEndDate);//dateFormat.format(selectedEndDate));
 
                         Calendar cal = Calendar.getInstance();
                         cal.setTime(selectedStartDate);
@@ -402,9 +419,9 @@ public class SpaceDetailFragment extends Fragment {
 
                 // Prepopulate edit start & end dates/times with existing dates/times
                 TimeInterval t = list.get((int) curr_selected_time_id);
-                String startDate = t.startTime.month + "/" + t.startTime.dayOfMonth + "/" + t.startTime.year;
+                String startDate = Integer.toString(t.startTime.month+1) + "/" + t.startTime.dayOfMonth + "/" + t.startTime.year;
                 String startTime = t.startTime.hourOfDay + "-" + t.startTime.minute;
-                String endDate = t.endTime.month + "/" + t.endTime.dayOfMonth + "/" + t.endTime.year;
+                String endDate = Integer.toString(t.endTime.month+1) + "/" + t.endTime.dayOfMonth + "/" + t.endTime.year;
                 String endTime = t.endTime.hourOfDay + "-" + t.endTime.minute;
 
                 _edit_start_date.setText(startDate);
@@ -502,17 +519,23 @@ public class SpaceDetailFragment extends Fragment {
                     return;
                 }
 
-                //TODO: get the timeslotID
-                //TODO: change EditTimeTask to (String: startDate, startTime, endDate, endTime, price)
 //                EditTimeTask editTimeTask = new EditTimeTask(_edit_price.getText().toString(), 1);
+                // Convert revised month in date (to send back to server, -1 the month)
+                String[] sDate = _edit_start_date.getText().toString().split("/");
+                String[] eDate = _edit_end_date.getText().toString().split("/");
                 EditTimeTask editTimeTask = new EditTimeTask(
-                        _edit_start_date.getText().toString(),
-                        _edit_start_time.getText().toString(),
-                        _edit_end_date.getText().toString(),
-                        _edit_end_time.getText().toString(),
+
+                        sDate[1]+"/"+Integer.toString(Integer.valueOf(sDate[0])-1)+"/"+sDate[2],//_edit_start_date.getText().toString(),
+//                        sDate[1]+"/"+sDate[0]+"/"+sDate[2],
+                        _edit_start_time.getText().toString()+"-0",
+                        eDate[1]+"/"+Integer.toString(Integer.valueOf(eDate[0])-1)+"/"+eDate[2],
+//                        eDate[1]+"/"+eDate[0]+"/"+eDate[2],//_edit_end_date.getText().toString(),
+                        _edit_end_time.getText().toString()+"-0",
                         _edit_price.getText().toString(),
-                        curr_selected_time_id);
+                        list.get((int) curr_selected_time_id).TimeIntervalID);
                 editTimeTask.execute((Void)null);
+                Log.d("SpaceDetail", "edit_start_date: " + sDate[1]+"/"+sDate[0]+"/"+sDate[2] +"* * * * * * * * ***** *");
+                Log.d("SpaceDetail", "edit_start_date: " + eDate[1]+"/"+eDate[0]+"/"+eDate[2] +"* * * * * * * * ***** *");
             }
         });
 
@@ -672,6 +695,11 @@ public class SpaceDetailFragment extends Fragment {
         }
     }
 
+
+
+
+
+
     private class AddTimeForSpaceTask extends AsyncTask<Void, Void, Boolean> {
         private final String mPrice;
 
@@ -693,9 +721,9 @@ public class SpaceDetailFragment extends Fragment {
             // call client controller
             ClientController controller = ClientController.getInstance();
 
-            System.out.println("BEFORE REQ Start:"+ inputedStartTime);
-            System.out.println("BEFORE REQ End:" + inputedEndTime);
-            Log.d("ADDSPACE", String.valueOf(thisParkingSpot.getParkingSpotID()));
+//            System.out.println("BEFORE REQ Start:"+ inputedStartTime);
+//            System.out.println("BEFORE REQ End:" + inputedEndTime);
+//            Log.d("ADDSPACE", String.valueOf(thisParkingSpot.getParkingSpotID()));
 
             controller.requestAddTime(thisParkingSpot, inputedStartTime, inputedEndTime, Integer.valueOf(mPrice));
 
@@ -717,7 +745,7 @@ public class SpaceDetailFragment extends Fragment {
                 progressDialog.dismiss();
                 ((ProviderActivity)getActivity()).showSpaceFragment();
                 Log.d("ADDTIME", "finish add time");
-                Toast.makeText(getContext(), "Added time!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Time added successfully!", Toast.LENGTH_SHORT).show();
 
                 // Back to SpacesFragment
 //                ((ProviderActivity)getActivity()).showSpaceFragment();
@@ -725,10 +753,14 @@ public class SpaceDetailFragment extends Fragment {
 
             } else{
                 progressDialog.dismiss();
-                Toast.makeText(getContext(), "Add time failed! Please try agian.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Add time failed. Please try again.", Toast.LENGTH_SHORT).show();
             }
         }
     }
+
+
+
+
 
     private class DeleteTimeForSpaceTask extends AsyncTask<Void, Void, Boolean> {
         private final long mTimeID;
@@ -776,16 +808,20 @@ public class SpaceDetailFragment extends Fragment {
                 progressDialog.dismiss();
                 _btn_delete_time.setVisibility(View.GONE);
                 Log.d("DELETETIME", "finish delete time");
-                Toast.makeText(getContext(), "Deleted!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Time is deleted successfully!", Toast.LENGTH_SHORT).show();
 
                 // Back to SpacesFragment
                 ((ProviderActivity)getActivity()).showSpaceFragment();
             } else{
                 progressDialog.dismiss();
-                Toast.makeText(getContext(), "Delete time failed! Please try agian.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Delete time failed. Please try again.", Toast.LENGTH_SHORT).show();
             }
         }
     }
+
+
+
+
 
     private class GetPostedTimeOnDateTask extends AsyncTask<Void, Void, ArrayList<TimeInterval> >{
         private Date mDate;
@@ -816,11 +852,16 @@ public class SpaceDetailFragment extends Fragment {
                 Log.d("SpaceDetailFragment ",
                         "GetPostedTimeOnDateTask onPostExecute inTimeInterval !NULL - "+inTimeInterval.size());
                 list = inTimeInterval;
+                Log.d("SpaceDetail", "* * * * * * list is assigned, size= "+inTimeInterval.size()+" * * * * * * *");
                 String[] timeList = new String[inTimeInterval.size()];
                 for(int i=0; i<inTimeInterval.size(); ++i) {
-                    String timeIntervalString = inTimeInterval.get(i).startTime.toString()
-                                + " ~ "
-                                + inTimeInterval.get(i).endTime.toString();
+//                    String timeIntervalString = inTimeInterval.get(i).startTime.toString()
+//                                + " ~ "
+//                                + inTimeInterval.get(i).endTime.toString();
+                    TimeInterval t = inTimeInterval.get(i);
+                    String timeIntervalString = Integer.toString(t.startTime.month+1)+"/"+t.startTime.dayOfMonth+"/"+t.startTime.year
+                            + " ~"
+                            + Integer.toString(t.endTime.month+1)+"/"+t.endTime.dayOfMonth+"/"+t.endTime.year;
 
                     timeList[i] = timeIntervalString;
                 }
@@ -834,6 +875,7 @@ public class SpaceDetailFragment extends Fragment {
 
 
 
+
     private class EditTimeTask extends AsyncTask<Void, Void, Boolean>{
         private final String mPrice;
         private final long timeSlotID;
@@ -841,6 +883,9 @@ public class SpaceDetailFragment extends Fragment {
         private Time end;
 
         EditTimeTask(String startDate, String startTime, String endDate, String endTime, String price, long timeSlotID){
+            System.out.println(startDate+" "+startTime);
+            System.out.println(endDate+" "+endTime);
+
             start = new Time(startDate+" "+startTime);
             end = new Time(endDate+" "+endTime);
             mPrice = price;
@@ -878,15 +923,16 @@ public class SpaceDetailFragment extends Fragment {
             if(success) {
                 // Back to SpacesFragment
                 ((ProviderActivity)getActivity()).showSpaceFragment();
-                Toast.makeText(getContext(), "Edited time!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Time is edited successfully!", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
 
             } else{
                 progressDialog.dismiss();
-                Toast.makeText(getContext(), "Edit time failed! Please try agian.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Time edit failed. Please try again.", Toast.LENGTH_SHORT).show();
             }
         }
     }
+
 
 
 

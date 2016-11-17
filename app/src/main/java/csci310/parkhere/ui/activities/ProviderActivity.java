@@ -335,9 +335,8 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
     }
 
     public void onEditSpace(ParkingSpot ps) {
-        spaceDetailFragment = new SpaceDetailFragment();
-        ((SpaceDetailFragment)spaceDetailFragment).thisParkingSpot = ps;
-        fm.beginTransaction().add(R.id.fragContainer, spaceDetailFragment).commit();
+        requestSpotTimeIntervalTask rstit = new requestSpotTimeIntervalTask(ps);
+        rstit.execute();
     }
 
     // Called by SpacesFragment's "add" button

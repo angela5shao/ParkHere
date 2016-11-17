@@ -3,6 +3,7 @@ package csci310.parkhere.controller;
 import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -727,6 +728,7 @@ public class ClientController {
     //the editParkingSpot which will be called by the provider
     public void editParkingSpot(ParkingSpot ps) {
         //map.put("PICTURE", imageStrings);
+        Log.d("ps", "send ps");
         NP.addEntry("EDITSPACE", ps);
         try {
             clientCommunicator.sendPackage(NP);

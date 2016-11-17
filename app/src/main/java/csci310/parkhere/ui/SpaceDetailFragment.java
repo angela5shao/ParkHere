@@ -399,6 +399,18 @@ public class SpaceDetailFragment extends Fragment {
                                     long id) {
                 curr_selected_time_id = (long)position;
 
+                // Prepopulate edit start & end dates/times with existing dates/times
+                _edit_start_date.setText(list.get((int) curr_selected_time_id).startTime.toDateString());
+                _edit_end_date.setText(list.get((int) curr_selected_time_id).endTime.toDateString());
+                TimeInterval t = list.get((int) curr_selected_time_id);
+                String startTime = t.startTime.hourOfDay + "-" + t.startTime.minute;
+                String endTime = t.endTime.hourOfDay + "-" + t.endTime.minute;
+                _edit_start_time.setText(startTime);
+                _edit_end_time.setText(endTime);
+
+                // Prepopulate with current price
+                _edit_price.setText(Double.toString(thisParkingSpot.search_price));
+
                 if(_editTimeForSpaceLayout.getVisibility()==View.GONE) {
                     _btn_delete_time.setVisibility(View.VISIBLE);
                     _editTimeForSpaceLayout.setVisibility(View.VISIBLE);

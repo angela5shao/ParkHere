@@ -167,6 +167,7 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
     {
         Log.d("show or not", "true");
         spacesFragment = new SpacesFragment();
+        (new requestParkingSpotListTask()).execute();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragContainer, spacesFragment).commit();
     }
@@ -373,7 +374,7 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 
     }
 
-    private class requestParkingSpotListTask extends AsyncTask<Void, Void, ArrayList<ParkingSpot>> {
+    public class requestParkingSpotListTask extends AsyncTask<Void, Void, ArrayList<ParkingSpot>> {
 
         requestParkingSpotListTask(){
 //            doInBackground((Void) null);

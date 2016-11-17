@@ -420,11 +420,15 @@ public class ClientController {
         }
     }
 
-
-
-//    public boolean book(long spaceID, long userID, TimeInterval interval) {
-//        return false;
-//    }
+    public void requestPaymentToken() {
+        NetworkPackage NP = new NetworkPackage();
+        NP.addEntry("TOKENREQUEST", null);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void postPaymentNonceToServer(String paymentMethodNonce, long resID, long providerID, String price)
     {

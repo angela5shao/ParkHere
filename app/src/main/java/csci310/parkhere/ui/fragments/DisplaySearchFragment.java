@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
+import csci310.parkhere.ui.activities.RenterActivity;
 import csci310.parkhere.ui.adapters.CustomSearchListAdapter;
 import csci310.parkhere.ui.helpers.DiplayListViewHelper;
 import resource.ParkingSpot;
@@ -97,7 +98,16 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
         _MapviewSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: Switch to Mapview
+                // TODO: Switch to MapView
+                MapViewFragment mapViewFragment = new MapViewFragment();
+                Bundle args = new Bundle();
+//                args.putString("USERNAME", mParam1 );
+//                args.putString("PASSWORD", mParam2);
+//                args.putString("USERLICENSE", mParam3);
+//                args.putString("USERPLATE", mParam4);
+//                args.putString("PHONE", mParam5);
+                mapViewFragment.setArguments(args);
+                ((RenterActivity) getActivity()).switchToMapViewFrag(mapViewFragment);
             }
         });
 

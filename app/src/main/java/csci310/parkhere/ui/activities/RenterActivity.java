@@ -24,6 +24,7 @@ import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
 import csci310.parkhere.ui.fragments.DisplaySearchFragment;
 import csci310.parkhere.ui.fragments.EditProfileFragment;
+import csci310.parkhere.ui.fragments.MapViewFragment;
 import csci310.parkhere.ui.fragments.PrivateProfileFragment;
 import csci310.parkhere.ui.fragments.PublicProfileFragment;
 import csci310.parkhere.ui.fragments.ReservationDetailFragment;
@@ -269,6 +270,20 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 
 
         fragmentTransaction.replace(R.id.fragContainer, searchSpaceDetailFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    public void switchToListViewFrag(DisplaySearchFragment displaySearchFragment) {
+        fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(R.id.fragContainer, displaySearchFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    public void switchToMapViewFrag(MapViewFragment mapViewFragment) {
+        fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(R.id.fragContainer, mapViewFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

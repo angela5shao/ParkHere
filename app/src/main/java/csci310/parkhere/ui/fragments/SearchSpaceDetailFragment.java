@@ -135,9 +135,13 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
             // Get ParkingSpot from controller
             ClientController controller = ClientController.getInstance();
             mParkingSpot = controller.searchResults.searchResultList.get(mPosition);
+//
+//            LoadSpotImageTask LSIT = new LoadSpotImageTask(mParkingSpot.getParkingSpotID());
+//            LSIT.execute((Void) null);
 
-            LoadSpotImageTask LSIT = new LoadSpotImageTask(mParkingSpot.getParkingSpotID());
-            LSIT.execute((Void) null);
+//            LoadSpotImageTask LSIT = new LoadSpotImageTask(mParkingSpot.getParkingSpotID());
+//            LSIT.execute((Void) null);
+
         }
     }
 

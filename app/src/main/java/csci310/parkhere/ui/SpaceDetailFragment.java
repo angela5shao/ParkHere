@@ -249,6 +249,8 @@ public class SpaceDetailFragment extends Fragment {
         _btn_deleteSpace.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 // TODO: call DeleteSpaceTask
+                DeleteSpaceTask dst = new DeleteSpaceTask(thisParkingSpot);
+                dst.execute((Void) null);
             }
         });
 
@@ -501,7 +503,6 @@ public class SpaceDetailFragment extends Fragment {
                     return;
                 }
 
-                //TODO: get the timeslotID
 //                EditTimeTask editTimeTask = new EditTimeTask(_edit_price.getText().toString(), 1);
                 EditTimeTask editTimeTask = new EditTimeTask(
                         _edit_start_date.getText().toString(),
@@ -691,9 +692,9 @@ public class SpaceDetailFragment extends Fragment {
             // call client controller
             ClientController controller = ClientController.getInstance();
 
-            System.out.println("BEFORE REQ Start:"+ inputedStartTime);
-            System.out.println("BEFORE REQ End:" + inputedEndTime);
-            Log.d("ADDSPACE", String.valueOf(thisParkingSpot.getParkingSpotID()));
+//            System.out.println("BEFORE REQ Start:"+ inputedStartTime);
+//            System.out.println("BEFORE REQ End:" + inputedEndTime);
+//            Log.d("ADDSPACE", String.valueOf(thisParkingSpot.getParkingSpotID()));
 
             controller.requestAddTime(thisParkingSpot, inputedStartTime, inputedEndTime, Integer.valueOf(mPrice));
 
@@ -715,7 +716,7 @@ public class SpaceDetailFragment extends Fragment {
                 progressDialog.dismiss();
                 ((ProviderActivity)getActivity()).showSpaceFragment();
                 Log.d("ADDTIME", "finish add time");
-                Toast.makeText(getContext(), "Added time!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Added time successfully!", Toast.LENGTH_SHORT).show();
 
                 // Back to SpacesFragment
 //                ((ProviderActivity)getActivity()).showSpaceFragment();
@@ -774,7 +775,7 @@ public class SpaceDetailFragment extends Fragment {
                 progressDialog.dismiss();
                 _btn_delete_time.setVisibility(View.GONE);
                 Log.d("DELETETIME", "finish delete time");
-                Toast.makeText(getContext(), "Deleted!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Time is deleted successfully!", Toast.LENGTH_SHORT).show();
 
                 // Back to SpacesFragment
                 ((ProviderActivity)getActivity()).showSpaceFragment();
@@ -876,12 +877,12 @@ public class SpaceDetailFragment extends Fragment {
             if(success) {
                 // Back to SpacesFragment
                 ((ProviderActivity)getActivity()).showSpaceFragment();
-                Toast.makeText(getContext(), "Edited time!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Time is edited successfully!", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
 
             } else{
                 progressDialog.dismiss();
-                Toast.makeText(getContext(), "Edit time failed! Please try agian.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Time edit failed! Please try agian.", Toast.LENGTH_SHORT).show();
             }
         }
     }

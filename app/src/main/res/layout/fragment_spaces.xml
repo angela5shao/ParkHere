@@ -3,7 +3,7 @@
     android:id="@+id/fragment_spaces"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="csci310.parkhere.ui.SpacesFragment">
+    tools:context=".ui.fragments.SpacesFragment">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true"
     android:background="@color/colorLightBackground"
     android:id="@+id/renter_ui"
-    tools:context=".ui.RenterActivity">
+    tools:context=".ui.activities.RenterActivity">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">

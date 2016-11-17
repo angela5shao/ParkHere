@@ -5,7 +5,7 @@
     android:layout_height="fill_parent"
     android:fitsSystemWindows="true"
     android:background="@color/colorDarkBackground"
-    tools:context=".ui.RegisterProviderActivity">
+    tools:context=".ui.activities.RegisterProviderActivity">
 
     <LinearLayout
         android:orientation="vertical"

@@ -480,6 +480,12 @@ public class SpaceDetailFragment extends Fragment {
 //                        return;
 //                    }
 //                }
+                // Check that rate is provided
+                if(_edit_price.getText().toString().length() == 0) {
+                    Toast.makeText(getContext(), "Please input price (per hour).", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 //TODO: get the timeslotID
                 EditTimeTask editTimeTask = new EditTimeTask(_edit_price.getText().toString(), 1);
                 editTimeTask.execute((Void)null);

@@ -1,6 +1,7 @@
 package csci310.parkhere.ui.fragments;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,9 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import csci310.parkhere.R;
@@ -212,14 +216,25 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
             _searchDescriptions[i] = result.searchResultList.get(i).getDescription();
         }
 
+
+        Uri[] uriArr = new Uri[result.searchResultList.size()];
+        for(int i = 0; i < uriArr.length; i++)
+        {
+            uriArr[i] =  Uri.parse("http://sourcey.com/images/stock/salvador-dali-metamorphosis-of-narcissus.jpg");
+        }
+//        var imageBitmap = GetImageBitmapFromUrl("http://xamarin.com/resources/design/home/devices.png");
         // Setup list adapter using customSearchListAdapter
 //        _searchresultList.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, resultList));
         // TODO: pass array of image IDs (int)
-        CustomSearchListAdapter adapter = new CustomSearchListAdapter(getActivity(), _searchDescriptions, null);
+        CustomSearchListAdapter adapter = new CustomSearchListAdapter(getActivity(), _searchDescriptions, uriArr);
         _searchresultList.setAdapter(adapter);
         DiplayListViewHelper.getListViewSize(_searchresultList);
     }
 //
+
+
+
+
     public void setSearchResultListview(String[] inSearchResults, String startDate, String startTime, String endDate, String endTime) {
 //        _searchresultList.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, inSearchResults));
 //        DiplayListViewHelper.getListViewSize(_searchresultList);

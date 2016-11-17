@@ -130,8 +130,8 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
             mParam5 = getArguments().getString(ARG_PARAM5);
 
             mImagesURLs = getArguments().getStringArrayList(ARG_PARAM6);
-            LoadSpotImageTask LSIT = new LoadSpotImageTask(mParkingSpot.getParkingSpotID());
-            LSIT.execute((Void) null);
+//            LoadSpotImageTask LSIT = new LoadSpotImageTask(mParkingSpot.getParkingSpotID());
+//            LSIT.execute((Void) null);
         }
     }
 

@@ -179,7 +179,8 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
             @Override
             public void onClick(View v) {
                 // TODO: confirm the server for payment
-                
+                ConfirmPaymentTask CPT = new ConfirmPaymentTask(res_id);
+                CPT.execute((Void) null);
             }
         });
 
@@ -312,8 +313,64 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
         }
     }
 
+    private class ConfirmPaymentTask extends AsyncTask<Void, Void, Boolean> {
+        private long mResID;
+        ProgressDialog progressDialog;
+
+        ConfirmPaymentTask(long resID){
+            mResID = resID;
+
+            Log.d("Reservation Detail: ", "ConfirmPaymentTask.mResID = "+mResID);
+        }
+
+        @Override
+        protected void onPreExecute(){
+            //Display a progress dialog
+            progressDialog = new ProgressDialog(getActivity(),
+                    R.style.AppTheme);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Confirming payment...");
+            progressDialog.show();
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params ){
+            ClientController clientController = ClientController.getInstance();
+            clientController.submitPaymentRequest(mResID);
+            NetworkPackage NP = clientController.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Boolean value = (Boolean) entry.getValue();
+
+            if(key.equals("CONFIRMSTATUS")){
+                return value;
+            }
+            else {
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean confirmStatus) {
+            if(confirmStatus){ // paid success
+                progressDialog.dismiss();
+                Toast.makeText(getContext(), "Confirmed and paid!", Toast.LENGTH_SHORT).show();
+
+                Fragment reservationsFragment = new ReservationsFragment();
+                FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragContainer, reservationsFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+            else{
+                progressDialog.dismiss();
+                Toast.makeText(getContext(), "Confirm payment unsuccessful! Please try agian.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
     private class RenterCancelTask extends AsyncTask<Void, Void, Long> {
-        long resID;
+        private long resID;
 
         RenterCancelTask(long resID){
             this.resID = resID;
@@ -405,7 +462,6 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
                 Toast.makeText(getContext(), "Review added!", Toast.LENGTH_SHORT).show();
                 RequestReservationsTask rrt = new RequestReservationsTask();
                 rrt.execute((Void)null);
-
             }
             else{
                 progressDialog.dismiss();
@@ -439,10 +495,8 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
         protected void onPostExecute(ArrayList<Reservation> list) {
             if (list != null) {
                 ClientController controller = ClientController.getInstance();
-
                 controller.reservations = list;
                 Fragment reservationsFragment = new ReservationsFragment();
-
                 FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragContainer, reservationsFragment);
                 fragmentTransaction.addToBackStack(null);

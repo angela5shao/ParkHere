@@ -440,8 +440,15 @@ public class ClientController {
         }
     }
 
-
-
+    public void submitPaymentRequest(long resID) {
+        NetworkPackage NP = new NetworkPackage();
+        NP.addEntry("CONFIRMPAYMENT", resID);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void requestMyReservationList()
     {

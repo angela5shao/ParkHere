@@ -509,7 +509,8 @@ public class SpaceDetailFragment extends Fragment {
                         _edit_start_time.getText().toString(),
                         _edit_end_date.getText().toString(),
                         _edit_end_time.getText().toString(),
-                        _edit_price.getText().toString());
+                        _edit_price.getText().toString(),
+                        curr_selected_time_id);
                 editTimeTask.execute((Void)null);
             }
         });
@@ -835,8 +836,12 @@ public class SpaceDetailFragment extends Fragment {
     private class EditTimeTask extends AsyncTask<Void, Void, Boolean>{
         private final String mPrice;
         private final long timeSlotID;
+        private Time start;
+        private Time end;
 
-        EditTimeTask(String price, long timeSlotID){
+        EditTimeTask(String startDate, String startTime, String endDate, String endTime, String price, long timeSlotID){
+            start = new Time(startDate+" "+startTime);
+            end = new Time(endDate+" "+endTime);
             mPrice = price;
             this.timeSlotID = timeSlotID;
         }
@@ -854,7 +859,7 @@ public class SpaceDetailFragment extends Fragment {
             // call client controller
             ClientController controller = ClientController.getInstance();
 
-            controller.requestEditTime(timeSlotID, inputedEditStartTime, inputedEditEndTime, Integer.valueOf(mPrice));
+            controller.requestEditTime(timeSlotID, start, end, Integer.valueOf(mPrice));
 
             NetworkPackage NP = controller.checkReceived();
             MyEntry<String, Serializable> entry = NP.getCommand();

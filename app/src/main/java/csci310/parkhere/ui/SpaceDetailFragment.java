@@ -502,13 +502,12 @@ public class SpaceDetailFragment extends Fragment {
                 }
 
                 //TODO: get the timeslotID
-                //TODO: change EditTimeTask to (String: startDate, startTime, endDate, endTime, price)
 //                EditTimeTask editTimeTask = new EditTimeTask(_edit_price.getText().toString(), 1);
                 EditTimeTask editTimeTask = new EditTimeTask(
                         _edit_start_date.getText().toString(),
-                        _edit_start_time.getText().toString(),
+                        _edit_start_time.getText().toString()+"-0",
                         _edit_end_date.getText().toString(),
-                        _edit_end_time.getText().toString(),
+                        _edit_end_time.getText().toString()+"-0",
                         _edit_price.getText().toString(),
                         curr_selected_time_id);
                 editTimeTask.execute((Void)null);

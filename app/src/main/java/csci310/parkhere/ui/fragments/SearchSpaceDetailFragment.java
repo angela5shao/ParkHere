@@ -465,7 +465,7 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
                 double price = (double) map.get("PRICE");
 
                 Intent intent = new Intent(getContext(), PaymentActivity.class);
-                intent.putExtra("RESERVATIONID", (Long)value);
+                intent.putExtra("RESERVATIONID", reservationID);
                 intent.putExtra("PROVIDERID", (Long)providerID);
                 intent.putExtra("PRICE", price);
 

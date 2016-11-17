@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -30,6 +29,7 @@ import csci310.parkhere.ui.activities.OnInfoWindowElemTouchListener;
 import csci310.parkhere.ui.activities.RenterActivity;
 import csci310.parkhere.ui.layout.MapWrapperLayout;
 import resource.ParkingSpot;
+import resource.SearchResults;
 
 public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     private double searchLat, searchLon;
@@ -77,15 +77,10 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
                 // TODO: Switch to ListView
-                DisplaySearchFragment displaySearchFragment = new DisplaySearchFragment();
-                Bundle args = new Bundle();
-//                args.putString("USERNAME", mParam1);
-//                args.putString("PASSWORD", mParam2);
-//                args.putString("USERLICENSE", mParam3);
-//                args.putString("USERPLATE", mParam4);
-//                args.putString("PHONE", mParam5);
-                displaySearchFragment.setArguments(args);
-                ((RenterActivity) getActivity()).switchToListViewFrag(displaySearchFragment);
+                ClientController clientController = ClientController.getInstance();
+                SearchResults results = clientController.searchResults;
+                ((RenterActivity) getActivity()).displaySearchResult(results, new LatLng(searchLat, searchLon),
+                        startDate, startTime, endDate, endTime);
             }
         });
 
@@ -118,7 +113,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
                 Log.d("MapViewFrag ", "marker get @ pos "+((int) marker.getTag()));
                 ((RenterActivity) getActivity()).onSearchSpaceSelected((int) marker.getTag(), startDate, startTime, endDate, endTime);
 
-                Toast.makeText(getActivity(), marker.getTitle() + "'s button clicked!", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), marker.getTitle() + "'s button clicked!", Toast.LENGTH_SHORT).show();
             }
         };
         this.infoButton.setOnTouchListener(infoButtonListener);

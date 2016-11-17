@@ -286,7 +286,7 @@ public class SpaceDetailFragment extends Fragment {
 //                        _edit_start_date.setText(dateFormat.format(selectedStartDate));
 
                         // Build string with incremented month (because month selected on calendar is -1 of actual month)
-                        String updatedStartDate = Integer.toString(selectedStartDate.getMonth()+1)+"/"+selectedStartDate.getDay()+"/"+selectedStartDate.getYear();
+                        String updatedStartDate = Integer.toString(selectedStartDate.getMonth()+1)+"/"+selectedStartDate.getDate()+"/"+Integer.toString(selectedStartDate.getYear()+1900);
 
                         _in_start_date.setText(updatedStartDate);
                         _edit_start_date.setText(updatedStartDate);
@@ -306,7 +306,7 @@ public class SpaceDetailFragment extends Fragment {
                         selectedStartDate = date;
 
                         // Build string with incremented month (because month selected on calendar is -1 of actual month)
-                        String updatedStartDate = Integer.toString(selectedStartDate.getMonth()+1)+"/"+selectedStartDate.getDay()+"/"+selectedStartDate.getYear();
+                        String updatedStartDate = Integer.toString(selectedStartDate.getMonth()+1)+"/"+selectedStartDate.getDate()+"/"+Integer.toString(selectedStartDate.getYear()+1900);
 
                         _in_start_date.setText(updatedStartDate);//dateFormat.format(updatedStartDate));
                         _edit_start_date.setText(updatedStartDate);//dateFormat.format(selectedStartDate));
@@ -314,7 +314,7 @@ public class SpaceDetailFragment extends Fragment {
                         selectedEndDate = date;
 
                         // Build string with incremented month (because month selected on calendar is -1 of actual month)
-                        String updatedEndDate = Integer.toString(selectedEndDate.getMonth()+1)+"/"+selectedEndDate.getDay()+"/"+selectedEndDate.getYear();
+                        String updatedEndDate = Integer.toString(selectedEndDate.getMonth()+1)+"/"+selectedEndDate.getDate()+"/"+Integer.toString(selectedEndDate.getYear()+1900);
 
                         _in_end_date.setText(updatedEndDate);//dateFormat.format(selectedEndDate));
                         _edit_end_date.setText(updatedEndDate);//dateFormat.format(selectedEndDate));
@@ -418,9 +418,9 @@ public class SpaceDetailFragment extends Fragment {
 
                 // Prepopulate edit start & end dates/times with existing dates/times
                 TimeInterval t = list.get((int) curr_selected_time_id);
-                String startDate = (++t.startTime.month) + "/" + t.startTime.dayOfMonth + "/" + t.startTime.year;
+                String startDate = Integer.toString(t.startTime.month+1) + "/" + t.startTime.dayOfMonth + "/" + t.startTime.year;
                 String startTime = t.startTime.hourOfDay + "-" + t.startTime.minute;
-                String endDate = (++t.endTime.month) + "/" + t.endTime.dayOfMonth + "/" + t.endTime.year;
+                String endDate = Integer.toString(t.endTime.month+1) + "/" + t.endTime.dayOfMonth + "/" + t.endTime.year;
                 String endTime = t.endTime.hourOfDay + "-" + t.endTime.minute;
 
                 _edit_start_date.setText(startDate);
@@ -523,9 +523,9 @@ public class SpaceDetailFragment extends Fragment {
                 String[] sDate = _edit_start_date.getText().toString().split("/");
                 String[] eDate = _edit_end_date.getText().toString().split("/");
                 EditTimeTask editTimeTask = new EditTimeTask(
-                        Integer.toString(Integer.valueOf(sDate[0])-1)+"/"+sDate[1]+"/"+sDate[2],//_edit_start_date.getText().toString(),
+                        sDate[1]+"/"+Integer.toString(Integer.valueOf(sDate[0])-1)+"/"+sDate[2],//_edit_start_date.getText().toString(),
                         _edit_start_time.getText().toString()+"-0",
-                        Integer.toString(Integer.valueOf(eDate[0])-1)+"/"+eDate[1]+"/"+eDate[2],//_edit_end_date.getText().toString(),
+                        eDate[1]+"/"+Integer.toString(Integer.valueOf(eDate[0])-1)+"/"+eDate[2],//_edit_end_date.getText().toString(),
                         _edit_end_time.getText().toString()+"-0",
                         _edit_price.getText().toString(),
                         list.get((int) curr_selected_time_id).TimeIntervalID);

@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="csci310.parkhere.ui.ReservationsFragment">
+    tools:context=".ui.fragments.ReservationsFragment">
     <!--<ScrollView-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="574dp"-->
@@ -15,6 +15,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/res_label"
+                android:id="@+id/reservationsTextView"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="36dp"
                 android:textAlignment="center"/>

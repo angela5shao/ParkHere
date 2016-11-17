@@ -3,6 +3,7 @@ package csci310.parkhere.controller;
 import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -15,6 +16,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 
 import resource.CarType;
+import resource.CustomImage;
+import resource.MyEntry;
 import resource.NetworkPackage;
 import resource.ParkingSpot;
 import resource.Reservation;
@@ -125,6 +128,16 @@ public class ClientController {
         entry.put("USERNAME", username);
         entry.put("PASSWORD", pw);
         clientCommunicator.send("LOGIN", entry);
+    }
+
+    public void verifyRegister(String username) throws IOException {
+        NetworkPackage NP = new NetworkPackage();
+        NP.addEntry("VERIFICATION", username);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void register(String username, String pw, String phone, String license, String plate, String usertype, String name) throws IOException {
@@ -241,36 +254,32 @@ public class ClientController {
 //            }
 //        }
 //    }
+//
+//    public User getProfile(long userID) {
+//        return null;
+//    }
+//
+//    TODO: Functions for provider
+//
+//
+//    public boolean addSpace(TimeInterval interval, String address, long userID) {
+//        return false;
+//    }
+//
+//    // TODO: include address, description, cartype, cancelpolicy, image, time interval(s)
+//    public boolean editSpace(long spaceID, TimeInterval interval) {
+//        return false;
+//    }
+//
+//    public void publishSpace(long spaceID) {
+//
+//    }
 
-    public User getProfile(long userID) {
-        return null;
-    }
-
-    // TODO: Functions for provider
-//    public ArrayList<>
-
-    public boolean addSpace(TimeInterval interval, String address, long userID) {
-        return false;
-    }
-
-    public boolean editSpace(long spaceID, TimeInterval interval) {
-        return false;
-    }
-
-    public void publishSpace(long spaceID) {
-
-    }
-
-    public void unpublishSpace(long spaceID) {
-
-    }
+//    public void unpublishSpace(long spaceID) {
+//
+//    }
 
     // TODO: Functions for renter
-
-    public boolean editReservation(long resID) {
-        return false;
-    }
-
     public void ProviderCancel(long timeIntervalID) {
         NetworkPackage NP = new NetworkPackage();
         NP.addEntry("PROVIDERCANCEL", timeIntervalID);
@@ -291,9 +300,9 @@ public class ClientController {
         }
     }
 
-    public Reservation getReservationDetail(int position) {
-        return reservations.get(position);
-    }
+//    public Reservation getReservationDetail(int position) {
+//        return reservations.get(position);
+//    }
 
     public void submitReview(long reservationID, int rating, String comment) {
         HashMap<String, Serializable> map = new HashMap<>();
@@ -306,10 +315,10 @@ public class ClientController {
             e.printStackTrace();
         }
     }
-
-    public void report(Reservation res) {
-
-    }
+//
+//    public void report(Reservation res) {
+//
+//    }
 
     public void search(LatLng location, String startDate, String startTime, String endDate, String endTime, String carType, String distance) throws IOException {
         currLocation = location;
@@ -386,17 +395,18 @@ public class ClientController {
 
     public SearchResults sortSearchResultByProviderRating() {
         if(searchResults != null) {
-//            Collections.sort(searchResults.searchResultList, new Comparator<ParkingSpot>() {
-//                public int compare(ParkingSpot p1, ParkingSpot p2) {
-//                    return Double.compare(p1.providerReview, p2.providerReview);
-//                }
-//            });
+            Collections.sort(searchResults.searchResultList, new Comparator<ParkingSpot>() {
+                public int compare(ParkingSpot p1, ParkingSpot p2) {
+                    return Double.compare(p1.providerReview, p2.providerReview);
+                }
+            });
         }
         return searchResults;
     }
 
     public void addSpace(LatLng location, String streetAddress, String description, String carType, int cancelPolicy)
     {
+        Log.d("@@@Controller", " addSpace called!");
         if(location == null)
             return;
 
@@ -404,30 +414,46 @@ public class ClientController {
         ParkingSpot spot = new ParkingSpot(user.userID,null,location.latitude,location.longitude,streetAddress,description, "",mCarType,cancelPolicy);
         //public ParkingSpot(long userID, ArrayList<TimeInterval> time, double lat, double lon, String streetAddr, String description, String zipcode, int cartype) {
         try {
+            Log.d("@@@Controller", " ADD_PARKINGSPOT");
             clientCommunicator.send("ADD_PARKINGSPOT", spot);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-
-
-    public boolean book(long spaceID, long userID, TimeInterval interval) {
-        return false;
-    }
-
-    public void postPaymentNonceToServer(String paymentMethodNonce, long resID)
-    {
+    public void requestPaymentToken() {
+        NetworkPackage NP = new NetworkPackage();
+        NP.addEntry("TOKENREQUEST", null);
         try {
-
-            clientCommunicator.send("PAYMENT_SUCCESS", resID);
+            clientCommunicator.sendPackage(NP);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    public void postPaymentNonceToServer(String paymentMethodNonce, long resID, long providerID, String price)
+    {
+        HashMap<String, Serializable> map = new HashMap<>();
+        map.put("PAYMENTNONCE", paymentMethodNonce);
+        map.put("RESERVATIONID", resID);
+        map.put("PROVIDERID", providerID);
+        map.put("PRICE", price);
+        try {
+            clientCommunicator.send("PAYMENT_SUCCESS", map);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-
+    public void submitPaymentRequest(long resID) {
+        NetworkPackage NP = new NetworkPackage();
+        NP.addEntry("CONFIRMPAYMENT", resID);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void requestMyReservationList()
     {
@@ -516,21 +542,43 @@ public class ClientController {
         }
     }
 
+    //the EditTime for provider
+    public void requestEditTime(long timeSlotID, Time startTime, Time endTime, double price){
+        TimeInterval timeInterval = new TimeInterval(startTime, endTime);
+        NetworkPackage NP = new NetworkPackage();
+        HashMap<String, Serializable> map = new HashMap<>();
+        map.put("TIMESLOTID", timeSlotID);
+        map.put("TIMEINTERVAL", timeInterval);
+        System.out.println("Start:"+timeInterval.startTime);
+        System.out.println("End:" + timeInterval.endTime);
+        map.put("PRICE", price);
+        NP.addEntry("EDITTIME", map);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void requestParkingSpotReview(long parkingSpotid)
+    {
+        NetworkPackage NP = new NetworkPackage();
+        NP.addEntry("FETCHREVIEWSFORPARKINGSPOT", parkingSpotid);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void requestAddTime(ParkingSpot spot, Time startTime, Time endTime, double price)
     {
-//        startTime.month +=1;
-//        endTime.month += 1;
-
         TimeInterval timeInterval = new TimeInterval(startTime, endTime);
-
-
         NetworkPackage NP = new NetworkPackage();
         HashMap<String, Serializable> map = new HashMap<>();
         map.put("PARKINGSPOTID", spot.getParkingSpotID());
         map.put("TIMEINTERVAL", timeInterval);
-
-
-
+        map.put("PRICE", price);
         System.out.println("Start:"+timeInterval.startTime);
         System.out.println("End:" + timeInterval.endTime);
         map.put("PRICE", price);
@@ -542,6 +590,14 @@ public class ClientController {
         }
     }
 
+    public void deleteSpace(long parkingSpotid){
+        NP.addEntry("DELETESPACE", parkingSpotid);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public void logout(boolean userType) {
         NetworkPackage NP = new NetworkPackage();
         HashMap<String, Serializable> map = new HashMap<>();
@@ -586,6 +642,32 @@ public class ClientController {
         }
     }
 
+    public void sendImagetoServer(String DataURI, String Identifier, long ID)
+    {
+        CustomImage customImage = new CustomImage();
+        customImage.Data_URI = DataURI;
+        if(Identifier.equals("PARKINGSPACEIMAGE"))
+        {
+            customImage.parkingSpotID = ID;
+            customImage.UserID = -1;
+        }
+        else if(Identifier.equals("USERPROFILEIAMGE"))
+        {
+            customImage.parkingSpotID = -1;
+            customImage.UserID = ID;
+        }
+        else
+        {
+            Log.d("WRONG", "WRONG IDENTIFIER");
+        }
+        NP.addEntry("UPLOADIMAGE",customImage);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void fetchReviewsForUser(long providerID){
         NP.addEntry("FETCHREVIEWSFORUSER", providerID);
         try {
@@ -600,6 +682,57 @@ public class ClientController {
         try{
             clientCommunicator.sendPackage(NP);
         } catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
+
+
+    public void fetchThumbNailImg(ArrayList<Long> listParkingSpotID)
+    {
+        NP.addEntry("GETTHUMBNAILIMG", listParkingSpotID);
+        try{
+            clientCommunicator.sendPackage(NP);
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void sendImagesToServer(ArrayList<String> images, String Identifier, long ID){
+        NetworkPackage NP1;
+        for(int i = 0 ; i< images.size();i++){
+            sendImagetoServer(images.get(i), Identifier, ID);
+            NP1 = checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            while (!key.equals("STOREIMAGESUCCESS")) {
+                Log.d("dame:", "zhende");
+                sendImagetoServer(images.get(i), Identifier, ID);
+            }
+        }
+    }
+
+    public void getParkingSpotImages(String identifier, long id) {
+        if(identifier.equals("PARKINGSPOT")) {
+            NP.addEntry("GETSPOTIMAGES", id);
+        } else{
+            NP.addEntry("GETUSERIMAGES", id);
+        }
+        try{
+            clientCommunicator.sendPackage(NP);
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    //the editParkingSpot which will be called by the provider
+    public void editParkingSpot(ParkingSpot ps) {
+        //map.put("PICTURE", imageStrings);
+        Log.d("ps", "send ps");
+        NP.addEntry("EDITSPACE", ps);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

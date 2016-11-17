@@ -35,7 +35,6 @@ configurations.all {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile files('libs/resource.jar')
-    compile 'com.android.support:design:23.4.0'
 
 
 
@@ -60,12 +59,12 @@ dependencies {
     androidTestCompile('com.android.support.test:runner:0.4.1') {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.android.support:design:24.2.1'
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.android.support:support-v4:24.2.1'
     compile 'com.android.support:multidex:1.0.0'
     compile 'com.google.android.gms:play-services:9.8.0'
-    compile 'com.android.support:design:23.4.0'
-    compile 'com.android.support:recyclerview-v7:23.4.0'
+    compile 'com.android.support:recyclerview-v7:24.2.1'
     compile 'com.braintreepayments.api:braintree:2.+'
     compile 'com.braintreepayments.api:drop-in:2.+'
     compile 'com.github.npanigrahy:Custom-Calendar-View:v1.0'
@@ -75,4 +74,7 @@ dependencies {
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile 'me.iwf.photopicker:PhotoPicker:0.9.0@aar'
     compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.google.android.gms:play-services-ads:9.8.0'
+    compile 'com.google.android.gms:play-services-identity:9.8.0'
+    compile 'com.google.android.gms:play-services-gcm:9.8.0'
 }

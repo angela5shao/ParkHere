@@ -12,6 +12,7 @@
     <string name="comment_label">Comment</string>
     <string name="review_score_label">Average rating: </string>
     <string name="search_label">Search</string>
+    <string name="listview_label">Listview</string>
     <string name="mapview_label">Mapview</string>
     <string name="res_label">Reservation</string>
     <string name="review_label">Review</string>

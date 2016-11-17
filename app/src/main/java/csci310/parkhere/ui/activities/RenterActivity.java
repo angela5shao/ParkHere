@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -24,6 +26,7 @@ import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
 import csci310.parkhere.ui.fragments.DisplaySearchFragment;
 import csci310.parkhere.ui.fragments.EditProfileFragment;
+import csci310.parkhere.ui.fragments.MapViewFragment;
 import csci310.parkhere.ui.fragments.PrivateProfileFragment;
 import csci310.parkhere.ui.fragments.PublicProfileFragment;
 import csci310.parkhere.ui.fragments.ReservationDetailFragment;
@@ -220,7 +223,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
     }
 
 
-    public void displaySearchResult(SearchResults results, String startDate, String startTime, String endDate, String endTime) {
+    public void displaySearchResult(SearchResults results, LatLng loc, String startDate, String startTime, String endDate, String endTime) {
         if (results == null)
             return;
 
@@ -236,7 +239,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 
         displaySearchFragment = new DisplaySearchFragment();
 
-        ((DisplaySearchFragment) displaySearchFragment).setSearchResultListview(searchResults, startDate, startTime, endDate, endTime);
+        ((DisplaySearchFragment) displaySearchFragment).setSearchResultListview(searchResults, loc, startDate, startTime, endDate, endTime);
 
         fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.replace(R.id.fragContainer, displaySearchFragment);
@@ -269,6 +272,20 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 
 
         fragmentTransaction.replace(R.id.fragContainer, searchSpaceDetailFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    public void switchToListViewFrag(DisplaySearchFragment displaySearchFragment) {
+        fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(R.id.fragContainer, displaySearchFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    public void switchToMapViewFrag(MapViewFragment mapViewFragment) {
+        fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(R.id.fragContainer, mapViewFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

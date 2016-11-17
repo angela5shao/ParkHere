@@ -895,7 +895,7 @@ public class SearchFragment extends Fragment {
         protected void onPostExecute(SearchResults result) {
             if(result!=null) {
                 Log.d("SEARCH_RESULT", "onPostExecute");
-                ((RenterActivity) getActivity()).displaySearchResult(result, mStartDate, mStartTime, mEndDate, mEndTime);
+                ((RenterActivity) getActivity()).displaySearchResult(result, curr_location, mStartDate, mStartTime, mEndDate, mEndTime);
             }
             else{
                 Toast.makeText(getContext(), "Error to find space! Please try again.", Toast.LENGTH_SHORT).show();

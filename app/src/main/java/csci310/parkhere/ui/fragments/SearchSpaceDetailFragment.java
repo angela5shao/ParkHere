@@ -129,6 +129,7 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mPosition = getArguments().getInt(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -137,8 +138,17 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
             mParam5 = getArguments().getString(ARG_PARAM5);
 
             mImagesURLs = getArguments().getStringArrayList(ARG_PARAM6);
+
+            // Get ParkingSpot from controller
+            ClientController controller = ClientController.getInstance();
+            mParkingSpot = controller.searchResults.searchResultList.get(mPosition);
+//
 //            LoadSpotImageTask LSIT = new LoadSpotImageTask(mParkingSpot.getParkingSpotID());
 //            LSIT.execute((Void) null);
+
+//            LoadSpotImageTask LSIT = new LoadSpotImageTask(mParkingSpot.getParkingSpotID());
+//            LSIT.execute((Void) null);
+
         }
     }
 
@@ -189,13 +199,9 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
             }
         });
 
-        // Get ParkingSpot from controller
-        ClientController controller = ClientController.getInstance();
-        mParkingSpot = controller.searchResults.searchResultList.get(mPosition);
-
 
         mMapView = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map));
-        mMapView.onCreate(savedInstanceState);
+//        mMapView.onCreate(savedInstanceState);
 
 
         mMapView.onResume();// needed to get the map to display immediately

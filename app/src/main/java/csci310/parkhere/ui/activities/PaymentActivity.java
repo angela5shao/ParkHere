@@ -12,7 +12,6 @@ import android.widget.Toast;
 import com.braintreepayments.api.BraintreeFragment;
 import com.braintreepayments.api.BraintreePaymentActivity;
 import com.braintreepayments.api.PaymentRequest;
-import com.braintreepayments.api.exceptions.InvalidArgumentException;
 import com.braintreepayments.api.models.PaymentMethodNonce;
 
 import java.io.Serializable;
@@ -29,38 +28,28 @@ public class PaymentActivity extends Activity {
     private String clientToken;
     BraintreeFragment braintreeFragment;
 
+    private long resID, providerID;
+    private String price;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
 
-        try {
-            braintreeFragment = BraintreeFragment.newInstance(this, clientToken);
-            // mBraintreeFragment is ready to use!
-        } catch (InvalidArgumentException e) {
-            // There was an issue with your authorization string.
-        }
-
-        PaymentRequest paymentRequest = new PaymentRequest()
-                .clientToken(clientToken);
+        Intent intent = getIntent();
+        resID = intent.getLongExtra("RESERVATIONID", 0);
+        providerID = intent.getLongExtra("PROVIDERID", 0);
+        price = intent.getStringExtra("PRICE");
 
 //        try {
-//            PaymentButton paymentButton = PaymentButton.newInstance(this, R.id.payment_button_container, paymentRequest);
-//            paymentButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    PayPal.authorizeAccount(braintreeFragment);
-//                }
-//            });
+//            braintreeFragment = BraintreeFragment.newInstance(this, clientToken);
+//            // mBraintreeFragment is ready to use!
 //        } catch (InvalidArgumentException e) {
-//            e.printStackTrace();
+//            // There was an issue with your authorization string.
 //        }
-
-//        CardBuilder cardBuilder = new CardBuilder()
-//                .cardNumber("4111111111111111")
-//                .expirationDate("09/2018");
 //
-//        Card.tokenize(braintreeFragment, cardBuilder);
+//        PaymentRequest paymentRequest = new PaymentRequest()
+//                .clientToken(clientToken);
     }
 
     // For BrainTree payment
@@ -104,20 +93,18 @@ public class PaymentActivity extends Activity {
         if (requestCode == BRAINTREE_REQUEST_CODE) {
             switch (resultCode) {
                 case BraintreePaymentActivity.RESULT_OK:
-                    String paymentMethodNonce = data
-                            .getStringExtra(BraintreePaymentActivity.EXTRA_PAYMENT_METHOD_NONCE);
+                    PaymentMethodNonce paymentMethodNonce = data.getParcelableExtra(
+                            BraintreePaymentActivity.EXTRA_PAYMENT_METHOD_NONCE
+                    );
+
+                    String nonce = paymentMethodNonce.getNonce();
 
                     // Send paymeny success to server
                     Log.d("PAYMENT", " success and send to server!");
                     ClientController clientController = ClientController.getInstance();
                     clientController.setCurrentActivity(this);
 
-                    Intent myintent = getIntent();
-                    Long resID = myintent.getLongExtra("RESERVATIONID", 0);
-                    Long providerID = myintent.getLongExtra("PROVIDERID", 0);
-                    String price = myintent.getStringExtra("PRICE");
-
-                    clientController.postPaymentNonceToServer(paymentMethodNonce, resID, providerID, price);
+                    clientController.postPaymentNonceToServer(nonce, resID, providerID, "35");//price);
                     Intent intent = new Intent(getBaseContext(), RenterActivity.class);
                     startActivity(intent);
 
@@ -191,6 +178,7 @@ public class PaymentActivity extends Activity {
 
                 Log.d("clientToken ", "= "+clientToken);
                 PaymentRequest paymentRequest = new PaymentRequest()
+                        .amount("$35")
                         .clientToken(clientToken);
                 startActivityForResult(paymentRequest.getIntent(PaymentActivity.this), BRAINTREE_REQUEST_CODE);
 

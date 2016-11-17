@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -221,7 +223,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
     }
 
 
-    public void displaySearchResult(SearchResults results, String startDate, String startTime, String endDate, String endTime) {
+    public void displaySearchResult(SearchResults results, LatLng loc, String startDate, String startTime, String endDate, String endTime) {
         if (results == null)
             return;
 
@@ -237,7 +239,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 
         displaySearchFragment = new DisplaySearchFragment();
 
-        ((DisplaySearchFragment) displaySearchFragment).setSearchResultListview(searchResults, startDate, startTime, endDate, endTime);
+        ((DisplaySearchFragment) displaySearchFragment).setSearchResultListview(searchResults, loc, startDate, startTime, endDate, endTime);
 
         fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.replace(R.id.fragContainer, displaySearchFragment);

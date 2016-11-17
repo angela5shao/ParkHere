@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -30,7 +31,8 @@ import csci310.parkhere.ui.layout.MapWrapperLayout;
 import resource.ParkingSpot;
 
 public class MapViewFragment extends Fragment implements OnMapReadyCallback {
-    ArrayList<ParkingSpot> _spots;
+    private double searchLat, searchLon;
+    private ArrayList<ParkingSpot> _spots;
 
     Button _ListviewSwitch;
     private ViewGroup infoWindow;
@@ -42,6 +44,18 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     SupportMapFragment mMapView;
     private GoogleMap googleMap;
     CameraPosition cameraPosition;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            searchLat = getArguments().getDouble("SEARCH_LAT");
+            searchLon = getArguments().getDouble("SEARCH_LON");
+
+            Log.d("MapViewFrag", " SEARCH_LAT = "+searchLat);
+            Log.d("MapViewFrag", " SEARCH_LON = "+searchLon);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,6 +78,9 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
+        mMapView = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.map));
+        mMapView.onCreate(savedInstanceState);
+
         final MapWrapperLayout mapWrapperLayout = (MapWrapperLayout)v.findViewById(R.id.map_relative_layout);
         mapWrapperLayout.init(googleMap, getPixelsFromDp(getContext(), 39 + 20));
 
@@ -81,9 +98,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
             }
         };
         this.infoButton.setOnTouchListener(infoButtonListener);
-
-        mMapView = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map));
-        mMapView.onCreate(savedInstanceState);
 
         mMapView.onResume(); // needed to get the map to display immediately
 
@@ -174,15 +188,15 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
         Log.d("ONMAPREADY", "inGoogleMap");
 
-//        googleMap = inGoogleMap;
-//        googleMap.setMyLocationEnabled(true);
-//        cameraPosition = new CameraPosition.Builder()
-//                .target(new LatLng(mParkingSpot.getLat(), mParkingSpot.getLon())).zoom(12).build();
-//
-//        addMarkers(_spots);
-//
-//        googleMap.animateCamera(CameraUpdateFactory
-//                .newCameraPosition(cameraPosition));
+        googleMap = inGoogleMap;
+
+        cameraPosition = new CameraPosition.Builder()
+                .target(new LatLng(searchLat, searchLon)).zoom(12).build();
+
+        addMarkers(_spots);
+
+        googleMap.animateCamera(CameraUpdateFactory
+                .newCameraPosition(cameraPosition));
     }
 
     public void addMarkers(ArrayList<ParkingSpot> spots) {

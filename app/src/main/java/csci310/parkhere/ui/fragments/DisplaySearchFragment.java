@@ -1,7 +1,6 @@
 package csci310.parkhere.ui.fragments;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,9 +14,8 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 
 import csci310.parkhere.R;
@@ -46,6 +44,7 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
     private String mParam1;
     private String mParam2;
 
+    private static LatLng mSearchLoc;
     private static String mStartDate;
     private static String mStartTime;
     private static String mEndDate;
@@ -105,11 +104,12 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
                 // TODO: Switch to MapView
                 MapViewFragment mapViewFragment = new MapViewFragment();
                 Bundle args = new Bundle();
-//                args.putString("USERNAME", mParam1 );
-//                args.putString("PASSWORD", mParam2);
-//                args.putString("USERLICENSE", mParam3);
-//                args.putString("USERPLATE", mParam4);
-//                args.putString("PHONE", mParam5);
+
+                //*********************************************************
+                args.putDouble("SEARCH_LAT", mSearchLoc.latitude);
+                args.putDouble("SEARCH_LON", mSearchLoc.longitude);
+                //*********************************************************
+
                 mapViewFragment.setArguments(args);
                 ((RenterActivity) getActivity()).switchToMapViewFrag(mapViewFragment);
             }
@@ -245,11 +245,12 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
 
 
 
-    public void setSearchResultListview(String[] inSearchResults, String startDate, String startTime, String endDate, String endTime) {
+    public void setSearchResultListview(String[] inSearchResults, LatLng inSearchLoc, String startDate, String startTime, String endDate, String endTime) {
 //        _searchresultList.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, inSearchResults));
 //        DiplayListViewHelper.getListViewSize(_searchresultList);
         Log.d("setSearchResultListview", startDate + " " + startTime + " " + endDate + " " + endTime);
 
+        mSearchLoc = inSearchLoc;
         mStartDate = startDate;
         mStartTime = startTime;
         mEndDate = endDate;

@@ -659,7 +659,7 @@ public class ClientController {
         {
             Log.d("WRONG", "WRONG IDENTIFIER");
         }
-        NP.addEntry("SENDIMAGE",customImage);
+        NP.addEntry("UPLOADIMAGE",customImage);
         try {
             clientCommunicator.sendPackage(NP);
         } catch (IOException e) {

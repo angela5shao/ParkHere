@@ -523,7 +523,7 @@ public class SpaceDetailFragment extends Fragment {
                 String[] sDate = _edit_start_date.getText().toString().split("/");
                 String[] eDate = _edit_end_date.getText().toString().split("/");
                 EditTimeTask editTimeTask = new EditTimeTask(
-                        
+
                         sDate[1]+"/"+Integer.toString(Integer.valueOf(sDate[0])-1)+"/"+sDate[2],//_edit_start_date.getText().toString(),
 //                        sDate[1]+"/"+sDate[0]+"/"+sDate[2],
                         _edit_start_time.getText().toString()+"-0",

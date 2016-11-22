@@ -436,7 +436,8 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
             if(key.equals("RESERVE")) {
                 HashMap<String, Serializable> map = (HashMap<String, Serializable>) value;
                 long reservationID = (long) map.get("RESERVATIONID");
-                double price = (double) map.get("PRICE");
+                String price = String.valueOf(map.get("PRICE"));
+                Log.d("price", price);
 
                 Intent intent = new Intent(getContext(), PaymentActivity.class);
                 intent.putExtra("RESERVATIONID", reservationID);

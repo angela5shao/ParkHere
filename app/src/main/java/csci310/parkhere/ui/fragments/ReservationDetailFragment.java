@@ -342,6 +342,9 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
         @Override
         protected Boolean doInBackground(Void... params ){
             ClientController clientController = ClientController.getInstance();
+
+            Log.d("***Reservation Detail ", "mResID = "+mResID);
+
             clientController.submitPaymentRequest(mResID);
             NetworkPackage NP = clientController.checkReceived();
             MyEntry<String, Serializable> entry = NP.getCommand();

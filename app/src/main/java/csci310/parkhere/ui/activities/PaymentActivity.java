@@ -104,7 +104,7 @@ public class PaymentActivity extends Activity {
                     ClientController clientController = ClientController.getInstance();
                     clientController.setCurrentActivity(this);
 
-                    clientController.postPaymentNonceToServer(nonce, resID, providerID, "35");//price);
+                    clientController.postPaymentNonceToServer(nonce, resID, providerID, price);
                     Intent intent = new Intent(getBaseContext(), RenterActivity.class);
                     startActivity(intent);
 
@@ -178,7 +178,7 @@ public class PaymentActivity extends Activity {
 
                 Log.d("clientToken ", "= "+clientToken);
                 PaymentRequest paymentRequest = new PaymentRequest()
-                        .amount("$35")
+                        .amount("$"+price)
                         .clientToken(clientToken);
                 startActivityForResult(paymentRequest.getIntent(PaymentActivity.this), BRAINTREE_REQUEST_CODE);
 

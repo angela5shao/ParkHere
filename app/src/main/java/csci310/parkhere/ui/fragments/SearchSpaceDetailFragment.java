@@ -253,6 +253,10 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
         _pager.setAdapter(mImageAdapter);
         _pager.setOffscreenPageLimit(6); // how many images to load into memory
 
+
+
+
+
         spotReviewStringList = new ArrayList<>();
 
         spotReivewListAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1,  spotReviewStringList);

@@ -33,6 +33,7 @@ import csci310.parkhere.controller.ClientController;
 import csci310.parkhere.ui.fragments.EditProfileFragment;
 import csci310.parkhere.ui.fragments.PrivateProfileFragment;
 import csci310.parkhere.ui.fragments.ReservationDetailFragment;
+import csci310.parkhere.ui.fragments.SearchSpaceDetailFragment;
 import csci310.parkhere.ui.fragments.SpaceDetailFragment;
 import csci310.parkhere.ui.fragments.SpaceEditFragment;
 import csci310.parkhere.ui.fragments.SpacesFragment;
@@ -503,8 +504,75 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 
             spaceDetailFragment = new SpaceDetailFragment();
             ((SpaceDetailFragment)spaceDetailFragment).thisParkingSpot = parkingSpot;
-            spaceDetailFragment.setArguments(args);
-            fm.beginTransaction().add(R.id.fragContainer, spaceDetailFragment).commit();
+
+            LoadSpotImageTask slit =  new LoadSpotImageTask(parkingSpot.getParkingSpotID(), args);
+            slit.execute();
+
         }
+    }
+
+    public void loadImages(Bundle bundle, ArrayList<String> inputURL) {
+
+        bundle.putStringArrayList("spot_images", inputURL);
+    }
+
+
+    private class LoadSpotImageTask extends AsyncTask<Void, Void, ArrayList<String> >{
+        private final long mSpotID;
+        private final Bundle bundle;
+
+        LoadSpotImageTask(long spotID, Bundle bundle){
+            mSpotID = spotID;
+            this.bundle = bundle;
+            System.out.println(mSpotID);
+        }
+        @Override
+        protected void onPreExecute() { }
+        @Override
+        protected ArrayList<String> doInBackground(Void... params ){
+
+            ClientController clientController = ClientController.getInstance();
+            clientController.getParkingSpotImages("PARKINGSPOT", mSpotID);
+
+            NetworkPackage NP = clientController.checkReceived();
+
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            if(entry.getKey().equals("PARKINGSPOTIMAGESURLS"))
+            {
+                ArrayList<String> urls = (ArrayList<String>) entry.getValue();
+
+
+                for(String url : urls)
+                {
+                    Log.d("FETCHIMAGE", url);
+                }
+                return urls;
+            }
+
+            return null;
+
+        }
+        @Override
+        protected void onPostExecute(ArrayList<String> imagesURLs) {
+            if(imagesURLs != null) {
+                Log.d("LoadSpotImageTask", " post execute imagesURLs != null");
+
+                ArrayList<String> mImagesURLs = new ArrayList<String>(imagesURLs);
+                loadImages(this.bundle, mImagesURLs);
+
+
+
+                spaceDetailFragment.setArguments(bundle);
+                fm.beginTransaction().add(R.id.fragContainer, spaceDetailFragment).commit();
+
+
+            } else{
+                // TODO: WHAT TO DISPLAY WHEN NO IMAGE
+                //
+                Toast.makeText(getBaseContext(), "Cannot find images", Toast.LENGTH_SHORT).show();
+
+            }
+        }
+
     }
 }

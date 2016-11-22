@@ -538,7 +538,7 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
                 for(Review r : list)
                 {
                     Log.d("FETCHREVIEW", r.comment);
-                    spotReviewStringList.add(r.comment);
+                    spotReviewStringList.add("Rating: " + String.valueOf(r.spotRating) + "\n" + "Comment: " + r.comment);
                 }
 
 

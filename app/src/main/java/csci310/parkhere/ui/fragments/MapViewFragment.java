@@ -70,6 +70,8 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater,container,savedInstanceState);
+
         View v = inflater.inflate(R.layout.fragment_mapview, container, false);
 
         _ListviewSwitch = (Button) v.findViewById(R.id.ListviewSwitch);
@@ -92,7 +94,9 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume(); // needed to get the map to display immediately
         try {
-            MapsInitializer.initialize(getActivity().getApplicationContext());
+//            MapsInitializer.initialize(getActivity().getApplicationContext());
+            MapsInitializer.initialize(v.getContext());
+
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -38,6 +38,7 @@ public class PaymentActivity extends Activity {
 
         Intent intent = getIntent();
         resID = intent.getLongExtra("RESERVATIONID", 0);
+        Log.d("resID for test", String.valueOf(resID));
         providerID = intent.getLongExtra("PROVIDERID", 0);
         price = intent.getStringExtra("PRICE");
 
@@ -100,7 +101,7 @@ public class PaymentActivity extends Activity {
                     String nonce = paymentMethodNonce.getNonce();
 
                     // Send paymeny success to server
-                    Log.d("PAYMENT", " success and send to server!");
+                    Log.d("PAYMENT", " success and send to server - "+price);
                     ClientController clientController = ClientController.getInstance();
                     clientController.setCurrentActivity(this);
 

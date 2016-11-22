@@ -34,7 +34,7 @@ public class ClientCommunicator extends Thread {
     private ClientController controller;
     public ClientCommunicator(ClientController controller) throws IOException {
         this.controller = controller;
-            socket = new Socket("104.236.143.142", 61129);
+            socket = new Socket("ec2-35-164-64-84.us-west-2.compute.amazonaws.com", 61129);
             oos = new ObjectOutputStream(socket.getOutputStream());
             oos.flush();
 

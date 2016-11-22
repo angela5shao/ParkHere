@@ -473,40 +473,49 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
             ArrayList<Integer> inEndDay = new ArrayList<Integer>();
             ArrayList<Integer> inEndHour = new ArrayList<Integer>();
             ArrayList<Integer> inEndMin = new ArrayList<Integer>();
-            for (TimeInterval timeInterv: myTimeIntervals) {
-                Time startTime = timeInterv.startTime;
-                Time endTime = timeInterv.endTime;
 
-                inStartYear.add(startTime.year);
-                inStartMonth.add(startTime.month);
-                inStartDay.add(startTime.dayOfMonth);
-                inStartHour.add(startTime.hourOfDay);
-                inStartMin.add(startTime.minute);
-                inEndYear.add(endTime.year);
-                inEndMonth.add(endTime.month);
-                inEndDay.add(endTime.dayOfMonth);
-                inEndHour.add(endTime.hourOfDay);
-                inEndMin.add(endTime.minute);
+
+            if(myTimeIntervals != null)
+            {
+                for (TimeInterval timeInterv: myTimeIntervals) {
+                    Time startTime = timeInterv.startTime;
+                    Time endTime = timeInterv.endTime;
+
+                    inStartYear.add(startTime.year);
+                    inStartMonth.add(startTime.month);
+                    inStartDay.add(startTime.dayOfMonth);
+                    inStartHour.add(startTime.hourOfDay);
+                    inStartMin.add(startTime.minute);
+                    inEndYear.add(endTime.year);
+                    inEndMonth.add(endTime.month);
+                    inEndDay.add(endTime.dayOfMonth);
+                    inEndHour.add(endTime.hourOfDay);
+                    inEndMin.add(endTime.minute);
+                }
+
+                Bundle args = new Bundle();
+                args.putString("ADDRESS", parkingSpot.getStreetAddr());
+                args.putIntegerArrayList("START_YEARS", inStartYear);
+                args.putIntegerArrayList("START_MONTHS", inStartMonth);
+                args.putIntegerArrayList("START_DAYS", inStartDay);
+                args.putIntegerArrayList("START_HOURS", inStartHour);
+                args.putIntegerArrayList("START_MINS", inStartMin);
+                args.putIntegerArrayList("END_YEARS", inEndYear);
+                args.putIntegerArrayList("END_MONTHS", inEndMonth);
+                args.putIntegerArrayList("END_DAYS", inEndDay);
+                args.putIntegerArrayList("END_HOURS", inEndHour);
+                args.putIntegerArrayList("END_MINS", inEndMin);
+
+                spaceDetailFragment = new SpaceDetailFragment();
+                ((SpaceDetailFragment)spaceDetailFragment).thisParkingSpot = parkingSpot;
+
+                LoadSpotImageTask slit =  new LoadSpotImageTask(parkingSpot.getParkingSpotID(), args);
+                slit.execute();
+
             }
-
-            Bundle args = new Bundle();
-            args.putString("ADDRESS", parkingSpot.getStreetAddr());
-            args.putIntegerArrayList("START_YEARS", inStartYear);
-            args.putIntegerArrayList("START_MONTHS", inStartMonth);
-            args.putIntegerArrayList("START_DAYS", inStartDay);
-            args.putIntegerArrayList("START_HOURS", inStartHour);
-            args.putIntegerArrayList("START_MINS", inStartMin);
-            args.putIntegerArrayList("END_YEARS", inEndYear);
-            args.putIntegerArrayList("END_MONTHS", inEndMonth);
-            args.putIntegerArrayList("END_DAYS", inEndDay);
-            args.putIntegerArrayList("END_HOURS", inEndHour);
-            args.putIntegerArrayList("END_MINS", inEndMin);
-
-            spaceDetailFragment = new SpaceDetailFragment();
-            ((SpaceDetailFragment)spaceDetailFragment).thisParkingSpot = parkingSpot;
-
-            LoadSpotImageTask slit =  new LoadSpotImageTask(parkingSpot.getParkingSpotID(), args);
-            slit.execute();
+            else{
+                Toast.makeText(getBaseContext(), "Error in getting parking spot info, try again", Toast.LENGTH_SHORT).show();
+            }
 
         }
     }

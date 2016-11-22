@@ -233,7 +233,8 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
         // Populate string array of descriptions to display
         _searchDescriptions = new String[result.searchResultList.size()];
         for(int i = 0; i < result.searchResultList.size(); i++) {
-            _searchDescriptions[i] = result.searchResultList.get(i).getDescription();
+            ParkingSpot s = result.searchResultList.get(i);
+            _searchDescriptions[i] = "Address: " + s.getStreetAddr() + "\n" + s.getDescription();
         }
 
         ArrayList<Long> idlist = new ArrayList<>();

@@ -15,6 +15,8 @@
     <string name="listview_label">Listview</string>
     <string name="mapview_label">Mapview</string>
     <string name="res_label">Reservation</string>
+    <string name="upcoming_res_label">Upcoming</string>
+    <string name="past_res_label">Past</string>
     <string name="review_label">Review</string>
     <string name="rating_label">Rating</string>
     <string name="space_label">Space</string>
@@ -55,8 +57,8 @@
     </string-array>
     <string-array name="cancel_policy_spinner">
         <item>Free cancellation</item>
-        <item>10% penalty for cancellation</item>
-        <item>15% penalty for cancellation</item>
+        <item>50% refund</item>
+        <item>15% refund</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->

@@ -31,6 +31,7 @@ import com.imanoweb.calendarview.DayDecorator;
 import com.imanoweb.calendarview.DayView;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -51,6 +52,7 @@ import resource.ParkingSpot;
 import resource.Review;
 import resource.Time;
 import resource.TimeInterval;
+import resource.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -1011,6 +1013,8 @@ public class SpaceDetailFragment extends Fragment {
 
     private class RequestReviewTask extends AsyncTask<Void, Void, ArrayList<Review>> {
         long parkingSpotID;
+        ArrayList<User> userlist;
+
 
         RequestReviewTask(long parkingSpotID) {
             this.parkingSpotID = parkingSpotID;
@@ -1019,6 +1023,7 @@ public class SpaceDetailFragment extends Fragment {
         protected ArrayList<Review> doInBackground(Void... params) {
 
             ClientController clientController = ClientController.getInstance();
+
 
             clientController.requestParkingSpotReview(parkingSpotID);
             NetworkPackage NP = clientController.checkReceived();
@@ -1030,7 +1035,7 @@ public class SpaceDetailFragment extends Fragment {
 
                 ArrayList<Review> list = (ArrayList<Review>) map.get("REVIEWS");
                 Log.d("FETCHREVIEWLIST", "listsize: " + String.valueOf(list.size()));
-
+                userlist = (ArrayList<User>) map.get("USERS");
 
 
 
@@ -1046,15 +1051,23 @@ public class SpaceDetailFragment extends Fragment {
         protected void onPostExecute(ArrayList<Review> list) {
 
 
-            if(list != null)
+            if(list != null && userlist != null)
             {
                 spotReviewStringList.clear();
 
-                for(Review r : list)
+//
+                for(int i = 0; i < list.size(); i++)
                 {
-                    Log.d("FETCHREVIEW", r.comment);
-                    spotReviewStringList.add("Rating: " + String.valueOf(r.spotRating) + "\n" + "Comment: " + r.comment);
+                    Log.d("FETCHREVIEW", list.get(i).comment);
+                    spotReviewStringList.add(userlist.get(i).Fname + ":\n" + "Rating: " + String.valueOf(list.get(i).spotRating) + "\n" + "Comment: " + list.get(i).comment);
+
                 }
+
+//                for(Review r : list)
+//                {
+//                    Log.d("FETCHREVIEW", r.comment);
+//                    spotReviewStringList.add("Rating: " + String.valueOf(r.spotRating) + "\n" + "Comment: " + r.comment);
+//                }
 
 
                 spotReivewListAdapter.notifyDataSetChanged();

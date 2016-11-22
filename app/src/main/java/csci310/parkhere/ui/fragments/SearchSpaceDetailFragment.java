@@ -497,6 +497,9 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
     private class RequestReviewTask extends AsyncTask<Void, Void, ArrayList<Review>> {
         long parkingSpotID;
 
+        ArrayList<User> userlist;
+
+
         RequestReviewTask(long parkingSpotID) {
             this.parkingSpotID = parkingSpotID;
         }
@@ -515,6 +518,8 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
 
                 ArrayList<Review> list = (ArrayList<Review>) map.get("REVIEWS");
                 Log.d("FETCHREVIEWLIST", "listsize: " + String.valueOf(list.size()));
+                userlist = (ArrayList<User>) map.get("USERS");
+
 
 
 
@@ -531,15 +536,22 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
         protected void onPostExecute(ArrayList<Review> list) {
 
 
-            if(list != null)
+            if(list != null && userlist != null)
             {
                 spotReviewStringList.clear();
 
-                for(Review r : list)
+                for(int i = 0; i < list.size(); i++)
                 {
-                    Log.d("FETCHREVIEW", r.comment);
-                    spotReviewStringList.add("Rating: " + String.valueOf(r.spotRating) + "\n" + "Comment: " + r.comment);
+                    Log.d("FETCHREVIEW", list.get(i).comment);
+                    spotReviewStringList.add(userlist.get(i).Fname + ":\n" + "Rating: " + String.valueOf(list.get(i).spotRating) + "\n" + "Comment: " + list.get(i).comment);
+
                 }
+
+//                for(Review r : list)
+//                {
+//                    Log.d("FETCHREVIEW", r.comment);
+//                    spotReviewStringList.add("Rating: " + String.valueOf(r.spotRating) + "\n" + "Comment: " + r.comment);
+//                }
 
 
                 spotReivewListAdapter.notifyDataSetChanged();

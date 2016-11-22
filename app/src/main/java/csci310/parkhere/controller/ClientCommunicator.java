@@ -1,6 +1,7 @@
 package csci310.parkhere.controller;
 
 import android.net.Network;
+import android.os.AsyncTask;
 import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
@@ -17,6 +18,7 @@ import java.util.HashMap;
 import resource.MyEntry;
 import resource.NetworkPackage;
 import resource.ParkingSpot;
+import resource.Review;
 import resource.SearchResults;
 import resource.TimeInterval;
 import resource.User;
@@ -34,15 +36,53 @@ public class ClientCommunicator extends Thread {
     private ClientController controller;
     public ClientCommunicator(ClientController controller) throws IOException {
         this.controller = controller;
-            socket = new Socket("ec2-35-164-64-84.us-west-2.compute.amazonaws.com", 61129);
-            oos = new ObjectOutputStream(socket.getOutputStream());
-            oos.flush();
-
-            ois = new ObjectInputStream(socket.getInputStream());
-
-            start();
-
+        ServerConnAsync sca = new ServerConnAsync();
+        sca.execute();
     }
+
+
+    private class ServerConnAsync extends AsyncTask<Void, Void, Boolean> {
+
+
+
+        ServerConnAsync() {
+
+
+        }
+        @Override
+        protected Boolean doInBackground(Void... params) {
+
+            try {
+                socket = new Socket("ec2-35-164-64-84.us-west-2.compute.amazonaws.com", 61129);
+                oos = new ObjectOutputStream(socket.getOutputStream());
+                oos.flush();
+
+                ois = new ObjectInputStream(socket.getInputStream());
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+
+
+
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            super.onPostExecute(success);
+
+            if(success)
+            {
+                start();
+            }
+
+        }
+    }
+
+
+
+
     public void run()
     {
         Looper.prepare();
@@ -91,65 +131,3 @@ public class ClientCommunicator extends Thread {
     }
 }
 
-//                if (obj instanceof NetworkPackage) {
-//                    NetworkPackage np = (NetworkPackage) obj;
-//                    MyEntry<String, Serializable> entry = np.getCommand();
-//                    if(entry==null)
-//                        Log.d("NULL", "NULL");
-//                    String key = entry.getKey();
-//                    Object value = entry.getValue();
-//                    System.out.println("Command Key: " + key);
-//                    if(key.equals("RF")){
-//                        Log.d("CONTROLLER", "Set flag true");
-//                        controller.registerFailed = true;
-//                    } else if(key.equals("LF")){
-//                        controller.loginFailed = true;
-//
-//                    } else if(key.equals("LOF")){
-//
-//                    } else if(key.equals("LOGIN")){
-//                        User result = (User) value;
-//                        Log.d("LOGIN", result.userName);
-//                        controller.setUser(result);
-//                    } else if(key.equals("REGISTER")){
-//                        User result = (User) value;
-//
-//                        controller.setUser(result);
-//
-//                    } else if(key.equals("LOGOUT")){
-//
-//                    } else if(key.equals("SEARCH_RESULT")){
-//                        SearchResults result = (SearchResults)value;
-//                        Log.d("Results", result.searchResultList.get(0).getStreetAddr());
-//                        controller.toDispaySearch = true;
-//                        controller.updateActivity();
-//                        controller.searchResults = result;
-//                        Log.d("SEARCH_RESULT", "Size "+ String.valueOf(result.searchResultList.size()));
-//                    } else if(key.equals("ADDSPACE")) {
-//
-//                        ParkingSpot spot = (ParkingSpot)value;
-//                        Log.d("Result","add space " + String.valueOf(spot.getParkingSpotID()));
-//
-//                        controller.parkingSpots.add(spot);
-////                        controller.requestMyParkingSpotList();
-////                        controller.providerToshowSpaces = true;
-//
-//                    } else if(key.equals("ADDTIME"))
-//                    {
-//                        Long newTimeID = (Long)value;;
-//                        Log.d("ADDTIME", "Interval id" + newTimeID);
-//                    }
-//                    else if(key.equals("RESPONSEPARKINGSPOT"))
-//                    {
-//                        ArrayList<ParkingSpot> myParkingSpot = (ArrayList<ParkingSpot>)value;
-//                        controller.parkingSpots = myParkingSpot;
-//                        Log.d("RESPONSEPARKINGSPOT","Receive list of parkingspot" + myParkingSpot.size());
-//
-//                    } else if(key.equals("RESPONSEINTERVAL"))
-//                    {
-//                        HashMap<String, Serializable> map = (HashMap<String, Serializable>) value;
-//                        ArrayList<TimeInterval> intervals = (ArrayList<TimeInterval>) map.get("TIMEINTERVAL");
-//                        Long spotID = (Long)map.get("PARKINGSPOTID");
-//                        controller.setSpotTimeInterval(spotID,intervals);
-//                        Log.d("RESPONSEINTERVAL","Receive list of interval" + intervals.size());
-//                    }

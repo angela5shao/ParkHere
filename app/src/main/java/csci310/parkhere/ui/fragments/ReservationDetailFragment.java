@@ -63,7 +63,7 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
     CameraPosition cameraPosition;
 
     TextView _spacedetail_address, _start_time_label, _end_time_label, _renter_username_label;
-    Button _btn_confirm, _btn_review, _btn_cancel;
+    Button _btn_confirm, _btn_review, _btn_report, _btn_cancel;
 
     // latitude and longitude (default as USC)
     private double curr_lat = 34.0224;
@@ -129,6 +129,7 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
         _renter_username_label=(TextView)v.findViewById(R.id.renter_username_label);
         _btn_confirm=(Button)v.findViewById(R.id.btn_confirm);
         _btn_review=(Button)v.findViewById(R.id.btn_review);
+        _btn_report=(Button)v.findViewById(R.id.btn_report);
         _btn_cancel=(Button)v.findViewById(R.id.btn_cancel);
 
         Log.d("Reservation detail ","if_canReview = "+if_canReview);
@@ -139,6 +140,7 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
         }
 
         if(!if_canCancel) {
+            _btn_report.setVisibility(View.GONE);
             _btn_cancel.setVisibility(View.GONE);
 
             if(if_ispaid) {

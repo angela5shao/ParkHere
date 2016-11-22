@@ -8,6 +8,7 @@
     <string name="phone_label">Phone #: </string>
     <string name="email_label">Email: </string>
     <string name="price_label">Price ($/hr): </string>
+    <string name="report_label">Report</string>
     <string name="cancel_label">Cancel</string>
     <string name="comment_label">Comment</string>
     <string name="review_score_label">Average rating: </string>

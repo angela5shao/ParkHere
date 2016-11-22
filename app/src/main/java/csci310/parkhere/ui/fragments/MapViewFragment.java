@@ -137,8 +137,8 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         if(mMapView != null) mMapView.onDestroy();
+        super.onDestroy();
     }
 
     @Override

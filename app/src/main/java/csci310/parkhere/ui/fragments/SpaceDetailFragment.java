@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -18,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -29,11 +31,13 @@ import com.imanoweb.calendarview.DayDecorator;
 import com.imanoweb.calendarview.DayView;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -45,8 +49,10 @@ import csci310.parkhere.ui.helpers.DiplayListViewHelper;
 import resource.MyEntry;
 import resource.NetworkPackage;
 import resource.ParkingSpot;
+import resource.Review;
 import resource.Time;
 import resource.TimeInterval;
+import resource.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -94,6 +100,12 @@ public class SpaceDetailFragment extends Fragment {
     Time inputedEndTime;
     Time inputedEditStartTime;
     Time inputedEditEndTime;
+
+
+
+    ListView spotReviewList;
+    ArrayAdapter spotReivewListAdapter;
+    ArrayList<String> spotReviewStringList;
 
 //    //*******************************************************************************
 //    // FOR TESTING DELETE LATER!!!
@@ -173,6 +185,19 @@ public class SpaceDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_space_detail, container, false);
+
+
+        spotReviewList = (ListView) v.findViewById(R.id.spot_review_list);
+
+
+        spotReviewStringList = new ArrayList<>();
+
+        spotReivewListAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1,  spotReviewStringList);
+        spotReviewList.setAdapter(spotReivewListAdapter);
+
+        RequestReviewTask rrt = new RequestReviewTask(thisParkingSpot.getParkingSpotID());
+        rrt.execute();
+
 
         _spacedetail_address = (TextView)v.findViewById(R.id.spacedetail_address);
         _spacedetail_address.setText(address);
@@ -982,5 +1007,100 @@ public class SpaceDetailFragment extends Fragment {
             }
         }
     }
+
+
+
+
+    private class RequestReviewTask extends AsyncTask<Void, Void, ArrayList<Review>> {
+        long parkingSpotID;
+        ArrayList<User> userlist;
+
+
+        RequestReviewTask(long parkingSpotID) {
+            this.parkingSpotID = parkingSpotID;
+        }
+        @Override
+        protected ArrayList<Review> doInBackground(Void... params) {
+
+            ClientController clientController = ClientController.getInstance();
+
+
+            clientController.requestParkingSpotReview(parkingSpotID);
+            NetworkPackage NP = clientController.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if (key.equals("REVIEWFORPARKINGSPOT")) {
+                HashMap<String, Serializable> map = (HashMap<String, Serializable>)value;
+
+                ArrayList<Review> list = (ArrayList<Review>) map.get("REVIEWS");
+                Log.d("FETCHREVIEWLIST", "listsize: " + String.valueOf(list.size()));
+                userlist = (ArrayList<User>) map.get("USERS");
+
+
+
+
+
+                return list;
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Review> list) {
+
+
+            if(list != null && userlist != null)
+            {
+                spotReviewStringList.clear();
+
+//
+                for(int i = 0; i < list.size(); i++)
+                {
+                    Log.d("FETCHREVIEW", list.get(i).comment);
+                    spotReviewStringList.add(userlist.get(i).Fname + ":\n" + "Rating: " + String.valueOf(list.get(i).spotRating) + "\n" + "Comment: " + list.get(i).comment);
+
+                }
+
+//                for(Review r : list)
+//                {
+//                    Log.d("FETCHREVIEW", r.comment);
+//                    spotReviewStringList.add("Rating: " + String.valueOf(r.spotRating) + "\n" + "Comment: " + r.comment);
+//                }
+
+
+                spotReivewListAdapter.notifyDataSetChanged();
+                setListViewHeightBasedOnChildren(spotReviewList);
+
+
+            }
+
+
+        }
+    }
+
+
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null)
+            return;
+
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+        int totalHeight = 0;
+        View view = null;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            view = listAdapter.getView(i, view, listView);
+            if (i == 0)
+                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewPager.LayoutParams.WRAP_CONTENT));
+
+            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += view.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+    }
+
 
 }

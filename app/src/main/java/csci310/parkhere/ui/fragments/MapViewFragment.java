@@ -22,6 +22,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
@@ -32,6 +33,11 @@ import resource.ParkingSpot;
 import resource.SearchResults;
 
 public class MapViewFragment extends Fragment implements OnMapReadyCallback {
+    // in case of several markers with the same location
+    private static final float COORDINATE_OFFSET = 0.0001f;
+    // HashMap of marker identifier and its location as a string
+    private HashMap<String, String> markerLocation = new HashMap<String, String>();
+
     private double searchLat, searchLon;
     private String startDate, startTime, endDate, endTime;
     private ArrayList<ParkingSpot> _spots;
@@ -70,6 +76,8 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater,container,savedInstanceState);
+
         View v = inflater.inflate(R.layout.fragment_mapview, container, false);
 
         _ListviewSwitch = (Button) v.findViewById(R.id.ListviewSwitch);
@@ -85,14 +93,12 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         });
 
         mMapView = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map));
-//        if (mMapView == null) {
-//            mMapView = SupportMapFragment.newInstance();
-//            getChildFragmentManager().beginTransaction().replace(R.id.map, mMapView).commit();
-//        }
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume(); // needed to get the map to display immediately
         try {
-            MapsInitializer.initialize(getActivity().getApplicationContext());
+//            MapsInitializer.initialize(getActivity().getApplicationContext());
+            MapsInitializer.initialize(v.getContext());
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -135,8 +141,8 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onDestroy() {
+        if(mMapView != null) mMapView.onDestroy();
         super.onDestroy();
-        mMapView.onDestroy();
     }
 
     @Override
@@ -184,11 +190,13 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
     public void addMarkers(ArrayList<ParkingSpot> spots) {
         if(googleMap != null) {
+            markerLocation.clear();
             for (int i=0; i<spots.size(); ++i) {
+                Double[] coord = coordinateForMarker(i, spots.get(i).getLat(), spots.get(i).getLon());
                 Marker marker = googleMap.addMarker(new MarkerOptions()
                         .title(("$" + Double.toString(spots.get(i).search_price) + "/hr"))
                         .snippet(spots.get(i).getStreetAddr())
-                        .position(new LatLng(spots.get(i).getLat(), spots.get(i).getLon())));
+                        .position(new LatLng(coord[0], coord[1])));
                 marker.setTag(i);
             }
         }
@@ -196,8 +204,55 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
     public static int getPixelsFromDp(Context context, float dp) {
         final float scale = context.getResources().getDisplayMetrics().density;
-        return (int)(dp * scale + 0.5f);
+        return (int) (dp * scale + 0.5f);
     }
+
+    // Source: http://stackoverflow.com/questions/19704124/how-to-handle-multiple-markers-on-google-maps-with-same-location
+    // Check if any marker is displayed on given coordinate. If yes then decide
+    // another appropriate coordinate to display this marker. It returns an
+    // array with latitude(at index 0) and longitude(at index 1).
+    private Double[] coordinateForMarker(int id, double latitude, double longitude) {
+        Double[] location = new Double[2];
+
+        for (int i = 0; i <= _spots.size(); i++) {
+            if (mapAlreadyHasMarkerForLocation((latitude + i
+                    * COORDINATE_OFFSET)
+                    + "," + (longitude + i * COORDINATE_OFFSET))) {
+
+                // If i = 0 then below if condition is same as upper one. Hence, no need to execute below if condition.
+                if (i == 0)
+                    continue;
+
+                if (mapAlreadyHasMarkerForLocation((latitude - i
+                        * COORDINATE_OFFSET)
+                        + "," + (longitude - i * COORDINATE_OFFSET))) {
+
+                    continue;
+
+                } else {
+                    location[0] = latitude - (i * COORDINATE_OFFSET);
+                    location[1] = longitude - (i * COORDINATE_OFFSET);
+                    break;
+                }
+
+            } else {
+                location[0] = latitude + (i * COORDINATE_OFFSET);
+                location[1] = longitude + (i * COORDINATE_OFFSET);
+                break;
+            }
+        }
+
+        // keep track of Hashmap
+        markerLocation.put(id+"", location[0]+","+location[1]);
+
+        return location;
+    }
+
+    // Return whether marker with same location is already on map
+    private boolean mapAlreadyHasMarkerForLocation(String location) {
+        return (markerLocation.containsValue(location));
+    }
+
 
     /**
      * This interface must be implemented by activities that contain this

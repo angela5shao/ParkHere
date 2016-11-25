@@ -376,7 +376,6 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
     public void onItemClick(AdapterView<?> parent, View view, int position,
                             long id) {
 //        String selectedItem= itemname[+position];
-
         mListener.onSearchSpaceSelected(position, mStartDate, mStartTime, mEndDate, mEndTime);
     }
 }

@@ -333,6 +333,15 @@
                     android:layout_marginBottom="12dp"
                     android:visibility="gone"/>
 
+
+                <ListView
+                    android:id="@+id/spot_review_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="12dp"
+                    android:textColor="@color/colorMainFont"
+                    android:background="@color/colorAccent"/>
+
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

@@ -60,6 +60,8 @@ public class AddSpaceActivity extends AppCompatActivity {
     ProviderAddSpaceTask addSpaceTask = null;
 
     public LatLng curr_location;
+    ProgressDialog progressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +127,10 @@ public class AddSpaceActivity extends AppCompatActivity {
         _btn_confirm = (Button)findViewById(R.id.btn_confirm);
         _btn_confirm.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+                progressDialog = ProgressDialog.show(
+                        AddSpaceActivity.this, "",
+                        "Adding", true);
+
                 Log.d("AddSpace", " onClick!");
 
                 addSpaceTask = new ProviderAddSpaceTask(_addressText.getText().toString(),
@@ -193,10 +199,11 @@ public class AddSpaceActivity extends AppCompatActivity {
         private final int mCancelPolicy;
         private final ArrayList<String> encodeImages = new ArrayList<String>();
 
-        ProgressDialog progressDialog;
 
         ProviderAddSpaceTask(String inAddressText, String inDescrip, String inCarType, int inCancelPolicy, ArrayList<String> inImagePaths) {
             Log.d("@@@ADDSPACE", "add space construct");
+            //Display a progress dialog
+
 
             mAddressText = inAddressText;
             mDescrip = inDescrip;
@@ -222,10 +229,7 @@ public class AddSpaceActivity extends AppCompatActivity {
         protected void onPreExecute() {
             Log.d("@@@ADDSPACE", "add space pre execute");
 
-            //Display a progress dialog
-            progressDialog = ProgressDialog.show(
-                    AddSpaceActivity.this, "",
-                    "Adding", true);
+
 //            progressDialog.setIndeterminate(true);
 //            progressDialog.setMessage("Adding...");
 //            progressDialog.show();
@@ -266,7 +270,11 @@ public class AddSpaceActivity extends AppCompatActivity {
             if (success) {
                 Log.d("ONPOSTEXECUTE", "success");
                 progressDialog.dismiss();
-                finish();
+//                finish();
+
+                Intent myIntent = new Intent(getBaseContext(), ProviderActivity.class);
+                startActivityForResult(myIntent, 0);
+
             } else {
                 progressDialog.dismiss();
                 Toast.makeText(getBaseContext(), "Error on add space! Please try again.", Toast.LENGTH_SHORT).show();

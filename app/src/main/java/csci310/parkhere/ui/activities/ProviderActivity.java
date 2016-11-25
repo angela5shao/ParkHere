@@ -33,6 +33,7 @@ import csci310.parkhere.controller.ClientController;
 import csci310.parkhere.ui.fragments.EditProfileFragment;
 import csci310.parkhere.ui.fragments.PrivateProfileFragment;
 import csci310.parkhere.ui.fragments.ReservationDetailFragment;
+import csci310.parkhere.ui.fragments.SearchSpaceDetailFragment;
 import csci310.parkhere.ui.fragments.SpaceDetailFragment;
 import csci310.parkhere.ui.fragments.SpaceEditFragment;
 import csci310.parkhere.ui.fragments.SpacesFragment;
@@ -472,39 +473,115 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
             ArrayList<Integer> inEndDay = new ArrayList<Integer>();
             ArrayList<Integer> inEndHour = new ArrayList<Integer>();
             ArrayList<Integer> inEndMin = new ArrayList<Integer>();
-            for (TimeInterval timeInterv: myTimeIntervals) {
-                Time startTime = timeInterv.startTime;
-                Time endTime = timeInterv.endTime;
 
-                inStartYear.add(startTime.year);
-                inStartMonth.add(startTime.month);
-                inStartDay.add(startTime.dayOfMonth);
-                inStartHour.add(startTime.hourOfDay);
-                inStartMin.add(startTime.minute);
-                inEndYear.add(endTime.year);
-                inEndMonth.add(endTime.month);
-                inEndDay.add(endTime.dayOfMonth);
-                inEndHour.add(endTime.hourOfDay);
-                inEndMin.add(endTime.minute);
+
+            if(myTimeIntervals != null)
+            {
+                for (TimeInterval timeInterv: myTimeIntervals) {
+                    Time startTime = timeInterv.startTime;
+                    Time endTime = timeInterv.endTime;
+
+                    inStartYear.add(startTime.year);
+                    inStartMonth.add(startTime.month);
+                    inStartDay.add(startTime.dayOfMonth);
+                    inStartHour.add(startTime.hourOfDay);
+                    inStartMin.add(startTime.minute);
+                    inEndYear.add(endTime.year);
+                    inEndMonth.add(endTime.month);
+                    inEndDay.add(endTime.dayOfMonth);
+                    inEndHour.add(endTime.hourOfDay);
+                    inEndMin.add(endTime.minute);
+                }
+
+                Bundle args = new Bundle();
+                args.putString("ADDRESS", parkingSpot.getStreetAddr());
+                args.putIntegerArrayList("START_YEARS", inStartYear);
+                args.putIntegerArrayList("START_MONTHS", inStartMonth);
+                args.putIntegerArrayList("START_DAYS", inStartDay);
+                args.putIntegerArrayList("START_HOURS", inStartHour);
+                args.putIntegerArrayList("START_MINS", inStartMin);
+                args.putIntegerArrayList("END_YEARS", inEndYear);
+                args.putIntegerArrayList("END_MONTHS", inEndMonth);
+                args.putIntegerArrayList("END_DAYS", inEndDay);
+                args.putIntegerArrayList("END_HOURS", inEndHour);
+                args.putIntegerArrayList("END_MINS", inEndMin);
+
+                spaceDetailFragment = new SpaceDetailFragment();
+                ((SpaceDetailFragment)spaceDetailFragment).thisParkingSpot = parkingSpot;
+
+                LoadSpotImageTask slit =  new LoadSpotImageTask(parkingSpot.getParkingSpotID(), args);
+                slit.execute();
+
+            }
+            else{
+                Toast.makeText(getBaseContext(), "Error in getting parking spot info, try again", Toast.LENGTH_SHORT).show();
             }
 
-            Bundle args = new Bundle();
-            args.putString("ADDRESS", parkingSpot.getStreetAddr());
-            args.putIntegerArrayList("START_YEARS", inStartYear);
-            args.putIntegerArrayList("START_MONTHS", inStartMonth);
-            args.putIntegerArrayList("START_DAYS", inStartDay);
-            args.putIntegerArrayList("START_HOURS", inStartHour);
-            args.putIntegerArrayList("START_MINS", inStartMin);
-            args.putIntegerArrayList("END_YEARS", inEndYear);
-            args.putIntegerArrayList("END_MONTHS", inEndMonth);
-            args.putIntegerArrayList("END_DAYS", inEndDay);
-            args.putIntegerArrayList("END_HOURS", inEndHour);
-            args.putIntegerArrayList("END_MINS", inEndMin);
-
-            spaceDetailFragment = new SpaceDetailFragment();
-            ((SpaceDetailFragment)spaceDetailFragment).thisParkingSpot = parkingSpot;
-            spaceDetailFragment.setArguments(args);
-            fm.beginTransaction().add(R.id.fragContainer, spaceDetailFragment).commit();
         }
+    }
+
+    public void loadImages(Bundle bundle, ArrayList<String> inputURL) {
+
+        bundle.putStringArrayList("spot_images", inputURL);
+    }
+
+
+    private class LoadSpotImageTask extends AsyncTask<Void, Void, ArrayList<String> >{
+        private final long mSpotID;
+        private final Bundle bundle;
+
+        LoadSpotImageTask(long spotID, Bundle bundle){
+            mSpotID = spotID;
+            this.bundle = bundle;
+            System.out.println(mSpotID);
+        }
+        @Override
+        protected void onPreExecute() { }
+        @Override
+        protected ArrayList<String> doInBackground(Void... params ){
+
+            ClientController clientController = ClientController.getInstance();
+            clientController.getParkingSpotImages("PARKINGSPOT", mSpotID);
+
+            NetworkPackage NP = clientController.checkReceived();
+
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            if(entry.getKey().equals("PARKINGSPOTIMAGESURLS"))
+            {
+                ArrayList<String> urls = (ArrayList<String>) entry.getValue();
+
+
+                for(String url : urls)
+                {
+                    Log.d("FETCHIMAGE", url);
+                }
+                return urls;
+            }
+
+            return null;
+
+        }
+        @Override
+        protected void onPostExecute(ArrayList<String> imagesURLs) {
+            if(imagesURLs != null) {
+                Log.d("LoadSpotImageTask", " post execute imagesURLs != null");
+
+                ArrayList<String> mImagesURLs = new ArrayList<String>(imagesURLs);
+                loadImages(this.bundle, mImagesURLs);
+
+
+
+                spaceDetailFragment.setArguments(bundle);
+                fm.beginTransaction().add(R.id.fragContainer, spaceDetailFragment).commit();
+
+
+            } else{
+                // TODO: WHAT TO DISPLAY WHEN NO IMAGE
+                //
+                Toast.makeText(getBaseContext(), "Cannot find images", Toast.LENGTH_SHORT).show();
+
+            }
+        }
+
     }
 }

@@ -270,10 +270,7 @@ public class AddSpaceActivity extends AppCompatActivity {
             if (success) {
                 Log.d("ONPOSTEXECUTE", "success");
                 progressDialog.dismiss();
-//                finish();
-
-                Intent myIntent = new Intent(getBaseContext(), ProviderActivity.class);
-                startActivityForResult(myIntent, 0);
+                finish();
 
             } else {
                 progressDialog.dismiss();

@@ -53,6 +53,42 @@
                         android:background="@color/colorAccent"/>
                 </LinearLayout>
 
+
+
+
+                <!--
+                    Image horizontal scroll container
+                    Source: https://github.com/sourcey/imagegallerydemo
+                -->
+                <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                             android:layout_width="match_parent"
+                             android:layout_height="300dp"
+                             android:layout_marginTop="8dp"
+                             android:layout_marginBottom="8dp"
+                             android:fitsSystemWindows="true">
+
+                    <android.support.v4.view.ViewPager
+                        android:id="@+id/pager"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="72dp">
+                    </android.support.v4.view.ViewPager>
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="72dp"
+                        android:layout_gravity="bottom">
+                        <LinearLayout
+                            android:id="@+id/thumbnails"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingTop="2dp"/>
+                    </HorizontalScrollView>
+                </FrameLayout>
+
+
                 <com.imanoweb.calendarview.CustomCalendarView
                     android:id="@+id/calendar_view"
                     android:layout_width="match_parent"

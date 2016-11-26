@@ -75,7 +75,7 @@ public class RenterReservationDetailFragment extends Fragment implements OnMapRe
     private String address = "[address]";
     private String start_time = "[start time]";
     private String end_time = "[end time]";
-    private String owner_id = "[owner id]";
+    private long owner_id = 0;
     private long res_id = 0;
     private boolean if_canReview, if_canCancel, if_ispaid;
 
@@ -113,7 +113,7 @@ public class RenterReservationDetailFragment extends Fragment implements OnMapRe
             address = b.getString("ADDRESS");
             start_time = b.getString("START_TIME");
             end_time = b.getString("END_TIME");
-            owner_id = b.getString("RENTER");
+            owner_id = b.getLong("PROVIDER");
             res_id = b.getLong("RES_ID");
             if_canReview = b.getBoolean("IF_CANREVIEW");
             if_canCancel = b.getBoolean("IF_CANCANCEL");
@@ -161,7 +161,10 @@ public class RenterReservationDetailFragment extends Fragment implements OnMapRe
         _spacedetail_address.setText(address);
         _start_time_label.setText(start_time);
         _end_time_label.setText(end_time);
-        _renter_username_label.setText(owner_id);
+        _renter_username_label.setText(Long.toString(owner_id));
+
+        SetUserNameTask sunt = new SetUserNameTask(owner_id);
+        sunt.execute();
 
         mMapView = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map));
         mMapView.onCreate(savedInstanceState);
@@ -311,7 +314,7 @@ public class RenterReservationDetailFragment extends Fragment implements OnMapRe
 
     // Update reservation information
     public void setReservation(String in_address, String in_start_time, String in_end_time,
-                               String in_own_id, double in_lat, double in_long) {
+                               long in_own_id, double in_lat, double in_long) {
         address = in_address;
         start_time = in_start_time;
         end_time = in_end_time;
@@ -319,7 +322,7 @@ public class RenterReservationDetailFragment extends Fragment implements OnMapRe
         _spacedetail_address.setText(address);
         _start_time_label.setText(start_time);
         _end_time_label.setText(end_time);
-        _renter_username_label.setText(owner_id);
+        _renter_username_label.setText(Long.toString(owner_id));
 
         curr_lat = in_lat;
         curr_long = in_long;
@@ -392,10 +395,42 @@ public class RenterReservationDetailFragment extends Fragment implements OnMapRe
         }
     }
 
-    private class RenterReportTask extends AsyncTask<Void, Void, User> {
-        private String own_id;
 
-        RenterReportTask(String own_id){
+    private class SetUserNameTask extends AsyncTask<Void, Void, User>{
+        private long userid;
+
+        SetUserNameTask(long own_id){
+            this.userid = own_id;
+        }
+
+        @Override
+        protected User doInBackground(Void... params ){
+            ClientController clientController = ClientController.getInstance();
+            clientController.getUserWithID(userid);
+            NetworkPackage NP = clientController.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if(key.equals("USERBYUSERID")){
+                User owner = (User) value;
+                return owner;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(User user) {
+            if(user != null) {
+                _renter_username_label.setText(user.userName);
+            }
+        }
+
+    }
+
+    private class RenterReportTask extends AsyncTask<Void, Void, User> {
+        private long own_id;
+
+        RenterReportTask(long own_id){
             this.own_id = own_id;
         }
 
@@ -425,9 +460,9 @@ public class RenterReservationDetailFragment extends Fragment implements OnMapRe
                             @Override
                             public void onClick(DialogInterface arg0, int arg1) {
                                 // Forward call
-                                Log.d("Reservation detail ", "call phonenum: "+phoneNume);
+                                Log.d("Reservation detail ", "call phonenum: " + phoneNume);
                                 Intent callIntent = new Intent(Intent.ACTION_CALL);
-                                callIntent.setData(Uri.parse("tel:"+phoneNume));
+                                callIntent.setData(Uri.parse("tel:" + phoneNume));
                                 startActivity(callIntent);
                             }
                         });
@@ -442,6 +477,9 @@ public class RenterReservationDetailFragment extends Fragment implements OnMapRe
 
                 AlertDialog alertDialog = alertDialogBuilder.create();
                 alertDialog.show();
+
+                alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.background_dark
+                );
             }
         }
     }

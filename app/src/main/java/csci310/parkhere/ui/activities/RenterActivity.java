@@ -427,7 +427,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 
         args.putString("START_TIME", displayStartTime.toString());
         args.putString("END_TIME", displayEndTime.toString());
-        args.putString("RENTER", Long.toString(selectedRes.getSpot().getOwner()));
+        args.putLong("PROVIDER", selectedRes.getSpot().getOwner());
         args.putLong("RES_ID", selectedRes.getReservationID());
 
         if(selectedRes.review==null && !ifNotPassed) {
@@ -475,8 +475,11 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
                 for(Reservation res : confirmList) {
                     // Create custom dialog object
                     final Dialog confirmDialog = new Dialog(RenterActivity.this);
+
+                    confirmDialog.setCancelable(false);
+                    confirmDialog.setCanceledOnTouchOutside(false);
+
                     confirmDialog.setContentView(R.layout.dialog_confirm);
-                    confirmDialog.setTitle("Confirm");
 
                     final TextView _address = (TextView) confirmDialog.findViewById(R.id.spacedetail_address);
                     final TextView _start_time = (TextView) confirmDialog.findViewById(R.id.start_time);
@@ -578,7 +581,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         protected void onPostExecute(Boolean confirmStatus) {
             progressDialog.dismiss();
             if(confirmStatus){ // paid success
-                Toast.makeText(getBaseContext(), "Confirmed and paid!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "Confirmed! (Review in reservation detail.)", Toast.LENGTH_SHORT).show();
                 finish();
             }
             else{

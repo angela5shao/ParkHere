@@ -771,8 +771,18 @@ public class ClientController {
         }
     }
 
-    public void getUserWithID(String userID) {
+    public void getUserWithID(long userID) {
         NP.addEntry("GETUSERWITHID", userID);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void providerReport(long resID){
+        NP.addEntry("REPORT", resID);
         try {
             clientCommunicator.sendPackage(NP);
         } catch (IOException e) {

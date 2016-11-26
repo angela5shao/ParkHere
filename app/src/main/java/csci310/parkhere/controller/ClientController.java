@@ -771,6 +771,17 @@ public class ClientController {
         }
     }
 
+    public void deleteOldParkingSpotImages(ParkingSpot ps)
+    {
+        NetworkPackage np = new NetworkPackage();
+        np.addEntry("DELETEOLDPARKINGSPOTIMAGES", ps.getParkingSpotID());
+        try {
+            clientCommunicator.sendPackage(np);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void getUserWithID(long userID) {
         NP.addEntry("GETUSERWITHID", userID);
         try {

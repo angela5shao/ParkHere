@@ -1,5 +1,7 @@
 package csci310.parkhere.ui.activities;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -13,8 +15,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -175,6 +179,10 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         }
+
+        // Get confirm list for unconfirmed reservations
+        GetConfirmListTask GCLT = new GetConfirmListTask(clientController.getUser().userID);
+        GCLT.execute();
     }
 
     @Override
@@ -440,8 +448,64 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         }
     }
 
+
+    private class GetConfirmListTask extends AsyncTask<Void, Void, ArrayList<Reservation> >{
+        private final long mUserID;
+
+        GetConfirmListTask(long userID){
+            mUserID = userID;
+        }
+
+        @Override
+        protected ArrayList<Reservation> doInBackground(Void... params ){
+            clientController.getConfirmListWithUserID(mUserID);
+            NetworkPackage NP = clientController.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if(key.equals("UNPAIDRESERVATION")){
+                return (ArrayList<Reservation>) value;
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(ArrayList<Reservation> confirmList) {
+            if(confirmList!= null) {
+                // Display dialog(s) for each unconfirmed past reservation
+                for(Reservation res : confirmList) {
+                    // Create custom dialog object
+                    final Dialog confirmDialog = new Dialog(RenterActivity.this);
+                    confirmDialog.setContentView(R.layout.dialog_confirm);
+                    confirmDialog.setTitle("Confirm");
+
+                    final TextView _address = (TextView) confirmDialog.findViewById(R.id.spacedetail_address);
+                    final TextView _start_time = (TextView) confirmDialog.findViewById(R.id.start_time);
+                    final TextView _end_time = (TextView) confirmDialog.findViewById(R.id.end_time);
+                    final TextView _renter_username = (TextView) confirmDialog.findViewById(R.id.renter_username);
+                    final Button _btn_confirm = (Button) confirmDialog.findViewById(R.id.btn_confirm);
+
+                    _address.setText(res.getSpot().getStreetAddr());
+                    _start_time.setText(""+res.getReserveTimeInterval().startTime);
+                    _end_time.setText(""+res.getReserveTimeInterval().endTime);
+                    _renter_username.setText("" + res.getProviderID());
+                    final long resID = res.getReservationID();
+                    _btn_confirm.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ConfirmPaymentTask CPT = new ConfirmPaymentTask(resID);
+                            CPT.execute((Void) null);
+                        }
+                    });
+                    confirmDialog.show();
+                }
+            }
+        }
+
+    }
+
     private class RequestRenterReservationsTask extends AsyncTask<Void, Void, ArrayList<Reservation>> {
-        RequestRenterReservationsTask() { }
+            RequestRenterReservationsTask() { }
+
         @Override
         protected ArrayList<Reservation> doInBackground(Void... params) {
             clientController.requestMyRenterReservationList();
@@ -473,6 +537,53 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
             }
 
 
+        }
+    }
+
+    private class ConfirmPaymentTask extends AsyncTask<Void, Void, Boolean> {
+        private long mResID;
+        ProgressDialog progressDialog;
+
+        ConfirmPaymentTask(long resID){
+            mResID = resID;
+        }
+
+        @Override
+        protected void onPreExecute(){
+            //Display a progress dialog
+            progressDialog = new ProgressDialog(RenterActivity.this, R.style.AppTheme);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Confirming...");
+            progressDialog.show();
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params ){
+            ClientController clientController = ClientController.getInstance();
+            clientController.submitPaymentRequest(mResID);
+            NetworkPackage NP = clientController.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Boolean value = (Boolean) entry.getValue();
+
+            if(key.equals("CONFIRMSTATUS")){
+                return value;
+            }
+            else {
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean confirmStatus) {
+            progressDialog.dismiss();
+            if(confirmStatus){ // paid success
+                Toast.makeText(getBaseContext(), "Confirmed and paid!", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+            else{
+                Toast.makeText(getBaseContext(), "Confirm payment unsuccessful! Please try agian.", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

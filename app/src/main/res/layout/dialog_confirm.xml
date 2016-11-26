@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:textAlignment="center">
+    <TextView
+        android:id="@+id/confirm_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/confirm_label"
+        android:textSize="24dp"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/thankyou_res_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/confirm_label"
+        android:text="@string/thankyou_res_label"
+        android:textSize="12dp"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="4dp"/>
+
+    <LinearLayout
+        android:id="@+id/res_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/thankyou_res_label"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Address:"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/colorMainFont"
+            android:background="@color/colorPrimary"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/spacedetail_address"
+            android:layout_weight="1"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:textAlignment="center"
+            android:textColor="@color/colorMainFont"
+            android:background="@color/colorAccent"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Start time:"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:textColor="@color/colorMainFont"
+                android:background="@color/colorPrimary"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/start_time"
+                android:layout_weight="1"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:textAlignment="center"
+                android:textColor="@color/colorMainFont"
+                android:background="@color/colorAccent"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="End time:"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:textColor="@color/colorMainFont"
+                android:background="@color/colorPrimary"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/end_time"
+                android:layout_weight="1"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:textAlignment="center"
+                android:textColor="@color/colorMainFont"
+                android:background="@color/colorAccent"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Renter:"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:textColor="@color/colorMainFont"
+                android:background="@color/colorPrimary"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/renter_username"
+                android:layout_weight="1"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:textAlignment="center"
+                android:textColor="@color/colorMainFont"
+                android:background="@color/colorAccent"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_confirm"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="@string/confirm_label"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_below="@+id/res_info"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/colorMainFont"
+        android:background="@color/colorSubAccent"/>
+</RelativeLayout>

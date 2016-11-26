@@ -3,11 +3,14 @@ package csci310.parkhere.ui.fragments;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +40,7 @@ import resource.MyEntry;
 import resource.NetworkPackage;
 import resource.Reservation;
 import resource.Time;
+import resource.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -71,7 +75,7 @@ public class RenterReservationDetailFragment extends Fragment implements OnMapRe
     private String address = "[address]";
     private String start_time = "[start time]";
     private String end_time = "[end time]";
-    private String renter_username = "[renter username]";
+    private String owner_id = "[owner id]";
     private long res_id = 0;
     private boolean if_canReview, if_canCancel, if_ispaid;
 
@@ -109,7 +113,7 @@ public class RenterReservationDetailFragment extends Fragment implements OnMapRe
             address = b.getString("ADDRESS");
             start_time = b.getString("START_TIME");
             end_time = b.getString("END_TIME");
-            renter_username = b.getString("RENTER");
+            owner_id = b.getString("RENTER");
             res_id = b.getLong("RES_ID");
             if_canReview = b.getBoolean("IF_CANREVIEW");
             if_canCancel = b.getBoolean("IF_CANCANCEL");
@@ -157,7 +161,7 @@ public class RenterReservationDetailFragment extends Fragment implements OnMapRe
         _spacedetail_address.setText(address);
         _start_time_label.setText(start_time);
         _end_time_label.setText(end_time);
-        _renter_username_label.setText(renter_username);
+        _renter_username_label.setText(owner_id);
 
         mMapView = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map));
         mMapView.onCreate(savedInstanceState);
@@ -223,6 +227,16 @@ public class RenterReservationDetailFragment extends Fragment implements OnMapRe
                     }
                 });
                 reviewDialog.show();
+            }
+        });
+
+        _btn_report.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // call Client Controller for report
+                // renter -> popup to call provider
+                RenterReportTask RRT = new RenterReportTask(owner_id);
+                RRT.execute((Void) null);
             }
         });
 
@@ -297,15 +311,15 @@ public class RenterReservationDetailFragment extends Fragment implements OnMapRe
 
     // Update reservation information
     public void setReservation(String in_address, String in_start_time, String in_end_time,
-                               String in_renter_username, double in_lat, double in_long) {
+                               String in_own_id, double in_lat, double in_long) {
         address = in_address;
         start_time = in_start_time;
         end_time = in_end_time;
-        renter_username = in_renter_username;
+        owner_id = in_own_id;
         _spacedetail_address.setText(address);
         _start_time_label.setText(start_time);
         _end_time_label.setText(end_time);
-        _renter_username_label.setText(renter_username);
+        _renter_username_label.setText(owner_id);
 
         curr_lat = in_lat;
         curr_long = in_long;
@@ -378,11 +392,76 @@ public class RenterReservationDetailFragment extends Fragment implements OnMapRe
         }
     }
 
+    private class RenterReportTask extends AsyncTask<Void, Void, User> {
+        private String own_id;
+
+        RenterReportTask(String own_id){
+            this.own_id = own_id;
+        }
+
+        @Override
+        protected User doInBackground(Void... params ){
+            ClientController clientController = ClientController.getInstance();
+            clientController.getUserWithID(own_id);
+            NetworkPackage NP = clientController.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if(key.equals("USERBYUSERID")){
+                User owner = (User) value;
+                return owner;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(User owner) {
+            if(owner != null) {
+                final String phoneNume = owner.userPhone;
+                final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+                alertDialogBuilder.setMessage(phoneNume);
+                alertDialogBuilder.setPositiveButton("Call",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                // Forward call
+                                Log.d("Reservation detail ", "call phonenum: "+phoneNume);
+                                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                                callIntent.setData(Uri.parse("tel:"+phoneNume));
+                                startActivity(callIntent);
+                            }
+                        });
+
+                alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Either of the following two lines should work.
+                        dialog.cancel();
+                        //dialog.dismiss();
+                    }
+                });
+
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+            }
+        }
+    }
+
     private class RenterCancelTask extends AsyncTask<Void, Void, Long> {
         private long resID;
+        ProgressDialog progressDialog;
 
         RenterCancelTask(long resID){
             this.resID = resID;
+        }
+
+        @Override
+        protected void onPreExecute(){
+            //Display a progress dialog
+            progressDialog = new ProgressDialog(getActivity(),
+                    R.style.AppTheme);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Cancelling...");
+            progressDialog.show();
         }
 
         @Override
@@ -406,6 +485,7 @@ public class RenterReservationDetailFragment extends Fragment implements OnMapRe
 
         @Override
         protected void onPostExecute(Long resID) {
+            progressDialog.dismiss();
             if(resID >= 0){
                 ClientController clientcontroller = ClientController.getInstance();
                 for(int i = 0; i<clientcontroller.renterReservations.size(); i++){

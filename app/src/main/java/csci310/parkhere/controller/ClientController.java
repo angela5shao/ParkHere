@@ -160,6 +160,17 @@ public class ClientController {
         clientCommunicator.send("REGISTER", entry);
     }
 
+    // Get unconfirmed reservations by user
+    public void getConfirmListWithUserID(long userID) {
+        NetworkPackage NP = new NetworkPackage();
+        NP.addEntry("FETCHUNPAIDRESERVATION", userID);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     //new Functions
     public void updateReceived(NetworkPackage NP){
         this.NP = NP;
@@ -178,7 +189,6 @@ public class ClientController {
         received = false;
         if(NP == null)
             Log.d("CHECKRECEIVE", "NULL");
-
 
         return NP;
     }
@@ -750,6 +760,15 @@ public class ClientController {
         //map.put("PICTURE", imageStrings);
         Log.d("ps", "send ps");
         NP.addEntry("EDITSPACE", ps);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getUserWithID(String userID) {
+        NP.addEntry("GETUSERWITHID", userID);
         try {
             clientCommunicator.sendPackage(NP);
         } catch (IOException e) {

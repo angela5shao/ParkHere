@@ -775,4 +775,14 @@ public class ClientController {
             e.printStackTrace();
         }
     }
+
+
+    public void providerReport(long resID){
+        NP.addEntry("REPORT", resID);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

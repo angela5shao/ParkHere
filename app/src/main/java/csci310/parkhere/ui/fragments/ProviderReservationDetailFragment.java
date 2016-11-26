@@ -33,6 +33,7 @@ import java.util.Calendar;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
+import csci310.parkhere.ui.activities.ProviderActivity;
 import resource.MyEntry;
 import resource.NetworkPackage;
 import resource.Reservation;
@@ -154,6 +155,14 @@ public class ProviderReservationDetailFragment extends Fragment implements OnMap
         }
 
         mMapView.getMapAsync(this);
+
+        _btn_report.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ProviderReportTask prt = new ProviderReportTask(res_id);
+                prt.execute();
+            }
+        });
 
 //        // create marker
 //        MarkerOptions marker = new MarkerOptions().position(new LatLng(latitude, longitude))
@@ -441,6 +450,51 @@ public class ProviderReservationDetailFragment extends Fragment implements OnMap
         }
 
 
+    }
+
+
+    private class ProviderReportTask extends AsyncTask<Void, Void, Boolean>{
+        long resID;
+
+        ProviderReportTask(long resId)
+        {
+            resID = resId;
+        }
+
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            ClientController clientController = ClientController.getInstance();
+            clientController.providerReport(resID);
+
+            NetworkPackage NP = clientController.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+
+            if(key.equals("CANCELRESERVATION"))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            if(aBoolean)
+            {
+                (mListener).returnToReservationsFragment();
+            }
+            else
+            {
+                Toast.makeText(getContext(), "Report Fail!", Toast.LENGTH_SHORT).show();
+            }
+
+        }
     }
 
     private class SetUserNameTask extends AsyncTask<Void, Void, User>{

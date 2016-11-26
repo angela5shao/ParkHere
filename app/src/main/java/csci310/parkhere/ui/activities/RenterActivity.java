@@ -475,8 +475,11 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
                 for(Reservation res : confirmList) {
                     // Create custom dialog object
                     final Dialog confirmDialog = new Dialog(RenterActivity.this);
+
+                    confirmDialog.setCancelable(false);
+                    confirmDialog.setCanceledOnTouchOutside(false);
+
                     confirmDialog.setContentView(R.layout.dialog_confirm);
-                    confirmDialog.setTitle("Confirm");
 
                     final TextView _address = (TextView) confirmDialog.findViewById(R.id.spacedetail_address);
                     final TextView _start_time = (TextView) confirmDialog.findViewById(R.id.start_time);

@@ -27,6 +27,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import csci310.parkhere.R;
 
@@ -100,14 +101,13 @@ public class PublicProfileFragment extends android.support.v4.app.Fragment {
             fname = b.getString("FIRSTNAME");
             email = b.getString("EMAIL");
             phone_num = b.getString("PHONE_NUM");
-            reviews = new ArrayList<String>((ArrayList<String>) b.getStringArrayList("REVIEWS"));
+            reviews = b.getStringArrayList("REVIEWS");
 
             Log.d("Public Profile ", "fname = "+fname);
             Log.d("Public Profile ", "email = "+email);
             Log.d("Public Profile ", "phone_num = "+phone_num);
             Log.d("Public Profile ", "reviews.size() = "+reviews.size());
         }
-
         setHasOptionsMenu(true);
     }
 
@@ -134,7 +134,6 @@ public class PublicProfileFragment extends android.support.v4.app.Fragment {
         _firstnameText.setText(fname);
         _emailText.setText(email);
         _phoneNumText.setText(phone_num);
-
         if(reviews != null) {
             _userReviewList.setAdapter(new ArrayAdapter(getActivity(),
                     android.R.layout.simple_list_item_1,

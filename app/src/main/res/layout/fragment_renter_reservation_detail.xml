@@ -3,7 +3,7 @@ xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 xmlns:app="http://schemas.android.com/apk/res-auto"
-tools:context=".ui.fragments.SpaceDetailFragment">
+tools:context=".ui.fragments.RenterReservationDetailFragment">
 
 <LinearLayout
     android:layout_width="match_parent"
@@ -179,7 +179,6 @@ tools:context=".ui.fragments.SpaceDetailFragment">
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:layout_marginBottom="24dp"
                 android:text="@string/report_label"
                 android:textColor="@color/colorMainFont"
                 android:padding="12dp" />

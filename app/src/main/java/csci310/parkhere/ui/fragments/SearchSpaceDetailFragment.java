@@ -160,40 +160,37 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
 
         String[] startDate1 = mParam2.split("\\D");
         String[] endDate1 = mParam4.split("\\D");
-        String startDateStr = startDate1[1] + "-" + startDate1[0] + "-" +startDate1[2];
-        String endDateStr = endDate1[1] + "-" + endDate1[0] + "-" +endDate1[2];
+        String startDateStr = startDate1[1] + "-" + startDate1[0] + "-" + startDate1[2];
+        String endDateStr = endDate1[1] + "-" + endDate1[0] + "-" + endDate1[2];
 
-        displaySearchStartTime = new Time(startDateStr+" "+mParam3 + "-0");
-        displaySearchEndTime = new Time(endDateStr+" "+mParam5+"-0");
+        displaySearchStartTime = new Time(startDateStr + " " + mParam3 + "-0");
+        displaySearchEndTime = new Time(endDateStr + " " + mParam5 + "-0");
 
-        displaySearchStartTime.month+=1;
-        displaySearchEndTime.month+=1;
+        displaySearchStartTime.month += 1;
+        displaySearchEndTime.month += 1;
 
 
         spotReviewList = (ListView) mView.findViewById(R.id.spot_review_list);
 
-        _searchspacedetail_reservebutton=(Button)mView.findViewById(R.id.searchspacedetail_reservebutton);
+        _searchspacedetail_reservebutton = (Button) mView.findViewById(R.id.searchspacedetail_reservebutton);
         _searchspacedetail_reservebutton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
 
 
-
-
-                System.out.println(mParam2+ " "+mParam3+" "+mParam4+" "+mParam5);
+                System.out.println(mParam2 + " " + mParam3 + " " + mParam4 + " " + mParam5);
                 String[] startDate1 = mParam2.split("\\D");
                 String[] endDate1 = mParam4.split("\\D");
-                String startDateStr = startDate1[1] + "-" + startDate1[0] + "-" +startDate1[2];
-                String endDateStr = endDate1[1] + "-" + endDate1[0] + "-" +endDate1[2];
+                String startDateStr = startDate1[1] + "-" + startDate1[0] + "-" + startDate1[2];
+                String endDateStr = endDate1[1] + "-" + endDate1[0] + "-" + endDate1[2];
 
-                Time startTime = new Time(startDateStr+" "+mParam3 + "-0");
-                Time endTime = new Time(endDateStr+" "+mParam5+"-0");
-                TimeInterval timeInterval = new TimeInterval(startTime,endTime);
+                Time startTime = new Time(startDateStr + " " + mParam3 + "-0");
+                Time endTime = new Time(endDateStr + " " + mParam5 + "-0");
+                TimeInterval timeInterval = new TimeInterval(startTime, endTime);
                 RenterReserveTask RRT = new RenterReserveTask(mParkingSpot.getParkingSpotID(),
-                                                                timeInterval,
-                                                                mParkingSpot.getOwner(),
-                                                                ClientController.getInstance().getUser().userID);
+                        timeInterval,
+                        mParkingSpot.getOwner(),
+                        ClientController.getInstance().getUser().userID);
                 RRT.execute((Void) null);
-
 
 
             }
@@ -215,7 +212,7 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
         mMapView.getMapAsync(this);
 
 
-        Log.d("MAPPOSITION", String.valueOf(mParkingSpot.getLat()) +" "+ String.valueOf(mParkingSpot.getLon()));
+        Log.d("MAPPOSITION", String.valueOf(mParkingSpot.getLat()) + " " + String.valueOf(mParkingSpot.getLon()));
         Log.d("MAPPOSITION", "googlemap = null?" + String.valueOf(googleMap == null));
 
         // Populate fields with data
@@ -236,8 +233,48 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
         Time eTime = displaySearchEndTime;
         ((TextView) mView.findViewById(R.id.searchspacedetail_starttime)).setText(sTime.toString());
         ((TextView) mView.findViewById(R.id.searchspacedetail_endtime)).setText(eTime.toString());
-        ((TextView) mView.findViewById(R.id.searchspacedetail_cartype)).setText(new Integer(mParkingSpot.getCartype()).toString());
-        ((TextView) mView.findViewById(R.id.searchspacedetail_cancelpolicy)).setText(new Integer(mParkingSpot.cancelpolicy).toString());
+
+        int carType = new Integer(mParkingSpot.getCartype());
+        if(carType == 0)
+        {
+            ((TextView) mView.findViewById(R.id.searchspacedetail_cartype)).setText("Compact");
+        }
+        else if(carType == 1)
+        {
+            ((TextView) mView.findViewById(R.id.searchspacedetail_cartype)).setText("Covered parking");
+        }
+        else if(carType == 2)
+        {
+            ((TextView) mView.findViewById(R.id.searchspacedetail_cartype)).setText("Handicap");
+        }
+        else if(carType == 3)
+        {
+            ((TextView) mView.findViewById(R.id.searchspacedetail_cartype)).setText("SUV");
+        }
+        else if(carType == 4)
+        {
+            ((TextView) mView.findViewById(R.id.searchspacedetail_cartype)).setText("Truck");
+        }
+        else if(carType == 5)
+        {
+            ((TextView) mView.findViewById(R.id.searchspacedetail_cartype)).setText("AnyCarType");
+        }
+
+
+        int cancelPolity = new Integer(mParkingSpot.cancelpolicy);
+        if (cancelPolity == 0)
+        {
+            ((TextView) mView.findViewById(R.id.searchspacedetail_cancelpolicy)).setText("Free cancellation");
+        }
+        else if(cancelPolity == 1)
+        {
+            ((TextView) mView.findViewById(R.id.searchspacedetail_cancelpolicy)).setText("50% Refund");
+        }
+        else if(cancelPolity == 2)
+        {
+            ((TextView) mView.findViewById(R.id.searchspacedetail_cancelpolicy)).setText("15% Refund");
+        }
+
 
         ((TextView) mView.findViewById(R.id.searchspacedetail_rating)).setText(String.valueOf(mParkingSpot.review));
 
@@ -252,6 +289,10 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
         mImageAdapter = new GalleryPagerAdapter(getContext());
         _pager.setAdapter(mImageAdapter);
         _pager.setOffscreenPageLimit(6); // how many images to load into memory
+
+
+
+
 
         spotReviewStringList = new ArrayList<>();
 
@@ -561,14 +602,14 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
 
             }
 //            if (list != null) {
-////                clientController.reservations = list;
-//                reservationsFragment = new ReservationsFragment();
+////                clientController.renterReservations = list;
+//                reservationsFragment = new RenterReservationsFragment();
 //                fragmentTransaction = fm.beginTransaction();
 //                fragmentTransaction.replace(R.id.fragContainer, reservationsFragment);
 //                fragmentTransaction.addToBackStack(null);
 //                fragmentTransaction.commit();
 //            } else {
-//                Toast.makeText(getBaseContext(), "Error on get reservations! Please try again.", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getBaseContext(), "Error on get renterReservations! Please try again.", Toast.LENGTH_SHORT).show();
 //            }
 
 

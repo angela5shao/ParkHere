@@ -1,5 +1,7 @@
 package csci310.parkhere.ui.activities;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -13,14 +15,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import csci310.parkhere.R;
@@ -30,8 +33,8 @@ import csci310.parkhere.ui.fragments.EditProfileFragment;
 import csci310.parkhere.ui.fragments.MapViewFragment;
 import csci310.parkhere.ui.fragments.PrivateProfileFragment;
 import csci310.parkhere.ui.fragments.PublicProfileFragment;
-import csci310.parkhere.ui.fragments.ReservationDetailFragment;
-import csci310.parkhere.ui.fragments.ReservationsFragment;
+import csci310.parkhere.ui.fragments.RenterReservationDetailFragment;
+import csci310.parkhere.ui.fragments.RenterReservationsFragment;
 import csci310.parkhere.ui.fragments.SearchFragment;
 import csci310.parkhere.ui.fragments.SearchSpaceDetailFragment;
 import resource.MyEntry;
@@ -47,8 +50,8 @@ import resource.User;
  */
 public class RenterActivity extends AppCompatActivity implements SearchFragment.OnFragmentInteractionListener,
         PrivateProfileFragment.OnFragmentInteractionListener, EditProfileFragment.OnFragmentInteractionListener,
-        DisplaySearchFragment.OnFragmentInteractionListener, ReservationsFragment.OnFragmentInteractionListener,
-        SearchSpaceDetailFragment.OnFragmentInteractionListener, ReservationDetailFragment.OnFragmentInteractionListener,
+        DisplaySearchFragment.OnFragmentInteractionListener, RenterReservationsFragment.OnFragmentInteractionListener,
+        SearchSpaceDetailFragment.OnFragmentInteractionListener, RenterReservationDetailFragment.OnFragmentInteractionListener,
         PublicProfileFragment.OnFragmentInteractionListener {
 
     int PAYMENT_REQUEST_CODE = 11;
@@ -81,16 +84,16 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         privateProfileFragment = new PrivateProfileFragment();
         editProfileFragment = new EditProfileFragment();
 //        displaySearchFragment = new DisplaySearchFragment();
-//        reservationsFragment = new ReservationsFragment();
+//        reservationsFragment = new RenterReservationsFragment();
 //        searchSpaceDetailFragment = new SearchSpaceDetailFragment();
 
-        _resLink = (LinearLayout) findViewById(R.id.resLink);
+        _resLink = (LinearLayout) findViewById(R.id.RenterResLink);
         _searchLink = (LinearLayout) findViewById(R.id.searchLink);
         _profilePic = (ImageView) findViewById(R.id.profilePic);
 
 
         //*****************************************************************
-        reservationDetailFragment = new ReservationDetailFragment();
+        reservationDetailFragment = new RenterReservationDetailFragment();
         fragmentTransaction.add(R.id.fragContainer, searchFragment);
         fragmentTransaction.commit();
 
@@ -106,7 +109,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
                     return;
                 }
 
-                RequestReservationsTask RRT = new RequestReservationsTask();
+                RequestRenterReservationsTask RRT = new RequestRenterReservationsTask();
                 RRT.execute((Void) null);
             }
         });
@@ -176,6 +179,10 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         }
+
+        // Get confirm list for unconfirmed reservations
+        GetConfirmListTask GCLT = new GetConfirmListTask(clientController.getUser().userID);
+        GCLT.execute();
     }
 
     @Override
@@ -393,16 +400,16 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 
     public void onReservationSelected(int resPosition, boolean ifNotPassed) {
         System.out.println("RenterActivity onReservationSelected for: " + resPosition);
-        if (clientController.reservations.size() == 0) {
-            System.out.println("RenterActivity: error - no reservations to select");
+        if (clientController.renterReservations.size() == 0) {
+            System.out.println("RenterActivity: error - no renterReservations to select");
             return;
         }
-        Reservation selectedRes = clientController.reservations.get(resPosition);
+        Reservation selectedRes = clientController.renterReservations.get(resPosition);
         if (selectedRes == null) {
             System.out.println("Selected parking spot is null");
             return;
         }
-        ReservationDetailFragment resDetailfragment = new ReservationDetailFragment();
+        RenterReservationDetailFragment resDetailfragment = new RenterReservationDetailFragment();
         Bundle args = new Bundle();
         args.putDouble("LAT", selectedRes.getSpot().getLat());
         args.putDouble("LONG", selectedRes.getSpot().getLon());
@@ -441,11 +448,67 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         }
     }
 
-    private class RequestReservationsTask extends AsyncTask<Void, Void, ArrayList<Reservation>> {
-        RequestReservationsTask() { }
+
+    private class GetConfirmListTask extends AsyncTask<Void, Void, ArrayList<Reservation> >{
+        private final long mUserID;
+
+        GetConfirmListTask(long userID){
+            mUserID = userID;
+        }
+
+        @Override
+        protected ArrayList<Reservation> doInBackground(Void... params ){
+            clientController.getConfirmListWithUserID(mUserID);
+            NetworkPackage NP = clientController.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if(key.equals("UNPAIDRESERVATION")){
+                return (ArrayList<Reservation>) value;
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(ArrayList<Reservation> confirmList) {
+            if(confirmList!= null) {
+                // Display dialog(s) for each unconfirmed past reservation
+                for(Reservation res : confirmList) {
+                    // Create custom dialog object
+                    final Dialog confirmDialog = new Dialog(RenterActivity.this);
+                    confirmDialog.setContentView(R.layout.dialog_confirm);
+                    confirmDialog.setTitle("Confirm");
+
+                    final TextView _address = (TextView) confirmDialog.findViewById(R.id.spacedetail_address);
+                    final TextView _start_time = (TextView) confirmDialog.findViewById(R.id.start_time);
+                    final TextView _end_time = (TextView) confirmDialog.findViewById(R.id.end_time);
+                    final TextView _renter_username = (TextView) confirmDialog.findViewById(R.id.renter_username);
+                    final Button _btn_confirm = (Button) confirmDialog.findViewById(R.id.btn_confirm);
+
+                    _address.setText(res.getSpot().getStreetAddr());
+                    _start_time.setText(""+res.getReserveTimeInterval().startTime);
+                    _end_time.setText(""+res.getReserveTimeInterval().endTime);
+                    _renter_username.setText("" + res.getProviderID());
+                    final long resID = res.getReservationID();
+                    _btn_confirm.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ConfirmPaymentTask CPT = new ConfirmPaymentTask(resID);
+                            CPT.execute((Void) null);
+                        }
+                    });
+                    confirmDialog.show();
+                }
+            }
+        }
+
+    }
+
+    private class RequestRenterReservationsTask extends AsyncTask<Void, Void, ArrayList<Reservation>> {
+            RequestRenterReservationsTask() { }
+
         @Override
         protected ArrayList<Reservation> doInBackground(Void... params) {
-            clientController.requestMyReservationList();
+            clientController.requestMyRenterReservationList();
             NetworkPackage NP = clientController.checkReceived();
             MyEntry<String, Serializable> entry = NP.getCommand();
             String key = entry.getKey();
@@ -463,17 +526,64 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         @Override
         protected void onPostExecute(ArrayList<Reservation> list) {
             if (list != null) {
-                clientController.reservations = list;
-                reservationsFragment = new ReservationsFragment();
+                clientController.renterReservations = list;
+                reservationsFragment = new RenterReservationsFragment();
                 fragmentTransaction = fm.beginTransaction();
                 fragmentTransaction.replace(R.id.fragContainer, reservationsFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             } else {
-                Toast.makeText(getBaseContext(), "Error on get reservations! Please try again.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "Error on get renterReservations! Please try again.", Toast.LENGTH_SHORT).show();
             }
 
 
+        }
+    }
+
+    private class ConfirmPaymentTask extends AsyncTask<Void, Void, Boolean> {
+        private long mResID;
+        ProgressDialog progressDialog;
+
+        ConfirmPaymentTask(long resID){
+            mResID = resID;
+        }
+
+        @Override
+        protected void onPreExecute(){
+            //Display a progress dialog
+            progressDialog = new ProgressDialog(RenterActivity.this, R.style.AppTheme);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Confirming...");
+            progressDialog.show();
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params ){
+            ClientController clientController = ClientController.getInstance();
+            clientController.submitPaymentRequest(mResID);
+            NetworkPackage NP = clientController.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Boolean value = (Boolean) entry.getValue();
+
+            if(key.equals("CONFIRMSTATUS")){
+                return value;
+            }
+            else {
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean confirmStatus) {
+            progressDialog.dismiss();
+            if(confirmStatus){ // paid success
+                Toast.makeText(getBaseContext(), "Confirmed and paid!", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+            else{
+                Toast.makeText(getBaseContext(), "Confirm payment unsuccessful! Please try agian.", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

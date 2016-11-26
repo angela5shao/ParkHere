@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_gravity="center"
-                android:id="@+id/resLink">
+                android:id="@+id/RenterResLink">
                 <ImageView
                     android:src="@mipmap/ic_reserve"
                     android:layout_height="30dp"

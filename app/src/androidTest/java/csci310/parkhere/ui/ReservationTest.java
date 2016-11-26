@@ -70,7 +70,8 @@ public class ReservationTest {
         // click on Reservation to show the fragment
         //resLink
 //        onView(withText("Reservations")).perform(click());
-        onView(withId(R.id.resLink)).perform(click());
+        onView(withId(R.id.renterResLink)).perform(click());
+
 
         //check the fragments text is now visible in the activity
         resFragmentText.check(matches(isDisplayed()));

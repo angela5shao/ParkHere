@@ -113,7 +113,7 @@ public class RenterReservationDetailFragment extends Fragment implements OnMapRe
             address = b.getString("ADDRESS");
             start_time = b.getString("START_TIME");
             end_time = b.getString("END_TIME");
-            owner_id = b.getLong("RENTER");
+            owner_id = b.getLong("PROVIDER");
             res_id = b.getLong("RES_ID");
             if_canReview = b.getBoolean("IF_CANREVIEW");
             if_canCancel = b.getBoolean("IF_CANCANCEL");
@@ -162,6 +162,9 @@ public class RenterReservationDetailFragment extends Fragment implements OnMapRe
         _start_time_label.setText(start_time);
         _end_time_label.setText(end_time);
         _renter_username_label.setText(Long.toString(owner_id));
+
+        SetUserNameTask sunt = new SetUserNameTask(owner_id);
+        sunt.execute();
 
         mMapView = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map));
         mMapView.onCreate(savedInstanceState);
@@ -390,6 +393,38 @@ public class RenterReservationDetailFragment extends Fragment implements OnMapRe
                 Toast.makeText(getContext(), "Confirm payment unsuccessful! Please try agian.", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+
+    private class SetUserNameTask extends AsyncTask<Void, Void, User>{
+        private long userid;
+
+        SetUserNameTask(long own_id){
+            this.userid = own_id;
+        }
+
+        @Override
+        protected User doInBackground(Void... params ){
+            ClientController clientController = ClientController.getInstance();
+            clientController.getUserWithID(userid);
+            NetworkPackage NP = clientController.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if(key.equals("USERBYUSERID")){
+                User owner = (User) value;
+                return owner;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(User user) {
+            if(user != null) {
+                _renter_username_label.setText(user.userName);
+            }
+        }
+
     }
 
     private class RenterReportTask extends AsyncTask<Void, Void, User> {

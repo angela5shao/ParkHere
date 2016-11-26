@@ -427,7 +427,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 
         args.putString("START_TIME", displayStartTime.toString());
         args.putString("END_TIME", displayEndTime.toString());
-        args.putLong("RENTER", selectedRes.getSpot().getOwner());
+        args.putLong("PROVIDER", selectedRes.getSpot().getOwner());
         args.putLong("RES_ID", selectedRes.getReservationID());
 
         if(selectedRes.review==null && !ifNotPassed) {

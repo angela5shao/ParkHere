@@ -478,7 +478,8 @@ public class RenterReservationDetailFragment extends Fragment implements OnMapRe
                 AlertDialog alertDialog = alertDialogBuilder.create();
                 alertDialog.show();
 
-                alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.darker_gray);
+                alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.background_dark
+                );
             }
         }
     }

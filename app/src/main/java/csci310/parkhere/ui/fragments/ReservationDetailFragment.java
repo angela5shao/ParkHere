@@ -75,7 +75,7 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
     private String address = "[address]";
     private String start_time = "[start time]";
     private String end_time = "[end time]";
-    private String owner_id = "[owner id]";
+    private long owner_id = 0;
     private long res_id = 0;
     private boolean if_canReview, if_canCancel, if_ispaid;
 
@@ -113,7 +113,7 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
             address = b.getString("ADDRESS");
             start_time = b.getString("START_TIME");
             end_time = b.getString("END_TIME");
-            owner_id = b.getString("RENTER");
+            owner_id = b.getLong("RENTER");
             res_id = b.getLong("RES_ID");
             if_canReview = b.getBoolean("IF_CANREVIEW");
             if_canCancel = b.getBoolean("IF_CANCANCEL");
@@ -161,7 +161,7 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
         _spacedetail_address.setText(address);
         _start_time_label.setText(start_time);
         _end_time_label.setText(end_time);
-        _renter_username_label.setText(owner_id);
+        _renter_username_label.setText(Long.toString(owner_id));
 
         mMapView = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map));
         mMapView.onCreate(savedInstanceState);
@@ -311,7 +311,7 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
 
     // Update reservation information
     public void setReservation(String in_address, String in_start_time, String in_end_time,
-                               String in_own_id, double in_lat, double in_long) {
+                               long in_own_id, double in_lat, double in_long) {
         address = in_address;
         start_time = in_start_time;
         end_time = in_end_time;
@@ -319,7 +319,7 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
         _spacedetail_address.setText(address);
         _start_time_label.setText(start_time);
         _end_time_label.setText(end_time);
-        _renter_username_label.setText(owner_id);
+        _renter_username_label.setText(Long.toString(owner_id));
 
         curr_lat = in_lat;
         curr_long = in_long;
@@ -393,9 +393,9 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
     }
 
     private class RenterReportTask extends AsyncTask<Void, Void, User> {
-        private String own_id;
+        private long own_id;
 
-        RenterReportTask(String own_id){
+        RenterReportTask(long own_id){
             this.own_id = own_id;
         }
 
@@ -425,9 +425,9 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
                             @Override
                             public void onClick(DialogInterface arg0, int arg1) {
                                 // Forward call
-                                Log.d("Reservation detail ", "call phonenum: "+phoneNume);
+                                Log.d("Reservation detail ", "call phonenum: " + phoneNume);
                                 Intent callIntent = new Intent(Intent.ACTION_CALL);
-                                callIntent.setData(Uri.parse("tel:"+phoneNume));
+                                callIntent.setData(Uri.parse("tel:" + phoneNume));
                                 startActivity(callIntent);
                             }
                         });
@@ -442,6 +442,8 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
 
                 AlertDialog alertDialog = alertDialogBuilder.create();
                 alertDialog.show();
+
+                alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.darker_gray);
             }
         }
     }

@@ -747,7 +747,7 @@ public class ClientController {
         }
     }
 
-    public void getUserWithID(String userID) {
+    public void getUserWithID(long userID) {
         NP.addEntry("GETUSERWITHID", userID);
         try {
             clientCommunicator.sendPackage(NP);

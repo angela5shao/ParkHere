@@ -34,7 +34,8 @@ public class ClientController {
 
     private User user;
     public ArrayList<ParkingSpot> parkingSpots;
-    public ArrayList<Reservation> reservations;
+    public ArrayList<Reservation> renterReservations;
+    public ArrayList<Reservation> providerReservations;
     public ArrayList<Review> reviews;
     public ClientCommunicator clientCommunicator;
 
@@ -64,7 +65,8 @@ public class ClientController {
 
         user = null;
         parkingSpots = new ArrayList<>();
-        reservations = new ArrayList<>();
+        renterReservations = new ArrayList<>();
+        providerReservations = new ArrayList<>();
         reviews = new ArrayList<>();
         clientCommunicator = new ClientCommunicator(this);
 
@@ -111,13 +113,13 @@ public class ClientController {
     // Getters
     public User getUser() { return user;}
     public ArrayList<ParkingSpot> getSpots() { return parkingSpots; }
-    public ArrayList<Reservation> getReservations() { return reservations; }
+    public ArrayList<Reservation> getRenterReservations() { return renterReservations; }
     public ArrayList<Review> getReviews() { return reviews; }
 
     // Setters
     public void setUser(User u) { user = u; }
     public void setSpots(ArrayList<ParkingSpot> spots) { parkingSpots = spots; }
-    public void setReservations(ArrayList<Reservation> res) { reservations = res; }
+    public void setRenterReservations(ArrayList<Reservation> res) { renterReservations = res; }
     public void setReviews(ArrayList<Review> rev) { reviews = rev; }
 
     // TODO: Functions for login, signup
@@ -311,7 +313,7 @@ public class ClientController {
     }
 
 //    public Reservation getReservationDetail(int position) {
-//        return reservations.get(position);
+//        return renterReservations.get(position);
 //    }
 
     public void submitReview(long reservationID, int rating, String comment) {
@@ -465,7 +467,25 @@ public class ClientController {
         }
     }
 
-    public void requestMyReservationList()
+
+    public void requestMyProviderReservationList()
+    {
+        if(user == null)
+        {
+            return;
+        }
+
+        NetworkPackage NP = new NetworkPackage();
+        NP.addEntry("FETCHRESERVATIONBYPROVIDERID", user.userID);
+
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void requestMyRenterReservationList()
     {
         if(user == null)
             return;

@@ -33,8 +33,8 @@ import csci310.parkhere.ui.fragments.EditProfileFragment;
 import csci310.parkhere.ui.fragments.MapViewFragment;
 import csci310.parkhere.ui.fragments.PrivateProfileFragment;
 import csci310.parkhere.ui.fragments.PublicProfileFragment;
-import csci310.parkhere.ui.fragments.ReservationDetailFragment;
-import csci310.parkhere.ui.fragments.ReservationsFragment;
+import csci310.parkhere.ui.fragments.RenterReservationDetailFragment;
+import csci310.parkhere.ui.fragments.RenterReservationsFragment;
 import csci310.parkhere.ui.fragments.SearchFragment;
 import csci310.parkhere.ui.fragments.SearchSpaceDetailFragment;
 import resource.MyEntry;
@@ -50,8 +50,8 @@ import resource.User;
  */
 public class RenterActivity extends AppCompatActivity implements SearchFragment.OnFragmentInteractionListener,
         PrivateProfileFragment.OnFragmentInteractionListener, EditProfileFragment.OnFragmentInteractionListener,
-        DisplaySearchFragment.OnFragmentInteractionListener, ReservationsFragment.OnFragmentInteractionListener,
-        SearchSpaceDetailFragment.OnFragmentInteractionListener, ReservationDetailFragment.OnFragmentInteractionListener,
+        DisplaySearchFragment.OnFragmentInteractionListener, RenterReservationsFragment.OnFragmentInteractionListener,
+        SearchSpaceDetailFragment.OnFragmentInteractionListener, RenterReservationDetailFragment.OnFragmentInteractionListener,
         PublicProfileFragment.OnFragmentInteractionListener {
 
     int PAYMENT_REQUEST_CODE = 11;
@@ -84,16 +84,16 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         privateProfileFragment = new PrivateProfileFragment();
         editProfileFragment = new EditProfileFragment();
 //        displaySearchFragment = new DisplaySearchFragment();
-//        reservationsFragment = new ReservationsFragment();
+//        reservationsFragment = new RenterReservationsFragment();
 //        searchSpaceDetailFragment = new SearchSpaceDetailFragment();
 
-        _resLink = (LinearLayout) findViewById(R.id.resLink);
+        _resLink = (LinearLayout) findViewById(R.id.RenterResLink);
         _searchLink = (LinearLayout) findViewById(R.id.searchLink);
         _profilePic = (ImageView) findViewById(R.id.profilePic);
 
 
         //*****************************************************************
-        reservationDetailFragment = new ReservationDetailFragment();
+        reservationDetailFragment = new RenterReservationDetailFragment();
         fragmentTransaction.add(R.id.fragContainer, searchFragment);
         fragmentTransaction.commit();
 
@@ -109,7 +109,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
                     return;
                 }
 
-                RequestReservationsTask RRT = new RequestReservationsTask();
+                RequestRenterReservationsTask RRT = new RequestRenterReservationsTask();
                 RRT.execute((Void) null);
             }
         });
@@ -400,16 +400,16 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 
     public void onReservationSelected(int resPosition, boolean ifNotPassed) {
         System.out.println("RenterActivity onReservationSelected for: " + resPosition);
-        if (clientController.reservations.size() == 0) {
-            System.out.println("RenterActivity: error - no reservations to select");
+        if (clientController.renterReservations.size() == 0) {
+            System.out.println("RenterActivity: error - no renterReservations to select");
             return;
         }
-        Reservation selectedRes = clientController.reservations.get(resPosition);
+        Reservation selectedRes = clientController.renterReservations.get(resPosition);
         if (selectedRes == null) {
             System.out.println("Selected parking spot is null");
             return;
         }
-        ReservationDetailFragment resDetailfragment = new ReservationDetailFragment();
+        RenterReservationDetailFragment resDetailfragment = new RenterReservationDetailFragment();
         Bundle args = new Bundle();
         args.putDouble("LAT", selectedRes.getSpot().getLat());
         args.putDouble("LONG", selectedRes.getSpot().getLon());
@@ -447,6 +447,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
             System.out.println("RenterActivity onReservationSelected exception");
         }
     }
+
 
     private class GetConfirmListTask extends AsyncTask<Void, Void, ArrayList<Reservation> >{
         private final long mUserID;
@@ -502,11 +503,12 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 
     }
 
-    private class RequestReservationsTask extends AsyncTask<Void, Void, ArrayList<Reservation>> {
-        RequestReservationsTask() { }
+    private class RequestRenterReservationsTask extends AsyncTask<Void, Void, ArrayList<Reservation>> {
+            RequestRenterReservationsTask() { }
+
         @Override
         protected ArrayList<Reservation> doInBackground(Void... params) {
-            clientController.requestMyReservationList();
+            clientController.requestMyRenterReservationList();
             NetworkPackage NP = clientController.checkReceived();
             MyEntry<String, Serializable> entry = NP.getCommand();
             String key = entry.getKey();
@@ -524,14 +526,14 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         @Override
         protected void onPostExecute(ArrayList<Reservation> list) {
             if (list != null) {
-                clientController.reservations = list;
-                reservationsFragment = new ReservationsFragment();
+                clientController.renterReservations = list;
+                reservationsFragment = new RenterReservationsFragment();
                 fragmentTransaction = fm.beginTransaction();
                 fragmentTransaction.replace(R.id.fragContainer, reservationsFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             } else {
-                Toast.makeText(getBaseContext(), "Error on get reservations! Please try again.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "Error on get renterReservations! Please try again.", Toast.LENGTH_SHORT).show();
             }
 
 

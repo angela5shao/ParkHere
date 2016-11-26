@@ -45,12 +45,12 @@ import resource.User;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ReservationDetailFragment.OnFragmentInteractionListener} interface
+ * {@link RenterReservationDetailFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link ReservationDetailFragment#newInstance} factory method to
+ * Use the {@link RenterReservationDetailFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ReservationDetailFragment extends Fragment implements OnMapReadyCallback {
+public class RenterReservationDetailFragment extends Fragment implements OnMapReadyCallback {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -79,7 +79,7 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
     private long res_id = 0;
     private boolean if_canReview, if_canCancel, if_ispaid;
 
-    public ReservationDetailFragment() {
+    public RenterReservationDetailFragment() {
         // Required empty public constructor
     }
 
@@ -89,11 +89,11 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ReservationDetailFragment.
+     * @return A new instance of fragment RenterReservationDetailFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ReservationDetailFragment newInstance(int param1, String param2) {
-        ReservationDetailFragment fragment = new ReservationDetailFragment();
+    public static RenterReservationDetailFragment newInstance(int param1, String param2) {
+        RenterReservationDetailFragment fragment = new RenterReservationDetailFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -125,7 +125,7 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_reservation_detail, container, false);
+        View v = inflater.inflate(R.layout.fragment_renter_reservation_detail, container, false);
 
         _spacedetail_address=(TextView)v.findViewById(R.id.spacedetail_address);
         _start_time_label=(TextView)v.findViewById(R.id.start_time_label);
@@ -379,7 +379,7 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
                 progressDialog.dismiss();
                 Toast.makeText(getContext(), "Confirmed and paid!", Toast.LENGTH_SHORT).show();
 
-                Fragment reservationsFragment = new ReservationsFragment();
+                Fragment reservationsFragment = new RenterReservationsFragment();
                 FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragContainer, reservationsFragment);
                 fragmentTransaction.addToBackStack(null);
@@ -490,9 +490,9 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
             progressDialog.dismiss();
             if(resID >= 0){
                 ClientController clientcontroller = ClientController.getInstance();
-                for(int i = 0; i<clientcontroller.reservations.size(); i++){
-                    if(clientcontroller.reservations.get(i).getReservationID()==resID){
-                        clientcontroller.reservations.remove(i);
+                for(int i = 0; i<clientcontroller.renterReservations.size(); i++){
+                    if(clientcontroller.renterReservations.get(i).getReservationID()==resID){
+                        clientcontroller.renterReservations.remove(i);
                     }
                 }
                 mListener.returnToReservationsFragment();
@@ -567,7 +567,7 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
         @Override
         protected ArrayList<Reservation> doInBackground(Void... params) {
             ClientController controller = ClientController.getInstance();
-            controller.requestMyReservationList();
+            controller.requestMyRenterReservationList();
             NetworkPackage NP = controller.checkReceived();
             MyEntry<String, Serializable> entry = NP.getCommand();
             String key = entry.getKey();
@@ -586,14 +586,14 @@ public class ReservationDetailFragment extends Fragment implements OnMapReadyCal
         protected void onPostExecute(ArrayList<Reservation> list) {
             if (list != null) {
                 ClientController controller = ClientController.getInstance();
-                controller.reservations = list;
-                Fragment reservationsFragment = new ReservationsFragment();
+                controller.renterReservations = list;
+                Fragment reservationsFragment = new RenterReservationsFragment();
                 FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragContainer, reservationsFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             } else {
-                Toast.makeText(getContext(), "Error on get reservations! Please try again.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Error on get renterReservations! Please try again.", Toast.LENGTH_SHORT).show();
             }
 
 

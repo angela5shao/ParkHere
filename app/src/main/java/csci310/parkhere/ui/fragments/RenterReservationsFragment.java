@@ -26,12 +26,12 @@ import resource.Time;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ReservationsFragment.OnFragmentInteractionListener} interface
+ * {@link RenterReservationsFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link ReservationsFragment#newInstance} factory method to
+ * Use the {@link RenterReservationsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ReservationsFragment extends Fragment implements AdapterView.OnItemClickListener  {
+public class RenterReservationsFragment extends Fragment implements AdapterView.OnItemClickListener  {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -49,7 +49,7 @@ public class ReservationsFragment extends Fragment implements AdapterView.OnItem
     ArrayList<Reservation> passedReservations;
     ArrayList<Reservation> futureReservations;
 
-    public ReservationsFragment() {
+    public RenterReservationsFragment() {
         // Required empty public constructor
     }
 
@@ -59,11 +59,11 @@ public class ReservationsFragment extends Fragment implements AdapterView.OnItem
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ReservationsFragment.
+     * @return A new instance of fragment RenterReservationsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ReservationsFragment newInstance(String param1, String param2) {
-        ReservationsFragment fragment = new ReservationsFragment();
+    public static RenterReservationsFragment newInstance(String param1, String param2) {
+        RenterReservationsFragment fragment = new RenterReservationsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -84,13 +84,13 @@ public class ReservationsFragment extends Fragment implements AdapterView.OnItem
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_reservations, container, false);
+        View v = inflater.inflate(R.layout.fragment_renter_reservations, container, false);
         _futureList = (ListView) v.findViewById(R.id.futureList);
         _passedList = (ListView) v.findViewById(R.id.passedList);
 
         ClientController controller = ClientController.getInstance();
 
-        ArrayList<Reservation> original_reservations = controller.reservations;
+        ArrayList<Reservation> original_reservations = controller.renterReservations;
 
 
         Calendar cal = Calendar.getInstance();
@@ -156,7 +156,7 @@ public class ReservationsFragment extends Fragment implements AdapterView.OnItem
                     ClientController controller = ClientController.getInstance();
 
 
-                    ArrayList<Reservation> resList = controller.getReservations();
+                    ArrayList<Reservation> resList = controller.getRenterReservations();
 
                     int posInControllerList = -1;
 
@@ -193,7 +193,7 @@ public class ReservationsFragment extends Fragment implements AdapterView.OnItem
                 ClientController controller = ClientController.getInstance();
 
 
-                ArrayList<Reservation> resList = controller.getReservations();
+                ArrayList<Reservation> resList = controller.getRenterReservations();
 
                 int posInControllerList = -1;
 //
@@ -297,7 +297,7 @@ public class ReservationsFragment extends Fragment implements AdapterView.OnItem
 
 //    public void refresh(){
 //        ClientController clientcontroller = ClientController.getInstance();
-//        mAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, clientcontroller.reservations);
+//        mAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, clientcontroller.renterReservations);
 //    }
 
 

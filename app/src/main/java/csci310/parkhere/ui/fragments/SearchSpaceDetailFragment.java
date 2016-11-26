@@ -602,14 +602,14 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
 
             }
 //            if (list != null) {
-////                clientController.reservations = list;
-//                reservationsFragment = new ReservationsFragment();
+////                clientController.renterReservations = list;
+//                reservationsFragment = new RenterReservationsFragment();
 //                fragmentTransaction = fm.beginTransaction();
 //                fragmentTransaction.replace(R.id.fragContainer, reservationsFragment);
 //                fragmentTransaction.addToBackStack(null);
 //                fragmentTransaction.commit();
 //            } else {
-//                Toast.makeText(getBaseContext(), "Error on get reservations! Please try again.", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getBaseContext(), "Error on get renterReservations! Please try again.", Toast.LENGTH_SHORT).show();
 //            }
 
 

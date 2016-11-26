@@ -5,8 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -23,7 +21,7 @@ public class CustomSpacesListAdapter extends ArrayAdapter {
 //    private final Integer[] imgid;
 
     public CustomSpacesListAdapter(Activity context, ArrayList<String> itemname) {
-        super(context, R.layout.fragment_reservations, itemname);
+        super(context, R.layout.fragment_renter_reservations, itemname);
         // TODO Auto-generated constructor stub
 
         this.context = context;
@@ -34,7 +32,7 @@ public class CustomSpacesListAdapter extends ArrayAdapter {
 
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
-        View rowView = inflater.inflate(R.layout.fragment_reservations, null, true);
+        View rowView = inflater.inflate(R.layout.fragment_renter_reservations, null, true);
 
 //        TextView txtTitle = (TextView) rowView.findViewById(R.id.reservations_address);
 //        ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);

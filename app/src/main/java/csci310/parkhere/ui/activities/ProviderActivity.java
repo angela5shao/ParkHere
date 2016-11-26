@@ -32,14 +32,15 @@ import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
 import csci310.parkhere.ui.fragments.EditProfileFragment;
 import csci310.parkhere.ui.fragments.PrivateProfileFragment;
-import csci310.parkhere.ui.fragments.ReservationDetailFragment;
-import csci310.parkhere.ui.fragments.SearchSpaceDetailFragment;
+import csci310.parkhere.ui.fragments.ProviderReservationsFragment;
+import csci310.parkhere.ui.fragments.RenterReservationDetailFragment;
 import csci310.parkhere.ui.fragments.SpaceDetailFragment;
 import csci310.parkhere.ui.fragments.SpaceEditFragment;
 import csci310.parkhere.ui.fragments.SpacesFragment;
 import resource.MyEntry;
 import resource.NetworkPackage;
 import resource.ParkingSpot;
+import resource.Reservation;
 import resource.Time;
 import resource.TimeInterval;
 import resource.User;
@@ -49,15 +50,15 @@ import resource.User;
  */
 public class ProviderActivity extends AppCompatActivity implements SpacesFragment.OnFragmentInteractionListener,
         SpaceDetailFragment.OnFragmentInteractionListener, PrivateProfileFragment.OnFragmentInteractionListener,
-        ReservationDetailFragment.OnFragmentInteractionListener, EditProfileFragment.OnFragmentInteractionListener,
-        SpaceEditFragment.OnFragmentInteractionListener {
+        RenterReservationDetailFragment.OnFragmentInteractionListener, EditProfileFragment.OnFragmentInteractionListener,
+        SpaceEditFragment.OnFragmentInteractionListener, ProviderReservationsFragment.OnFragmentInteractionListener {
 
-    LinearLayout _spaceLink;
+    LinearLayout _spaceLink, _resLink;
     ImageView _profilePic;
 
     FragmentManager fm;
     FragmentTransaction fragmentTransaction;
-    Fragment spacesFragment, privateProfileFragment, spaceDetailFragment;
+    Fragment spacesFragment, privateProfileFragment, spaceDetailFragment, reservationsFragment;
     BraintreeFragment mBraintreeFragment;
     String mAuthorization = "clientToken";
 
@@ -76,8 +77,10 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         Toolbar providerrToolbar = (Toolbar) findViewById(R.id.providerTabbar);
         setSupportActionBar(providerrToolbar);
 //
+        _resLink = (LinearLayout)findViewById(R.id.ProviderResLink);
         _spaceLink = (LinearLayout)findViewById(R.id.spaceLink);
         _profilePic = (ImageView)findViewById(R.id.profilePic);
+
 //
         fm = getSupportFragmentManager();
         fragmentTransaction = fm.beginTransaction();
@@ -112,6 +115,14 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         } catch (InvalidArgumentException e) {
             // There was an issue with your authorization string.
         }
+
+        _resLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                RequestRenterReservationsTask rrtrt = new RequestRenterReservationsTask();
+                rrtrt.execute();
+            }
+        });
 
         _spaceLink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -301,6 +312,58 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 
     public void onFragmentInteraction(Uri uri){
         //you can leave it empty
+    }
+
+    @Override
+    public void onReservationSelected(int resPosition, boolean ifNotPassed) {
+
+        System.out.println("ProviderActivity onReservationSelected for: " + resPosition);
+        if (clientController.providerReservations.size() == 0) {
+            System.out.println("ProviderActivity: error - no providerReservations to select");
+            return;
+        }
+        Reservation selectedRes = clientController.providerReservations.get(resPosition);
+        if (selectedRes == null) {
+            System.out.println("Selected parking spot is null");
+            return;
+        }
+        RenterReservationDetailFragment resDetailfragment = new RenterReservationDetailFragment();
+        Bundle args = new Bundle();
+        args.putDouble("LAT", selectedRes.getSpot().getLat());
+        args.putDouble("LONG", selectedRes.getSpot().getLon());
+        args.putString("ADDRESS", selectedRes.getSpot().getStreetAddr());
+
+        Time startTime = selectedRes.getReserveTimeInterval().startTime;
+        Time endTime = selectedRes.getReserveTimeInterval().endTime;
+
+        Time displayStartTime = new Time(startTime.year,startTime.month,startTime.dayOfMonth,startTime.hourOfDay,startTime.minute,startTime.second);
+        Time displayEndTime = new Time(endTime.year,endTime.month,endTime.dayOfMonth,endTime.hourOfDay,endTime.minute,endTime.second);
+
+        displayStartTime.month+=1;
+        displayEndTime.month+=1;
+
+
+        args.putString("START_TIME", displayStartTime.toString());
+        args.putString("END_TIME", displayEndTime.toString());
+        args.putString("RENTER", Long.toString(selectedRes.getSpot().getOwner()));
+        args.putLong("RES_ID", selectedRes.getReservationID());
+
+        if(selectedRes.review==null && !ifNotPassed) {
+            args.putBoolean("IF_CANREVIEW", true);
+        }
+        else {
+            args.putBoolean("IF_CANREVIEW", false);
+        }
+        args.putBoolean("IF_CANCANCEL", ifNotPassed);
+        args.putBoolean("IF_ISPAID", selectedRes.isPaid());
+        resDetailfragment.setArguments(args);
+
+        try {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragContainer, resDetailfragment).commit();
+        } catch (Exception e) {
+            System.out.println("ProviderActivity onReservationSelected exception");
+        }
     }
 
     public void openSpaceEditFragment(ParkingSpot spot) {
@@ -583,5 +646,41 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
             }
         }
 
+    }
+
+    private class RequestRenterReservationsTask extends AsyncTask<Void, Void, ArrayList<Reservation>> {
+        RequestRenterReservationsTask() { }
+        @Override
+        protected ArrayList<Reservation> doInBackground(Void... params) {
+            clientController.requestMyProviderReservationList();
+            NetworkPackage NP = clientController.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if (key.equals("PROVIDERRESERVATION")) {
+                ArrayList<Reservation> list = (ArrayList<Reservation>) value;
+                Log.d("FETCHPROVIDERRESERVATION", "listsize: " + String.valueOf(list.size()));
+
+                return list;
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Reservation> list) {
+            if (list != null) {
+                clientController.providerReservations = list;
+                reservationsFragment = new ProviderReservationsFragment();
+                fragmentTransaction = fm.beginTransaction();
+                fragmentTransaction.replace(R.id.fragContainer, reservationsFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            } else {
+                Toast.makeText(getBaseContext(), "Error on get providerReservations! Please try again.", Toast.LENGTH_SHORT).show();
+            }
+
+
+        }
     }
 }

@@ -328,9 +328,13 @@ public class ClientController {
         }
     }
 //
-//    public void report(Reservation res) {
-//
-//    }
+    public void report(long reservationID) {
+        try {
+            clientCommunicator.send("REPORT", reservationID);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void search(LatLng location, String startDate, String startTime, String endDate, String endTime, String carType, String distance) throws IOException {
         currLocation = location;

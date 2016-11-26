@@ -547,9 +547,7 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
         }
         @Override
         protected ArrayList<Review> doInBackground(Void... params) {
-
             ClientController clientController = ClientController.getInstance();
-
             clientController.requestParkingSpotReview(parkingSpotID);
             NetworkPackage NP = clientController.checkReceived();
             MyEntry<String, Serializable> entry = NP.getCommand();
@@ -557,17 +555,9 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
             Object value = entry.getValue();
             if (key.equals("REVIEWFORPARKINGSPOT")) {
                 HashMap<String, Serializable> map = (HashMap<String, Serializable>)value;
-
                 ArrayList<Review> list = (ArrayList<Review>) map.get("REVIEWS");
                 Log.d("FETCHREVIEWLIST", "listsize: " + String.valueOf(list.size()));
                 userlist = (ArrayList<User>) map.get("USERS");
-
-
-
-
-
-
-
                 return list;
             } else {
                 return null;
@@ -576,43 +566,17 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
 
         @Override
         protected void onPostExecute(ArrayList<Review> list) {
-
-
             if(list != null && userlist != null)
             {
                 spotReviewStringList.clear();
-
                 for(int i = 0; i < list.size(); i++)
                 {
                     Log.d("FETCHREVIEW", list.get(i).comment);
                     spotReviewStringList.add(userlist.get(i).Fname + ":\n" + "Rating: " + String.valueOf(list.get(i).spotRating) + "\n" + "Comment: " + list.get(i).comment);
-
                 }
-
-//                for(Review r : list)
-//                {
-//                    Log.d("FETCHREVIEW", r.comment);
-//                    spotReviewStringList.add("Rating: " + String.valueOf(r.spotRating) + "\n" + "Comment: " + r.comment);
-//                }
-
-
                 spotReivewListAdapter.notifyDataSetChanged();
                 setListViewHeightBasedOnChildren(spotReviewList);
-
-
             }
-//            if (list != null) {
-////                clientController.renterReservations = list;
-//                reservationsFragment = new RenterReservationsFragment();
-//                fragmentTransaction = fm.beginTransaction();
-//                fragmentTransaction.replace(R.id.fragContainer, reservationsFragment);
-//                fragmentTransaction.addToBackStack(null);
-//                fragmentTransaction.commit();
-//            } else {
-//                Toast.makeText(getBaseContext(), "Error on get renterReservations! Please try again.", Toast.LENGTH_SHORT).show();
-//            }
-
-
         }
     }
 
@@ -637,7 +601,6 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
         protected HashMap<String, Serializable> doInBackground(Void... params ){
             ClientController clientController = ClientController.getInstance();
             clientController.fetchReviewsForUser(mProviderID);
-//                clientController.cancelReceived();
             NetworkPackage NP = clientController.checkReceived();
             MyEntry<String, Serializable> entry = NP.getCommand();
             String key = entry.getKey();
@@ -657,15 +620,14 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
 
                 User user = (User) inPublicProfileInfo.get("USER");
                 ArrayList<Review> list = (ArrayList<Review>)inPublicProfileInfo.get("REVIEWS");
-
+                ArrayList<User> list2 = (ArrayList<User>)inPublicProfileInfo.get("USERS");
+                Log.d("LISTSIZE", String.valueOf(list.size())+" "+String.valueOf(list2.size()));
                 if(user != null && list != null) {
                     ArrayList<String> reviewsString = new ArrayList<String>();
-                    for(Review review : list) {
-                        String s = review.spotRating + " - " + review.comment;
-
+                    for(int i = 0; i<list.size(); i++) {
+                        String s = list2.get(i).userName+"-"+ list.get(i).spotRating + " - " + list.get(i).comment;
                         reviewsString.add(s);
                     }
-
                     PublicProfileFragment publicProfileFragment = new PublicProfileFragment();
                     Bundle args = new Bundle();
                     args.putString("FIRSTNAME", user.Fname);
@@ -673,9 +635,9 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
                     args.putString("PHONE_NUM", user.userPhone);
                     args.putStringArrayList("REVIEWS", reviewsString);
                     publicProfileFragment.setArguments(args);
-                    Activity ac = getActivity();
-                    if (ac instanceof RenterActivity)
-                        ((RenterActivity) getActivity()).switchToPublicProfileFrag(publicProfileFragment);
+                    //Activity ac = getActivity();
+                    //if (ac instanceof RenterActivity)
+                    ((RenterActivity) getActivity()).switchToPublicProfileFrag(publicProfileFragment);
                 }
             } else{
                 progressDialog.dismiss();

@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
@@ -241,6 +243,12 @@ public class RegisterRenterActivity extends Activity {
         @Override
         protected Boolean doInBackground(Void... params ){
             try {
+                // TODO: start timer
+                Long tsLong = System.currentTimeMillis()/1000;
+                SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm:ss");
+                Date resultdate = new Date(tsLong);
+                System.out.println("START TIME: " + sdf.format(resultdate) + " ********************");
+                /******************************************************/
                 clientController.register(mUsername, mPassword, mphonenum, mlicenseID, mplatenum, mcat, mname);
                 NetworkPackage NP = clientController.checkReceived();
                 MyEntry<String, Serializable> entry = NP.getCommand();
@@ -263,6 +271,12 @@ public class RegisterRenterActivity extends Activity {
         @Override
         protected void onPostExecute(Boolean success) {
             Context c = getBaseContext();
+            // TODO: end timer
+            Long tsLong = System.currentTimeMillis()/1000;
+            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm:ss");
+            Date resultdate = new Date(tsLong);
+            System.out.println("END TIME: " + sdf.format(resultdate) + " ********************");
+            /******************************************************/
             if(success) {
                 progressDialog.dismiss();
 

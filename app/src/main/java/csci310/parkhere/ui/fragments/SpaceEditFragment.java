@@ -1,6 +1,7 @@
 package csci310.parkhere.ui.fragments;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -34,6 +35,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import csci310.parkhere.R;
@@ -67,12 +69,13 @@ public class SpaceEditFragment extends Fragment {
     private EditText mAddressText, mDescriptionText;
     private SubsamplingScaleImageView mSpacePic2;
     private Spinner mCartypeSpinner, mCancelPolicySpinner;
-    private Vector<String> encodedImages;
+    private ArrayList<String> encodedImages;
     private LinearLayout mImagesLayout;
 
     private LatLng mCurrLocation;
 
     private OnFragmentInteractionListener mListener;
+    private ProgressDialog progressDialog;
 
     public SpaceEditFragment() {
         // Required empty public constructor
@@ -260,7 +263,7 @@ public class SpaceEditFragment extends Fragment {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] imageBytes = baos.toByteArray();
-            if (encodedImages == null) encodedImages = new Vector<String>();
+            if (encodedImages == null) encodedImages = new ArrayList<String>();
             encodedImages.add(Base64.encodeToString(imageBytes, Base64.DEFAULT));
         }
     }
@@ -296,6 +299,15 @@ public class SpaceEditFragment extends Fragment {
         }
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = new ProgressDialog(getContext(), R.style.AppTheme);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Update Parking Spot Info...");
+            progressDialog.show();
+        }
+
+        @Override
         protected ParkingSpot doInBackground(Void... params ) {
             ClientController clientController = ClientController.getInstance();
 //            clientController.editParkingSpot(address, description, cartype, cancelpolicy, encodedImages);
@@ -308,15 +320,15 @@ public class SpaceEditFragment extends Fragment {
             Log.d("EditSpaceTask", key);
 
             if (key.equals("EDITSPACE")) {
-//                for (int i = 0; i < encodedImages.size(); i++) {
-//                    clientController.sendImagetoServer(encodedImages.get(i), "PARKINGSPACEIMAGE", thisParkingSpot.getParkingSpotID());
-//                    NP = clientController.checkReceived();
-//                    entry = NP.getCommand();
-//                    key = entry.getKey();
-//                    while (!key.equals("STOREIMAGESUCCESS")) {
-//                        clientController.sendImagetoServer(encodedImages.get(i), "PARKINGSPACEIMAGE", thisParkingSpot.getParkingSpotID());
-//                    }
-//                }
+                clientController.deleteOldParkingSpotImages(ps);
+                NetworkPackage deleteResponse = clientController.checkReceived();
+                MyEntry<String, Serializable> deleteEntry = deleteResponse.getCommand();
+                String deleteKey = deleteEntry.getKey();
+
+                if(deleteKey.equals("DELETEIMAGESSUCCESS"))
+                {
+                    clientController.sendImagesToServer(encodedImages,"PARKINGSPACEIMAGE", ps.getParkingSpotID());
+                }
                 Log.d("SpaceEdit", "doInBackground 1");
                 return ps;
             }
@@ -328,10 +340,10 @@ public class SpaceEditFragment extends Fragment {
         protected void onPostExecute(ParkingSpot spot) {
             Log.d("EditSpaceTask", "onPostExecute!!!!! - - - - - ");
             if(spot!=null){
-
-
+                progressDialog.dismiss();
                 ((ProviderActivity)getActivity()).onEditSpace(spot);
             } else{
+                progressDialog.dismiss();
                 Toast.makeText(getContext(), "Error on edit space! Please try again.", Toast.LENGTH_SHORT).show();
                 // back to parking spot detail
             }

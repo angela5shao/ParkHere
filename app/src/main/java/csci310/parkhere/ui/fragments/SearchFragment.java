@@ -473,6 +473,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.HashMap;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
@@ -879,12 +880,21 @@ public class SearchFragment extends Fragment {
             System.out.println("SearchFrag doInBackground 15");
 
             if(key.equals("SEARCH_RESULT")) {
-                SearchResults result = (SearchResults) value;
+                HashMap<String, Serializable> map = (HashMap<String, Serializable>)value;
+
+                SearchResults result = (SearchResults) map.get("SEARCHRESULT");
+                HashMap<Long, Integer> result_freq = (HashMap<Long, Integer>) map.get("FREQ");
+
 //                Log.d("Results", result.searchResultList.get(0).getStreetAddr());
                 clientController.toDispaySearch = true;
                 //controller.updateActivity();
                 clientController.searchResults = result;
                 Log.d("SEARCH_RESULT", "Size " + String.valueOf(result.searchResultList.size()));
+
+                // Update HashMap<Long, Integer> of <parking spot ID, amount of bookings>
+                clientController.searchResultsFreq = result_freq;
+                Log.d("SEARCH_RESULT_FREQ", "Size " + String.valueOf(result_freq.size()));
+
                 return result;
             }
             else {

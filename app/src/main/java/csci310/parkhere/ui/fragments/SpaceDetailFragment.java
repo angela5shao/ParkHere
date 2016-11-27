@@ -42,7 +42,6 @@ import com.imanoweb.calendarview.DayView;
 import junit.framework.Assert;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -1071,8 +1070,6 @@ public class SpaceDetailFragment extends Fragment {
                 ArrayList<Review> list = (ArrayList<Review>) map.get("REVIEWS");
                 Log.d("FETCHREVIEWLIST", "listsize: " + String.valueOf(list.size()));
                 userlist = (ArrayList<User>) map.get("USERS");
-
-
 
 
 

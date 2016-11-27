@@ -27,30 +27,35 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/thankyou_res_label"
         android:orientation="vertical">
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Address:"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_weight="1"
-            android:textAlignment="center"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:textColor="@color/colorMainFont"
-            android:background="@color/colorPrimary"/>
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Address:"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:textColor="@color/colorMainFont"
+                android:background="@color/colorPrimary"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/spacedetail_address"
-            android:layout_weight="1"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:textAlignment="center"
-            android:textColor="@color/colorMainFont"
-            android:background="@color/colorAccent"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/spacedetail_address"
+                android:layout_weight="1"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:textAlignment="center"
+                android:textColor="@color/colorMainFont"
+                android:background="@color/colorAccent"/>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

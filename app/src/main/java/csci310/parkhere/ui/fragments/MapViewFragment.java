@@ -20,6 +20,7 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -27,6 +28,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
@@ -39,6 +41,12 @@ import resource.SearchResults;
 public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     // in case of several markers with the same location
     private static final float COORDINATE_OFFSET = 0.0001f;
+    // Visualize freq circle radius
+    private double mapCircleRadius = 40.0;
+    private float curr_zoom = 16;
+    private boolean isShowCircle = false;
+    // Store all added circles
+    private List<Circle> mapCircles = new ArrayList<Circle>();
     // HashMap of marker identifier and its location as a string
     private HashMap<String, String> markerLocation = new HashMap<String, String>();
     // HashMap of parking spot ID and its amount of times of booking
@@ -143,6 +151,8 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
                     // Remove visuals
                 }
                 else if (_spots != null) {
+                    isShowCircle = !isShowCircle;
+
                     MapLoadCirclesTask MLCT = new MapLoadCirclesTask(googleMap, _spots, spotBookingAmount);
                     MLCT.execute((Void) null);
                 }
@@ -183,30 +193,50 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         googleMap = inGoogleMap;
 
         cameraPosition = new CameraPosition.Builder()
-                .target(new LatLng(searchLat, searchLon)).zoom(16).build();
+                .target(new LatLng(searchLat, searchLon)).zoom(curr_zoom).build();
 
         googleMap.animateCamera(CameraUpdateFactory
                 .newCameraPosition(cameraPosition));
 
-            mapWrapperLayout.init(googleMap, getPixelsFromDp(getContext(), 39 + 20));
+        mapWrapperLayout.init(googleMap, getPixelsFromDp(getContext(), 39 + 20));
 
-            googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-                @Override
-                public View getInfoWindow(Marker marker) {
-                    return null;
+        googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+            @Override
+            public View getInfoWindow(Marker marker) {
+                return null;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+                // Setting up the infoWindow with current's marker info
+                infoTitle.setText(marker.getTitle());
+                infoSnippet.setText(marker.getSnippet());
+                infoListener.setMarker(marker);
+
+                // We must call this to set the current marker and infoWindow references
+                // to the MapWrapperLayout
+                mapWrapperLayout.setMarkerWithInfoWindow(marker, infoWindow);
+                return infoWindow;
+            }
+        });
+
+        googleMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
+            @Override
+            public void onCameraMove() {
+
+                CameraPosition cameraPosition = googleMap.getCameraPosition();
+                Log.d("MapView Frag ", "new mapCircleRadius with cameraPosition.zoom = " + (double) cameraPosition.zoom);
+                mapCircleRadius = (mapCircleRadius / curr_zoom) * (double) cameraPosition.zoom;
+                Log.d("MapView Frag ", "new mapCircleRadius = " + mapCircleRadius);
+
+                if(cameraPosition.zoom != curr_zoom) {
+                    //***************************************************************************************
+                    MapLoadCirclesTask MLCT = new MapLoadCirclesTask(googleMap, _spots, spotBookingAmount);
+                    MLCT.execute((Void) null);
+                    //***************************************************************************************
                 }
 
-                @Override
-                public View getInfoContents(Marker marker) {
-                    // Setting up the infoWindow with current's marker info
-                    infoTitle.setText(marker.getTitle());
-                    infoSnippet.setText(marker.getSnippet());
-                    infoListener.setMarker(marker);
-
-                    // We must call this to set the current marker and infoWindow references
-                    // to the MapWrapperLayout
-                    mapWrapperLayout.setMarkerWithInfoWindow(marker, infoWindow);
-                    return infoWindow;
+                curr_zoom = cameraPosition.zoom;
             }
         });
 
@@ -306,6 +336,17 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         }
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            // Clear draws on map
+            for (Circle circle : mapCircles) {
+                circle.remove();
+            }
+            mapCircles.clear();
+        }
+
+        @Override
         protected HashMap<ParkingSpot, Integer> doInBackground(Void... params){
             int total_bookings = 0;
             for(int bookings : freqs.values()) {
@@ -355,15 +396,20 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
         @Override
         protected void onPostExecute(HashMap<ParkingSpot, Integer> results) {
-            if(results != null) {
+            if (results != null && isShowCircle == true) {
                 for (ParkingSpot spot : results.keySet()) {
-                    Log.d("MapLoadCirclesTask ", "results.get(spot) = " + results.get(spot));
+                    Log.d("MapLoadCirclesTask ", spot.getParkingSpotID() + "- results.get(spot) = " + results.get(spot));
 
-                    map.addCircle(new CircleOptions()
+                    float radius = (float)( mapCircleRadius / ( 100 - Color.alpha(results.get(spot)) ) ) * 50;
+                    Log.d("MapLoadCirclesTask ", "Color.alpha(results.get(spot)) = " + Color.alpha(results.get(spot)));
+                    Log.d("MapLoadCirclesTask ", "radius = " + radius);
+
+                    Circle circle = map.addCircle(new CircleOptions()
                             .center(new LatLng(spot.getLat(), spot.getLon()))
-                            .radius(20)
+                            .radius(radius)
                             .strokeColor(Color.TRANSPARENT)
-                            .fillColor(results.get(spot)));//results.get(spot)));
+                            .fillColor(results.get(spot)));
+                    mapCircles.add(circle);
                 }
             }
         }

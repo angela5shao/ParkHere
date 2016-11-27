@@ -792,4 +792,18 @@ public class ClientController {
             e.printStackTrace();
         }
     }
+
+    public void getPrice(long userID, long parkingSpotID, TimeInterval timeInterval) {
+        NetworkPackage NP = new NetworkPackage();
+        HashMap<String, Serializable> map = new HashMap<String, Serializable>();
+        map.put("PARKINGSPOTID", parkingSpotID);
+        map.put("RENTERID", userID);
+        map.put("TIMEINTERVAL", timeInterval);
+        NP.addEntry("PRICE", map);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -16,6 +16,7 @@ import com.braintreepayments.api.models.PaymentMethodNonce;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
@@ -35,7 +36,8 @@ public class PaymentActivity extends Activity {
     private long userID;
     private long parkingSpotID;
     private TimeInterval timeInterval;
-    private long resID, providerID;
+    private long resID = -1;
+    private long providerID;
     private String price;
 
     @Override
@@ -50,7 +52,14 @@ public class PaymentActivity extends Activity {
         String end = intent.getStringExtra("TIMEINTERVALEND");
         timeInterval = new TimeInterval(new Time(start), new Time(end));
         providerID = intent.getLongExtra("PROVIDERID", 0);
-//        price = intent.getStringExtra("PRICE");
+        PriceRetrieveTask PRT = new PriceRetrieveTask(parkingSpotID, timeInterval, providerID, userID);
+        try {
+            price = PRT.execute((Void)null).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
 //        try {
 //            braintreeFragment = BraintreeFragment.newInstance(this, clientToken);
 //            // mBraintreeFragment is ready to use!
@@ -107,13 +116,23 @@ public class PaymentActivity extends Activity {
 
                     String nonce = paymentMethodNonce.getNonce();
                     RenterReserveTask RRT = new RenterReserveTask(parkingSpotID, timeInterval, providerID, userID);
-                    RRT.execute((Void)null);
+                    try {
+                        HashMap<String, Serializable> mapp = RRT.execute((Void)null).get();
+                        resID = (long) mapp.get("RESERVATIONID");
+                        price = String.valueOf(mapp.get("PRICE"));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    }
                     // Send payment success to server
                     Log.d("PAYMENT", " success and send to server - "+price);
                     ClientController clientController = ClientController.getInstance();
                     clientController.setCurrentActivity(this);
-
-                    clientController.postPaymentNonceToServer(nonce, resID, providerID, price);
+                    if(resID!=-1) {
+                        Log.d("Payment Success", String.valueOf(resID));
+                        clientController.postPaymentNonceToServer(nonce, resID, providerID, price);
+                    }
                     Intent intent = new Intent(getBaseContext(), RenterActivity.class);
                     startActivity(intent);
 
@@ -204,6 +223,9 @@ public class PaymentActivity extends Activity {
         private final TimeInterval timeInterval;
         private final long providerID;
         private final long userID;
+        private long resID;
+        private String price;
+
 
         private ProgressDialog progressDialog;
 
@@ -217,10 +239,10 @@ public class PaymentActivity extends Activity {
         @Override
         protected void onPreExecute(){
             //Display a progress dialog
-            progressDialog = new ProgressDialog(getBaseContext(), R.style.AppTheme);
-            progressDialog.setIndeterminate(true);
-            progressDialog.setMessage("Booking...");
-            progressDialog.show();
+//            progressDialog = new ProgressDialog(getBaseContext(), R.style.AppTheme);
+//            progressDialog.setIndeterminate(true);
+//            progressDialog.setMessage("Booking...");
+//            progressDialog.show();
         }
         @Override
         protected HashMap<String, Serializable> doInBackground(Void... params ){
@@ -250,13 +272,73 @@ public class PaymentActivity extends Activity {
         @Override
         protected void onPostExecute(HashMap<String, Serializable> map) {
             if(map==null){
-                progressDialog.dismiss();
+//                progressDialog.dismiss();
                 Toast.makeText(getBaseContext(), "Book space failed! Please try agian.", Toast.LENGTH_SHORT).show();
             }else {
-                resID = (long) map.get("RESERVATIONID");
-                price = String.valueOf(map.get("PRICE"));
-                progressDialog.dismiss();
+                this.resID = (long) map.get("RESERVATIONID");
+                this.price = String.valueOf(map.get("PRICE"));
+                Log.d("testtest", String.valueOf(resID)+"  "+price);
+//                progressDialog.dismiss();
             }
         }
+    }
+
+
+    private class PriceRetrieveTask extends AsyncTask<Void, Void, String> {
+        private final long parkingSpotID;
+        private final TimeInterval timeInterval;
+        private final long providerID;
+        private final long userID;
+        private long resID;
+        private String price;
+
+        PriceRetrieveTask(long parkingSpotID, TimeInterval timeinterval, long providerID, long userID){
+            this.parkingSpotID = parkingSpotID;
+            this.timeInterval = timeinterval;
+            this.providerID = providerID;
+            this.userID = userID;
+        }
+
+        @Override
+        protected void onPreExecute(){
+            //Display a progress dialog
+//            progressDialog = new ProgressDialog(getBaseContext(), R.style.AppTheme);
+//            progressDialog.setIndeterminate(true);
+//            progressDialog.setMessage("Booking...");
+//            progressDialog.show();
+        }
+        @Override
+        protected String doInBackground(Void... params ){
+            // call client controller
+            // call client controller
+            ClientController controller = ClientController.getInstance();
+            controller.getPrice(userID, parkingSpotID, timeInterval);
+            Log.d("SEARCHRESERVE", "AFTERREQUEST");
+            NetworkPackage NP = controller.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Object value = entry.getValue();
+
+            if(key.equals("PRICE")) {
+                double pricee = (double)value;
+                this.price = String.valueOf(pricee);
+                return this.price;
+            }
+            else {
+                return null;
+            }
+        }
+//        @Override
+//        protected void onPostExecute(String price) {
+//            if(price==null){
+////                progressDialog.dismiss();
+//                price = price;
+//            }else {
+//                this.resID = (long) map.get("RESERVATIONID");
+//                this.price = String.valueOf(map.get("PRICE"));
+//                Log.d("testtest", String.valueOf(resID)+"  "+price);
+////                progressDialog.dismiss();
+//            }
+//        }
     }
 }

@@ -316,7 +316,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
             if(total_bookings == 0) return null;
 
             HashMap<ParkingSpot, Integer> spotsWithFreq = new HashMap<ParkingSpot, Integer>();
-            String alpha = "ff";
+//            String alpha = "ff";
             int bgColor = ContextCompat.getColor(getContext(), R.color.colorAccent);
             String red = Integer.toHexString(Color.red(bgColor));
             String green = Integer.toHexString(Color.green(bgColor));
@@ -335,9 +335,12 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
                 int tp = (amount_of_bookings * 100)/total_bookings;
                 Log.d("MapLoadCirclesTask ", "transparency for " + spot.getParkingSpotID() + " = " + tp);
 
-                if(tp == 100) alpha = "00";
-                else if(tp >0 && tp < 10) alpha = "0" + tp;
-                else if(tp != 0) alpha = Integer.toString(tp);
+//                if(tp == 100) alpha = "00";
+//                else if(tp >0 && tp < 10) alpha = "0" + tp;
+//                else if(tp != 0) alpha = Integer.toString(tp);
+
+                String alpha = Integer.toHexString(tp);
+                Log.d("MapLoadCirclesTask ", "alpha for " + spot.getParkingSpotID() + " = " + alpha);
 
                 String hex = alpha + red + green + blue;
                 Log.d("MapLoadCirclesTask ", "hex for " + spot.getParkingSpotID() + " = " + hex);
@@ -355,12 +358,12 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
             if(results != null) {
                 for (ParkingSpot spot : results.keySet()) {
                     Log.d("MapLoadCirclesTask ", "results.get(spot) = " + results.get(spot));
-                    Log.d("MapLoadCirclesTask ", "0x5500ff00 = " + 0x5500ff00);
 
                     map.addCircle(new CircleOptions()
                             .center(new LatLng(spot.getLat(), spot.getLon()))
-                            .radius(10)
-                            .fillColor(Integer.parseInt("5500ff00", 16)));//results.get(spot)));
+                            .radius(20)
+                            .strokeColor(Color.TRANSPARENT)
+                            .fillColor(results.get(spot)));//results.get(spot)));
                 }
             }
         }

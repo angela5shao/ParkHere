@@ -318,9 +318,9 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
             HashMap<ParkingSpot, Integer> spotsWithFreq = new HashMap<ParkingSpot, Integer>();
             String alpha = "ff";
             int bgColor = ContextCompat.getColor(getContext(), R.color.colorAccent);
-            String red = Integer.toString(Color.red(bgColor));
-            String green = Integer.toString(Color.green(bgColor));
-            String blue = Integer.toString(Color.blue(bgColor));
+            String red = Integer.toHexString(Color.red(bgColor));
+            String green = Integer.toHexString(Color.green(bgColor));
+            String blue = Integer.toHexString(Color.blue(bgColor));
 
             for(ParkingSpot spot : spots) {
                 int amount_of_bookings = freqs.get(spot.getParkingSpotID());
@@ -332,14 +332,14 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
                 // For 0% transparency ( ie, opaque ) , specify ff
                 // The remaining 6 characters(00ff00) specify the fill color
                 // eg. 0x5500ff00
-                int tp = amount_of_bookings/total_bookings;
+                int tp = (amount_of_bookings * 100)/total_bookings;
                 Log.d("MapLoadCirclesTask ", "transparency for " + spot.getParkingSpotID() + " = " + tp);
 
                 if(tp == 100) alpha = "00";
                 else if(tp >0 && tp < 10) alpha = "0" + tp;
                 else if(tp != 0) alpha = Integer.toString(tp);
 
-                String hex = "0x" + alpha + red + green + blue;
+                String hex = alpha + red + green + blue;
                 Log.d("MapLoadCirclesTask ", "hex for " + spot.getParkingSpotID() + " = " + hex);
 
                 int color = Integer.parseInt(hex, 16);
@@ -347,17 +347,20 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
                 spotsWithFreq.put(spot, color);
             }
 
-            return null;
+            return spotsWithFreq;
         }
 
         @Override
         protected void onPostExecute(HashMap<ParkingSpot, Integer> results) {
             if(results != null) {
                 for (ParkingSpot spot : results.keySet()) {
+                    Log.d("MapLoadCirclesTask ", "results.get(spot) = " + results.get(spot));
+                    Log.d("MapLoadCirclesTask ", "0x5500ff00 = " + 0x5500ff00);
+
                     map.addCircle(new CircleOptions()
                             .center(new LatLng(spot.getLat(), spot.getLon()))
                             .radius(10)
-                            .fillColor(results.get(spot)));
+                            .fillColor(Integer.parseInt("5500ff00", 16)));//results.get(spot)));
                 }
             }
         }

@@ -33,10 +33,12 @@ import java.util.Calendar;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
+import csci310.parkhere.ui.activities.ProviderActivity;
 import resource.MyEntry;
 import resource.NetworkPackage;
 import resource.Reservation;
 import resource.Time;
+import resource.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -63,7 +65,8 @@ public class ProviderReservationDetailFragment extends Fragment implements OnMap
     CameraPosition cameraPosition;
 
     TextView _spacedetail_address, _start_time_label, _end_time_label, _renter_username_label;
-    Button _btn_confirm, _btn_review, _btn_report, _btn_cancel;
+//    Button _btn_confirm, _btn_review, _btn_report, _btn_cancel;
+    Button _btn_report;
 
     // latitude and longitude (default as USC)
     private double curr_lat = 34.0224;
@@ -71,9 +74,10 @@ public class ProviderReservationDetailFragment extends Fragment implements OnMap
     private String address = "[address]";
     private String start_time = "[start time]";
     private String end_time = "[end time]";
-    private String renter_username = "[renter username]";
+//    private String renter_username = "[renter username]";
+    private Long renter_id;
     private long res_id = 0;
-    private boolean if_canReview, if_canCancel, if_ispaid;
+//    private boolean if_canReview, if_canCancel, if_ispaid;
 
     public ProviderReservationDetailFragment() {
         // Required empty public constructor
@@ -109,11 +113,10 @@ public class ProviderReservationDetailFragment extends Fragment implements OnMap
             address = b.getString("ADDRESS");
             start_time = b.getString("START_TIME");
             end_time = b.getString("END_TIME");
-            renter_username = b.getString("RENTER");
+//            renter_username = b.getString("RENTER");
+            renter_id = b.getLong("RENTER");
             res_id = b.getLong("RES_ID");
-            if_canReview = b.getBoolean("IF_CANREVIEW");
-            if_canCancel = b.getBoolean("IF_CANCANCEL");
-            if_ispaid = b.getBoolean("IF_ISPAID");
+
         }
     }
 
@@ -121,43 +124,24 @@ public class ProviderReservationDetailFragment extends Fragment implements OnMap
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_renter_reservation_detail, container, false);
+        View v = inflater.inflate(R.layout.fragment_provider_reservation_detail, container, false);
 
         _spacedetail_address=(TextView)v.findViewById(R.id.spacedetail_address);
         _start_time_label=(TextView)v.findViewById(R.id.start_time_label);
         _end_time_label=(TextView)v.findViewById(R.id.end_time_label);
         _renter_username_label=(TextView)v.findViewById(R.id.renter_username_label);
-//        _btn_confirm=(Button)v.findViewById(R.id.btn_confirm);
-//        _btn_review=(Button)v.findViewById(R.id.btn_review);
+
         _btn_report=(Button)v.findViewById(R.id.btn_report);
-//        _btn_cancel=(Button)v.findViewById(R.id.btn_cancel);
 
-        Log.d("Reservation detail ","if_canReview = "+if_canReview);
-        Log.d("Reservation detail ","if_canCancel = "+if_canCancel);
-
-//        if(!if_canReview) {
-//            _btn_review.setVisibility(View.GONE);
-//        }
-
-        if(!if_canCancel) {
-            _btn_report.setVisibility(View.GONE);
-            _btn_cancel.setVisibility(View.GONE);
-
-            if(if_ispaid) {
-                _btn_confirm.setVisibility(View.GONE);
-            }
-            else {
-                Toast.makeText(getContext(), "Please confirme your ended reservation!", Toast.LENGTH_SHORT).show();
-            }
-        }
-        else {
-            _btn_confirm.setVisibility(View.GONE);
-        }
 
         _spacedetail_address.setText(address);
         _start_time_label.setText(start_time);
         _end_time_label.setText(end_time);
-        _renter_username_label.setText(renter_username);
+        _renter_username_label.setText(renter_id.toString());
+        SetUserNameTask sunt = new SetUserNameTask(renter_id);
+        sunt.execute();
+
+
 
         mMapView = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map));
         mMapView.onCreate(savedInstanceState);
@@ -172,6 +156,14 @@ public class ProviderReservationDetailFragment extends Fragment implements OnMap
 
         mMapView.getMapAsync(this);
 
+        _btn_report.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ProviderReportTask prt = new ProviderReportTask(res_id);
+                prt.execute();
+            }
+        });
+
 //        // create marker
 //        MarkerOptions marker = new MarkerOptions().position(new LatLng(latitude, longitude))
 //                .title("Hello Maps").icon(BitmapDescriptorFactory.fromResource(R.mipmap.map_pin));
@@ -181,67 +173,7 @@ public class ProviderReservationDetailFragment extends Fragment implements OnMap
         cameraPosition = new CameraPosition.Builder()
                 .target(new LatLng(curr_lat, curr_long)).zoom(12).build();
 
-        _btn_confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO: confirm the server for payment
-                ConfirmPaymentTask CPT = new ConfirmPaymentTask(res_id);
-                CPT.execute((Void) null);
-            }
-        });
 
-        _btn_review.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Create custom dialog object
-                final Dialog reviewDialog = new Dialog(getActivity());
-                reviewDialog.setContentView(R.layout.dialog_review);
-                reviewDialog.setTitle("Review");
-
-                final RatingBar _ratingBar = (RatingBar) reviewDialog.findViewById(R.id.ratingBar);
-//                Drawable drawable = _ratingBar.getProgressDrawable();
-//                drawable.setColorFilter(Color.parseColor("#FFCC00"), PorterDuff.Mode.SRC_ATOP);
-                final EditText _commentDialog = (EditText) reviewDialog.findViewById(R.id.commentDialog);
-                Button _btn_confirm = (Button) reviewDialog.findViewById(R.id.btn_confirm);
-                _btn_confirm.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Time end = new Time(end_time);
-                        Calendar cal = Calendar.getInstance();
-                        Time currentTime = new Time(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
-                        if (currentTime.compareTo(end) >= 0) {
-                            // Send to controller
-                            AddReviewTask ART = new AddReviewTask(_ratingBar.getRating(),
-                                    _commentDialog.getText().toString());
-                            ART.execute((Void) null);
-
-                            // Close dialog
-                            reviewDialog.dismiss();
-                        } else {
-                            Toast.makeText(getContext(), "Can not cancel the reservation which hasn't ended!", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-                reviewDialog.show();
-            }
-        });
-
-        _btn_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // call Client Controller for cancelling reservaiton
-                Time start = new Time(start_time);
-                Calendar cal = Calendar.getInstance();
-                Time currentTime = new Time(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH),cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
-                if(currentTime.compareTo(start)<0){
-                    RenterCancelTask RCT = new RenterCancelTask(res_id);
-                    RCT.execute((Void) null);
-                }
-                else{
-                    Toast.makeText(getContext(), "Can not cancel the reservation which has started!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
 
         return v;
     }
@@ -294,191 +226,191 @@ public class ProviderReservationDetailFragment extends Fragment implements OnMap
         googleMap.animateCamera(CameraUpdateFactory
                 .newCameraPosition(cameraPosition));
     }
+//
+//    // Update reservation information
+//    public void setReservation(String in_address, String in_start_time, String in_end_time,
+//                               String in_renter_username, double in_lat, double in_long) {
+//        address = in_address;
+//        start_time = in_start_time;
+//        end_time = in_end_time;
+//        renter_username = in_renter_username;
+//        _spacedetail_address.setText(address);
+//        _start_time_label.setText(start_time);
+//        _end_time_label.setText(end_time);
+//        _renter_username_label.setText(renter_username);
+//
+//        curr_lat = in_lat;
+//        curr_long = in_long;
+//        cameraPosition = new CameraPosition.Builder()
+//                .target(new LatLng(curr_lat, curr_long)).zoom(12).build();
+//        if(googleMap != null) {
+//            googleMap.addMarker(new MarkerOptions()
+//                    .position(new LatLng(curr_lat, curr_long)));
+//            googleMap.animateCamera(CameraUpdateFactory
+//                    .newCameraPosition(cameraPosition));
+//        }
+//    }
+//
+//    private class ConfirmPaymentTask extends AsyncTask<Void, Void, Boolean> {
+//        private long mResID;
+//        ProgressDialog progressDialog;
+//
+//        ConfirmPaymentTask(long resID){
+//            mResID = resID;
+//
+//            Log.d("Reservation Detail: ", "ConfirmPaymentTask.mResID = "+mResID);
+//        }
+//
+//        @Override
+//        protected void onPreExecute(){
+//            //Display a progress dialog
+//            progressDialog = new ProgressDialog(getActivity(),
+//                    R.style.AppTheme);
+//            progressDialog.setIndeterminate(true);
+//            progressDialog.setMessage("Confirming payment...");
+//            progressDialog.show();
+//        }
+//
+//        @Override
+//        protected Boolean doInBackground(Void... params ){
+//            ClientController clientController = ClientController.getInstance();
+//
+//            Log.d("***Reservation Detail ", "mResID = "+mResID);
+//
+//            clientController.submitPaymentRequest(mResID);
+//            NetworkPackage NP = clientController.checkReceived();
+//            MyEntry<String, Serializable> entry = NP.getCommand();
+//            String key = entry.getKey();
+//            Boolean value = (Boolean) entry.getValue();
+//
+//            if(key.equals("CONFIRMSTATUS")){
+//                return value;
+//            }
+//            else {
+//                return false;
+//            }
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Boolean confirmStatus) {
+//            if(confirmStatus){ // paid success
+//                progressDialog.dismiss();
+//                Toast.makeText(getContext(), "Confirmed and paid!", Toast.LENGTH_SHORT).show();
+//
+//                Fragment reservationsFragment = new RenterReservationsFragment();
+//                FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+//                fragmentTransaction.replace(R.id.fragContainer, reservationsFragment);
+//                fragmentTransaction.addToBackStack(null);
+//                fragmentTransaction.commit();
+//            }
+//            else{
+//                progressDialog.dismiss();
+//                Toast.makeText(getContext(), "Confirm payment unsuccessful! Please try agian.", Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//    }
+//
+//    private class RenterCancelTask extends AsyncTask<Void, Void, Long> {
+//        private long resID;
+//
+//        RenterCancelTask(long resID){
+//            this.resID = resID;
+//        }
+//
+//        @Override
+//        protected Long doInBackground(Void... params ){
+//            ClientController clientController = ClientController.getInstance();
+//            clientController.RenterCancel(resID);
+//            NetworkPackage NP = clientController.checkReceived();
+//            MyEntry<String, Serializable> entry = NP.getCommand();
+//            String key = entry.getKey();
+//            Object value = entry.getValue();
+//            if(key.equals("CANCELRESERVATION")){
+//                long reservationID = (long) value;
+//                return reservationID;
+//            } else if(key.equals("CANCELRESERVATIONFAIL")){
+//                Log.d("ReservationDetail ","CANCELRESERVATIONFAIL");
+//                return (long)-1;
+//            }
+//            Log.d("ReservationDetail ","END OF doInBackground");
+//            return (long)-1;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Long resID) {
+//            if(resID >= 0){
+//                ClientController clientcontroller = ClientController.getInstance();
+//                for(int i = 0; i<clientcontroller.renterReservations.size(); i++){
+//                    if(clientcontroller.renterReservations.get(i).getReservationID()==resID){
+//                        clientcontroller.renterReservations.remove(i);
+//                    }
+//                }
+//                mListener.returnToReservationsFragment();
+//            } else{
+//                Toast.makeText(getContext(), "Error on cancel reservation!", Toast.LENGTH_SHORT).show();
+//                // back to reservation detail
+//            }
+//        }
+//    }
 
-    // Update reservation information
-    public void setReservation(String in_address, String in_start_time, String in_end_time,
-                               String in_renter_username, double in_lat, double in_long) {
-        address = in_address;
-        start_time = in_start_time;
-        end_time = in_end_time;
-        renter_username = in_renter_username;
-        _spacedetail_address.setText(address);
-        _start_time_label.setText(start_time);
-        _end_time_label.setText(end_time);
-        _renter_username_label.setText(renter_username);
-
-        curr_lat = in_lat;
-        curr_long = in_long;
-        cameraPosition = new CameraPosition.Builder()
-                .target(new LatLng(curr_lat, curr_long)).zoom(12).build();
-        if(googleMap != null) {
-            googleMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(curr_lat, curr_long)));
-            googleMap.animateCamera(CameraUpdateFactory
-                    .newCameraPosition(cameraPosition));
-        }
-    }
-
-    private class ConfirmPaymentTask extends AsyncTask<Void, Void, Boolean> {
-        private long mResID;
-        ProgressDialog progressDialog;
-
-        ConfirmPaymentTask(long resID){
-            mResID = resID;
-
-            Log.d("Reservation Detail: ", "ConfirmPaymentTask.mResID = "+mResID);
-        }
-
-        @Override
-        protected void onPreExecute(){
-            //Display a progress dialog
-            progressDialog = new ProgressDialog(getActivity(),
-                    R.style.AppTheme);
-            progressDialog.setIndeterminate(true);
-            progressDialog.setMessage("Confirming payment...");
-            progressDialog.show();
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params ){
-            ClientController clientController = ClientController.getInstance();
-
-            Log.d("***Reservation Detail ", "mResID = "+mResID);
-
-            clientController.submitPaymentRequest(mResID);
-            NetworkPackage NP = clientController.checkReceived();
-            MyEntry<String, Serializable> entry = NP.getCommand();
-            String key = entry.getKey();
-            Boolean value = (Boolean) entry.getValue();
-
-            if(key.equals("CONFIRMSTATUS")){
-                return value;
-            }
-            else {
-                return false;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(Boolean confirmStatus) {
-            if(confirmStatus){ // paid success
-                progressDialog.dismiss();
-                Toast.makeText(getContext(), "Confirmed and paid!", Toast.LENGTH_SHORT).show();
-
-                Fragment reservationsFragment = new RenterReservationsFragment();
-                FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fragContainer, reservationsFragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-            }
-            else{
-                progressDialog.dismiss();
-                Toast.makeText(getContext(), "Confirm payment unsuccessful! Please try agian.", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    private class RenterCancelTask extends AsyncTask<Void, Void, Long> {
-        private long resID;
-
-        RenterCancelTask(long resID){
-            this.resID = resID;
-        }
-
-        @Override
-        protected Long doInBackground(Void... params ){
-            ClientController clientController = ClientController.getInstance();
-            clientController.RenterCancel(resID);
-            NetworkPackage NP = clientController.checkReceived();
-            MyEntry<String, Serializable> entry = NP.getCommand();
-            String key = entry.getKey();
-            Object value = entry.getValue();
-            if(key.equals("CANCELRESERVATION")){
-                long reservationID = (long) value;
-                return reservationID;
-            } else if(key.equals("CANCELRESERVATIONFAIL")){
-                Log.d("ReservationDetail ","CANCELRESERVATIONFAIL");
-                return (long)-1;
-            }
-            Log.d("ReservationDetail ","END OF doInBackground");
-            return (long)-1;
-        }
-
-        @Override
-        protected void onPostExecute(Long resID) {
-            if(resID >= 0){
-                ClientController clientcontroller = ClientController.getInstance();
-                for(int i = 0; i<clientcontroller.renterReservations.size(); i++){
-                    if(clientcontroller.renterReservations.get(i).getReservationID()==resID){
-                        clientcontroller.renterReservations.remove(i);
-                    }
-                }
-                mListener.returnToReservationsFragment();
-            } else{
-                Toast.makeText(getContext(), "Error on cancel reservation!", Toast.LENGTH_SHORT).show();
-                // back to reservation detail
-            }
-        }
-    }
-
-    private class AddReviewTask extends AsyncTask<Void, Void, Boolean> {
-        private int mRating;
-        private String mComment;
-        ProgressDialog progressDialog;
-
-        AddReviewTask(float inRating, String inComment){
-            mRating = (int) inRating;
-            mComment = inComment;
-
-            Log.d("Reservation Detail: ", "AddReviewTask.mRating = "+inRating);
-        }
-
-        @Override
-        protected void onPreExecute(){
-            //Display a progress dialog
-            progressDialog = new ProgressDialog(getActivity(),
-                    R.style.AppTheme);
-            progressDialog.setIndeterminate(true);
-            progressDialog.setMessage("Adding...");
-            progressDialog.show();
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params ){
-            ClientController clientController = ClientController.getInstance();
-            clientController.submitReview(res_id, mRating, mComment);
-            NetworkPackage NP = clientController.checkReceived();
-            MyEntry<String, Serializable> entry = NP.getCommand();
-            String key = entry.getKey();
-
-
-            Log.d("ADDREVIEW", key);
-            if(key.equals("ADDREVIEW")){
-                return true;
-            }
-            else if(key.equals("ADDREVIEWFAIL")){
-                Log.d("Reservation Detail ","ADDREVIEWFAIL");
-                return false;
-            }
-            Log.d("Reservation Detail ","doInBackground END");
-            return false;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean ifAdded) {
-            if(ifAdded){
-                progressDialog.dismiss();
-                Toast.makeText(getContext(), "Review added!", Toast.LENGTH_SHORT).show();
-                RequestReservationsTask rrt = new RequestReservationsTask();
-                rrt.execute((Void)null);
-            }
-            else{
-                progressDialog.dismiss();
-                Toast.makeText(getContext(), "Review cannot be added! Please try agian.", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
+//    private class AddReviewTask extends AsyncTask<Void, Void, Boolean> {
+//        private int mRating;
+//        private String mComment;
+//        ProgressDialog progressDialog;
+//
+//        AddReviewTask(float inRating, String inComment){
+//            mRating = (int) inRating;
+//            mComment = inComment;
+//
+//            Log.d("Reservation Detail: ", "AddReviewTask.mRating = "+inRating);
+//        }
+//
+//        @Override
+//        protected void onPreExecute(){
+//            //Display a progress dialog
+//            progressDialog = new ProgressDialog(getActivity(),
+//                    R.style.AppTheme);
+//            progressDialog.setIndeterminate(true);
+//            progressDialog.setMessage("Adding...");
+//            progressDialog.show();
+//        }
+//
+//        @Override
+//        protected Boolean doInBackground(Void... params ){
+//            ClientController clientController = ClientController.getInstance();
+//            clientController.submitReview(res_id, mRating, mComment);
+//            NetworkPackage NP = clientController.checkReceived();
+//            MyEntry<String, Serializable> entry = NP.getCommand();
+//            String key = entry.getKey();
+//
+//
+//            Log.d("ADDREVIEW", key);
+//            if(key.equals("ADDREVIEW")){
+//                return true;
+//            }
+//            else if(key.equals("ADDREVIEWFAIL")){
+//                Log.d("Reservation Detail ","ADDREVIEWFAIL");
+//                return false;
+//            }
+//            Log.d("Reservation Detail ","doInBackground END");
+//            return false;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Boolean ifAdded) {
+//            if(ifAdded){
+//                progressDialog.dismiss();
+//                Toast.makeText(getContext(), "Review added!", Toast.LENGTH_SHORT).show();
+//                RequestReservationsTask rrt = new RequestReservationsTask();
+//                rrt.execute((Void)null);
+//            }
+//            else{
+//                progressDialog.dismiss();
+//                Toast.makeText(getContext(), "Review cannot be added! Please try agian.", Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//    }
+//
 
     private class RequestReservationsTask extends AsyncTask<Void, Void, ArrayList<Reservation>> {
         RequestReservationsTask() { }
@@ -517,6 +449,82 @@ public class ProviderReservationDetailFragment extends Fragment implements OnMap
 
         }
 
+
+    }
+
+
+    private class ProviderReportTask extends AsyncTask<Void, Void, Boolean>{
+        long resID;
+
+        ProviderReportTask(long resId)
+        {
+            resID = resId;
+        }
+
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            ClientController clientController = ClientController.getInstance();
+            clientController.providerReport(resID);
+
+            NetworkPackage NP = clientController.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+
+            if(key.equals("CANCELRESERVATION"))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            if(aBoolean)
+            {
+                (mListener).returnToReservationsFragment();
+            }
+            else
+            {
+                Toast.makeText(getContext(), "Report Fail!", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+    }
+
+    private class SetUserNameTask extends AsyncTask<Void, Void, User>{
+        private long userid;
+
+        SetUserNameTask(long own_id){
+            this.userid = own_id;
+        }
+
+        @Override
+        protected User doInBackground(Void... params ){
+            ClientController clientController = ClientController.getInstance();
+            clientController.getUserWithID(userid);
+            NetworkPackage NP = clientController.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if(key.equals("USERBYUSERID")){
+                User owner = (User) value;
+                return owner;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(User user) {
+            if(user != null) {
+                _renter_username_label.setText(user.userName);
+            }
+        }
 
     }
 }

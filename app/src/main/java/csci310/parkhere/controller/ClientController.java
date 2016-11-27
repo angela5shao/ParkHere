@@ -331,9 +331,13 @@ public class ClientController {
         }
     }
 //
-//    public void report(Reservation res) {
-//
-//    }
+    public void report(long reservationID) {
+        try {
+            clientCommunicator.send("REPORT", reservationID);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void search(LatLng location, String startDate, String startTime, String endDate, String endTime, String carType, String distance) throws IOException {
         currLocation = location;
@@ -772,6 +776,16 @@ public class ClientController {
 
     public void getUserWithID(long userID) {
         NP.addEntry("GETUSERWITHID", userID);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void providerReport(long resID){
+        NP.addEntry("REPORT", resID);
         try {
             clientCommunicator.sendPackage(NP);
         } catch (IOException e) {

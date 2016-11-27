@@ -32,6 +32,7 @@ import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
 import csci310.parkhere.ui.fragments.EditProfileFragment;
 import csci310.parkhere.ui.fragments.PrivateProfileFragment;
+import csci310.parkhere.ui.fragments.ProviderReservationDetailFragment;
 import csci310.parkhere.ui.fragments.ProviderReservationsFragment;
 import csci310.parkhere.ui.fragments.RenterReservationDetailFragment;
 import csci310.parkhere.ui.fragments.SpaceDetailFragment;
@@ -50,7 +51,7 @@ import resource.User;
  */
 public class ProviderActivity extends AppCompatActivity implements SpacesFragment.OnFragmentInteractionListener,
         SpaceDetailFragment.OnFragmentInteractionListener, PrivateProfileFragment.OnFragmentInteractionListener,
-        RenterReservationDetailFragment.OnFragmentInteractionListener, EditProfileFragment.OnFragmentInteractionListener,
+        ProviderReservationDetailFragment.OnFragmentInteractionListener, EditProfileFragment.OnFragmentInteractionListener,
         SpaceEditFragment.OnFragmentInteractionListener, ProviderReservationsFragment.OnFragmentInteractionListener {
 
     LinearLayout _spaceLink, _resLink;
@@ -327,7 +328,7 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
             System.out.println("Selected parking spot is null");
             return;
         }
-        RenterReservationDetailFragment resDetailfragment = new RenterReservationDetailFragment();
+        ProviderReservationDetailFragment resDetailfragment = new ProviderReservationDetailFragment();
         Bundle args = new Bundle();
         args.putDouble("LAT", selectedRes.getSpot().getLat());
         args.putDouble("LONG", selectedRes.getSpot().getLon());
@@ -345,17 +346,17 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 
         args.putString("START_TIME", displayStartTime.toString());
         args.putString("END_TIME", displayEndTime.toString());
-        args.putString("RENTER", Long.toString(selectedRes.getSpot().getOwner()));
+        args.putLong("RENTER", selectedRes.getRenterID());
         args.putLong("RES_ID", selectedRes.getReservationID());
 
-        if(selectedRes.review==null && !ifNotPassed) {
-            args.putBoolean("IF_CANREVIEW", true);
-        }
-        else {
-            args.putBoolean("IF_CANREVIEW", false);
-        }
-        args.putBoolean("IF_CANCANCEL", ifNotPassed);
-        args.putBoolean("IF_ISPAID", selectedRes.isPaid());
+//        if(selectedRes.review==null && !ifNotPassed) {
+//            args.putBoolean("IF_CANREVIEW", true);
+//        }
+//        else {
+//            args.putBoolean("IF_CANREVIEW", false);
+//        }
+//        args.putBoolean("IF_CANCANCEL", ifNotPassed);
+//        args.putBoolean("IF_ISPAID", selectedRes.isPaid());
         resDetailfragment.setArguments(args);
 
         try {
@@ -383,7 +384,10 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 
     @Override
     public void returnToReservationsFragment() {
-
+        fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(R.id.fragContainer, reservationsFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     public void onSpaceSelected(int spacePositionInList) {
@@ -659,7 +663,7 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
             Object value = entry.getValue();
             if (key.equals("PROVIDERRESERVATION")) {
                 ArrayList<Reservation> list = (ArrayList<Reservation>) value;
-                Log.d("FETCHPROVIDERRESERVATION", "listsize: " + String.valueOf(list.size()));
+                Log.d("FETCHRESERVATION", "listsize: " + String.valueOf(list.size()));
 
                 return list;
             } else {

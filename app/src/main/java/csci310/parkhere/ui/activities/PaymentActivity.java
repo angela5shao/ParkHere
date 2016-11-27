@@ -15,11 +15,14 @@ import com.braintreepayments.api.PaymentRequest;
 import com.braintreepayments.api.models.PaymentMethodNonce;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
 import resource.MyEntry;
 import resource.NetworkPackage;
+import resource.Time;
+import resource.TimeInterval;
 
 public class PaymentActivity extends Activity {
     int BRAINTREE_REQUEST_CODE = 11;
@@ -28,6 +31,10 @@ public class PaymentActivity extends Activity {
     private String clientToken;
     BraintreeFragment braintreeFragment;
 
+
+    private long userID;
+    private long parkingSpotID;
+    private TimeInterval timeInterval;
     private long resID, providerID;
     private String price;
 
@@ -37,11 +44,13 @@ public class PaymentActivity extends Activity {
         setContentView(R.layout.activity_payment);
 
         Intent intent = getIntent();
-        resID = intent.getLongExtra("RESERVATIONID", 0);
-        Log.d("resID for test", String.valueOf(resID));
+        userID = intent.getLongExtra("USERID", 0);
+        parkingSpotID = intent.getLongExtra("PARKINGSPOTID", 0);
+        String start = intent.getStringExtra("TIMEINTERVALSTART");
+        String end = intent.getStringExtra("TIMEINTERVALEND");
+        timeInterval = new TimeInterval(new Time(start), new Time(end));
         providerID = intent.getLongExtra("PROVIDERID", 0);
-        price = intent.getStringExtra("PRICE");
-
+//        price = intent.getStringExtra("PRICE");
 //        try {
 //            braintreeFragment = BraintreeFragment.newInstance(this, clientToken);
 //            // mBraintreeFragment is ready to use!
@@ -57,8 +66,6 @@ public class PaymentActivity extends Activity {
     public void onBraintreeSubmit(View v) {
 //        Intent intent = new Intent(context, BraintreePaymentActivity.class);
 //        .putExtra(BraintreePaymentActivity.EXTRA_CLIENT_TOKEN, clientToken);
-
-        System.out.println("MDZZ!!!");
 
         // TODO: request client token
         GetClientToken GCT = new GetClientToken();
@@ -82,10 +89,10 @@ public class PaymentActivity extends Activity {
         startActivityForResult(paymentRequest.getIntent(this), BRAINTREE_PAYPAL_REQUEST_CODE);
     }
 
-    public void onPaymentMethodNonceCreated(PaymentMethodNonce paymentMethodNonce) {
-        // Send this nonce to your server
-        String nonce = paymentMethodNonce.getNonce();
-    }
+//    public void onPaymentMethodNonceCreated(PaymentMethodNonce paymentMethodNonce) {
+//        // Send this nonce to your server
+//        String nonce = paymentMethodNonce.getNonce();
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -99,8 +106,9 @@ public class PaymentActivity extends Activity {
                     );
 
                     String nonce = paymentMethodNonce.getNonce();
-
-                    // Send paymeny success to server
+                    RenterReserveTask RRT = new RenterReserveTask(parkingSpotID, timeInterval, providerID, userID);
+                    RRT.execute((Void)null);
+                    // Send payment success to server
                     Log.d("PAYMENT", " success and send to server - "+price);
                     ClientController clientController = ClientController.getInstance();
                     clientController.setCurrentActivity(this);
@@ -189,5 +197,66 @@ public class PaymentActivity extends Activity {
             }
         }
 
+    }
+
+    private class RenterReserveTask extends AsyncTask<Void, Void, HashMap<String, Serializable>> {
+        private final long parkingSpotID;
+        private final TimeInterval timeInterval;
+        private final long providerID;
+        private final long userID;
+
+        private ProgressDialog progressDialog;
+
+        RenterReserveTask(long parkingSpotID, TimeInterval timeinterval, long providerID, long userID){
+            this.parkingSpotID = parkingSpotID;
+            this.timeInterval = timeinterval;
+            this.providerID = providerID;
+            this.userID = userID;
+        }
+
+        @Override
+        protected void onPreExecute(){
+            //Display a progress dialog
+            progressDialog = new ProgressDialog(getBaseContext(), R.style.AppTheme);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Booking...");
+            progressDialog.show();
+        }
+        @Override
+        protected HashMap<String, Serializable> doInBackground(Void... params ){
+            // call client controller
+            // call client controller
+            ClientController controller = ClientController.getInstance();
+            controller.renterReserve(userID, parkingSpotID, timeInterval);
+            Log.d("SEARCHRESERVE", "AFTERREQUEST");
+            NetworkPackage NP = controller.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+            String key = entry.getKey();
+            Object value = entry.getValue();
+
+            if(key.equals("RESERVE")) {
+                HashMap<String, Serializable> map = (HashMap<String, Serializable>) value;
+                return map;
+            }
+            else if(key.equals("RESERVEFAIL")) {
+                Log.d("SEARCHRESERVE", "RESERVFAIL");
+                return null;
+            }
+            else {
+                Log.d("SEARCHRESERVE", "UNDEFINED ERROR");
+                return null;
+            }
+        }
+        @Override
+        protected void onPostExecute(HashMap<String, Serializable> map) {
+            if(map==null){
+                progressDialog.dismiss();
+                Toast.makeText(getBaseContext(), "Book space failed! Please try agian.", Toast.LENGTH_SHORT).show();
+            }else {
+                resID = (long) map.get("RESERVATIONID");
+                price = String.valueOf(map.get("PRICE"));
+                progressDialog.dismiss();
+            }
+        }
     }
 }

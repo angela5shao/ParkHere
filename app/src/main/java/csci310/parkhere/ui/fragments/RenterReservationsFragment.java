@@ -19,9 +19,12 @@ import java.util.Comparator;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
+import csci310.parkhere.ui.adapters.CustomReservationListAdapter;
 import resource.ParkingSpot;
 import resource.Reservation;
+import resource.Review;
 import resource.Time;
+import resource.TimeInterval;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,7 +45,8 @@ public class RenterReservationsFragment extends Fragment implements AdapterView.
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-    private ArrayAdapter passedListAdapter, futureListAdapter;
+    private ArrayAdapter futureListAdapter;
+    private CustomReservationListAdapter passedListAdapter;
     ListView _futureList, _passedList;
 
 
@@ -146,6 +150,7 @@ public class RenterReservationsFragment extends Fragment implements AdapterView.
             passedListString.add(spotInlist.getStreetAddr() + "\n Time: " + displayStartTime.toString() + " ~ " + displayEndTime.toString());
         }
 
+
         futureListAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, futureListString);
         _futureList.setAdapter(futureListAdapter);
         _futureList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -182,7 +187,23 @@ public class RenterReservationsFragment extends Fragment implements AdapterView.
             }
         });
 
-        passedListAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, passedListString);
+
+        {
+            passedReservations = new ArrayList<>();
+            ParkingSpot parkingSpot1 = new ParkingSpot(1, null, 34, 34, "2831 Ellendale Pl, Los Angeles", "Really good", "90007", 0,0);
+            Time start =  new Time(2016, 2, 29, 4, 30, 0);
+			Time end = new Time(2016, 2 ,29, 5, 0,0);
+            TimeInterval ti  = new TimeInterval(start,end);
+            Reservation reservation = new Reservation(1,1,1,parkingSpot1,ti,1,true);
+            Reservation reservation1 = new Reservation(1,1,1,parkingSpot1,ti,1,true);
+            reservation.review =null;
+            reservation1.review = new Review(1l, "ha");
+            passedReservations.add(reservation);
+            passedReservations.add(reservation1);
+            passedReservations.add(reservation);
+        }
+
+        passedListAdapter = new CustomReservationListAdapter(getActivity(),passedReservations);
         _passedList.setAdapter(passedListAdapter);
         _passedList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

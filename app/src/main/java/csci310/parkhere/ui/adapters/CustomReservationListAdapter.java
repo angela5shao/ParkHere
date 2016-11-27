@@ -26,6 +26,7 @@ public class CustomReservationListAdapter extends ArrayAdapter<Reservation>{
     public CustomReservationListAdapter(Context context, ArrayList<Reservation> ReservationsArrayList) {
 
         super(context, R.layout.target_item, ReservationsArrayList);
+        Log.d("Constructor", "I get called");
 
         this.context = context;
         this.ReservationsArrayList = ReservationsArrayList;
@@ -40,7 +41,7 @@ public class CustomReservationListAdapter extends ArrayAdapter<Reservation>{
 
         // 2. Get rowView from inflater
 
-            View rowView = null;
+        View rowView = null;
             rowView = inflater.inflate(R.layout.target_item, parent, false);
             // 3. Get icon,title & counter views from the rowView
             TextView titleView = (TextView) rowView.findViewById(R.id.item_title);
@@ -57,13 +58,15 @@ public class CustomReservationListAdapter extends ArrayAdapter<Reservation>{
             displayStartTime.month+=1;
             displayEndTime.month+=1;
 
-            titleView.setText(spotInlist.getStreetAddr() + "\n Time: " + displayStartTime.toString() + " ~ " + displayEndTime.toString());
+            titleView.setText(spotInlist.getStreetAddr() + "\nTime: " + displayStartTime.toString() + " ~ " + displayEndTime.toString());
             if(ReservationsArrayList.get(position).review == null) {
             //make invisible
-                counterView.setVisibility(View.GONE);
+                counterView.setText("!");
+
             }
             else {
-                counterView.setText("!");
+                counterView.setVisibility(View.GONE);
+
             }
 
         // 5. retrn rowView

@@ -49,6 +49,8 @@ public class ClientController {
 
     public LatLng currLocation;
     public SearchResults searchResults;
+    // HashMap<Long, Integer> of <parking spot ID, amount of bookings>
+    public HashMap<Long, Integer> searchResultsFreq;
 
     public boolean registerFailed;
     public boolean loginFailed;
@@ -78,6 +80,7 @@ public class ClientController {
         providerToshowSpaces = false;
         providerToshowSpacesDetail = false;
         searchResults = null;
+        searchResultsFreq = null;
         currentIndexofSpaces = -1;
         //new
         received = false;

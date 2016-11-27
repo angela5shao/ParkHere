@@ -1,9 +1,12 @@
 package csci310.parkhere.ui.fragments;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +20,7 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -37,17 +41,19 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     private static final float COORDINATE_OFFSET = 0.0001f;
     // HashMap of marker identifier and its location as a string
     private HashMap<String, String> markerLocation = new HashMap<String, String>();
+    // HashMap of parking spot ID and its amount of times of booking
+    private HashMap<Long, Integer> spotBookingAmount = new HashMap<Long, Integer>();
 
     private double searchLat, searchLon;
     private String startDate, startTime, endDate, endTime;
     private ArrayList<ParkingSpot> _spots;
 
-    Button _ListviewSwitch;
+    Button _ListviewSwitch, _popButton;
     private ViewGroup infoWindow;
     private TextView infoTitle;
     private TextView infoSnippet;
-    private Button infoButton;
-    private OnInfoWindowElemTouchListener infoButtonListener;
+//    private Button infoButton;
+    private OnInfoWindowElemTouchListener infoListener;
 
     MapWrapperLayout mapWrapperLayout;
 
@@ -68,6 +74,9 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
             ClientController controller = ClientController.getInstance();
             _spots = controller.searchResults.searchResultList;
+
+            spotBookingAmount = controller.searchResultsFreq;
+            Log.d("MapViewFrag", " spotBookingAmount.size = "+spotBookingAmount.size());
 
             Log.d("MapViewFrag", " SEARCH_LAT = "+searchLat);
             Log.d("MapViewFrag", " SEARCH_LON = "+searchLon);
@@ -110,9 +119,9 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         this.infoWindow = (ViewGroup) inflater.inflate(R.layout.info_window, null);
         this.infoTitle = (TextView)infoWindow.findViewById(R.id.title);
         this.infoSnippet = (TextView)infoWindow.findViewById(R.id.snippet);
-        this.infoButton = (Button)infoWindow.findViewById(R.id.button);
+//        this.infoButton = (Button)infoWindow.findViewById(R.id.button);
 
-        this.infoButtonListener = new OnInfoWindowElemTouchListener(infoButton){
+        this.infoListener = new OnInfoWindowElemTouchListener(infoWindow) { //infoButton){
             @Override
             protected void onClickConfirmed(View v, Marker marker) {
                 // TODO: Here we can perform some action triggered after clicking the button
@@ -122,7 +131,23 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 //                Toast.makeText(getActivity(), marker.getTitle() + "'s button clicked!", Toast.LENGTH_SHORT).show();
             }
         };
-        this.infoButton.setOnTouchListener(infoButtonListener);
+        this.infoWindow.setOnTouchListener(infoListener);
+//        this.infoButton.setOnTouchListener(infoListener);
+
+        _popButton = (Button) v.findViewById(R.id.popButton);
+        _popButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Visualize on map
+                if(false) {
+                    // Remove visuals
+                }
+                else if (_spots != null) {
+                    MapLoadCirclesTask MLCT = new MapLoadCirclesTask(googleMap, _spots, spotBookingAmount);
+                    MLCT.execute((Void) null);
+                }
+            }
+        });
 
         return v;
     }
@@ -158,7 +183,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         googleMap = inGoogleMap;
 
         cameraPosition = new CameraPosition.Builder()
-                .target(new LatLng(searchLat, searchLon)).zoom(12).build();
+                .target(new LatLng(searchLat, searchLon)).zoom(16).build();
 
         googleMap.animateCamera(CameraUpdateFactory
                 .newCameraPosition(cameraPosition));
@@ -176,7 +201,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
                     // Setting up the infoWindow with current's marker info
                     infoTitle.setText(marker.getTitle());
                     infoSnippet.setText(marker.getSnippet());
-                    infoButtonListener.setMarker(marker);
+                    infoListener.setMarker(marker);
 
                     // We must call this to set the current marker and infoWindow references
                     // to the MapWrapperLayout
@@ -243,7 +268,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         }
 
         // keep track of Hashmap
-        markerLocation.put(id+"", location[0]+","+location[1]);
+        markerLocation.put(id + "", location[0] + "," + location[1]);
 
         return location;
     }
@@ -267,5 +292,74 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private class MapLoadCirclesTask extends AsyncTask<Void, Void, HashMap<ParkingSpot, Integer> > {
+        private GoogleMap map;
+        private ArrayList<ParkingSpot> spots;
+        private HashMap<Long, Integer> freqs;
+
+        MapLoadCirclesTask(GoogleMap map, ArrayList<ParkingSpot> spots, HashMap<Long, Integer> freqs){
+            this.map = map;
+            this.spots = spots;
+            this.freqs = freqs;
+        }
+
+        @Override
+        protected HashMap<ParkingSpot, Integer> doInBackground(Void... params){
+            int total_bookings = 0;
+            for(int bookings : freqs.values()) {
+                total_bookings += bookings;
+            }
+            Log.d("MapLoadCirclesTask ", "total_bookings = " + total_bookings);
+
+            if(total_bookings == 0) return null;
+
+            HashMap<ParkingSpot, Integer> spotsWithFreq = new HashMap<ParkingSpot, Integer>();
+            String alpha = "ff";
+            int bgColor = ContextCompat.getColor(getContext(), R.color.colorAccent);
+            String red = Integer.toString(Color.red(bgColor));
+            String green = Integer.toString(Color.green(bgColor));
+            String blue = Integer.toString(Color.blue(bgColor));
+
+            for(ParkingSpot spot : spots) {
+                int amount_of_bookings = freqs.get(spot.getParkingSpotID());
+                Log.d("MapLoadCirclesTask ", "amount_of_bookings for " + spot.getParkingSpotID() + " = " + amount_of_bookings);
+
+                // Fill color of the circle
+                // 0x represents, this is an hexadecimal code
+                // 55 represents percentage of transparency. For 100% transparency, specify 00.
+                // For 0% transparency ( ie, opaque ) , specify ff
+                // The remaining 6 characters(00ff00) specify the fill color
+                // eg. 0x5500ff00
+                int tp = amount_of_bookings/total_bookings;
+                Log.d("MapLoadCirclesTask ", "transparency for " + spot.getParkingSpotID() + " = " + tp);
+
+                if(tp == 100) alpha = "00";
+                else if(tp >0 && tp < 10) alpha = "0" + tp;
+                else if(tp != 0) alpha = Integer.toString(tp);
+
+                String hex = "0x" + alpha + red + green + blue;
+                Log.d("MapLoadCirclesTask ", "hex for " + spot.getParkingSpotID() + " = " + hex);
+
+                int color = Integer.parseInt(hex, 16);
+
+                spotsWithFreq.put(spot, color);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(HashMap<ParkingSpot, Integer> results) {
+            if(results != null) {
+                for (ParkingSpot spot : results.keySet()) {
+                    map.addCircle(new CircleOptions()
+                            .center(new LatLng(spot.getLat(), spot.getLon()))
+                            .radius(10)
+                            .fillColor(results.get(spot)));
+                }
+            }
+        }
     }
 }

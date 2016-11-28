@@ -80,7 +80,7 @@ public class SpaceEditFragment extends Fragment {
 
     private Button mDoneButton, mUploadPicButton, mEditAddressButton;
     private EditText mAddressText, mDescriptionText;
-    private SubsamplingScaleImageView mSpacePic2;
+//    private SubsamplingScaleImageView mSpacePic2;
     private Spinner mCartypeSpinner, mCancelPolicySpinner;
     private ArrayList<String> encodedImages;
     private LinearLayout mImagesLayout;
@@ -135,8 +135,25 @@ public class SpaceEditFragment extends Fragment {
         mDescriptionText = (EditText) v.findViewById(R.id.description_text);
         mDescriptionText.setText(thisParkingSpot.getDescription());
 //        mSpacePic2 = (SubsamplingScaleImageView) v.findViewById(R.id.imageView);
-
-
+//<<<<<<< HEAD
+//
+//
+//=======
+////        if (thisParkingSpot.encodedImages != null) { // If has pictures, set them
+////            for (String encodedimg : encodedImages) {
+////                byte[] byteArray = encodedimg.getBytes();
+////                Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+//////                mSpacePic2.setImage(ImageSource.bitmap(bmp));
+////
+////                SubsamplingScaleImageView newImage = new SubsamplingScaleImageView(getContext());
+////                newImage.setImage(ImageSource.bitmap(bmp));
+////                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+////                newImage.setLayoutParams(lp);
+////                // Add to layout of images
+////                mImagesLayout.addView(newImage);
+////            }
+////        }
+//>>>>>>> c9d9370ebf2b71f198e2647496ca52e18ae0e7f0
 
         mCartypeSpinner = (Spinner)v.findViewById(R.id.editCartype_spinner);
         mCartypeSpinner.setSelection(thisParkingSpot.getCartype());
@@ -193,22 +210,25 @@ public class SpaceEditFragment extends Fragment {
                         .start(getContext(), SpaceEditFragment.this, PhotoPicker.REQUEST_CODE);
             }
         });
-
-        recyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(getContext(), new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        PhotoPreview.builder()
-                                .setPhotos(selectedPhotos)
-                                .setCurrentItem(position)
-                                .start(getContext(), SpaceEditFragment.this, PhotoPicker.REQUEST_CODE);
-                    }
-                })
-        );
-
-
-
-
+//
+//<<<<<<< HEAD
+//        recyclerView.addOnItemTouchListener(
+//                new RecyclerItemClickListener(getContext(), new RecyclerItemClickListener.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(View view, int position) {
+//                        PhotoPreview.builder()
+//                                .setPhotos(selectedPhotos)
+//                                .setCurrentItem(position)
+//                                .start(getContext(), SpaceEditFragment.this, PhotoPicker.REQUEST_CODE);
+//                    }
+//                })
+//        );
+//
+//
+//
+//
+//=======
+//>>>>>>> c9d9370ebf2b71f198e2647496ca52e18ae0e7f0
         mEditAddressButton = (Button)v.findViewById(R.id.changeAddress_btn);
         mEditAddressButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {

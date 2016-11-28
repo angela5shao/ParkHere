@@ -163,6 +163,16 @@ public class ClientController {
         clientCommunicator.send("REGISTER", entry);
     }
 
+    public void forgotPW(String username) {
+        NetworkPackage NP = new NetworkPackage();
+        NP.addEntry("UPDATEPASSWORD", username);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     // Get unconfirmed reservations by user
     public void getConfirmListWithUserID(long userID) {
         NetworkPackage NP = new NetworkPackage();
@@ -346,8 +356,8 @@ public class ClientController {
         String[] time2 = endDate.split("-");
         String[] time22 = endTime.split("-");
         Log.d("time", time1[0] + " " + time1[1] + " "+time1[2]+ " "+ time11[0]+" "+time11[1]+ " "+time2[0] + " " + time2[1] + " "+time2[2]+ " "+ time22[0]+" "+time22[1]+ " " );
-        Time inStartTime = new Time(Integer.parseInt(time1[2]),Integer.parseInt(time1[0]), Integer.parseInt(time1[1]), Integer.parseInt(time11[1]), Integer.parseInt(time11[0]),0);
-        Time inEndTime = new Time(Integer.parseInt(time2[2]),Integer.parseInt(time2[0]), Integer.parseInt(time2[1]), Integer.parseInt(time22[1]), Integer.parseInt(time22[0]),0);
+        Time inStartTime = new Time(Integer.parseInt(time1[2]),Integer.parseInt(time1[0]), Integer.parseInt(time1[1]), Integer.parseInt(time11[0]), Integer.parseInt(time11[1]),0);
+        Time inEndTime = new Time(Integer.parseInt(time2[2]),Integer.parseInt(time2[0]), Integer.parseInt(time2[1]), Integer.parseInt(time22[0]), Integer.parseInt(time22[1]),0);
 //        inStartTime.month -=;
 //        inEndTime.month -=1;
 
@@ -776,10 +786,12 @@ public class ClientController {
 
     public void deleteOldParkingSpotImages(ParkingSpot ps)
     {
-        NetworkPackage np = new NetworkPackage();
-        np.addEntry("DELETEOLDPARKINGSPOTIMAGES", ps.getParkingSpotID());
+
+        NetworkPackage updateImageNP = new NetworkPackage();
+        updateImageNP.addEntry("DELETEOLDPARKINGSPOTIMAGES", ps.getParkingSpotID());
+
         try {
-            clientCommunicator.sendPackage(np);
+            clientCommunicator.sendPackage(updateImageNP);
         } catch (IOException e) {
             e.printStackTrace();
         }

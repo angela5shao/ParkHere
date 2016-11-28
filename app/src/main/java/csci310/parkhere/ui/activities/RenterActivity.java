@@ -425,6 +425,11 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         displayEndTime.month+=1;
 
 
+
+        Log.d("STARTTime: ", displayStartTime.toString());
+        Log.d("ENDTime: ", displayEndTime.toString());
+
+
         args.putString("START_TIME", displayStartTime.toString());
         args.putString("END_TIME", displayEndTime.toString());
         args.putLong("PROVIDER", selectedRes.getSpot().getOwner());

@@ -215,9 +215,12 @@ public class RenterReservationDetailFragment extends Fragment implements OnMapRe
                     public void onClick(View v) {
                         Time end = new Time(end_time);
                         Calendar cal = Calendar.getInstance();
-                        Time currentTime = new Time(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
+                        Time currentTime = new Time(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
+                        Log.d("currentTime", currentTime.toString());
+                        Log.d("end Time", end.toString());
                         if (currentTime.compareTo(end) >= 0) {
                             // Send to controller
+
                             AddReviewTask ART = new AddReviewTask(_ratingBar.getRating(),
                                     _commentDialog.getText().toString());
                             ART.execute((Void) null);
@@ -225,7 +228,7 @@ public class RenterReservationDetailFragment extends Fragment implements OnMapRe
                             // Close dialog
                             reviewDialog.dismiss();
                         } else {
-                            Toast.makeText(getContext(), "Can not cancel the reservation which hasn't ended!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Can not review the reservation which hasn't ended!", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

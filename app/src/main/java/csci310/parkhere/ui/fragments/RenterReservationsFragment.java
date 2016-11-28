@@ -188,20 +188,20 @@ public class RenterReservationsFragment extends Fragment implements AdapterView.
         });
 
 
-        {
-            passedReservations = new ArrayList<>();
-            ParkingSpot parkingSpot1 = new ParkingSpot(1, null, 34, 34, "2831 Ellendale Pl, Los Angeles", "Really good", "90007", 0,0);
-            Time start =  new Time(2016, 2, 29, 4, 30, 0);
-			Time end = new Time(2016, 2 ,29, 5, 0,0);
-            TimeInterval ti  = new TimeInterval(start,end);
-            Reservation reservation = new Reservation(1,1,1,parkingSpot1,ti,1,true);
-            Reservation reservation1 = new Reservation(1,1,1,parkingSpot1,ti,1,true);
-            reservation.review =null;
-            reservation1.review = new Review(1l, "ha");
-            passedReservations.add(reservation);
-            passedReservations.add(reservation1);
-            passedReservations.add(reservation);
-        }
+//        {
+//            passedReservations = new ArrayList<>();
+//            ParkingSpot parkingSpot1 = new ParkingSpot(1, null, 34, 34, "2831 Ellendale Pl, Los Angeles", "Really good", "90007", 0,0);
+//            Time start =  new Time(2016, 2, 29, 4, 30, 0);
+//			Time end = new Time(2016, 2 ,29, 5, 0,0);
+//            TimeInterval ti  = new TimeInterval(start,end);
+//            Reservation reservation = new Reservation(1,1,1,parkingSpot1,ti,1,true);
+//            Reservation reservation1 = new Reservation(1,1,1,parkingSpot1,ti,1,true);
+//            reservation.review =null;
+//            reservation1.review = new Review(1l, "ha");
+//            passedReservations.add(reservation);
+//            passedReservations.add(reservation1);
+//            passedReservations.add(reservation);
+//        }
 
         passedListAdapter = new CustomReservationListAdapter(getActivity(),passedReservations);
         _passedList.setAdapter(passedListAdapter);

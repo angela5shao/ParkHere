@@ -137,6 +137,7 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
             mParam3 = getArguments().getString(ARG_PARAM3);
             mParam4 = getArguments().getString(ARG_PARAM4);
             mParam5 = getArguments().getString(ARG_PARAM5);
+            Log.d("FinalBattle", mParam2+" "+mParam3+" "+mParam4+" "+mParam5);
 
             mImagesURLs = getArguments().getStringArrayList(ARG_PARAM6);
 

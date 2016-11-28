@@ -120,6 +120,7 @@ public class PaymentActivity extends Activity {
                     try {
                         HashMap<String, Serializable> mapp = RRT.execute((Void)null).get();
                         resID = (long) mapp.get("RESERVATIONID");
+                        Log.d("resID" , String.valueOf(resID));
                         price = String.valueOf(mapp.get("PRICE"));
                     } catch (InterruptedException e) {
                         e.printStackTrace();

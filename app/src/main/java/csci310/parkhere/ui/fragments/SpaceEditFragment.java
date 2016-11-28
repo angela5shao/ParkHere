@@ -65,7 +65,7 @@ public class SpaceEditFragment extends Fragment {
 
     private Button mDoneButton, mUploadPicButton, mEditAddressButton;
     private EditText mAddressText, mDescriptionText;
-    private SubsamplingScaleImageView mSpacePic2;
+//    private SubsamplingScaleImageView mSpacePic2;
     private Spinner mCartypeSpinner, mCancelPolicySpinner;
     private Vector<String> encodedImages;
     private LinearLayout mImagesLayout;
@@ -113,7 +113,7 @@ public class SpaceEditFragment extends Fragment {
         mAddressText.setText(thisParkingSpot.getStreetAddr());
         mDescriptionText = (EditText) v.findViewById(R.id.description_text);
         mDescriptionText.setText(thisParkingSpot.getDescription());
-        mSpacePic2 = (SubsamplingScaleImageView) v.findViewById(R.id.imageView);
+//        mSpacePic2 = (SubsamplingScaleImageView) v.findViewById(R.id.imageView);
 //        if (thisParkingSpot.encodedImages != null) { // If has pictures, set them
 //            for (String encodedimg : encodedImages) {
 //                byte[] byteArray = encodedimg.getBytes();
@@ -167,6 +167,7 @@ public class SpaceEditFragment extends Fragment {
                 startActivityForResult(i, RESULT_LOAD_IMAGE);
             }
         });
+
         mEditAddressButton = (Button)v.findViewById(R.id.changeAddress_btn);
         mEditAddressButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {

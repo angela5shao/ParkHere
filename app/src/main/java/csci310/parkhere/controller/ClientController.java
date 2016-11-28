@@ -163,6 +163,16 @@ public class ClientController {
         clientCommunicator.send("REGISTER", entry);
     }
 
+    public void forgotPW(String username) {
+        NetworkPackage NP = new NetworkPackage();
+        NP.addEntry("UPDATEPASSWORD", username);
+        try {
+            clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     // Get unconfirmed reservations by user
     public void getConfirmListWithUserID(long userID) {
         NetworkPackage NP = new NetworkPackage();
@@ -769,6 +779,18 @@ public class ClientController {
         NP.addEntry("EDITSPACE", ps);
         try {
             clientCommunicator.sendPackage(NP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteOldParkingSpotImages(ParkingSpot ps)
+    {
+        NetworkPackage updateImageNP = new NetworkPackage();
+        updateImageNP.addEntry("DELETEOLDPARKINGSPOTIMAGES", ps.getParkingSpotID());
+
+        try {
+            clientCommunicator.sendPackage(updateImageNP);
         } catch (IOException e) {
             e.printStackTrace();
         }

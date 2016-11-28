@@ -247,8 +247,8 @@ public class RegisterRenterActivity extends Activity {
                 Long tsLong = System.currentTimeMillis()/1000;
                 SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm:ss");
                 Date resultdate = new Date(tsLong);
-                System.out.println("START TIME: " + sdf.format(resultdate) + " ********************");
-                /******************************************************/
+                System.out.println("START TIME (doInBackgrnd): " + sdf.format(resultdate) + " ********************");
+
                 clientController.register(mUsername, mPassword, mphonenum, mlicenseID, mplatenum, mcat, mname);
                 NetworkPackage NP = clientController.checkReceived();
                 MyEntry<String, Serializable> entry = NP.getCommand();
@@ -275,8 +275,8 @@ public class RegisterRenterActivity extends Activity {
             Long tsLong = System.currentTimeMillis()/1000;
             SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm:ss");
             Date resultdate = new Date(tsLong);
-            System.out.println("END TIME: " + sdf.format(resultdate) + " ********************");
-            /******************************************************/
+            System.out.println("END TIME (onPostExecute): " + sdf.format(resultdate) + " ********************");
+
             if(success) {
                 progressDialog.dismiss();
 

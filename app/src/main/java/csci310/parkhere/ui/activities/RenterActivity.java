@@ -1,5 +1,6 @@
 package csci310.parkhere.ui.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -21,7 +22,9 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
 import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
@@ -67,6 +70,13 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.renter_ui);
+
+        Context c = getBaseContext();
+        // TODO: end timer
+        Long tsLong = System.currentTimeMillis()/1000;
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm:ss");
+        Date resultdate = new Date(tsLong);
+        System.out.println("END TIME (RenterActivity onCreate): " + sdf.format(resultdate) + " ********************");
 
         clientController = ClientController.getInstance();
         clientController.setCurrentActivity(this);
@@ -176,6 +186,8 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         }
+
+        System.out.println("END TIME (RenterActivity onCreate finished): " + sdf.format(resultdate) + " ********************");
     }
 
     @Override

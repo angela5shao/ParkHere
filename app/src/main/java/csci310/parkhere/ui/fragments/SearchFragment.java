@@ -726,11 +726,17 @@ public class SearchFragment extends Fragment {
                 }
 
 
+                if (startHour == -1 && startMinute == -1 && endHour == -1 && endMinute == -1) {
+                    startHour = 0; startMinute = 0;
+                    endHour = 23; endMinute = 59;
+                }
+
                 if(curr_location == null || startMonth == -1 || startDay == -1 || startYear == -1 || startHour == -1 || startMinute == -1
                         || endMonth == -1 || endDay == -1 || endYear == -1 || endHour == -1 || endMinute == -1){
-                    Toast.makeText(getContext(), "Please input valid search infogi! Please try again.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Please input valid search info! Please try again.", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
 
                 ClientController clientController = ClientController.getInstance();
                 // SearchSpaceTask(LatLng location, String startDate, String startTime, String endDate, String endTime, String carType, String distance){

@@ -50,6 +50,7 @@ public class PaymentActivity extends Activity {
         parkingSpotID = intent.getLongExtra("PARKINGSPOTID", 0);
         String start = intent.getStringExtra("TIMEINTERVALSTART");
         String end = intent.getStringExtra("TIMEINTERVALEND");
+        Log.d("Start and end: ", start+ " "+end);
         timeInterval = new TimeInterval(new Time(start), new Time(end));
         providerID = intent.getLongExtra("PROVIDERID", 0);
         PriceRetrieveTask PRT = new PriceRetrieveTask(parkingSpotID, timeInterval, providerID, userID);

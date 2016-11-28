@@ -705,6 +705,8 @@ public class SearchFragment extends Fragment {
                                                   int minute) {
 
                                 txtEndTime.setText(hourOfDay + ":" + minute);
+                                endHour = hourOfDay;
+                                endMinute = minute;
                             }
                         }, endHour, endMinute, false);
                 timePickerDialog.show();
@@ -727,9 +729,14 @@ public class SearchFragment extends Fragment {
                 }
 
 
+                if (startHour == -1 && startMinute == -1 && endHour == -1 && endMinute == -1) {
+                    startHour = 0; startMinute = 0;
+                    endHour = 23; endMinute = 59;
+                }
+
                 if(curr_location == null || startMonth == -1 || startDay == -1 || startYear == -1 || startHour == -1 || startMinute == -1
                         || endMonth == -1 || endDay == -1 || endYear == -1 || endHour == -1 || endMinute == -1){
-                    Toast.makeText(getContext(), "Please input valid search infogi! Please try again.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Please input valid search info! Please try again.", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -841,6 +848,7 @@ public class SearchFragment extends Fragment {
             mStartDate = startDate;
             mStartTime = startTime;
             mEndDate = endDate;
+            Log.d("FINALBATTLE", endTime);
             mEndTime = endTime;
             mCarType = carType;
             mDistance = distance;
@@ -864,8 +872,8 @@ public class SearchFragment extends Fragment {
             ClientController clientController = ClientController.getInstance();
             try {
 
-                Log.d("SEARCH", mStartDate.toString()  + " " + mEndDate.toString());
-                clientController.search(mlocation, mStartDate, mStartTime, mEndDate,mEndTime, mCarType, mDistance);
+                Log.d("SEARCH", mStartDate.toString()  + " " + mEndDate.toString()+" "+mEndTime.toString());
+                clientController.search(mlocation, mStartDate, mStartTime, mEndDate, mEndTime, mCarType, mDistance);
             } catch (IOException e) {
                 e.printStackTrace();
             }

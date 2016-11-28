@@ -11,9 +11,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
@@ -46,6 +49,9 @@ public class LoginActivity extends Activity {
         _signupLink=(TextView)findViewById(R.id.signupLink);
         _forgotPwLink=(TextView)findViewById(R.id.forgotPwLink);
 
+        _email=(EditText)findViewById(R.id.emailText);
+        _password=(EditText)findViewById(R.id.passwordText);
+
         clientController = ClientController.getInstance();
         clientController.setCurrentActivity(this);
 
@@ -61,7 +67,8 @@ public class LoginActivity extends Activity {
         _signupLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //
+                Intent registerIntent = new Intent(v.getContext(), RegisterMainActivity.class);
+                startActivity(registerIntent);
             }
         });
 
@@ -69,7 +76,10 @@ public class LoginActivity extends Activity {
         _forgotPwLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //
+                email = _email.getText().toString();
+
+                ForgotPWTask FPWT = new ForgotPWTask(email);
+                FPWT.execute((Void) null);
             }
         });
     }
@@ -153,12 +163,60 @@ public class LoginActivity extends Activity {
 
     }
 
+    private class ForgotPWTask extends AsyncTask<Void, Void, Boolean>{
+        private final String mUsername;
+
+        ForgotPWTask(String username){
+            mUsername = username;
+        }
+        @Override
+        protected void onPreExecute(){
+            //Display a progress dialog
+            progressDialog = new ProgressDialog(LoginActivity.this,
+                    R.style.AppTheme);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Checking...");
+            progressDialog.show();
+        }
+        @Override
+        protected Boolean doInBackground(Void... params ){
+            if(mUsername != null && isEmailValid(mUsername) == true) clientController.forgotPW(mUsername);
+            else {
+                Toast.makeText(getBaseContext(), "Please Enter a Valid Email", Toast.LENGTH_SHORT).show();
+            }
+
+            NetworkPackage NP = clientController.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if(key.equals("RESETPASSWORD")){
+                if((Boolean) value) {
+                    Log.d("LOGIN FORGOT PW ", "--- RESETPASSWORD == true");
+                    return true;
+                }
+                return false;
+            } else{
+                return false;
+            }
+        }
+        @Override
+        protected void onPostExecute(Boolean success) {
+            progressDialog.dismiss();
+            Log.d("LOGIN FORGOT PW ", "--- onPostExecute");
+            if(success) {
+                Toast.makeText(getBaseContext(), "New temporary password has sent to your email!", Toast.LENGTH_SHORT).show();
+            } else{
+                Toast.makeText(getBaseContext(), "Reset password failed!", Toast.LENGTH_SHORT).show();
+            }
+            finish();
+        }
+
+    }
 
     public void login(View v) {
         Log.d(TAG, "Login");
 
-        _email=(EditText)findViewById(R.id.emailText);
-        _password=(EditText)findViewById(R.id.passwordText);
         email = _email.getText().toString();
         password = _password.getText().toString();
 
@@ -171,6 +229,18 @@ public class LoginActivity extends Activity {
 
     }
 
+    public boolean isEmailValid(String email) {
+        boolean isValid = false;
 
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        CharSequence inputStr = email;
+
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(inputStr);
+        if (matcher.matches()) {
+            isValid = true;
+        }
+        return isValid;
+    }
 }
 

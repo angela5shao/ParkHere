@@ -19,6 +19,27 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+<!--<<<<<<< HEAD-->
+<!--=======-->
+                <!--&lt;!&ndash;<com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:id="@+id/imageView"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_height="match_parent"/>&ndash;&gt;-->
+
+                <!--<HorizontalScrollView-->
+                    <!--android:id="@+id/horizontal_scroll"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent" >-->
+
+                    <!--<LinearLayout-->
+                        <!--android:id="@+id/linearLayout_images"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="150dp"-->
+                        <!--android:orientation="horizontal" >-->
+                    <!--</LinearLayout>-->
+
+                <!--</HorizontalScrollView>-->
+<!--&gt;>>>>>> c9d9370ebf2b71f198e2647496ca52e18ae0e7f0-->
 
                 <Button
                     android:id="@+id/spacePicUpload_btn"

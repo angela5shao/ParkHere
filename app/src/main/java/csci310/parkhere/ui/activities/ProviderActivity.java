@@ -35,9 +35,7 @@ import csci310.parkhere.ui.fragments.EditProfileFragment;
 import csci310.parkhere.ui.fragments.PrivateProfileFragment;
 import csci310.parkhere.ui.fragments.ProviderReservationDetailFragment;
 import csci310.parkhere.ui.fragments.ProviderReservationsFragment;
-import csci310.parkhere.ui.fragments.RenterReservationDetailFragment;
 import csci310.parkhere.ui.fragments.SpaceDetailFragment;
-import csci310.parkhere.ui.fragments.SpaceEditFragment;
 import csci310.parkhere.ui.fragments.SpacesFragment;
 import resource.MyEntry;
 import resource.NetworkPackage;
@@ -53,7 +51,7 @@ import resource.User;
 public class ProviderActivity extends AppCompatActivity implements SpacesFragment.OnFragmentInteractionListener,
         SpaceDetailFragment.OnFragmentInteractionListener, PrivateProfileFragment.OnFragmentInteractionListener,
         ProviderReservationDetailFragment.OnFragmentInteractionListener, EditProfileFragment.OnFragmentInteractionListener,
-        SpaceEditFragment.OnFragmentInteractionListener, ProviderReservationsFragment.OnFragmentInteractionListener {
+        ProviderReservationsFragment.OnFragmentInteractionListener {
 
     LinearLayout _spaceLink, _resLink;
     ImageView _profilePic;
@@ -369,18 +367,22 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
     }
 
     public void openSpaceEditFragment(ParkingSpot spot) {
-        SpaceEditFragment editSpaceFrag = new SpaceEditFragment();
+        Intent intent = new Intent(getBaseContext(), EditSpaceActivity.class);
+        intent.putExtra("SPOT", spot);
+        startActivityForResult(intent, 87);
 
-        Bundle args = new Bundle();
-        args.putSerializable("spot", spot);
-        editSpaceFrag.setArguments(args);
-
-        // TODO: pass parkingspot
-
-        fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(R.id.fragContainer, editSpaceFrag);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+//        SpaceEditFragment editSpaceFrag = new SpaceEditFragment();
+//
+//        Bundle args = new Bundle();
+//        args.putSerializable("spot", spot);
+//        editSpaceFrag.setArguments(args);
+//
+//        // TODO: pass parkingspot
+//
+//        fragmentTransaction = fm.beginTransaction();
+//        fragmentTransaction.replace(R.id.fragContainer, editSpaceFrag);
+//        fragmentTransaction.addToBackStack(null);
+//        fragmentTransaction.commit();
     }
 
     @Override
@@ -412,20 +414,6 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
     public void onAddSpaceClick(View v) {
         Intent intent = new Intent(v.getContext(), AddSpaceActivity.class);
         startActivity(intent);
-
-//        System.out.println("ProviderActivity onAddSpaceClick() called");
-//        AddSpaceFragment addSpaceFragment = new AddSpaceFragment();
-//        Bundle args = new Bundle();
-//        args.putLong("param1", 012345);
-//        addSpaceFragment.setArguments(args);
-//
-//        try {
-//            getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.fragContainer, addSpaceFragment).commit();
-//            System.out.println("onReservationSelected, replaced with reservationDetailFragment");
-//        } catch (Exception e) {
-//            System.out.println("Reservation item exception");
-//        }
     }
 
     public void returnToSpaces() {

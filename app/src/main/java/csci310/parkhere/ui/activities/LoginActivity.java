@@ -49,6 +49,9 @@ public class LoginActivity extends Activity {
         _signupLink=(TextView)findViewById(R.id.signupLink);
         _forgotPwLink=(TextView)findViewById(R.id.forgotPwLink);
 
+        _email=(EditText)findViewById(R.id.emailText);
+        _password=(EditText)findViewById(R.id.passwordText);
+
         clientController = ClientController.getInstance();
         clientController.setCurrentActivity(this);
 
@@ -73,7 +76,6 @@ public class LoginActivity extends Activity {
         _forgotPwLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                _email=(EditText)findViewById(R.id.emailText);
                 email = _email.getText().toString();
 
                 ForgotPWTask FPWT = new ForgotPWTask(email);
@@ -215,8 +217,6 @@ public class LoginActivity extends Activity {
     public void login(View v) {
         Log.d(TAG, "Login");
 
-        _email=(EditText)findViewById(R.id.emailText);
-        _password=(EditText)findViewById(R.id.passwordText);
         email = _email.getText().toString();
         password = _password.getText().toString();
 

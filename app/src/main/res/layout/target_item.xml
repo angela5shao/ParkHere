@@ -14,7 +14,7 @@
         android:layout_alignBaseline="@+id/item_counter"
         android:padding="8dp"
         android:layout_marginRight="32dp"
-        android:textSize="18dp" />
+        android:textSize="14dp" />
 
     <!-- counter -->
     <TextView

@@ -79,7 +79,8 @@
             android:layout_marginTop="6dp"
             android:layout_marginBottom="6dp"
             android:textColorHint="@color/colorAccent"
-            android:textColor="@color/colorAccent"/>
+            android:textColor="@color/colorAccent"
+            android:inputType="number"/>
 
         <Spinner
             android:id="@+id/usertypeSpinner"

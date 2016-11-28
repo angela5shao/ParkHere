@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -245,9 +246,13 @@ public class RegisterRenterActivity extends Activity {
             try {
                 // TODO: start timer
                 Long tsLong = System.currentTimeMillis()/1000;
-                SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm:ss");
+                SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm:ss.SSS");
                 Date resultdate = new Date(tsLong);
-                System.out.println("START TIME (doInBackgrnd): " + sdf.format(resultdate) + " ********************");
+//                System.out.println("START TIME (doInBackgrnd): " + sdf.format(resultdate) + " ********************");
+
+                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
+                Date date2 = new Date();
+                System.out.println("START TIME: " + dateFormat.format(date2) + " ********************");
 
                 clientController.register(mUsername, mPassword, mphonenum, mlicenseID, mplatenum, mcat, mname);
                 NetworkPackage NP = clientController.checkReceived();
@@ -275,7 +280,11 @@ public class RegisterRenterActivity extends Activity {
             Long tsLong = System.currentTimeMillis()/1000;
             SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm:ss");
             Date resultdate = new Date(tsLong);
-            System.out.println("END TIME (onPostExecute): " + sdf.format(resultdate) + " ********************");
+//            System.out.println("END TIME (onPostExecute): " + sdf.format(resultdate) + " ********************");
+
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
+            Date date2 = new Date();
+            System.out.println("END TIME (onPostExecute): " + dateFormat.format(date2) + " ********************");
 
             if(success) {
                 progressDialog.dismiss();

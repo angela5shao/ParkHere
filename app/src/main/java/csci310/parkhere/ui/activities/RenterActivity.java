@@ -22,6 +22,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
 import java.lang.reflect.Array;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -76,7 +77,11 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         Long tsLong = System.currentTimeMillis()/1000;
         SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm:ss");
         Date resultdate = new Date(tsLong);
-        System.out.println("END TIME (RenterActivity onCreate): " + sdf.format(resultdate) + " ********************");
+//        System.out.println("END TIME (RenterActivity onCreate): " + sdf.format(resultdate) + " ********************");
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
+        Date date2 = new Date();
+        System.out.println("END TIME (RenterActivity onCreate): " + dateFormat.format(date2) + " ********************");
 
         clientController = ClientController.getInstance();
         clientController.setCurrentActivity(this);
@@ -187,7 +192,6 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
             fragmentTransaction.commit();
         }
 
-        System.out.println("END TIME (RenterActivity onCreate finished): " + sdf.format(resultdate) + " ********************");
     }
 
     @Override

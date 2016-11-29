@@ -227,7 +227,6 @@ public class LoginActivity extends Activity {
                 }else {
                     Toast.makeText(getBaseContext(), "Please Enter a Valid Email", Toast.LENGTH_SHORT).show();
                 }
-                Toast.makeText(LoginActivity.this.getBaseContext(), "Reset password failed!", Toast.LENGTH_SHORT).show();
             }
             finish();
         }

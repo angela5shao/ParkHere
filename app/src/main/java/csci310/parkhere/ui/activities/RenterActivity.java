@@ -103,14 +103,17 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         _profilePic.setBorderColor(R.color.colorLightBackground);
         _profilePic.setBorderWidth(10);
 
-        getProfilePic gpc = new getProfilePic(clientController.getUser().userID);
-        String encodedPic = "";
-        try {
-            encodedPic = gpc.execute((Void) null).get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+        String encodedPic = clientController.encodedProfilePic;
+        if (encodedPic == "") {
+            getProfilePic gpc = new getProfilePic(clientController.getUser().userID);
+            try {
+                encodedPic = gpc.execute((Void) null).get();
+                clientController.encodedProfilePic = encodedPic;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
         }
         Glide.with(this).load(encodedPic).into(_profilePic);
 //        byte[] imageAsBytes = Base64.decode(encodedPic.getBytes(), Base64.DEFAULT);

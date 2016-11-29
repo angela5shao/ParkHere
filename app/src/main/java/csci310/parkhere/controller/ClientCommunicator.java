@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -56,8 +57,8 @@ public class ClientCommunicator extends Thread {
                 socket = new Socket("ec2-35-164-64-84.us-west-2.compute.amazonaws.com", 61129);
                 oos = new ObjectOutputStream(socket.getOutputStream());
                 oos.flush();
-
                 ois = new ObjectInputStream(socket.getInputStream());
+                controller.startReceiving();
                 return true;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -89,6 +90,21 @@ public class ClientCommunicator extends Thread {
 
         try {
             while(true) {
+                if(ois==null) {
+                    controller.stopReceiving();
+                }
+                else{
+                    try {
+                        socket = new Socket("ec2-35-164-64-84.us-west-2.compute.amazonaws.com", 61129);
+                        oos = new ObjectOutputStream(socket.getOutputStream());
+                        oos.flush();
+
+                        ois = new ObjectInputStream(socket.getInputStream());
+                        controller.startReceiving();
+                    } catch (IOException e) {
+                    }
+                    break;
+                }
                 NetworkPackage obj = (NetworkPackage)ois.readObject();
                 System.out.println("do receive the networkpackage");
                 Log.d("NetworkPackage", "NP is null?" + String.valueOf(obj == null));
@@ -98,8 +114,6 @@ public class ClientCommunicator extends Thread {
 
                 //controller.updateActivity();
                 controller.updateReceived(obj);
-
-
 
 //                oos.flush();
             }
@@ -117,8 +131,11 @@ public class ClientCommunicator extends Thread {
         NetworkPackage NP = new NetworkPackage();
         NP.addEntry(command, entry);
 
-        if(oos == null)
+        if(oos == null){
             Log.d("oos","oos is null");
+//            Toast.makeText(controller.getCurrentActivity().getBaseContext(), "Lost the Network Connection", Toast.LENGTH_SHORT).show();
+            return;
+        }
         oos.writeObject(NP);
         oos.flush();
     }
@@ -126,6 +143,12 @@ public class ClientCommunicator extends Thread {
 
     public void sendPackage(NetworkPackage np) throws IOException {
         Log.d("SENDPACAGE", "send once");
+        if(oos == null){
+            Log.d("oos","oos is null");
+            controller.stopReceiving();
+//            Toast.makeText(controller.getCurrentActivity().getBaseContext(), "Lost the Network Connection", Toast.LENGTH_SHORT).show();
+            return;
+        }
         oos.writeObject(np);
         oos.flush();
     }

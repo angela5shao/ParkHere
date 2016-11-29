@@ -122,6 +122,7 @@ public class LoginActivity extends Activity {
                 if(NP == null)
                 {
                     Log.d("DOINBACKGROUND", "null");
+                    return false;
                 }
                 MyEntry<String, Serializable> entry = NP.getCommand();
 
@@ -161,6 +162,9 @@ public class LoginActivity extends Activity {
                 }
             } else{
                 progressDialog.dismiss();
+                if(clientController.receiving){
+                    Toast.makeText(getBaseContext(), "Lost Connection to Server", Toast.LENGTH_SHORT).show();
+                }
                 Intent intent = new Intent(c, HomeActivity.class);
                 startActivityForResult(intent, 0);
             }
@@ -185,9 +189,16 @@ public class LoginActivity extends Activity {
         }
         @Override
         protected Boolean doInBackground(Void... params ){
-            clientController.forgotPW(mUsername);
+            if(mUsername != null && isEmailValid(mUsername) == true) clientController.forgotPW(mUsername);
+            else {
+                return false;
+            }
 
             NetworkPackage NP = clientController.checkReceived();
+            if(NP == null)
+            {
+                return false;
+            }
             MyEntry<String, Serializable> entry = NP.getCommand();
 
             String key = entry.getKey();
@@ -208,7 +219,18 @@ public class LoginActivity extends Activity {
             if(success) {
                 Toast.makeText(LoginActivity.this.getBaseContext(), "New temporary password has sent to your email!", Toast.LENGTH_SHORT).show();
             } else{
+<<<<<<< HEAD
+                if(clientController.receiving){
+                    Toast.makeText(getBaseContext(), "Lost Connection to Server", Toast.LENGTH_SHORT).show();
+                }
+                if(mUsername != null && isEmailValid(mUsername) == true){
+                    Toast.makeText(getBaseContext(), "Reset password failed!", Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(getBaseContext(), "Please Enter a Valid Email", Toast.LENGTH_SHORT).show();
+                }
+=======
                 Toast.makeText(LoginActivity.this.getBaseContext(), "Reset password failed!", Toast.LENGTH_SHORT).show();
+>>>>>>> 0f746c9164bdb3553f3090944c49622e14902305
             }
             finish();
         }

@@ -7,7 +7,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="12dp">
         <LinearLayout
             android:layout_width="match_parent"
@@ -236,19 +236,19 @@
 
 
                 <Button
-                    android:id="@+id/btn_save"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="64dp"
-                    android:layout_marginRight="64dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:adjustViewBounds="true"
-                    android:text="Save"
-                    android:background="@color/colorAccent"
-                    android:textColor="@color/colorMainFont"/>
-            </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
-</FrameLayout>
 
+    android:id="@+id/btn_save"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:layout_marginLeft="64dp"
+    android:layout_marginRight="64dp"
+    android:layout_alignParentTop="true"
+    android:layout_centerHorizontal="true"
+    android:adjustViewBounds="true"
+    android:text="Save"
+    android:background="@color/colorAccent"
+    android:textColor="@color/colorMainFont"/>
+    </LinearLayout>
+    </LinearLayout>
+    </ScrollView>
+    </FrameLayout>

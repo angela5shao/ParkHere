@@ -2,11 +2,17 @@ package csci310.parkhere.ui.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +21,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.davemorrissey.labs.subscaleview.ImageSource;
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
 
 import csci310.parkhere.R;
@@ -48,6 +59,9 @@ public class EditProfileFragment extends Fragment {
     private String mParam3;
     private String mParam4;
     private String mParam5;
+
+    private int RESULT_LOAD_IMAGE = 87;
+    private String encodedImage;
 
     private OnFragmentInteractionListener mListener;
 
@@ -126,6 +140,16 @@ public class EditProfileFragment extends Fragment {
 
         updateUserInfo(mParam1, mParam2, mParam3, mParam4, mParam5);
         _btn_upload_image = (Button) v.findViewById(R.id.btn_upload_image);
+        _btn_upload_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Complete action using"), RESULT_LOAD_IMAGE);
+            }
+        });
         _btn_save = (Button) v.findViewById(R.id.btn_save);
         _btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -209,6 +233,41 @@ public class EditProfileFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == Activity.RESULT_OK && null != data) {
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+            Cursor cursor = getContext().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+            cursor.moveToFirst();
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            cursor.close();
+
+            _privatProfileImage.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+
+            SubsamplingScaleImageView newImage = new SubsamplingScaleImageView(getContext());
+            newImage.setImage(ImageSource.uri(picturePath));
+
+            Bitmap bitmap = null;
+            try {
+//                BitmapRegionDecoder decoder = BitmapRegionDecoder.newInstance(myStream, false);
+//                bitmap = decoder.decodeRegion(new Rect(10, 10, 50, 50), null);
+                bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), selectedImage);
+            } catch (IOException e) {
+            }
+
+//            _privatProfileImage.setImageBitmap(bitmap);
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] imageBytes = baos.toByteArray();
+
+            encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        }
     }
 
     public void updateUserInfo(String inUsername, String inPw, String inLicenseID, String inLicensePlate, String inPhone) {

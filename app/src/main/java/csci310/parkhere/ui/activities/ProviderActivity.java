@@ -26,6 +26,7 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 import csci310.parkhere.R;
@@ -597,14 +598,21 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
             NetworkPackage NP = clientController.checkReceived();
 
             MyEntry<String, Serializable> entry = NP.getCommand();
+
+            ArrayList<String> images = (ArrayList<String>) entry.getValue() ;
+
+            ArrayList<String> urls = new ArrayList<>();
+
             if(entry.getKey().equals("PARKINGSPOTIMAGESURLS"))
             {
-                ArrayList<String> urls = (ArrayList<String>) entry.getValue();
+//                ArrayList<String> urls = (ArrayList<String>) entry.getValue() ;
 
+                Calendar cal = Calendar.getInstance();
 
-                for(String url : urls)
+                for(String url : images)
                 {
                     Log.d("FETCHIMAGE", url);
+                    urls.add(url+"?" + String.valueOf(cal.getTimeInMillis()));
                 }
                 return urls;
             }

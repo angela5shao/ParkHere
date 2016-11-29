@@ -1,11 +1,8 @@
 package csci310.parkhere.controller;
 
-import android.net.Network;
 import android.os.AsyncTask;
 import android.os.Looper;
-import android.os.SystemClock;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -13,16 +10,8 @@ import java.io.ObjectOutputStream;
 import java.io.OptionalDataException;
 import java.io.Serializable;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
 
-import resource.MyEntry;
 import resource.NetworkPackage;
-import resource.ParkingSpot;
-import resource.Review;
-import resource.SearchResults;
-import resource.TimeInterval;
-import resource.User;
 
 
 /**
@@ -103,7 +92,6 @@ public class ClientCommunicator extends Thread {
                         controller.startReceiving();
                     } catch (IOException e) {
                     }
-                    break;
                 }
                 NetworkPackage obj = (NetworkPackage)ois.readObject();
                 System.out.println("do receive the networkpackage");

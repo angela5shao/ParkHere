@@ -19,24 +19,27 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <!--<com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView-->
-                    <!--android:id="@+id/imageView"-->
+<!--<<<<<<< HEAD-->
+<!--=======-->
+                <!--&lt;!&ndash;<com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:id="@+id/imageView"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_height="match_parent"/>&ndash;&gt;-->
+
+                <!--<HorizontalScrollView-->
+                    <!--android:id="@+id/horizontal_scroll"-->
                     <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent"/>-->
+                    <!--android:layout_height="match_parent" >-->
 
-                <HorizontalScrollView
-                    android:id="@+id/horizontal_scroll"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
+                    <!--<LinearLayout-->
+                        <!--android:id="@+id/linearLayout_images"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="150dp"-->
+                        <!--android:orientation="horizontal" >-->
+                    <!--</LinearLayout>-->
 
-                    <LinearLayout
-                        android:id="@+id/linearLayout_images"
-                        android:layout_width="wrap_content"
-                        android:layout_height="150dp"
-                        android:orientation="horizontal" >
-                    </LinearLayout>
-
-                </HorizontalScrollView>
+                <!--</HorizontalScrollView>-->
+<!--&gt;>>>>>> c9d9370ebf2b71f198e2647496ca52e18ae0e7f0-->
 
                 <Button
                     android:id="@+id/spacePicUpload_btn"
@@ -48,6 +51,17 @@
                     android:layout_centerHorizontal="true"
                     android:adjustViewBounds="true"
                     android:text="Upload image"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_below="@id/spacePicUpload_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    />
+
 
                 <LinearLayout
                     android:layout_width="match_parent"

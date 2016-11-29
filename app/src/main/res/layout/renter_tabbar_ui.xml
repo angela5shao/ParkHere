@@ -20,13 +20,10 @@
             <com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/profilePic"
                 android:layout_width="24dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:src="@mipmap/ic_launcher"
                 app:civ_border_color="@color/colorLightBackground"
                 app:civ_border_width="4dp"
-                app:civ_shadow="true"
-                app:civ_shadow_radius="10"
-                app:civ_shadow_color="@color/colorGrey"
                 android:layout_weight="1"/>
             <!--<ImageView-->
                 <!--android:id="@+id/profilePic"-->

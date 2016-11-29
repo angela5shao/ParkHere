@@ -1,15 +1,20 @@
 package csci310.parkhere.ui.fragments;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.OrientationHelper;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,13 +37,23 @@ import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
+import csci310.parkhere.ui.activities.AddSpaceActivity;
 import csci310.parkhere.ui.activities.ProviderActivity;
+import csci310.parkhere.ui.activities.RecyclerItemClickListener;
+import csci310.parkhere.ui.adapters.PhotoAdapter;
+import me.iwf.photopicker.PhotoPicker;
+import me.iwf.photopicker.PhotoPreview;
 import resource.MyEntry;
 import resource.NetworkPackage;
 import resource.ParkingSpot;
@@ -67,12 +82,18 @@ public class SpaceEditFragment extends Fragment {
     private EditText mAddressText, mDescriptionText;
 //    private SubsamplingScaleImageView mSpacePic2;
     private Spinner mCartypeSpinner, mCancelPolicySpinner;
-    private Vector<String> encodedImages;
+    private ArrayList<String> encodedImages;
     private LinearLayout mImagesLayout;
 
     private LatLng mCurrLocation;
 
     private OnFragmentInteractionListener mListener;
+    private ProgressDialog progressDialog;
+
+
+    private PhotoAdapter photoAdapter;
+    private ArrayList<String> selectedPhotos = new ArrayList<>();
+
 
     public SpaceEditFragment() {
         // Required empty public constructor
@@ -114,20 +135,25 @@ public class SpaceEditFragment extends Fragment {
         mDescriptionText = (EditText) v.findViewById(R.id.description_text);
         mDescriptionText.setText(thisParkingSpot.getDescription());
 //        mSpacePic2 = (SubsamplingScaleImageView) v.findViewById(R.id.imageView);
-//        if (thisParkingSpot.encodedImages != null) { // If has pictures, set them
-//            for (String encodedimg : encodedImages) {
-//                byte[] byteArray = encodedimg.getBytes();
-//                Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-////                mSpacePic2.setImage(ImageSource.bitmap(bmp));
+//<<<<<<< HEAD
 //
-//                SubsamplingScaleImageView newImage = new SubsamplingScaleImageView(getContext());
-//                newImage.setImage(ImageSource.bitmap(bmp));
-//                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-//                newImage.setLayoutParams(lp);
-//                // Add to layout of images
-//                mImagesLayout.addView(newImage);
-//            }
-//        }
+//
+//=======
+////        if (thisParkingSpot.encodedImages != null) { // If has pictures, set them
+////            for (String encodedimg : encodedImages) {
+////                byte[] byteArray = encodedimg.getBytes();
+////                Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+//////                mSpacePic2.setImage(ImageSource.bitmap(bmp));
+////
+////                SubsamplingScaleImageView newImage = new SubsamplingScaleImageView(getContext());
+////                newImage.setImage(ImageSource.bitmap(bmp));
+////                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+////                newImage.setLayoutParams(lp);
+////                // Add to layout of images
+////                mImagesLayout.addView(newImage);
+////            }
+////        }
+//>>>>>>> c9d9370ebf2b71f198e2647496ca52e18ae0e7f0
 
         mCartypeSpinner = (Spinner)v.findViewById(R.id.editCartype_spinner);
         mCartypeSpinner.setSelection(thisParkingSpot.getCartype());
@@ -159,15 +185,50 @@ public class SpaceEditFragment extends Fragment {
                 editProfileTask.execute((Void)null);
             }
         });
+
+
+
+
+
+
+
         mUploadPicButton = (Button)v.findViewById(R.id.spacePicUpload_btn);
+
+
+        RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
+        photoAdapter = new PhotoAdapter(getContext(), selectedPhotos);
+
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(4, OrientationHelper.VERTICAL));
+        recyclerView.setAdapter(photoAdapter);
+
         mUploadPicButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(i, RESULT_LOAD_IMAGE);
+            public void onClick(View view) {
+                PhotoPicker.builder()
+                        .setPhotoCount(6)
+                        .setShowCamera(true)
+                        .setSelected(selectedPhotos)
+                        .start(getContext(), SpaceEditFragment.this, PhotoPicker.REQUEST_CODE);
             }
         });
-
+//
+//<<<<<<< HEAD
+//        recyclerView.addOnItemTouchListener(
+//                new RecyclerItemClickListener(getContext(), new RecyclerItemClickListener.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(View view, int position) {
+//                        PhotoPreview.builder()
+//                                .setPhotos(selectedPhotos)
+//                                .setCurrentItem(position)
+//                                .start(getContext(), SpaceEditFragment.this, PhotoPicker.REQUEST_CODE);
+//                    }
+//                })
+//        );
+//
+//
+//
+//
+//=======
+//>>>>>>> c9d9370ebf2b71f198e2647496ca52e18ae0e7f0
         mEditAddressButton = (Button)v.findViewById(R.id.changeAddress_btn);
         mEditAddressButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -186,7 +247,7 @@ public class SpaceEditFragment extends Fragment {
             }
 
         });
-        mImagesLayout = (LinearLayout) v.findViewById(R.id.linearLayout_images);
+//        mImagesLayout = (LinearLayout) v.findViewById(R.id.linearLayout_images);
 
         // Inflate the layout for this fragment
         return v;
@@ -230,39 +291,23 @@ public class SpaceEditFragment extends Fragment {
                 // The user canceled the operation.
             }
         }
-        else if (requestCode == RESULT_LOAD_IMAGE && resultCode == Activity.RESULT_OK && null != data) {
-            Uri selectedImage = data.getData();
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
-            Cursor cursor = getContext().getContentResolver().query(selectedImage,filePathColumn, null, null, null);
-            cursor.moveToFirst();
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
-            cursor.close();
+        else if (requestCode == PhotoPicker.REQUEST_CODE || requestCode == PhotoPreview.REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                List<String> photos = null;
+                if (data != null) {
+                    photos = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
 
-//            mSpacePic2.setImage(ImageSource.resource(R.drawable.monkey));
-//            mSpacePic2.setImage(ImageSource.asset("map.png"))
-//            mSpacePic2.setImage(ImageSource.bitmap(bitmap));
-//            mSpacePic2.setImage(ImageSource.uri(picturePath));
+                    for (String s : photos) {
+                        Log.d("!!!!!!!!!!!", "data.getStringArrayListExtra = " + s);
+                    }
+                }
+                selectedPhotos.clear();
 
-            SubsamplingScaleImageView newImage = new SubsamplingScaleImageView(getContext());
-            newImage.setImage(ImageSource.uri(picturePath));
-            mImagesLayout.addView(newImage);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-            newImage.setLayoutParams(lp);
-
-
-            Bitmap bitmap = null;
-            try {
-//                BitmapRegionDecoder decoder = BitmapRegionDecoder.newInstance(myStream, false);
-//                bitmap = decoder.decodeRegion(new Rect(10, 10, 50, 50), null);
-                bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), selectedImage);
-            } catch (IOException e) {
+                if (photos != null) {
+                    selectedPhotos.addAll(photos);
+                }
+                photoAdapter.notifyDataSetChanged();
             }
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-            byte[] imageBytes = baos.toByteArray();
-            if (encodedImages == null) encodedImages = new Vector<String>();
-            encodedImages.add(Base64.encodeToString(imageBytes, Base64.DEFAULT));
         }
     }
 
@@ -294,6 +339,25 @@ public class SpaceEditFragment extends Fragment {
             ps.setLon(mCurrLocation.longitude);
             ps.cancelpolicy = inCancelPolicy;
 //            this.encodedImages = encodedImage;
+
+            encodedImages = new ArrayList<>();
+            for(String path : selectedPhotos)
+            {
+                try {
+                    encodedImages.add(readEncodeImage(path));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = new ProgressDialog(getContext(), R.style.AppTheme);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Update Parking Spot Info...");
+            progressDialog.show();
         }
 
         @Override
@@ -309,15 +373,15 @@ public class SpaceEditFragment extends Fragment {
             Log.d("EditSpaceTask", key);
 
             if (key.equals("EDITSPACE")) {
-//                for (int i = 0; i < encodedImages.size(); i++) {
-//                    clientController.sendImagetoServer(encodedImages.get(i), "PARKINGSPACEIMAGE", thisParkingSpot.getParkingSpotID());
-//                    NP = clientController.checkReceived();
-//                    entry = NP.getCommand();
-//                    key = entry.getKey();
-//                    while (!key.equals("STOREIMAGESUCCESS")) {
-//                        clientController.sendImagetoServer(encodedImages.get(i), "PARKINGSPACEIMAGE", thisParkingSpot.getParkingSpotID());
-//                    }
-//                }
+                clientController.deleteOldParkingSpotImages(ps);
+                NetworkPackage deleteResponse = clientController.checkReceived();
+                MyEntry<String, Serializable> deleteEntry = deleteResponse.getCommand();
+                String deleteKey = deleteEntry.getKey();
+
+                if(deleteKey.equals("DELETEIMAGESSUCCESS"))
+                {
+                    clientController.sendImagesToServer(encodedImages,"PARKINGSPACEIMAGE", ps.getParkingSpotID());
+                }
                 Log.d("SpaceEdit", "doInBackground 1");
                 return ps;
             }
@@ -329,14 +393,32 @@ public class SpaceEditFragment extends Fragment {
         protected void onPostExecute(ParkingSpot spot) {
             Log.d("EditSpaceTask", "onPostExecute!!!!! - - - - - ");
             if(spot!=null){
-
-
+                progressDialog.dismiss();
                 ((ProviderActivity)getActivity()).onEditSpace(spot);
             } else{
+                progressDialog.dismiss();
                 Toast.makeText(getContext(), "Error on edit space! Please try again.", Toast.LENGTH_SHORT).show();
                 // back to parking spot detail
             }
         }
     }
 
+    public String readEncodeImage(String filepath) throws IOException {
+        File imagefile = new File(filepath);
+        FileInputStream fis = null;
+        try {
+            fis = new FileInputStream(imagefile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+//        Bitmap bm = BitmapFactory.decodeFile(imagefile);
+        Bitmap bm = BitmapFactory.decodeStream(fis);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.JPEG, 100 , baos);
+        byte[] b = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+        Log.d("@@@ADDSPACE", "encodedImage = "+ encodedImage);
+        return encodedImage;
+    }
 }

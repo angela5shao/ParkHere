@@ -182,7 +182,17 @@ public class LoginActivity extends Activity {
         }
         @Override
         protected void onPreExecute(){
-            //Display a progress dialog
+
+//            if(mUsername != null && isEmailValid(mUsername) == true) clientController.forgotPW(mUsername);
+//            else {
+//                Toast.makeText(getBaseContext(), "Please Enter a Valid Email", Toast.LENGTH_SHORT).show();
+//            }
+
+            if(mUsername == null || mUsername.isEmpty() || !isEmailValid(mUsername))
+                Toast.makeText(getBaseContext(), "Please Enter a Valid Email", Toast.LENGTH_SHORT).show();
+
+
+                //Display a progress dialog
             progressDialog = new ProgressDialog(LoginActivity.this,
                     R.style.AppTheme);
             progressDialog.setIndeterminate(true);
@@ -191,10 +201,16 @@ public class LoginActivity extends Activity {
         }
         @Override
         protected Boolean doInBackground(Void... params ){
-            if(mUsername != null && isEmailValid(mUsername) == true) clientController.forgotPW(mUsername);
-            else {
-                return false;
-            }
+//<<<<<<< HEAD
+//            if(mUsername != null && isEmailValid(mUsername) == true) clientController.forgotPW(mUsername);
+//            else {
+//                return false;
+//            }
+//=======
+//
+            clientController.forgotPW(mUsername);
+//>>>>>>> eeecd23a971f4bc854e626a7ca549bfefc6ba317
+
 
             NetworkPackage NP = clientController.checkReceived();
             if(NP == null)

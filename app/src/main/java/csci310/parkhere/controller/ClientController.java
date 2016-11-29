@@ -4,16 +4,12 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -792,8 +788,10 @@ public class ClientController {
         }
     }
 
-    public void getProfilePic() {
-        long userID = user.userID;
-        // TODO
+    public void getProfilePic(long userID) {
+        NetworkPackage NP = new NetworkPackage();
+        NP.addEntry("GETUSERIMAGE", userID);
+        clientCommunicator.sendPackage(NP);
+
     }
 }

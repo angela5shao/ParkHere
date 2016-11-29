@@ -3,6 +3,8 @@ package csci310.parkhere.ui.activities;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,11 +24,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.model.LatLng;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
@@ -45,6 +50,8 @@ import resource.Reservation;
 import resource.SearchResults;
 import resource.Time;
 import resource.User;
+
+import static java.security.AccessController.getContext;
 
 /**
  * Created by ivylinlaw on 10/17/16.
@@ -95,6 +102,20 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         // Set Border
         _profilePic.setBorderColor(R.color.colorLightBackground);
         _profilePic.setBorderWidth(10);
+
+        getProfilePic gpc = new getProfilePic(clientController.getUser().userID);
+        String encodedPic = "";
+        try {
+            encodedPic = gpc.execute((Void) null).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        Glide.with(this).load(encodedPic).into(_profilePic);
+//        byte[] imageAsBytes = Base64.decode(encodedPic.getBytes(), Base64.DEFAULT);
+//        Bitmap bp = BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
+//        _profilePic.setImageBitmap(bp);
 
 
         //*****************************************************************
@@ -600,5 +621,39 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
                 Toast.makeText(getBaseContext(), "Confirm payment unsuccessful! Please try agian.", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private class getProfilePic extends AsyncTask<Void, Void, String>{
+        private final long userID;
+
+        getProfilePic(long userID){
+            this.userID = userID;
+        }
+        @Override
+        protected void onPreExecute(){
+        }
+        @Override
+        protected String doInBackground(Void... params ){
+
+//            clientController.getProfilePic(mUsername);
+            clientController.getProfilePic(userID);
+
+            NetworkPackage NP = clientController.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            String encodedPic = null;
+            if(key.equals("PROFILEPICIMAGE")){
+                encodedPic = (String)value;
+            }
+            return encodedPic;
+        }
+        @Override
+        protected void onPostExecute(String profilePic) {
+            // TODO set profile image
+//            _profilePic.setImageBitmap();
+        }
+
     }
 }

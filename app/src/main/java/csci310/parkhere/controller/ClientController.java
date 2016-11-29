@@ -848,4 +848,9 @@ public class ClientController {
     public void startReceiving(){
         receiving = true;
     }
+
+    public void getProfilePic() {
+        long userID = user.userID;
+        // TODO
+    }
 }

@@ -385,14 +385,15 @@ public class ClientController {
 //        }
     }
 
-    public void postPaymentNonceToServer(String paymentMethodNonce, long resID, long providerID, String price)
+    public void postPaymentNonceToServer(String paymentMethodNonce, long resID, long providerID, String price, String paymentMethodType)
     {
         HashMap<String, Serializable> map = new HashMap<>();
         map.put("PAYMENTNONCE", paymentMethodNonce);
         map.put("RESERVATIONID", resID);
         map.put("PROVIDERID", providerID);
         map.put("PRICE", price);
-//        try {
+        map.put("TYPE", paymentMethodType);
+
             clientCommunicator.send("PAYMENT_SUCCESS", map);
 //        } catch (IOException e) {
 //            e.printStackTrace();

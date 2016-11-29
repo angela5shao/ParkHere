@@ -390,10 +390,12 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
     }
 
     public void switchToEditProfileFrag(EditProfileFragment editProfileFragment) {
-        fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(R.id.fragContainer, editProfileFragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+//        fragmentTransaction = fm.beginTransaction();
+//        fragmentTransaction.replace(R.id.fragContainer, editProfileFragment);
+//        fragmentTransaction.addToBackStack(null);
+//        fragmentTransaction.commit();
+        Intent intent = new Intent(getBaseContext(), EditProfileActivity.class);
+        startActivity(intent);
     }
 
     public void switchToPrivateProfileFrag(PrivateProfileFragment privateProfileFragment){

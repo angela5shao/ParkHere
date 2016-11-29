@@ -9,9 +9,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.braintreepayments.api.BraintreeFragment;
 import com.braintreepayments.api.BraintreePaymentActivity;
 import com.braintreepayments.api.PaymentRequest;
+import com.braintreepayments.api.interfaces.PaymentMethodNonceCreatedListener;
 import com.braintreepayments.api.models.PaymentMethodNonce;
 
 import java.io.Serializable;
@@ -29,13 +29,11 @@ import resource.NetworkPackage;
 import resource.Time;
 import resource.TimeInterval;
 
-public class PaymentActivity extends Activity {
+public class PaymentActivity extends Activity implements PaymentMethodNonceCreatedListener {
     int BRAINTREE_REQUEST_CODE = 11;
-    int BRAINTREE_PAYPAL_REQUEST_CODE = 12;
 
-    private String clientToken;
-    BraintreeFragment braintreeFragment;
-
+//    private String clientToken;
+//    BraintreeFragment braintreeFragment;
 
     private long userID;
     private long parkingSpotID;
@@ -110,35 +108,16 @@ public class PaymentActivity extends Activity {
 
     // For BrainTree payment
     public void onBraintreeSubmit(View v) {
-//        Intent intent = new Intent(context, BraintreePaymentActivity.class);
-//        .putExtra(BraintreePaymentActivity.EXTRA_CLIENT_TOKEN, clientToken);
-
-        // TODO: request client token
         GetClientToken GCT = new GetClientToken();
         GCT.execute((Void) null);
-//        clientToken = "eyJ2ZXJzaW9uIjoyLCJhdXRob3JpemF0aW9uRmluZ2VycHJpbnQiOiJjZTM0OTdiMGMzMzQyZjBjNjBjYWZmMWUxNjIzOWNhZGIzZTU3OWU0Zjc5MDMyNjZmZDEzMWVhYjE2MDNkM2U1fGNyZWF0ZWRfYXQ9MjAxNi0xMS0xNVQwNToxMjoyOC4yOTcwNTM4MzgrMDAwMFx1MDAyNm1lcmNoYW50X2lkPXNyZjczdDVmYzcyNHc0cmhcdTAwMjZwdWJsaWNfa2V5PXRxdjhwcTZoaHl4N2J6cXIiLCJjb25maWdVcmwiOiJodHRwczovL2FwaS5zYW5kYm94LmJyYWludHJlZWdhdGV3YXkuY29tOjQ0My9tZXJjaGFudHMvc3JmNzN0NWZjNzI0dzRyaC9jbGllbnRfYXBpL3YxL2NvbmZpZ3VyYXRpb24iLCJjaGFsbGVuZ2VzIjpbXSwiZW52aXJvbm1lbnQiOiJzYW5kYm94IiwiY2xpZW50QXBpVXJsIjoiaHR0cHM6Ly9hcGkuc2FuZGJveC5icmFpbnRyZWVnYXRld2F5LmNvbTo0NDMvbWVyY2hhbnRzL3NyZjczdDVmYzcyNHc0cmgvY2xpZW50X2FwaSIsImFzc2V0c1VybCI6Imh0dHBzOi8vYXNzZXRzLmJyYWludHJlZWdhdGV3YXkuY29tIiwiYXV0aFVybCI6Imh0dHBzOi8vYXV0aC52ZW5tby5zYW5kYm94LmJyYWludHJlZWdhdGV3YXkuY29tIiwiYW5hbHl0aWNzIjp7InVybCI6Imh0dHBzOi8vY2xpZW50LWFuYWx5dGljcy5zYW5kYm94LmJyYWludHJlZWdhdGV3YXkuY29tL3NyZjczdDVmYzcyNHc0cmgifSwidGhyZWVEU2VjdXJlRW5hYmxlZCI6dHJ1ZSwicGF5cGFsRW5hYmxlZCI6dHJ1ZSwicGF5cGFsIjp7ImRpc3BsYXlOYW1lIjoiUGFya0hlcmUiLCJjbGllbnRJZCI6bnVsbCwicHJpdmFjeVVybCI6Imh0dHA6Ly9leGFtcGxlLmNvbS9wcCIsInVzZXJBZ3JlZW1lbnRVcmwiOiJodHRwOi8vZXhhbXBsZS5jb20vdG9zIiwiYmFzZVVybCI6Imh0dHBzOi8vYXNzZXRzLmJyYWludHJlZWdhdGV3YXkuY29tIiwiYXNzZXRzVXJsIjoiaHR0cHM6Ly9jaGVja291dC5wYXlwYWwuY29tIiwiZGlyZWN0QmFzZVVybCI6bnVsbCwiYWxsb3dIdHRwIjp0cnVlLCJlbnZpcm9ubWVudE5vTmV0d29yayI6dHJ1ZSwiZW52aXJvbm1lbnQiOiJvZmZsaW5lIiwidW52ZXR0ZWRNZXJjaGFudCI6ZmFsc2UsImJyYWludHJlZUNsaWVudElkIjoibWFzdGVyY2xpZW50MyIsImJpbGxpbmdBZ3JlZW1lbnRzRW5hYmxlZCI6dHJ1ZSwibWVyY2hhbnRBY2NvdW50SWQiOiJwYXJraGVyZSIsImN1cnJlbmN5SXNvQ29kZSI6IlVTRCJ9LCJjb2luYmFzZUVuYWJsZWQiOmZhbHNlLCJtZXJjaGFudElkIjoic3JmNzN0NWZjNzI0dzRyaCIsInZlbm1vIjoib2ZmIn0";
-//        PaymentRequest paymentRequest = new PaymentRequest()
-//                .clientToken(clientToken);
-//
-//        startActivityForResult(paymentRequest.getIntent(this), BRAINTREE_REQUEST_CODE);
     }
 
-    public void onBraintreeSubmitPaypal(View v) {
-//        ClientTokenRequest clientTokenRequest = new ClientTokenRequest()
-//                .customerId(aCustomerId);
-//        String clientToken = gateway.clientToken().generate(clientTokenRequest);
-
-        // TODO: request client token
-        clientToken = "eyJ2ZXJzaW9uIjoyLCJhdXRob3JpemF0aW9uRmluZ2VycHJpbnQiOiJjZTM0OTdiMGMzMzQyZjBjNjBjYWZmMWUxNjIzOWNhZGIzZTU3OWU0Zjc5MDMyNjZmZDEzMWVhYjE2MDNkM2U1fGNyZWF0ZWRfYXQ9MjAxNi0xMS0xNVQwNToxMjoyOC4yOTcwNTM4MzgrMDAwMFx1MDAyNm1lcmNoYW50X2lkPXNyZjczdDVmYzcyNHc0cmhcdTAwMjZwdWJsaWNfa2V5PXRxdjhwcTZoaHl4N2J6cXIiLCJjb25maWdVcmwiOiJodHRwczovL2FwaS5zYW5kYm94LmJyYWludHJlZWdhdGV3YXkuY29tOjQ0My9tZXJjaGFudHMvc3JmNzN0NWZjNzI0dzRyaC9jbGllbnRfYXBpL3YxL2NvbmZpZ3VyYXRpb24iLCJjaGFsbGVuZ2VzIjpbXSwiZW52aXJvbm1lbnQiOiJzYW5kYm94IiwiY2xpZW50QXBpVXJsIjoiaHR0cHM6Ly9hcGkuc2FuZGJveC5icmFpbnRyZWVnYXRld2F5LmNvbTo0NDMvbWVyY2hhbnRzL3NyZjczdDVmYzcyNHc0cmgvY2xpZW50X2FwaSIsImFzc2V0c1VybCI6Imh0dHBzOi8vYXNzZXRzLmJyYWludHJlZWdhdGV3YXkuY29tIiwiYXV0aFVybCI6Imh0dHBzOi8vYXV0aC52ZW5tby5zYW5kYm94LmJyYWludHJlZWdhdGV3YXkuY29tIiwiYW5hbHl0aWNzIjp7InVybCI6Imh0dHBzOi8vY2xpZW50LWFuYWx5dGljcy5zYW5kYm94LmJyYWludHJlZWdhdGV3YXkuY29tL3NyZjczdDVmYzcyNHc0cmgifSwidGhyZWVEU2VjdXJlRW5hYmxlZCI6dHJ1ZSwicGF5cGFsRW5hYmxlZCI6dHJ1ZSwicGF5cGFsIjp7ImRpc3BsYXlOYW1lIjoiUGFya0hlcmUiLCJjbGllbnRJZCI6bnVsbCwicHJpdmFjeVVybCI6Imh0dHA6Ly9leGFtcGxlLmNvbS9wcCIsInVzZXJBZ3JlZW1lbnRVcmwiOiJodHRwOi8vZXhhbXBsZS5jb20vdG9zIiwiYmFzZVVybCI6Imh0dHBzOi8vYXNzZXRzLmJyYWludHJlZWdhdGV3YXkuY29tIiwiYXNzZXRzVXJsIjoiaHR0cHM6Ly9jaGVja291dC5wYXlwYWwuY29tIiwiZGlyZWN0QmFzZVVybCI6bnVsbCwiYWxsb3dIdHRwIjp0cnVlLCJlbnZpcm9ubWVudE5vTmV0d29yayI6dHJ1ZSwiZW52aXJvbm1lbnQiOiJvZmZsaW5lIiwidW52ZXR0ZWRNZXJjaGFudCI6ZmFsc2UsImJyYWludHJlZUNsaWVudElkIjoibWFzdGVyY2xpZW50MyIsImJpbGxpbmdBZ3JlZW1lbnRzRW5hYmxlZCI6dHJ1ZSwibWVyY2hhbnRBY2NvdW50SWQiOiJwYXJraGVyZSIsImN1cnJlbmN5SXNvQ29kZSI6IlVTRCJ9LCJjb2luYmFzZUVuYWJsZWQiOmZhbHNlLCJtZXJjaGFudElkIjoic3JmNzN0NWZjNzI0dzRyaCIsInZlbm1vIjoib2ZmIn0";
-        PaymentRequest paymentRequest = new PaymentRequest()
-                .clientToken(clientToken);
-        startActivityForResult(paymentRequest.getIntent(this), BRAINTREE_PAYPAL_REQUEST_CODE);
+    @Override
+    public void onPaymentMethodNonceCreated(PaymentMethodNonce paymentMethodNonce) {
+        Log.d("BT PAYPAL ", "Activity.RESULT_OK -- onPaymentMethodNonceCreated");
+        // Send this nonce to your server
+        String nonce = paymentMethodNonce.getNonce();
     }
-
-//    public void onPaymentMethodNonceCreated(PaymentMethodNonce paymentMethodNonce) {
-//        // Send this nonce to your server
-//        String nonce = paymentMethodNonce.getNonce();
-//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -147,11 +126,14 @@ public class PaymentActivity extends Activity {
         if (requestCode == BRAINTREE_REQUEST_CODE) {
             switch (resultCode) {
                 case BraintreePaymentActivity.RESULT_OK:
+                    Log.d("BT CREDIT CARD ", "Activity.RESULT_OK");
+
                     PaymentMethodNonce paymentMethodNonce = data.getParcelableExtra(
                             BraintreePaymentActivity.EXTRA_PAYMENT_METHOD_NONCE
                     );
 
                     String nonce = paymentMethodNonce.getNonce();
+
                     RenterReserveTask RRT = new RenterReserveTask(parkingSpotID, timeInterval, providerID, userID);
                     try {
                         HashMap<String, Serializable> mapp = RRT.execute((Void)null).get();
@@ -169,9 +151,13 @@ public class PaymentActivity extends Activity {
                     clientController.setCurrentActivity(this);
                     if(resID!=-1) {
                         Log.d("Payment Success", String.valueOf(resID));
+                        if((paymentMethodNonce.getTypeLabel().equals("PayPal"))) {
+                            clientController.postPaymentNonceToServer(nonce, resID, providerID, price, "PAYPAL");
+                        }
+                        else {
+                            clientController.postPaymentNonceToServer(nonce, resID, providerID, price, "CREDITCARD");
+                        }
 
-
-                        clientController.postPaymentNonceToServer(nonce, resID, providerID, String.valueOf(price));
                     }
                     Intent intent = new Intent(getBaseContext(), RenterActivity.class);
                     startActivity(intent);
@@ -185,24 +171,6 @@ public class PaymentActivity extends Activity {
                     break;
                 default:
                     break;
-            }
-        }
-
-        if (requestCode == BRAINTREE_PAYPAL_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK)
-            {
-                Log.d("BT onActivityResult ", "Activity.RESULT_OK");
-                PaymentMethodNonce paymentMethodNonce = data.getParcelableExtra(
-                        BraintreePaymentActivity.EXTRA_PAYMENT_METHOD_NONCE
-                );
-                String nonce = paymentMethodNonce.getNonce();
-                // Send the nonce to your server.
-
-                Intent intent = new Intent(getBaseContext(), RenterActivity.class);
-                startActivity(intent);
-            }
-            else {
-                Log.d("VT onActivityResult ", "!Activity.RESULT_OK");
             }
         }
     }
@@ -252,12 +220,12 @@ public class PaymentActivity extends Activity {
                 Log.d("PaymentActivity ", "clientToken != null");
                 progressDialog.dismiss();
 
-                Log.d("clientToken ", "= "+clientToken);
+                Log.d("clientToken ", "= " + clientToken);
+
                 PaymentRequest paymentRequest = new PaymentRequest()
-                        .amount("$"+price)
+                        .amount("$" + price)
                         .clientToken(clientToken);
                 startActivityForResult(paymentRequest.getIntent(PaymentActivity.this), BRAINTREE_REQUEST_CODE);
-
             } else{
                 progressDialog.dismiss();
                 Toast.makeText(getBaseContext(), "Payment request token failed!", Toast.LENGTH_SHORT).show();
@@ -292,6 +260,7 @@ public class PaymentActivity extends Activity {
 //            progressDialog.setMessage("Booking...");
 //            progressDialog.show();
         }
+
         @Override
         protected HashMap<String, Serializable> doInBackground(Void... params ){
             // call client controller
@@ -376,17 +345,6 @@ public class PaymentActivity extends Activity {
                 return null;
             }
         }
-//        @Override
-//        protected void onPostExecute(String price) {
-//            if(price==null){
-////                progressDialog.dismiss();
-//                price = price;
-//            }else {
-//                this.resID = (long) map.get("RESERVATIONID");
-//                this.price = String.valueOf(map.get("PRICE"));
-//                Log.d("testtest", String.valueOf(resID)+"  "+price);
-////                progressDialog.dismiss();
-//            }
-//        }
+
     }
 }

@@ -62,6 +62,9 @@ public class EditSpaceActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
         setContentView(R.layout.activity_edit_space);
         ClientController.getInstance().setCurrentActivity(this);
 

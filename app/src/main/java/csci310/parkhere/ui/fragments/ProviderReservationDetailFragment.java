@@ -156,6 +156,20 @@ public class ProviderReservationDetailFragment extends Fragment implements OnMap
 
         mMapView.getMapAsync(this);
 
+        Calendar cal = Calendar.getInstance();
+
+        Time nowTime = new Time(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH),
+                cal.get(Calendar.HOUR_OF_DAY),cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
+
+        Time startTime = new Time(start_time);
+        startTime.month-=1;
+        Time endTime = new Time(end_time);
+        endTime.month-=1;
+
+        if(nowTime.compareTo(startTime) < 0 || nowTime.compareTo(endTime) > 0)
+            _btn_report.setVisibility(View.INVISIBLE);
+
+
         _btn_report.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

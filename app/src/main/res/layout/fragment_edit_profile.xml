@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragments.EditProfileFragment"
+    tools:context=".ui.activities.EditProfileActivity"
     android:paddingBottom="?android:attr/actionBarSize">
 
     <ScrollView
@@ -27,19 +27,21 @@
                     android:textSize="36dp"
                     android:textAlignment="center"/>
 
-                <ImageView
-                    android:id="@+id/privatProfileImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="120dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:adjustViewBounds="true"
-                    android:src="@mipmap/ic_default_profile_pic"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginBottom="12dp"/>
+
+
+                <!--<ImageView-->
+                    <!--android:id="@+id/privatProfileImage"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="120dp"-->
+                    <!--android:layout_alignParentTop="true"-->
+                    <!--android:layout_centerHorizontal="true"-->
+                    <!--android:adjustViewBounds="true"-->
+                    <!--android:src="@mipmap/ic_default_profile_pic"-->
+                    <!--android:layout_marginTop="12dp"-->
+                    <!--android:layout_marginBottom="12dp"/>-->
 
                 <Button
-                    android:id="@+id/btn_upload_image"
+                    android:id="@+id/edit_btn_upload_image"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginLeft="64dp"
@@ -48,6 +50,17 @@
                     android:layout_centerHorizontal="true"
                     android:adjustViewBounds="true"
                     android:text="Upload image"/>
+
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_below="@id/edit_btn_upload_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -75,7 +88,7 @@
                         android:layout_height="wrap_content"
                         android:hint="username"
                         android:clickable="false"
-                        android:id="@+id/usernameText"
+                        android:id="@+id/edit_usernameText"
                         android:textColorHint="@color/colorAccent"
                         android:textColor="@color/colorSubAccent"
                         android:layout_alignBottom="@+id/username_label"
@@ -111,7 +124,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="password"
-                        android:id="@+id/pwText"
+                        android:id="@+id/edit_pwText"
                         android:textColorHint="@color/colorAccent"
                         android:textColor="@color/colorSubAccent"
                         android:password="true"
@@ -149,7 +162,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="licenseID"
-                        android:id="@+id/licenseIDText"
+                        android:id="@+id/edit_licenseIDText"
                         android:textColorHint="@color/colorAccent"
                         android:textColor="@color/colorSubAccent"
                         android:layout_alignBottom="@+id/licenseID_label"
@@ -184,7 +197,7 @@
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/licenseplateText"
+                        android:id="@+id/edit_licenseplateText"
                         android:hint="license plate num"
                         android:textColorHint="@color/colorAccent"
                         android:textColor="@color/colorSubAccent"
@@ -221,7 +234,7 @@
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/phoneText"
+                        android:id="@+id/edit_phoneText"
                         android:hint="phone num"
                         android:textColorHint="@color/colorAccent"
                         android:textColor="@color/colorSubAccent"

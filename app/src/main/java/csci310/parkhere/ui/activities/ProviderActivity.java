@@ -51,8 +51,9 @@ import resource.User;
  */
 public class ProviderActivity extends AppCompatActivity implements SpacesFragment.OnFragmentInteractionListener,
         SpaceDetailFragment.OnFragmentInteractionListener, PrivateProfileFragment.OnFragmentInteractionListener,
-        ProviderReservationDetailFragment.OnFragmentInteractionListener, EditProfileFragment.OnFragmentInteractionListener,
-        ProviderReservationsFragment.OnFragmentInteractionListener {
+        ProviderReservationDetailFragment.OnFragmentInteractionListener, ProviderReservationsFragment.OnFragmentInteractionListener {
+
+    private final int EDIT_PROFILE_CODE = 3;
 
     LinearLayout _spaceLink, _resLink;
     CircularImageView _profilePic;
@@ -223,13 +224,9 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
                 .replace(R.id.fragContainer, spacesFragment).commit();
     }
 
-    public void switchToEditProfileFrag(EditProfileFragment editProfileFragment) {
-//        fragmentTransaction = fm.beginTransaction();
-//        fragmentTransaction.replace(R.id.fragContainer, editProfileFragment);
-//        fragmentTransaction.addToBackStack(null);
-//        fragmentTransaction.commit();
+    public void switchToEditProfileFrag() {
         Intent intent = new Intent(getBaseContext(), EditProfileActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, EDIT_PROFILE_CODE);
     }
 
     public void switchToPrivateProfileFrag(PrivateProfileFragment privateProfileFragment){
@@ -304,6 +301,12 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
                     break;
                 default:
                     break;
+            }
+        }
+
+        if (requestCode == EDIT_PROFILE_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                //
             }
         }
     }

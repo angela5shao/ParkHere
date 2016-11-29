@@ -2,13 +2,10 @@ package csci310.parkhere.ui.fragments;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -140,19 +137,19 @@ public class PrivateProfileFragment extends Fragment {
         _editLogo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditProfileFragment editProfileFragment = new EditProfileFragment();
-                Bundle args = new Bundle();
-                args.putString("USERNAME", mParam1 );
-                args.putString("PASSWORD", mParam2);
-                args.putString("USERLICENSE", mParam3);
-                args.putString("USERPLATE", mParam4);
-                args.putString("PHONE", mParam5);
-                editProfileFragment.setArguments(args);
+//                EditProfileFragment editProfileFragment = new EditProfileFragment();
+//                Bundle args = new Bundle();
+//                args.putString("USERNAME", mParam1 );
+//                args.putString("PASSWORD", mParam2);
+//                args.putString("USERLICENSE", mParam3);
+//                args.putString("USERPLATE", mParam4);
+//                args.putString("PHONE", mParam5);
+//                editProfileFragment.setArguments(args);
                 Activity ac = getActivity();
                 if(ac instanceof RenterActivity)
-                    ((RenterActivity) getActivity()).switchToEditProfileFrag(editProfileFragment);
+                    ((RenterActivity) getActivity()).switchToEditProfileFrag();
                 else if(ac instanceof ProviderActivity)
-                    ((ProviderActivity) getActivity()).switchToEditProfileFrag(editProfileFragment);
+                    ((ProviderActivity) getActivity()).switchToEditProfileFrag();
             }
         });
 

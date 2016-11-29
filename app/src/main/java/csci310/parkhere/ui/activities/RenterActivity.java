@@ -1,5 +1,6 @@
 package csci310.parkhere.ui.activities;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -51,12 +52,12 @@ import resource.User;
  * Created by ivylinlaw on 10/17/16.
  */
 public class RenterActivity extends AppCompatActivity implements SearchFragment.OnFragmentInteractionListener,
-        PrivateProfileFragment.OnFragmentInteractionListener, EditProfileFragment.OnFragmentInteractionListener,
-        DisplaySearchFragment.OnFragmentInteractionListener, RenterReservationsFragment.OnFragmentInteractionListener,
-        SearchSpaceDetailFragment.OnFragmentInteractionListener, RenterReservationDetailFragment.OnFragmentInteractionListener,
-        PublicProfileFragment.OnFragmentInteractionListener {
+        PrivateProfileFragment.OnFragmentInteractionListener, DisplaySearchFragment.OnFragmentInteractionListener,
+        RenterReservationsFragment.OnFragmentInteractionListener, SearchSpaceDetailFragment.OnFragmentInteractionListener,
+        RenterReservationDetailFragment.OnFragmentInteractionListener, PublicProfileFragment.OnFragmentInteractionListener {
 
-    int PAYMENT_REQUEST_CODE = 11;
+    private final int PAYMENT_REQUEST_CODE = 11;
+    private final int EDIT_PROFILE_CODE = 3;
 
     LinearLayout _resLink, _searchLink;
     CircularImageView _profilePic;
@@ -84,10 +85,6 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 
         searchFragment = new SearchFragment();
         privateProfileFragment = new PrivateProfileFragment();
-        editProfileFragment = new EditProfileFragment();
-//        displaySearchFragment = new DisplaySearchFragment();
-//        reservationsFragment = new RenterReservationsFragment();
-//        searchSpaceDetailFragment = new SearchSpaceDetailFragment();
 
         _resLink = (LinearLayout) findViewById(R.id.RenterResLink);
         _searchLink = (LinearLayout) findViewById(R.id.searchLink);
@@ -305,6 +302,16 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == EDIT_PROFILE_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                //
+            }
+        }
+    }
+
 
 
     private class LoadSpotImageTask extends AsyncTask<Void, Void, ArrayList<String> >{
@@ -388,13 +395,9 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         fragmentTransaction.commit();
     }
 
-    public void switchToEditProfileFrag(EditProfileFragment editProfileFragment) {
-//        fragmentTransaction = fm.beginTransaction();
-//        fragmentTransaction.replace(R.id.fragContainer, editProfileFragment);
-//        fragmentTransaction.addToBackStack(null);
-//        fragmentTransaction.commit();
+    public void switchToEditProfileFrag() {
         Intent intent = new Intent(getBaseContext(), EditProfileActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, EDIT_PROFILE_CODE);
     }
 
     public void switchToPrivateProfileFrag(PrivateProfileFragment privateProfileFragment){

@@ -28,6 +28,7 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.concurrent.ExecutionException;
 
 import csci310.parkhere.R;
@@ -106,8 +107,9 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
                 e.printStackTrace();
             }
         }
+        Calendar cal = Calendar.getInstance();
         Glide.with(this)
-                .load(encodedPic)
+                .load(encodedPic+"?"+String.valueOf(cal.getTimeInMillis()))
                 .override(48, 48)
                 .into(_profilePic);
 //        byte[] imageAsBytes = Base64.decode(encodedPic.getBytes(), Base64.DEFAULT);
@@ -306,9 +308,14 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == EDIT_PROFILE_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                //
-            }
+            Log.d("EDIT_PROFILE_CODE", "OK");
+            Log.d("EDIT_RESULT_CODE", String.valueOf(resultCode) + " vs "+ String.valueOf(Activity.RESULT_OK));
+
+
+                updateBarImage();
+                if(privateProfileFragment != null)
+                    ((PrivateProfileFragment)privateProfileFragment).refreshPrivateProfilePic();
+
         }
     }
 
@@ -677,8 +684,11 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         }
         if(encodedPic != null)
         {
+            Calendar cal = Calendar.getInstance();
+            Log.d("UPDATEBARIMAGE", encodedPic);
+
             Glide.with(this)
-                    .load(encodedPic)
+                    .load(encodedPic+"?"+String.valueOf(cal.getTimeInMillis()))
                     .override(48, 48)
                     .into(_profilePic);
         }

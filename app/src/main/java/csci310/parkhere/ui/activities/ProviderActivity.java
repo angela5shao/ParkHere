@@ -102,8 +102,10 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
                 e.printStackTrace();
             }
         }
+
+        Calendar cal = Calendar.getInstance();
         Glide.with(this)
-                .load(encodedPic)
+                .load(encodedPic+"?"+String.valueOf(cal.getTimeInMillis()))
                 .override(48, 48)
                 .into(_profilePic);
 
@@ -305,9 +307,12 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         }
 
         if (requestCode == EDIT_PROFILE_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                //
-            }
+            Log.d("EDIT_PROFILE_CODE", "OK");
+            Log.d("EDIT_RESULT_CODE", String.valueOf(resultCode) + " vs "+ String.valueOf(Activity.RESULT_OK));
+
+                updateBarImage();
+                if(privateProfileFragment != null)
+                    ((PrivateProfileFragment)privateProfileFragment).refreshPrivateProfilePic();
         }
     }
 
@@ -780,10 +785,13 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
+
         if(encodedPic != null)
         {
+            Calendar cal = Calendar.getInstance();
+            Log.d("UPDATEBARIMAGE", encodedPic);
             Glide.with(this)
-                    .load(encodedPic)
+                    .load(encodedPic+"?"+String.valueOf(cal.getTimeInMillis()))
                     .override(48, 48)
                     .into(_profilePic);
         }

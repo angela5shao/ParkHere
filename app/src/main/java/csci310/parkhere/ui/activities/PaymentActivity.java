@@ -334,17 +334,6 @@ public class PaymentActivity extends Activity implements PaymentMethodNonceCreat
                 return null;
             }
         }
-//        @Override
-//        protected void onPostExecute(String price) {
-//            if(price==null){
-////                progressDialog.dismiss();
-//                price = price;
-//            }else {
-//                this.resID = (long) map.get("RESERVATIONID");
-//                this.price = String.valueOf(map.get("PRICE"));
-//                Log.d("testtest", String.valueOf(resID)+"  "+price);
-////                progressDialog.dismiss();
-//            }
-//        }
+
     }
 }

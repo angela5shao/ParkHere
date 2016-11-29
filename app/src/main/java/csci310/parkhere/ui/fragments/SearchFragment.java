@@ -728,23 +728,23 @@ public class SearchFragment extends Fragment {
                     curr_location = new LatLng(mLat, mLong);
                 }
 
-                String [] sDate = txtStartDate.toString().split("-");
+                String [] sDate = txtStartDate.getText().toString().split("-");
 //                System.out.println("txtStartDate ***** **** " + sDate[0] + " " + sDate[1] + " " + sDate[2]);
-                Log.d("SearchFrag", txtStartDate + ": " + sDate[0]);
+                Log.d("SearchFrag", "sDates size: " + sDate.length + ", " + txtStartDate.getText().toString());//txtStartDate.toString() + ": " + sDate[0]);
                 startDay = Integer.valueOf(sDate[0]);
                 startMonth = Integer.valueOf(sDate[1]) - 1;
                 startYear = Integer.valueOf(sDate[2]);
-                String [] eDate = txtEndTime.toString().split("-");
+                String [] eDate = txtEndDate.getText().toString().split("-");
                 endDay = Integer.valueOf(eDate[0]);
                 endMonth = Integer.valueOf(eDate[1]) - 1;
                 endYear = Integer.valueOf(eDate[2]);
 
-                String [] sTime = txtStartTime.toString().split(":");
+                String [] sTime = txtStartTime.getText().toString().split(":");
                 startHour = Integer.valueOf(sTime[0]);
                 startMinute = Integer.valueOf(sTime[1]);
-                String [] eTime = txtEndTime.toString().split(":");
+                String [] eTime = txtEndTime.getText().toString().split(":");
                 endHour = Integer.valueOf(eTime[0]);
-                endMinute = Integer.valueOf(sTime[1]);
+                endMinute = Integer.valueOf(eTime[1]);
 
 
                 if (startHour == -1 && startMinute == -1 && endHour == -1 && endMinute == -1) {

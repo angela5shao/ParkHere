@@ -37,26 +37,18 @@ public class UserRegTest {
 
         ViewInteraction editText = onView(
                 withId(R.id.nameText));
-        editText.perform(scrollTo(), replaceText("Angela"), closeSoftKeyboard());
-
-        ViewInteraction editText2 = onView(
-                allOf(withId(R.id.nameText), withText("Angela")));
-        editText2.perform(scrollTo(), click());
-
-        ViewInteraction editText3 = onView(
-                allOf(withId(R.id.nameText), withText("Angela")));
-        editText3.perform(scrollTo(), replaceText("Angela A"), closeSoftKeyboard());
+        editText.perform(scrollTo(), replaceText("Angela S"), closeSoftKeyboard());
 
         ViewInteraction editText4 = onView(
                 withId(R.id.emailText));
-        editText4.perform(scrollTo(), replaceText("Angela.sh@hotmail.com"), closeSoftKeyboard());
+        editText4.perform(scrollTo(), replaceText("angela.sh@hotmail.com"), closeSoftKeyboard());
 
         ViewInteraction editText5 = onView(
-                allOf(withId(R.id.emailText), withText("Angela.sh@hotmail.com")));
+                allOf(withId(R.id.emailText), withText("angela.sh@hotmail.com")));
         editText5.perform(scrollTo(), click());
 
         ViewInteraction editText6 = onView(
-                allOf(withId(R.id.emailText), withText("Angela.sh@hotmail.com")));
+                allOf(withId(R.id.emailText), withText("angela.sh@hotmail.com")));
         editText6.perform(scrollTo(), replaceText("angela.sh@hotmail.com"), closeSoftKeyboard());
 
         ViewInteraction editText7 = onView(

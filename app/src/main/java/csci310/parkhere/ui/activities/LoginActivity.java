@@ -44,6 +44,8 @@ public class LoginActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_ui);
+        ClientController.getInstance().setCurrentActivity(this);
+
 
         _loginButton=(Button)findViewById(R.id.loginButton);
         _signupLink=(TextView)findViewById(R.id.signupLink);

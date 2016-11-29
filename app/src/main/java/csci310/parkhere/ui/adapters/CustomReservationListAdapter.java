@@ -26,7 +26,7 @@ public class CustomReservationListAdapter extends ArrayAdapter<Reservation>{
     public CustomReservationListAdapter(Context context, ArrayList<Reservation> ReservationsArrayList) {
 
         super(context, R.layout.target_item, ReservationsArrayList);
-        Log.d("Constructor", "I get called");
+//        Log.d("Constructor", "I get called");
 
         this.context = context;
         this.ReservationsArrayList = ReservationsArrayList;

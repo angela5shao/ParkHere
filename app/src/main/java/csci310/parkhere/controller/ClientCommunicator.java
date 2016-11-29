@@ -3,6 +3,7 @@ package csci310.parkhere.controller;
 import android.os.AsyncTask;
 import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -24,10 +25,22 @@ public class ClientCommunicator extends Thread {
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
     private ClientController controller;
-    public ClientCommunicator(ClientController controller) throws IOException {
+
+
+    public boolean connecting;
+    public ClientCommunicator(ClientController controller) {
         this.controller = controller;
+        connecting = false;
         ServerConnAsync sca = new ServerConnAsync();
         sca.execute();
+    }
+
+
+    public void connect() throws IOException {
+        socket = new Socket("ec2-35-164-64-84.us-west-2.compute.amazonaws.com", 61129);
+        oos = new ObjectOutputStream(socket.getOutputStream());
+        oos.flush();
+        ois = new ObjectInputStream(socket.getInputStream());
     }
 
 
@@ -39,15 +52,16 @@ public class ClientCommunicator extends Thread {
 
 
         }
+
+
+
         @Override
         protected Boolean doInBackground(Void... params) {
 
             try {
-                socket = new Socket("ec2-35-164-64-84.us-west-2.compute.amazonaws.com", 61129);
-                oos = new ObjectOutputStream(socket.getOutputStream());
-                oos.flush();
-                ois = new ObjectInputStream(socket.getInputStream());
-                controller.startReceiving();
+
+                connect();
+
                 return true;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -64,6 +78,7 @@ public class ClientCommunicator extends Thread {
 
             if(success)
             {
+                connecting = true;
                 start();
             }
 
@@ -79,66 +94,79 @@ public class ClientCommunicator extends Thread {
 
         try {
             while(true) {
-                if(ois==null) {
-                    controller.stopReceiving();
-                }
-                else{
-                    try {
-                        socket = new Socket("ec2-35-164-64-84.us-west-2.compute.amazonaws.com", 61129);
-                        oos = new ObjectOutputStream(socket.getOutputStream());
-                        oos.flush();
-
-                        ois = new ObjectInputStream(socket.getInputStream());
-                        controller.startReceiving();
-                    } catch (IOException e) {
-                    }
-                }
                 NetworkPackage obj = (NetworkPackage)ois.readObject();
+
                 System.out.println("do receive the networkpackage");
                 Log.d("NetworkPackage", "NP is null?" + String.valueOf(obj == null));
 
                 if(obj == null)
                     continue;
 
+                if(obj.getCommand().getKey().equals("EXCEPTION"))
+                {
+                    Log.d("Server GG:", "GG");
+                    System.err.println(obj.getCommand().getValue());
+                    controller.resetConnection();
+
+                    socket.close();
+
+                    break;
+                }
+
                 //controller.updateActivity();
                 controller.updateReceived(obj);
-
-//                oos.flush();
             }
         } catch (OptionalDataException e1) {
             e1.printStackTrace();
         } catch (IOException e1) {
+            controller.resetConnection();
             e1.printStackTrace();
         } catch (ClassNotFoundException e1) {
             e1.printStackTrace();
         }
     }
 
-    public void send(String command, Serializable entry) throws IOException {
+    public void send(String command, Serializable entry) {
+        if(!connecting)
+        {
+            controller.resetConnection();
+            return;
+        }
         Log.v("send to server: ", command);
+
         NetworkPackage NP = new NetworkPackage();
         NP.addEntry(command, entry);
 
-        if(oos == null){
-            Log.d("oos","oos is null");
-//            Toast.makeText(controller.getCurrentActivity().getBaseContext(), "Lost the Network Connection", Toast.LENGTH_SHORT).show();
-            return;
+
+        try {
+            oos.writeObject(NP);
+            oos.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+            connecting = false;
+            controller.resetConnection();
         }
-        oos.writeObject(NP);
-        oos.flush();
     }
 
 
-    public void sendPackage(NetworkPackage np) throws IOException {
+    public void sendPackage(NetworkPackage np)  {
         Log.d("SENDPACAGE", "send once");
-        if(oos == null){
-            Log.d("oos","oos is null");
-            controller.stopReceiving();
-//            Toast.makeText(controller.getCurrentActivity().getBaseContext(), "Lost the Network Connection", Toast.LENGTH_SHORT).show();
+
+        if(!connecting)
+        {
+            controller.resetConnection();
             return;
         }
-        oos.writeObject(np);
-        oos.flush();
+
+
+        try {
+            oos.writeObject(np);
+            oos.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+            connecting = false;
+            controller.resetConnection();
+        }
     }
 }
 

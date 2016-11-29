@@ -796,6 +796,7 @@ public class ClientController {
 
     public void deleteOldParkingSpotImages(ParkingSpot ps)
     {
+
         NetworkPackage updateImageNP = new NetworkPackage();
         updateImageNP.addEntry("DELETEOLDPARKINGSPOTIMAGES", ps.getParkingSpotID());
 

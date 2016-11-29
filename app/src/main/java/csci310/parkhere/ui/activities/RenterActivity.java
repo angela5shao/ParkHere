@@ -487,6 +487,10 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
                     final Dialog confirmDialog = new Dialog(RenterActivity.this);
 
 
+//                    confirmDialog.setCancelable(false);
+//                    confirmDialog.setCanceledOnTouchOutside(false);
+
+
                     confirmDialog.setContentView(R.layout.dialog_confirm);
 
                     final TextView _address = (TextView) confirmDialog.findViewById(R.id.spacedetail_address);

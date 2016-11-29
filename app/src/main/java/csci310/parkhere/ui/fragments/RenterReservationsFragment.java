@@ -187,7 +187,7 @@ public class RenterReservationsFragment extends Fragment implements AdapterView.
             }
         });
 
-//
+
 //        {
 //            passedReservations = new ArrayList<>();
 //            ParkingSpot parkingSpot1 = new ParkingSpot(1, null, 34, 34, "2831 Ellendale Pl, Los Angeles", "Really good", "90007", 0,0);

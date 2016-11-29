@@ -26,6 +26,9 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.Array;
@@ -307,7 +310,7 @@ public class EditProfileActivity extends Activity {
             this.licenseIdText = licenseIdText;
             this.licenseplateText = licenseplateText;
             this.phoneText = phoneText;
-            doInBackground((Void) null);
+//            doInBackground((Void) null);
         }
 
 //        @Override
@@ -323,9 +326,25 @@ public class EditProfileActivity extends Activity {
             MyEntry<String, Serializable> entry = NP.getCommand();
             String key = entry.getKey();
             Object value = entry.getValue();
+
+
+            Log.d("EDITPROFILE 1", key);
+
             if(key.equals("EDITPROFILE")){
                 User user = (User) value;
                 clientController.setUser(user);
+
+
+                if(selectedPhoto.size() == 1)
+                    try {
+                        clientController.sendImagetoServer(readEncodeImage(selectedPhoto.get(0)), "USERPROFILEIMAGE", user.userID);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+
+
+
                 return true;
             }
             return false;
@@ -354,5 +373,24 @@ public class EditProfileActivity extends Activity {
                 // back to reservation detail
             }
         }
+    }
+
+    public String readEncodeImage(String filepath) throws IOException {
+        File imagefile = new File(filepath);
+        FileInputStream fis = null;
+        try {
+            fis = new FileInputStream(imagefile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+//        Bitmap bm = BitmapFactory.decodeFile(imagefile);
+        Bitmap bm = BitmapFactory.decodeStream(fis);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.JPEG, 100 , baos);
+        byte[] b = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+        Log.d("@@@EDITSPACE", "encodedImage = " + encodedImage);
+        return encodedImage;
     }
 }

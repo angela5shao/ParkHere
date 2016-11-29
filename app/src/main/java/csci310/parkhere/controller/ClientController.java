@@ -623,17 +623,19 @@ public class ClientController {
         {
             customImage.parkingSpotID = ID;
             customImage.UserID = -1;
+            NP.addEntry("UPLOADIMAGE",customImage);
+
         }
-        else if(Identifier.equals("USERPROFILEIAMGE"))
+        else if(Identifier.equals("USERPROFILEIMAGE"))
         {
             customImage.parkingSpotID = -1;
             customImage.UserID = ID;
+            NP.addEntry("UPLOADPROFILEIMAGE", customImage);
         }
         else
         {
             Log.d("WRONG", "WRONG IDENTIFIER");
         }
-        NP.addEntry("UPLOADIMAGE",customImage);
 //        try {
             clientCommunicator.sendPackage(NP);
 //        } catch (IOException e) {

@@ -44,6 +44,8 @@ public class PaymentActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
+        ClientController.getInstance().setCurrentActivity(this);
+
 
         Intent intent = getIntent();
         userID = intent.getLongExtra("USERID", 0);

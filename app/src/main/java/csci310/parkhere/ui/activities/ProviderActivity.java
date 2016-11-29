@@ -71,6 +71,9 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.provider_ui);
 
+        ClientController.getInstance().setCurrentActivity(this);
+
+
         clientController = ClientController.getInstance();
         clientController.setCurrentActivity(this);
 
@@ -503,6 +506,10 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
             MyEntry<String, Serializable> entry = NP.getCommand();
             String key = entry.getKey();
             Object value = entry.getValue();
+
+            Log.d("requesTimeInterval: Key", key);
+
+
             if(key.equals("RESPONSEINTERVAL")){
                 HashMap<String, Serializable> map = (HashMap<String, Serializable>) value;
                 myTimeIntervals = (ArrayList<TimeInterval>) map.get("TIMEINTERVAL");
@@ -603,6 +610,9 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 
             ArrayList<String> urls = new ArrayList<>();
 
+
+            Log.d("LoadSpotImageTask", "Get images back");
+
             if(entry.getKey().equals("PARKINGSPOTIMAGESURLS"))
             {
 //                ArrayList<String> urls = (ArrayList<String>) entry.getValue() ;
@@ -638,6 +648,8 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
                 // TODO: WHAT TO DISPLAY WHEN NO IMAGE
                 //
                 Toast.makeText(getBaseContext(), "Cannot find images", Toast.LENGTH_SHORT).show();
+                spaceDetailFragment.setArguments(bundle);
+                fm.beginTransaction().add(R.id.fragContainer, spaceDetailFragment).commit();
 
             }
         }

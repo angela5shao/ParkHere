@@ -155,8 +155,8 @@ public class LoginActivity extends Activity {
                 Log.d("LOGIN TEST 1", "yeah");
                 progressDialog.dismiss();
                 finish();
-                getProfilePic gpp = new getProfilePic(mUsername);
-                gpp.execute((Void)null);
+//                getProfilePic gpp = new getProfilePic(mUsername);
+//                gpp.execute((Void)null);
                 if (clientController.getUser().userType) {
                     Intent myIntent = new Intent(c, RenterActivity.class);
                     startActivityForResult(myIntent, 0);
@@ -264,7 +264,7 @@ public class LoginActivity extends Activity {
         }
         @Override
         protected String doInBackground(Void... params ){
-            clientController.getProfilePic(mUsername);
+//            clientController.getProfilePic(mUsername);
 
             NetworkPackage NP = clientController.checkReceived();
             MyEntry<String, Serializable> entry = NP.getCommand();

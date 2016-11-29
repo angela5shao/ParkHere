@@ -780,14 +780,14 @@ public class ClientController {
         @Override
         protected Void doInBackground(Void... params) {
 
-            clientCommunicator = new ClientCommunicator(ClientController.this);
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            Toast.makeText(currentActivity.getBaseContext(), "Reconnecting", Toast.LENGTH_SHORT).show();
+            Toast.makeText(currentActivity.getApplicationContext(), "Reconnecting", Toast.LENGTH_LONG).show();
+            clientCommunicator = new ClientCommunicator(ClientController.this);
 
         }
     }

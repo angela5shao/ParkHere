@@ -78,8 +78,13 @@ public class LoginActivity extends Activity {
             public void onClick(View v) {
                 email = _email.getText().toString();
 
-                ForgotPWTask FPWT = new ForgotPWTask(email);
-                FPWT.execute((Void) null);
+                if(email != null && isEmailValid(email) == true) {
+                    ForgotPWTask FPWT = new ForgotPWTask(email);
+                    FPWT.execute((Void) null);
+                }
+                else {
+                    Toast.makeText(LoginActivity.this.getBaseContext(), "Please Enter a Valid Email", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -203,18 +208,18 @@ public class LoginActivity extends Activity {
                     Log.d("LOGIN FORGOT PW ", "--- RESETPASSWORD == true");
                     return true;
                 }
-                return false;
-            } else{
-                return false;
             }
+
+            return false;
         }
         @Override
         protected void onPostExecute(Boolean success) {
             progressDialog.dismiss();
             Log.d("LOGIN FORGOT PW ", "--- onPostExecute");
             if(success) {
-                Toast.makeText(getBaseContext(), "New temporary password has sent to your email!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this.getBaseContext(), "New temporary password has sent to your email!", Toast.LENGTH_SHORT).show();
             } else{
+<<<<<<< HEAD
                 if(clientController.receiving){
                     Toast.makeText(getBaseContext(), "Lost Connection to Server", Toast.LENGTH_SHORT).show();
                 }
@@ -223,6 +228,9 @@ public class LoginActivity extends Activity {
                 }else {
                     Toast.makeText(getBaseContext(), "Please Enter a Valid Email", Toast.LENGTH_SHORT).show();
                 }
+=======
+                Toast.makeText(LoginActivity.this.getBaseContext(), "Reset password failed!", Toast.LENGTH_SHORT).show();
+>>>>>>> 0f746c9164bdb3553f3090944c49622e14902305
             }
             finish();
         }

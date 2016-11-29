@@ -99,7 +99,10 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        Glide.with(this).load(encodedPic).into(_profilePic);
+        Glide.with(this)
+                .load(encodedPic)
+                .override(48, 48)
+                .into(_profilePic);
 
 
 

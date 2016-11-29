@@ -5,8 +5,10 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,9 +16,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
+import java.io.Serializable;
+import java.util.concurrent.ExecutionException;
+
 import csci310.parkhere.R;
+import csci310.parkhere.controller.ClientController;
 import csci310.parkhere.ui.activities.ProviderActivity;
 import csci310.parkhere.ui.activities.RenterActivity;
+import resource.MyEntry;
+import resource.NetworkPackage;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,6 +53,7 @@ public class PrivateProfileFragment extends Fragment {
     private String mParam5;
 
     private OnFragmentInteractionListener mListener;
+    private ClientController clientController = ClientController.getInstance();
 
     ImageView _privatProfileImage, _editLogo;
     TextView _usernameText, _pwText, _licenseIDText, _licenseplateText, _phoneText;
@@ -103,9 +114,28 @@ public class PrivateProfileFragment extends Fragment {
         _licenseplateText = (TextView) v.findViewById(R.id.licenseplateText);
         _phoneText = (TextView) v.findViewById(R.id.phoneText);
 
-        Bitmap bm = BitmapFactory.decodeResource(getResources(),
-                R.mipmap.ic_default_profile_pic);
-        _privatProfileImage.setImageBitmap(bm);
+//        Bitmap bm = BitmapFactory.decodeResource(getResources(),
+//                R.mipmap.ic_default_profile_pic);
+//        _privatProfileImage.setImageBitmap(bm);
+
+        // Set profile picture
+        getProfilePic gpc = new getProfilePic(clientController.getUser().userID);
+        String encodedPic = "";
+        try {
+            encodedPic = gpc.execute((Void) null).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+//        byte[] imageAsBytes = Base64.decode(encodedPic.getBytes(), Base64.DEFAULT);
+//        Bitmap bp = BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
+        Glide.with(getContext()).load(encodedPic).into(_privatProfileImage);
+
+//        _privatProfileImage.setImageBitmap(bp);
+
+
+
 
         _editLogo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -204,5 +234,39 @@ public class PrivateProfileFragment extends Fragment {
 //            }
 //        }
         return super.onOptionsItemSelected(item);
+    }
+
+    private class getProfilePic extends AsyncTask<Void, Void, String> {
+        private final long userID;
+
+        getProfilePic(long userID){
+            this.userID = userID;
+        }
+        @Override
+        protected void onPreExecute(){
+        }
+        @Override
+        protected String doInBackground(Void... params ){
+
+//            clientController.getProfilePic(mUsername);
+            clientController.getProfilePic(userID);
+
+            NetworkPackage NP = clientController.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            String encodedPic = null;
+            if(key.equals("PROFILEPICIMAGE")){
+                encodedPic = (String)value;
+            }
+            return encodedPic;
+        }
+        @Override
+        protected void onPostExecute(String profilePic) {
+            // TODO set profile image
+//            _profilePic.setImageBitmap();
+        }
+
     }
 }

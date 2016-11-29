@@ -15,6 +15,9 @@ import com.braintreepayments.api.PaymentRequest;
 import com.braintreepayments.api.models.PaymentMethodNonce;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
@@ -219,6 +222,10 @@ public class PaymentActivity extends Activity {
         }
         @Override
         protected String doInBackground(Void... params ){
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
+            Date date = new Date();
+            System.out.println("START GetClientToken: " + dateFormat.format(date) + " ********************");
+
             Log.d("PaymentActivity ", "GetClientToken doInBackground");
             ClientController clientController = ClientController.getInstance();
             clientController.requestPaymentToken();
@@ -237,6 +244,10 @@ public class PaymentActivity extends Activity {
         }
         @Override
         protected void onPostExecute(String clientToken) {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
+            Date date = new Date();
+            System.out.println("FINISHED GetClientToken: " + dateFormat.format(date) + " ********************");
+
             if(clientToken != null) {
                 Log.d("PaymentActivity ", "clientToken != null");
                 progressDialog.dismiss();

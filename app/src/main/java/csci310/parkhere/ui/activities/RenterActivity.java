@@ -594,7 +594,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
             progressDialog.dismiss();
             if(confirmStatus){ // paid success
                 Toast.makeText(getBaseContext(), "Confirmed! (Review in reservation detail.)", Toast.LENGTH_SHORT).show();
-                finish();
+//                finish();
             }
             else{
                 Toast.makeText(getBaseContext(), "Confirm payment unsuccessful! Please try agian.", Toast.LENGTH_SHORT).show();

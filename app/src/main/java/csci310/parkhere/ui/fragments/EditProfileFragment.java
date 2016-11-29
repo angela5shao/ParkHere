@@ -21,9 +21,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.davemorrissey.labs.subscaleview.ImageSource;
-import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
@@ -249,8 +246,8 @@ public class EditProfileFragment extends Fragment {
 
             _privatProfileImage.setImageBitmap(BitmapFactory.decodeFile(picturePath));
 
-            SubsamplingScaleImageView newImage = new SubsamplingScaleImageView(getContext());
-            newImage.setImage(ImageSource.uri(picturePath));
+//            SubsamplingScaleImageView newImage = new SubsamplingScaleImageView(getContext());
+//            newImage.setImage(ImageSource.uri(picturePath));
 
             Bitmap bitmap = null;
             try {

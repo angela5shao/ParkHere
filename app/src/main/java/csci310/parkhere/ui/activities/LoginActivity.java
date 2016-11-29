@@ -264,7 +264,9 @@ public class LoginActivity extends Activity {
         }
         @Override
         protected String doInBackground(Void... params ){
+
 //            clientController.getProfilePic(mUsername);
+            clientController.getProfilePic();
 
             NetworkPackage NP = clientController.checkReceived();
             MyEntry<String, Serializable> entry = NP.getCommand();

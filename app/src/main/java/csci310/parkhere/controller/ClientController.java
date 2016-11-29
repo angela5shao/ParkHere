@@ -791,4 +791,9 @@ public class ClientController {
 
         }
     }
+
+    public void getProfilePic() {
+        long userID = user.userID;
+        // TODO
+    }
 }

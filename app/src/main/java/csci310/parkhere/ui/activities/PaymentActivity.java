@@ -15,6 +15,7 @@ import com.braintreepayments.api.PaymentRequest;
 import com.braintreepayments.api.models.PaymentMethodNonce;
 
 import java.io.Serializable;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
@@ -58,6 +59,36 @@ public class PaymentActivity extends Activity {
         PriceRetrieveTask PRT = new PriceRetrieveTask(parkingSpotID, timeInterval, providerID, userID);
         try {
             price = PRT.execute((Void)null).get();
+
+            GregorianCalendar startCal = new GregorianCalendar(
+                    timeInterval.startTime.year,
+                    timeInterval.startTime.month,
+                    timeInterval.startTime.dayOfMonth,
+                    timeInterval.startTime.hourOfDay,
+                    timeInterval.startTime.minute,
+                    timeInterval.startTime.second);
+
+
+            GregorianCalendar endCal = new GregorianCalendar(
+                    timeInterval.endTime.year,
+                    timeInterval.endTime.month,
+                    timeInterval.endTime.dayOfMonth,
+                    timeInterval.endTime.hourOfDay,
+                    timeInterval.endTime.minute,
+                    timeInterval.endTime.second);
+
+            long startMillis = startCal.getTimeInMillis();
+            long endMillis = endCal.getTimeInMillis();
+
+            long diffHour = (((endMillis - startMillis)/1000)/60)/60;
+            Log.d("PAYMENT", "Hour elapse " + diffHour);
+            Log.d("PAYMENT", "Price rate " + price);
+
+            double dprice = Double.parseDouble(price);
+            double finalPrice = dprice * diffHour;
+
+            price = String.valueOf(finalPrice);
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -135,7 +166,9 @@ public class PaymentActivity extends Activity {
                     clientController.setCurrentActivity(this);
                     if(resID!=-1) {
                         Log.d("Payment Success", String.valueOf(resID));
-                        clientController.postPaymentNonceToServer(nonce, resID, providerID, price);
+
+
+                        clientController.postPaymentNonceToServer(nonce, resID, providerID, String.valueOf(price));
                     }
                     Intent intent = new Intent(getBaseContext(), RenterActivity.class);
                     startActivity(intent);

@@ -489,7 +489,7 @@ public class SpaceDetailFragment extends Fragment {
                 _edit_end_time.setText(endTime);
 
                 // Prepopulate with current price
-                _edit_price.setText(Double.toString(thisParkingSpot.search_price));
+                _edit_price.setText(String.valueOf(t.price));
 
                 if(_editTimeForSpaceLayout.getVisibility()==View.GONE) {
                     _btn_delete_time.setVisibility(View.VISIBLE);

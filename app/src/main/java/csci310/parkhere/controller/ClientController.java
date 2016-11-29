@@ -38,6 +38,7 @@ public class ClientController {
     public ArrayList<Reservation> providerReservations;
     public ArrayList<Review> reviews;
     public ClientCommunicator clientCommunicator;
+    public String encodedProfilePic;
 
     private static ClientController instance;
 
@@ -72,6 +73,7 @@ public class ClientController {
         providerReservations = new ArrayList<>();
         reviews = new ArrayList<>();
         clientCommunicator = new ClientCommunicator(this);
+        encodedProfilePic = "";
 
         instance = this;
 

@@ -3,8 +3,6 @@ package csci310.parkhere.ui.activities;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,7 +11,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,8 +47,6 @@ import resource.Reservation;
 import resource.SearchResults;
 import resource.Time;
 import resource.User;
-
-import static java.security.AccessController.getContext;
 
 /**
  * Created by ivylinlaw on 10/17/16.
@@ -103,16 +98,22 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         _profilePic.setBorderColor(R.color.colorLightBackground);
         _profilePic.setBorderWidth(10);
 
-        getProfilePic gpc = new getProfilePic(clientController.getUser().userID);
-        String encodedPic = "";
-        try {
-            encodedPic = gpc.execute((Void) null).get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+        String encodedPic = clientController.encodedProfilePic;
+        if (encodedPic == "") {
+            getProfilePic gpc = new getProfilePic(clientController.getUser().userID);
+            try {
+                encodedPic = gpc.execute((Void) null).get();
+                clientController.encodedProfilePic = encodedPic;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
         }
-        Glide.with(this).load(encodedPic).into(_profilePic);
+        Glide.with(this)
+                .load(encodedPic)
+                .override(48, 48)
+                .into(_profilePic);
 //        byte[] imageAsBytes = Base64.decode(encodedPic.getBytes(), Base64.DEFAULT);
 //        Bitmap bp = BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
 //        _profilePic.setImageBitmap(bp);

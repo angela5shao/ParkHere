@@ -19,7 +19,10 @@ import android.widget.Toast;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
@@ -100,6 +103,10 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
+        Date date = new Date();
+        System.out.println("END SEARCH: " + dateFormat.format(date) + " ********************");
+
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_display_search, container, false);
 

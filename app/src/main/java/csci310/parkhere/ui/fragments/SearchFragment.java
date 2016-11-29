@@ -472,7 +472,10 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
@@ -736,6 +739,10 @@ public class SearchFragment extends Fragment {
                     Toast.makeText(getContext(), "Please input valid search info! Please try again.", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
+                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
+                Date date = new Date();
+                System.out.println("START SEARCH: " + dateFormat.format(date) + " ********************");
 
 
                 ClientController clientController = ClientController.getInstance();

@@ -42,7 +42,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import junit.framework.Assert;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import csci310.parkhere.R;
@@ -421,6 +424,10 @@ public class SearchSpaceDetailFragment extends Fragment implements OnMapReadyCal
         }
         @Override
         protected Boolean doInBackground(Void... params ){
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
+            Date date = new Date();
+            System.out.println("CLICKED TO PAY (SearchSpaceDetailFrag): " + dateFormat.format(date) + " ********************");
+
             // call client controller
             // call client controller
             ClientController controller = ClientController.getInstance();

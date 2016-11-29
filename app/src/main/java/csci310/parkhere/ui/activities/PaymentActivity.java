@@ -15,6 +15,9 @@ import com.braintreepayments.api.PaymentRequest;
 import com.braintreepayments.api.models.PaymentMethodNonce;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
@@ -137,6 +140,10 @@ public class PaymentActivity extends Activity {
                 Log.d("VT onActivityResult ", "!Activity.RESULT_OK");
             }
         }
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
+        Date date = new Date();
+        System.out.println("END PAYMENT: " + dateFormat.format(date) + " ********************");
     }
 
     private class GetClientToken extends AsyncTask<Void, Void, String> {
@@ -154,6 +161,10 @@ public class PaymentActivity extends Activity {
         }
         @Override
         protected String doInBackground(Void... params ){
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
+            Date date = new Date();
+            System.out.println("START GetClientToken: " + dateFormat.format(date) + " ********************");
+
             Log.d("PaymentActivity ", "GetClientToken doInBackground");
             ClientController clientController = ClientController.getInstance();
             clientController.requestPaymentToken();
@@ -172,6 +183,10 @@ public class PaymentActivity extends Activity {
         }
         @Override
         protected void onPostExecute(String clientToken) {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
+            Date date = new Date();
+            System.out.println("FINISHED GetClientToken: " + dateFormat.format(date) + " ********************");
+
             if(clientToken != null) {
                 Log.d("PaymentActivity ", "clientToken != null");
                 progressDialog.dismiss();

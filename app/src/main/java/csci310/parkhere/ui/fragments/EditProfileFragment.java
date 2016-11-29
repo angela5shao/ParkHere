@@ -142,10 +142,8 @@ public class EditProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Complete action using"), RESULT_LOAD_IMAGE);
+                Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(i, RESULT_LOAD_IMAGE);
             }
         });
         _btn_save = (Button) v.findViewById(R.id.btn_save);
@@ -233,31 +231,26 @@ public class EditProfileFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
+
+
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == RESULT_LOAD_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == Activity.RESULT_OK && null != data) {
             Uri selectedImage = data.getData();
             String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
             Cursor cursor = getContext().getContentResolver().query(selectedImage,
                     filePathColumn, null, null, null);
-
             cursor.moveToFirst();
+
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String picturePath = cursor.getString(columnIndex);
-
-//            Uri selectedImage = data.getData();
-//            String[] filePathColumn = { MediaStore.Images.Media.DATA };
-//            Cursor cursor = getContext().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-//            cursor.moveToFirst();
-//            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-//            String picturePath = cursor.getString(columnIndex);
-//            cursor.close();
+            cursor.close();
 
             _privatProfileImage.setImageBitmap(BitmapFactory.decodeFile(picturePath));
             Log.d("!!!Edit Profile ", "picturePath = "+picturePath);
-
-            cursor.close();
 
 //            SubsamplingScaleImageView newImage = new SubsamplingScaleImageView(getContext());
 //            newImage.setImage(ImageSource.uri(picturePath));
@@ -268,6 +261,7 @@ public class EditProfileFragment extends Fragment {
 //                bitmap = decoder.decodeRegion(new Rect(10, 10, 50, 50), null);
                 bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), selectedImage);
             } catch (IOException e) {
+                e.printStackTrace();
             }
 
 //            _privatProfileImage.setImageBitmap(bitmap);

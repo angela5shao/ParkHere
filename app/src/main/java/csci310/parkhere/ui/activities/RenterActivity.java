@@ -32,7 +32,6 @@ import java.util.concurrent.ExecutionException;
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
 import csci310.parkhere.ui.fragments.DisplaySearchFragment;
-import csci310.parkhere.ui.fragments.EditProfileFragment;
 import csci310.parkhere.ui.fragments.MapViewFragment;
 import csci310.parkhere.ui.fragments.PrivateProfileFragment;
 import csci310.parkhere.ui.fragments.PublicProfileFragment;

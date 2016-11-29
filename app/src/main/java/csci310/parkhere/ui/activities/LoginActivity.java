@@ -37,7 +37,7 @@ public class LoginActivity extends Activity {
 
     TextView _signupLink, _forgotPwLink;
     ClientController clientController;
-
+    String encodedPic;
     ProgressDialog progressDialog;
     UserLoginTask AuthTask = null;
     @Override
@@ -155,6 +155,8 @@ public class LoginActivity extends Activity {
                 Log.d("LOGIN TEST 1", "yeah");
                 progressDialog.dismiss();
                 finish();
+                getProfilePic gpp = new getProfilePic(mUsername);
+                gpp.execute((Void)null);
                 if (clientController.getUser().userType) {
                     Intent myIntent = new Intent(c, RenterActivity.class);
                     startActivityForResult(myIntent, 0);
@@ -247,6 +249,37 @@ public class LoginActivity extends Activity {
                 }
             }
             finish();
+        }
+
+    }
+
+    private class getProfilePic extends AsyncTask<Void, Void, String>{
+        private final String mUsername;
+
+        getProfilePic(String username){
+            mUsername = username;
+        }
+        @Override
+        protected void onPreExecute(){
+        }
+        @Override
+        protected String doInBackground(Void... params ){
+            clientController.getProfilePic(mUsername);
+
+            NetworkPackage NP = clientController.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            String encodedPic = null;
+            if(key.equals("RESETPASSWORD")){
+                encodedPic = (String)value;
+            }
+            return encodedPic;
+        }
+        @Override
+        protected void onPostExecute(String profilePic) {
+            
         }
 
     }

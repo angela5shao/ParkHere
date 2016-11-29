@@ -60,6 +60,7 @@ public class ClientController {
     public boolean providerToshowSpacesDetail;
     //new
     private boolean received;
+    public boolean receiving;
     private NetworkPackage NP;
     //
 
@@ -91,6 +92,9 @@ public class ClientController {
     public void setCurrentActivity(Activity ac)
     {
         currentActivity = ac;
+    }
+    public Activity getCurrentActivity(){
+        return currentActivity;
     }
     public void setCurrentFragment(Fragment fr) { currentFragment = fr;}
 
@@ -196,14 +200,20 @@ public class ClientController {
     }
 
     public NetworkPackage checkReceived(){
-        while(received == false || NP == null ){
+        if(receiving) {
 
+            while (received == false || NP == null) {
+
+            }
+            received = false;
+            if (NP == null)
+                Log.d("CHECKRECEIVE", "NULL");
+
+            return NP;
         }
-        received = false;
-        if(NP == null)
-            Log.d("CHECKRECEIVE", "NULL");
-
-        return NP;
+        else{
+            return null;
+        }
     }
     //new functions for the AsyncTask
 //    public void updateActivity()
@@ -827,5 +837,14 @@ public class ClientController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+
+    public void stopReceiving() {
+        receiving = false;
+    }
+
+    public void startReceiving(){
+        receiving = true;
     }
 }

@@ -732,6 +732,7 @@ public class SearchFragment extends Fragment {
                 if (startHour == -1 && startMinute == -1 && endHour == -1 && endMinute == -1) {
                     startHour = 0; startMinute = 0;
                     endHour = 23; endMinute = 59;
+                    Log.d("TESTTEST", String.valueOf(startHour));
                 }
 
                 if(curr_location == null || startMonth == -1 || startDay == -1 || startYear == -1 || startHour == -1 || startMinute == -1

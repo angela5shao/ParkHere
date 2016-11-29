@@ -510,8 +510,8 @@ public class SearchFragment extends Fragment {
     LinearLayout _addressSearchLayout, _latlongSearchLayout;
     Spinner  _distSpinner, _cartypeSpinner;
 
-    private int startYear, startMonth, startDay, startHour, startMinute,
-            endYear, endMonth, endDay, endHour, endMinute = -1;
+    private int startYear = -1, startMonth = -1, startDay = -1, startHour = -1, startMinute = -1,
+            endYear = -1, endMonth = -1, endDay = -1, endHour = -1, endMinute = -1;
 
     private Calendar startDate = Calendar.getInstance();
     private Calendar endDate = Calendar.getInstance();
@@ -745,7 +745,7 @@ public class SearchFragment extends Fragment {
                 endMinute = Integer.valueOf(eTime[1]);
 
 
-                if (startHour == -1 && startMinute == -1 && endHour == -1 && endMinute == -1) {
+                if (startHour == -1 && startMinute == -1 && endHour == -1 && endMinute == -1 && curr_location != null && startMonth != -1 && startDay != -1 && startYear != -1&& endMonth != -1 && endDay != -1 && endYear != -1) {
                     startHour = 0; startMinute = 0;
                     endHour = 23; endMinute = 59;
                     Log.d("TESTTEST", String.valueOf(startHour));

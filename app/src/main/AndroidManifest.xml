@@ -95,7 +95,9 @@
         <uses-library android:name="android.test.runner" />
 
         <activity android:name=".ui.activities.AddSpaceActivity" />
-        <activity android:name=".ui.activities.EditSpaceActivity"></activity>
+        <activity android:name=".ui.activities.EditSpaceActivity"/>
+        <activity android:name=".ui.activities.EditProfileActivity"/>
+
     </application>
 
 </manifest>

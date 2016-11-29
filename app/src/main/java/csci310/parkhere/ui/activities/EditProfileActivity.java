@@ -12,6 +12,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.OrientationHelper;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,22 +28,28 @@ import android.widget.Toast;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
+import csci310.parkhere.ui.adapters.PhotoAdapter;
 import csci310.parkhere.ui.fragments.PrivateProfileFragment;
+import me.iwf.photopicker.PhotoPicker;
+import me.iwf.photopicker.PhotoPreview;
 import resource.MyEntry;
 import resource.NetworkPackage;
 import resource.User;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link EditProfileActivity.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link EditProfileActivity#newInstance} factory method to
- * create an instance of this fragment.
- */
+///**
+// * A simple {@link Fragment} subclass.
+// * Activities that contain this fragment must implement the
+// * {@link EditProfileActivity.OnFragmentInteractionListener} interface
+// * to handle interaction events.
+// * Use the {@link EditProfileActivity#newInstance} factory method to
+// * create an instance of this fragment.
+// */
 public class EditProfileActivity extends Activity {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -64,6 +73,14 @@ public class EditProfileActivity extends Activity {
     ImageView _privatProfileImage;
     Button _btn_upload_image, _btn_save;
     EditText _usernameText, _pwText, _licenseIDText, _licenseplateText, _phoneText;
+
+
+
+    private int PLACE_AUTOCOMPLETE_REQUEST_CODE = 0;
+
+    private PhotoAdapter photoAdapter;
+    private ArrayList<String> selectedPhoto = new ArrayList<>();
+
 
     public EditProfileActivity() {
         // Required empty public constructor
@@ -93,6 +110,9 @@ public class EditProfileActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_edit_profile);
+        ClientController.getInstance().setCurrentActivity(this);
+
 
 
 
@@ -100,7 +120,7 @@ public class EditProfileActivity extends Activity {
         _privatProfileImage = (ImageView) findViewById(R.id.privatProfileImage);
 
 
-        _usernameText = (EditText) findViewById(R.id.usernameText);
+        _usernameText = (EditText) findViewById(R.id.edit_usernameText);
         _usernameText.setText(controller.getUser().userName);
         _usernameText.setFocusable(false);
         _usernameText.setEnabled(false);
@@ -110,30 +130,57 @@ public class EditProfileActivity extends Activity {
 
 
 
-        _pwText = (EditText) findViewById(R.id.pwText);
+        _pwText = (EditText) findViewById(R.id.edit_pwText);
+        _pwText.setText("");
 
-        _licenseIDText = (EditText) findViewById(R.id.licenseIDText);
+        _licenseIDText = (EditText) findViewById(R.id.edit_licenseIDText);
         _licenseIDText.setText(controller.getUser().userLicense);
 
-        _licenseplateText = (EditText) findViewById(R.id.licenseplateText);
+        _licenseplateText = (EditText) findViewById(R.id.edit_licenseplateText);
         _licenseplateText.setText(controller.getUser().userPlate);
 
 
-        _phoneText = (EditText) findViewById(R.id.phoneText);
+        _phoneText = (EditText) findViewById(R.id.edit_phoneText);
         _phoneText.setText(controller.getUser().userPhone);
 
-        updateUserInfo(mParam1, mParam2, mParam3, mParam4, mParam5);
-        _btn_upload_image = (Button) findViewById(R.id.btn_upload_image);
+//        updateUserInfo(mParam1, mParam2, mParam3, mParam4, mParam5);
+        _btn_upload_image = (Button) findViewById(R.id.edit_btn_upload_image);
         _btn_upload_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Complete action using"), RESULT_LOAD_IMAGE);
+
+                PhotoPicker.builder()
+                        .setPhotoCount(1)
+                        .setShowCamera(true)
+                        .setSelected(selectedPhoto)
+                        .start(EditProfileActivity.this);
+//                Intent intent = new Intent();
+//                intent.setType("image/*");
+//                intent.setAction(Intent.ACTION_GET_CONTENT);
+//                startActivityForResult(Intent.createChooser(intent, "Complete action using"), RESULT_LOAD_IMAGE);
             }
         });
+
+
+
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        photoAdapter = new PhotoAdapter(getBaseContext(), selectedPhoto);
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(4, OrientationHelper.VERTICAL));
+        recyclerView.setAdapter(photoAdapter);
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getBaseContext(), new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        PhotoPreview.builder()
+                                .setPhotos(selectedPhoto)
+                                .setCurrentItem(position)
+                                .start(EditProfileActivity.this);
+                    }
+                })
+        );
+
+
         _btn_save = (Button) findViewById(R.id.btn_save);
         _btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -178,180 +225,65 @@ public class EditProfileActivity extends Activity {
 
     }
 
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//        // Inflate the layout for this fragment
-//        View v = inflater.inflate(R.layout.fragment_edit_profile, container, false);
-//
-//        final ClientController controller = ClientController.getInstance();
-//
-//        _privatProfileImage = (ImageView) v.findViewById(R.id.privatProfileImage);
-//
-//        _usernameText = (EditText) v.findViewById(R.id.usernameText);
-//        _usernameText.setText(controller.getUser().userName);
-//        _usernameText.setFocusable(false);
-//        _usernameText.setEnabled(false);
-//        _usernameText.setCursorVisible(false);
-//        _usernameText.setKeyListener(null);
-//        _usernameText.setBackgroundColor(Color.TRANSPARENT);
-//
-//
-//
-//        _pwText = (EditText) v.findViewById(R.id.pwText);
-//
-//        _licenseIDText = (EditText) v.findViewById(R.id.licenseIDText);
-//        _licenseIDText.setText(controller.getUser().userLicense);
-//
-//        _licenseplateText = (EditText) v.findViewById(R.id.licenseplateText);
-//        _licenseplateText.setText(controller.getUser().userPlate);
-//
-//
-//        _phoneText = (EditText) v.findViewById(R.id.phoneText);
-//        _phoneText.setText(controller.getUser().userPhone);
-//
-//        updateUserInfo(mParam1, mParam2, mParam3, mParam4, mParam5);
-//        _btn_upload_image = (Button) v.findViewById(R.id.btn_upload_image);
-//        _btn_upload_image.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //
-//                Intent intent = new Intent();
-//                intent.setType("image/*");
-//                intent.setAction(Intent.ACTION_GET_CONTENT);
-//                startActivityForResult(Intent.createChooser(intent, "Complete action using"), RESULT_LOAD_IMAGE);
-//            }
-//        });
-//        _btn_save = (Button) v.findViewById(R.id.btn_save);
-//        _btn_save.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(_pwText.getText().length() < 10)
-//                {
-//                    Toast.makeText(getContext(), "Please input password longer than 10 digits", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//
-//                if(_licenseplateText.getText().length() == 0)
-//                {
-//                    _licenseplateText.setText("#######");
-//                }
-//
-//                if(_phoneText.getText().length() != 10)
-//                {
-//                    Toast.makeText(getContext(), "Please input valid phone numebr", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//
-//                if(controller.getUser().userType && _licenseplateText.getText().toString().equals("#######"))
-//                {
-//                    Toast.makeText(getContext(), "Please input your licence plate to proceed in renter mode", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//
-//
-//
-//
-//                if(_licenseIDText.getText().length() == 0 || _phoneText.getText().length() == 0 )
-//                {
-//                    Toast.makeText(getContext(), "Please fill in all required field", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//
-//                EditProfileTask editProfileTask = new EditProfileTask(_usernameText.getText().toString(),_pwText.getText().toString(), _licenseIDText.getText().toString(), _licenseplateText.getText().toString(), _phoneText.getText().toString());
-//                editProfileTask.execute((Void)null);
-//
-//            }
-//        });
-//
-//
-//        return v;
-//    }
-
-//    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
-//
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-//
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PhotoPicker.REQUEST_CODE || requestCode == PhotoPreview.REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                List<String> photos = null;
+                if (data != null) {
+                    photos = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
 
-        if (requestCode == RESULT_LOAD_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
-            Uri selectedImage = data.getData();
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
-            Cursor cursor = getBaseContext().getContentResolver().query(selectedImage,
-                    filePathColumn, null, null, null);
+                    for (String s : photos) {
+                        Log.d("!!!!!!!!!!!", "data.getStringArrayListExtra = " + s);
+                    }
+                }
+                selectedPhoto.clear();
 
-            cursor.moveToFirst();
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
+                if (photos != null) {
+                    selectedPhoto.addAll(photos);
+                }
+                photoAdapter.notifyDataSetChanged();
+            }
+        }
 
+
+
+//        if (requestCode == RESULT_LOAD_IMAGE && resultCode == Activity.RESULT_OK && null != data) {
 //            Uri selectedImage = data.getData();
 //            String[] filePathColumn = { MediaStore.Images.Media.DATA };
-//            Cursor cursor = getContext().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+//
+//            Cursor cursor = getBaseContext().getContentResolver().query(selectedImage,
+//                    filePathColumn, null, null, null);
 //            cursor.moveToFirst();
+//
 //            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
 //            String picturePath = cursor.getString(columnIndex);
 //            cursor.close();
-
-            _privatProfileImage.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-            Log.d("!!!Edit Profile ", "picturePath = "+picturePath);
-
-            cursor.close();
-
-//            SubsamplingScaleImageView newImage = new SubsamplingScaleImageView(getContext());
-//            newImage.setImage(ImageSource.uri(picturePath));
-
-            Bitmap bitmap = null;
-            try {
-//                BitmapRegionDecoder decoder = BitmapRegionDecoder.newInstance(myStream, false);
-//                bitmap = decoder.decodeRegion(new Rect(10, 10, 50, 50), null);
-                bitmap = MediaStore.Images.Media.getBitmap(getBaseContext().getContentResolver(), selectedImage);
-            } catch (IOException e) {
-            }
-
-//            _privatProfileImage.setImageBitmap(bitmap);
-
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-            byte[] imageBytes = baos.toByteArray();
-
-            encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-        }
+//
+//            _privatProfileImage.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+//            Log.d("!!!Edit Profile ", "picturePath = "+picturePath);
+//
+////            SubsamplingScaleImageView newImage = new SubsamplingScaleImageView(getContext());
+////            newImage.setImage(ImageSource.uri(picturePath));
+//
+//            Bitmap bitmap = null;
+//            try {
+////                BitmapRegionDecoder decoder = BitmapRegionDecoder.newInstance(myStream, false);
+////                bitmap = decoder.decodeRegion(new Rect(10, 10, 50, 50), null);
+//                bitmap = MediaStore.Images.Media.getBitmap(getBaseContext().getContentResolver(), selectedImage);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//
+////            _privatProfileImage.setImageBitmap(bitmap);
+//
+//            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+//            byte[] imageBytes = baos.toByteArray();
+//
+//            encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+//        }
     }
 
     public void updateUserInfo(String inUsername, String inPw, String inLicenseID, String inLicensePlate, String inPhone) {

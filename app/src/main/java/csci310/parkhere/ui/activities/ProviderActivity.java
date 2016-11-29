@@ -22,12 +22,14 @@ import com.braintreepayments.api.BraintreePaymentActivity;
 import com.braintreepayments.api.exceptions.InvalidArgumentException;
 import com.braintreepayments.api.models.PaymentMethodNonce;
 import com.braintreepayments.api.models.VenmoAccountNonce;
+import com.bumptech.glide.Glide;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
@@ -87,6 +89,19 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         // Set Border
         _profilePic.setBorderColor(R.color.colorLightBackground);
         _profilePic.setBorderWidth(10);
+
+        getProfilePic gpc = new getProfilePic(clientController.getUser().userID);
+        String encodedPic = "";
+        try {
+            encodedPic = gpc.execute((Void) null).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        Glide.with(this).load(encodedPic).into(_profilePic);
+
+
 
         fm = getSupportFragmentManager();
         fragmentTransaction = fm.beginTransaction();
@@ -690,5 +705,41 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 
 
         }
+
+
+    }
+
+    private class getProfilePic extends AsyncTask<Void, Void, String>{
+        private final long userID;
+
+        getProfilePic(long userID){
+            this.userID = userID;
+        }
+        @Override
+        protected void onPreExecute(){
+        }
+        @Override
+        protected String doInBackground(Void... params ){
+
+//            clientController.getProfilePic(mUsername);
+            clientController.getProfilePic(userID);
+
+            NetworkPackage NP = clientController.checkReceived();
+            MyEntry<String, Serializable> entry = NP.getCommand();
+
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            String encodedPic = null;
+            if(key.equals("PROFILEPICIMAGE")){
+                encodedPic = (String)value;
+            }
+            return encodedPic;
+        }
+        @Override
+        protected void onPostExecute(String profilePic) {
+            // TODO set profile image
+//            _profilePic.setImageBitmap();
+        }
+
     }
 }

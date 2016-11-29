@@ -253,36 +253,38 @@ public class LoginActivity extends Activity {
 
     }
 
-    private class getProfilePic extends AsyncTask<Void, Void, String>{
-        private final String mUsername;
-
-        getProfilePic(String username){
-            mUsername = username;
-        }
-        @Override
-        protected void onPreExecute(){
-        }
-        @Override
-        protected String doInBackground(Void... params ){
-//            clientController.getProfilePic(mUsername);
-
-            NetworkPackage NP = clientController.checkReceived();
-            MyEntry<String, Serializable> entry = NP.getCommand();
-
-            String key = entry.getKey();
-            Object value = entry.getValue();
-            String encodedPic = null;
-            if(key.equals("RESETPASSWORD")){
-                encodedPic = (String)value;
-            }
-            return encodedPic;
-        }
-        @Override
-        protected void onPostExecute(String profilePic) {
-            
-        }
-
-    }
+//    private class getProfilePic extends AsyncTask<Void, Void, String>{
+//        private final String mUsername;
+//
+//        getProfilePic(String username){
+//            mUsername = username;
+//        }
+//        @Override
+//        protected void onPreExecute(){
+//        }
+//        @Override
+//        protected String doInBackground(Void... params ){
+//
+////            clientController.getProfilePic(mUsername);
+//            clientController.getProfilePic();
+//
+//            NetworkPackage NP = clientController.checkReceived();
+//            MyEntry<String, Serializable> entry = NP.getCommand();
+//
+//            String key = entry.getKey();
+//            Object value = entry.getValue();
+//            String encodedPic = null;
+//            if(key.equals("RESETPASSWORD")){
+//                encodedPic = (String)value;
+//            }
+//            return encodedPic;
+//        }
+//        @Override
+//        protected void onPostExecute(String profilePic) {
+//
+//        }
+//
+//    }
 
     public void login(View v) {
         Log.d(TAG, "Login");

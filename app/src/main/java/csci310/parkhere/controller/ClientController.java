@@ -787,4 +787,11 @@ public class ClientController {
 
         }
     }
+
+    public void getProfilePic(long userID) {
+        NetworkPackage NP = new NetworkPackage();
+        NP.addEntry("GETUSERIMAGE", userID);
+        clientCommunicator.sendPackage(NP);
+
+    }
 }

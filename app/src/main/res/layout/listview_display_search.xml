@@ -2,13 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="horizontal" android:layout_width="fill_parent"
               android:layout_height="fill_parent">
-
-
-    <!--<ImageView android:id="@+id/img"-->
-               <!--android:layout_width="wrap_content"-->
-               <!--android:layout_height="wrap_content"-->
-               <!--android:layout_margin="5px"/>-->
-
     <LinearLayout android:orientation="vertical"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content">
@@ -16,25 +9,14 @@
         <TextView android:id="@+id/title"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:textColor="#FFFFFFFF"
+                  android:textColor="@color/colorPrimaryDark"
                   android:textSize="22px" />
         <TextView android:id="@+id/info"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:textColor="#FFFFFFFF"
+                  android:textColor="@color/colorPrimary"
                   android:textSize="13px" />
     </LinearLayout>
 
 
 </LinearLayout>
-
-
-    <!--<?xml version="1.0" encoding="utf-8"?>-->
-    <!--<TextView xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--android:orientation="vertical"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:paddingTop="4dp"-->
-    <!--android:paddingBottom="4dp"-->
-    <!--android:text="List Item"-->
-    <!--android:id="@+id/textView1"/>-->

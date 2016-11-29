@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -57,7 +58,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
     int PAYMENT_REQUEST_CODE = 11;
 
     LinearLayout _resLink, _searchLink;
-    ImageView _profilePic;
+    CircularImageView _profilePic;
     ImageView _editLogo;
     FragmentManager fm;
     FragmentTransaction fragmentTransaction;
@@ -89,7 +90,11 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
 
         _resLink = (LinearLayout) findViewById(R.id.RenterResLink);
         _searchLink = (LinearLayout) findViewById(R.id.searchLink);
-        _profilePic = (ImageView) findViewById(R.id.profilePic);
+
+        _profilePic = (CircularImageView)findViewById(R.id.profilePic);
+        // Set Border
+        _profilePic.setBorderColor(R.color.colorLightBackground);
+        _profilePic.setBorderWidth(10);
 
 
         //*****************************************************************
@@ -589,7 +594,7 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
             progressDialog.dismiss();
             if(confirmStatus){ // paid success
                 Toast.makeText(getBaseContext(), "Confirmed! (Review in reservation detail.)", Toast.LENGTH_SHORT).show();
-                finish();
+//                finish();
             }
             else{
                 Toast.makeText(getBaseContext(), "Confirm payment unsuccessful! Please try agian.", Toast.LENGTH_SHORT).show();

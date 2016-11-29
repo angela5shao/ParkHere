@@ -40,6 +40,7 @@ public class RegisterRenterActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_renter_ui);
+        ClientController.getInstance().setCurrentActivity(this);
 
         _nextButton=(Button)findViewById(R.id.nextButton);
         _liscenseIdText=(EditText)findViewById(R.id.liscenseIdText); // license ID

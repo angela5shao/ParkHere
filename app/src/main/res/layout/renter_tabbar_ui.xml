@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.Toolbar
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/renterTabbar"
     android:minHeight="?attr/actionBarSize"
     android:background="@color/colorDarkBackground"
@@ -15,13 +16,26 @@
             android:orientation="horizontal"
             android:layout_gravity="center"
             android:gravity="center_vertical|center_horizontal">
-            <ImageView
+
+            <com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/profilePic"
+                android:layout_width="24dp"
+                android:layout_height="52dp"
+                android:layout_marginTop="2dp"
                 android:src="@mipmap/ic_launcher"
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                app:civ_border_color="@color/colorLightBackground"
+                app:civ_border_width="4dp"
+                app:civ_shadow="true"
+                app:civ_shadow_radius="0"
+                app:civ_shadow_color="@color/colorLightBackground"
+                android:layout_weight="2"/>
+            <!--<ImageView-->
+                <!--android:id="@+id/profilePic"-->
+                <!--android:src="@mipmap/ic_launcher"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"/>-->
 
             <LinearLayout android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

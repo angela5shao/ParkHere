@@ -14,7 +14,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -23,6 +22,7 @@ import com.braintreepayments.api.BraintreePaymentActivity;
 import com.braintreepayments.api.exceptions.InvalidArgumentException;
 import com.braintreepayments.api.models.PaymentMethodNonce;
 import com.braintreepayments.api.models.VenmoAccountNonce;
+import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -54,7 +54,7 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         ProviderReservationsFragment.OnFragmentInteractionListener {
 
     LinearLayout _spaceLink, _resLink;
-    ImageView _profilePic;
+    CircularImageView _profilePic;
 
     FragmentManager fm;
     FragmentTransaction fragmentTransaction;
@@ -71,6 +71,9 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.provider_ui);
 
+        ClientController.getInstance().setCurrentActivity(this);
+
+
         clientController = ClientController.getInstance();
         clientController.setCurrentActivity(this);
 
@@ -79,9 +82,12 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 //
         _resLink = (LinearLayout)findViewById(R.id.ProviderResLink);
         _spaceLink = (LinearLayout)findViewById(R.id.spaceLink);
-        _profilePic = (ImageView)findViewById(R.id.profilePic);
 
-//
+        _profilePic = (CircularImageView)findViewById(R.id.profilePic);
+        // Set Border
+        _profilePic.setBorderColor(R.color.colorLightBackground);
+        _profilePic.setBorderWidth(10);
+
         fm = getSupportFragmentManager();
         fragmentTransaction = fm.beginTransaction();
 
@@ -140,13 +146,6 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         _profilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                System.out.println("Clicked on profile tab item");
-//                try {
-//                    getSupportFragmentManager().beginTransaction()
-//                            .replace(R.id.fragContainer, privateProfileFragment).commit();
-//                } catch (Exception e) {
-//                    System.out.println("Profile tab item exception");
-//                }
                 fragmentTransaction = fm.beginTransaction();
 
                 privateProfileFragment = new PrivateProfileFragment();
@@ -507,6 +506,10 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
             MyEntry<String, Serializable> entry = NP.getCommand();
             String key = entry.getKey();
             Object value = entry.getValue();
+
+            Log.d("requesTimeInterval: Key", key);
+
+
             if(key.equals("RESPONSEINTERVAL")){
                 HashMap<String, Serializable> map = (HashMap<String, Serializable>) value;
                 myTimeIntervals = (ArrayList<TimeInterval>) map.get("TIMEINTERVAL");
@@ -607,6 +610,9 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
 
             ArrayList<String> urls = new ArrayList<>();
 
+
+            Log.d("LoadSpotImageTask", "Get images back");
+
             if(entry.getKey().equals("PARKINGSPOTIMAGESURLS"))
             {
 //                ArrayList<String> urls = (ArrayList<String>) entry.getValue() ;
@@ -642,6 +648,8 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
                 // TODO: WHAT TO DISPLAY WHEN NO IMAGE
                 //
                 Toast.makeText(getBaseContext(), "Cannot find images", Toast.LENGTH_SHORT).show();
+                spaceDetailFragment.setArguments(bundle);
+                fm.beginTransaction().add(R.id.fragContainer, spaceDetailFragment).commit();
 
             }
         }

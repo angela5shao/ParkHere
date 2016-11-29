@@ -219,7 +219,6 @@ public class LoginActivity extends Activity {
             if(success) {
                 Toast.makeText(LoginActivity.this.getBaseContext(), "New temporary password has sent to your email!", Toast.LENGTH_SHORT).show();
             } else{
-<<<<<<< HEAD
                 if(clientController.receiving){
                     Toast.makeText(getBaseContext(), "Lost Connection to Server", Toast.LENGTH_SHORT).show();
                 }
@@ -228,9 +227,7 @@ public class LoginActivity extends Activity {
                 }else {
                     Toast.makeText(getBaseContext(), "Please Enter a Valid Email", Toast.LENGTH_SHORT).show();
                 }
-=======
                 Toast.makeText(LoginActivity.this.getBaseContext(), "Reset password failed!", Toast.LENGTH_SHORT).show();
->>>>>>> 0f746c9164bdb3553f3090944c49622e14902305
             }
             finish();
         }

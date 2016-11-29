@@ -659,4 +659,27 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         }
 
     }
+
+    public void updateBarImage()
+    {
+        String encodedPic  = null;
+
+        getProfilePic gpc = new getProfilePic(clientController.getUser().userID);
+        try {
+            encodedPic = gpc.execute((Void) null).get();
+            clientController.encodedProfilePic = encodedPic;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        if(encodedPic != null)
+        {
+            Glide.with(this)
+                    .load(encodedPic)
+                    .override(48, 48)
+                    .into(_profilePic);
+        }
+
+    }
 }

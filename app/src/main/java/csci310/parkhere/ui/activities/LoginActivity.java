@@ -44,6 +44,8 @@ public class LoginActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_ui);
+        ClientController.getInstance().setCurrentActivity(this);
+
 
         _loginButton=(Button)findViewById(R.id.loginButton);
         _signupLink=(TextView)findViewById(R.id.signupLink);
@@ -153,8 +155,8 @@ public class LoginActivity extends Activity {
                 Log.d("LOGIN TEST 1", "yeah");
                 progressDialog.dismiss();
                 finish();
-                getProfilePic gpp = new getProfilePic(mUsername);
-                gpp.execute((Void)null);
+//                getProfilePic gpp = new getProfilePic(mUsername);
+//                gpp.execute((Void)null);
                 if (clientController.getUser().userType) {
                     Intent myIntent = new Intent(c, RenterActivity.class);
                     startActivityForResult(myIntent, 0);

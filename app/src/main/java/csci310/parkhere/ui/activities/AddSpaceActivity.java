@@ -67,6 +67,7 @@ public class AddSpaceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_space);
+        ClientController.getInstance().setCurrentActivity(this);
 
         _addressText = (TextView)findViewById(R.id.addressText);
         _cartypeSpinner = (Spinner)findViewById(R.id.cartypeSpinner);

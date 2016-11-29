@@ -1,6 +1,7 @@
 package csci310.parkhere.controller;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
@@ -9,7 +10,10 @@ import android.widget.Toast;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -112,6 +116,17 @@ public class ClientController {
         return instance;
     }
 
+    public void resetConnection()
+    {
+        if(currentActivity != null)
+        {
+            ResetConnAsync reset = new ResetConnAsync();
+            reset.execute();
+        }
+
+    }
+
+
     public static void resetController()
     {
             instance = null;
@@ -142,11 +157,11 @@ public class ClientController {
     public void verifyRegister(String username) throws IOException {
         NetworkPackage NP = new NetworkPackage();
         NP.addEntry("VERIFICATION", username);
-        try {
+//        try {
             clientCommunicator.sendPackage(NP);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void register(String username, String pw, String phone, String license, String plate, String usertype, String name) throws IOException {
@@ -170,25 +185,24 @@ public class ClientController {
     public void forgotPW(String username) {
         NetworkPackage NP = new NetworkPackage();
         NP.addEntry("UPDATEPASSWORD", username);
-        try {
+//        try {
             clientCommunicator.sendPackage(NP);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     // Get unconfirmed reservations by user
     public void getConfirmListWithUserID(long userID) {
         NetworkPackage NP = new NetworkPackage();
         NP.addEntry("FETCHUNPAIDRESERVATION", userID);
-        try {
+//        try {
             clientCommunicator.sendPackage(NP);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
-    //new Functions
     public void updateReceived(NetworkPackage NP){
         this.NP = NP;
         received = true;
@@ -200,7 +214,7 @@ public class ClientController {
     }
 
     public NetworkPackage checkReceived(){
-        if(receiving) {
+//        if(receiving) {
 
             while (received == false || NP == null) {
 
@@ -210,129 +224,32 @@ public class ClientController {
                 Log.d("CHECKRECEIVE", "NULL");
 
             return NP;
-        }
-        else{
-            return null;
-        }
+//        }
+//        else{
+//            return null;
+//        }
     }
-    //new functions for the AsyncTask
-//    public void updateActivity()
-//    {
-//        if(currentActivity instanceof RegisterRenterActivity)
-//        {
-//            RegisterRenterActivity rra = (RegisterRenterActivity)currentActivity;
-//            Log.d("UPDATEACTIVITY", "RegisterRenterActivity");
-//
-//            if(user == null)
-//            {
-//                rra.onRegisterFailed(rra.getApplicationContext());
-//            }
-//            else
-//            {
-//                rra.onRegisterSuccess(rra.getApplicationContext());
-//            }
-//        }
-//        else if(currentActivity instanceof RegisterProviderActivity) {
-//            RegisterProviderActivity rpa = (RegisterProviderActivity)currentActivity;
-//            Log.d("UPDATEACTIVITY", "RegisterProviderActivity");
-//
-//            if(user == null)
-//            {
-//                rpa.onRegisterFailed(rpa.getApplicationContext());
-//            }
-//            else
-//            {
-//                rpa.onRegisterSuccess(rpa.getApplicationContext());
-//            }
-//        }
-//        else if(currentActivity instanceof RenterActivity) {
-//            RenterActivity ra = (RenterActivity)currentActivity;
-////            Log.d("UPDATEACTIVITY", "RenterActivity");
-//
-//            if(toDispaySearch)
-//            {
-//                ra.displaySearchResult(searchResults);
-//                toDispaySearch = false;
-//            }
-//
-//            if(user != null)
-//            {
-////                ra.updateUserInfo(user.getUsername(), "", user.userLicense, user.userPlate);
-//            }
-//        }
-//        else if(currentActivity instanceof ProviderActivity) {
-//            ProviderActivity ra = (ProviderActivity)currentActivity;
-//            if(providerToshowSpaces)
-//            {
-//                ra.showSpaceFragment();
-//                providerToshowSpaces = false;
-//            }
-//
-//            else if(providerToshowSpacesDetail)
-//            {
-//                ra.showSpaceDetailFragment();
-//                providerToshowSpacesDetail = false;
-//            }
-//
-//
-//        }
-//        else if(currentActivity instanceof LoginActivity)
-//        {
-//            LoginActivity la = (LoginActivity)currentActivity;
-//            if(user == null)
-//            {
-//                la.onLoginFailed(la.getApplicationContext());
-//            }
-//            else
-//            {
-//                la.onLoginSuccess(la.getApplicationContext());
-//            }
-//        }
-//    }
-//
-//    public User getProfile(long userID) {
-//        return null;
-//    }
-//
-//    TODO: Functions for provider
-//
-//
-//    public boolean addSpace(TimeInterval interval, String address, long userID) {
-//        return false;
-//    }
-//
-//    // TODO: include address, description, cartype, cancelpolicy, image, time interval(s)
-//    public boolean editSpace(long spaceID, TimeInterval interval) {
-//        return false;
-//    }
-//
-//    public void publishSpace(long spaceID) {
-//
-//    }
 
-//    public void unpublishSpace(long spaceID) {
-//
-//    }
 
     // TODO: Functions for renter
     public void ProviderCancel(long timeIntervalID) {
         NetworkPackage NP = new NetworkPackage();
         NP.addEntry("PROVIDERCANCEL", timeIntervalID);
-        try {
+//        try {
             clientCommunicator.sendPackage(NP);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void RenterCancel(long resID) {
         NetworkPackage NP = new NetworkPackage();
         NP.addEntry("RENTERCANCEL", resID);
-        try {
+//        try {
             clientCommunicator.sendPackage(NP);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
 //    public Reservation getReservationDetail(int position) {
@@ -344,19 +261,19 @@ public class ClientController {
         map.put("RESERVATIONID", reservationID);
         map.put("REVIEWDESCRIPTION", comment);
         map.put("RATING", rating);
-        try {
+//        try {
             clientCommunicator.send("REVIEW", map);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 //
     public void report(long reservationID) {
-        try {
+//        try {
             clientCommunicator.send("REPORT", reservationID);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void search(LatLng location, String startDate, String startTime, String endDate, String endTime, String carType, String distance) throws IOException {
@@ -452,22 +369,22 @@ public class ClientController {
         int mCarType = new CarType(carType).findNum();
         ParkingSpot spot = new ParkingSpot(user.userID,null,location.latitude,location.longitude,streetAddress,description, "",mCarType,cancelPolicy);
         //public ParkingSpot(long userID, ArrayList<TimeInterval> time, double lat, double lon, String streetAddr, String description, String zipcode, int cartype) {
-        try {
+//        try {
             Log.d("@@@Controller", " ADD_PARKINGSPOT");
             clientCommunicator.send("ADD_PARKINGSPOT", spot);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void requestPaymentToken() {
         NetworkPackage NP = new NetworkPackage();
         NP.addEntry("TOKENREQUEST", null);
-        try {
+//        try {
             clientCommunicator.sendPackage(NP);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void postPaymentNonceToServer(String paymentMethodNonce, long resID, long providerID, String price)
@@ -477,21 +394,21 @@ public class ClientController {
         map.put("RESERVATIONID", resID);
         map.put("PROVIDERID", providerID);
         map.put("PRICE", price);
-        try {
+//        try {
             clientCommunicator.send("PAYMENT_SUCCESS", map);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void submitPaymentRequest(long resID) {
         NetworkPackage NP = new NetworkPackage();
         NP.addEntry("CONFIRMPAYMENT", resID);
-        try {
+//        try {
             clientCommunicator.sendPackage(NP);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
 
@@ -505,11 +422,11 @@ public class ClientController {
         NetworkPackage NP = new NetworkPackage();
         NP.addEntry("FETCHRESERVATIONBYPROVIDERID", user.userID);
 
-        try {
+//        try {
             clientCommunicator.sendPackage(NP);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void requestMyRenterReservationList()
@@ -519,11 +436,11 @@ public class ClientController {
 
         NetworkPackage NP = new NetworkPackage();
         NP.addEntry("FETCHRESERVATION", user.userID);
-        try {
+//        try {
             clientCommunicator.sendPackage(NP);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void requestMyParkingSpotList()
@@ -533,11 +450,11 @@ public class ClientController {
 
         NetworkPackage NP = new NetworkPackage();
         NP.addEntry("FETCHPARKINGSPOT", user.userID);
-        try {
+//        try {
             clientCommunicator.sendPackage(NP);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void requestSpotTimeInterval(ParkingSpot spot)
@@ -549,11 +466,11 @@ public class ClientController {
 
         NetworkPackage NP = new NetworkPackage();
         NP.addEntry("FETCHTIMEINTERVAL", spot.getParkingSpotID());
-        try {
+//        try {
             clientCommunicator.sendPackage(NP);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public ArrayList<TimeInterval> requestSpotTimeIntervalWithDate(long spotID, String date) {
@@ -610,22 +527,22 @@ public class ClientController {
         System.out.println("End:" + timeInterval.endTime);
         map.put("PRICE", price);
         NP.addEntry("EDITTIME", map);
-        try {
+//        try {
             clientCommunicator.sendPackage(NP);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void requestParkingSpotReview(long parkingSpotid)
     {
         NetworkPackage NP = new NetworkPackage();
         NP.addEntry("FETCHREVIEWSFORPARKINGSPOT", parkingSpotid);
-        try {
+//        try {
             clientCommunicator.sendPackage(NP);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void requestAddTime(ParkingSpot spot, Time startTime, Time endTime, double price)
@@ -640,20 +557,20 @@ public class ClientController {
         System.out.println("End:" + timeInterval.endTime);
         map.put("PRICE", price);
         NP.addEntry("ADDTIME", map);
-        try {
+//        try {
             clientCommunicator.sendPackage(NP);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void deleteSpace(long parkingSpotid){
         NP.addEntry("DELETESPACE", parkingSpotid);
-        try {
+//        try {
             clientCommunicator.sendPackage(NP);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
     public void logout(boolean userType) {
         NetworkPackage NP = new NetworkPackage();
@@ -661,11 +578,11 @@ public class ClientController {
         map.put("USERID", user.userID);
         map.put("USERTYPE", userType);
         NP.addEntry("LOGOUT", map);
-        try {
+//        try {
             clientCommunicator.sendPackage(NP);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void renterReserve(long userID, long parkingSpotID, TimeInterval timeInterval){
@@ -675,11 +592,11 @@ public class ClientController {
         map.put("RENTERID", userID);
         map.put("TIMEINTERVAL", timeInterval);
         NP.addEntry("RESERVE", map);
-        try {
+//        try {
             clientCommunicator.sendPackage(NP);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void editProfile(String username, String password, String userLicense, String userPlate, String phone){
@@ -692,11 +609,11 @@ public class ClientController {
         map.put("USER", user);
         map.put("PASSWORD", password);
         NP.addEntry("EDITPROFILE", map);
-        try {
+//        try {
             clientCommunicator.sendPackage(NP);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void sendImagetoServer(String DataURI, String Identifier, long ID)
@@ -718,29 +635,29 @@ public class ClientController {
             Log.d("WRONG", "WRONG IDENTIFIER");
         }
         NP.addEntry("UPLOADIMAGE",customImage);
-        try {
+//        try {
             clientCommunicator.sendPackage(NP);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void fetchReviewsForUser(long providerID){
         NP.addEntry("FETCHREVIEWSFORUSER", providerID);
-        try {
+//        try {
             clientCommunicator.sendPackage(NP);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void fetchReviewsForParkingSpot(long parkingSpotID){
         NP.addEntry("FETCHREVIEWSFORPARKINGSPOT", parkingSpotID);
-        try{
+//        try{
             clientCommunicator.sendPackage(NP);
-        } catch(IOException e){
-            e.printStackTrace();
-        }
+//        } catch(IOException e){
+//            e.printStackTrace();
+//        }
     }
 
 
@@ -748,11 +665,11 @@ public class ClientController {
     public void fetchThumbNailImg(ArrayList<Long> listParkingSpotID)
     {
         NP.addEntry("GETTHUMBNAILIMG", listParkingSpotID);
-        try{
+//        try{
             clientCommunicator.sendPackage(NP);
-        } catch(IOException e){
-            e.printStackTrace();
-        }
+//        } catch(IOException e){
+//            e.printStackTrace();
+//        }
     }
 
     public void sendImagesToServer(ArrayList<String> images, String Identifier, long ID){
@@ -775,11 +692,12 @@ public class ClientController {
         } else{
             NP.addEntry("GETUSERIMAGES", id);
         }
-        try{
+
+//        try{
             clientCommunicator.sendPackage(NP);
-        } catch(IOException e){
-            e.printStackTrace();
-        }
+//        } catch(IOException e){
+//            e.printStackTrace();
+//        }
     }
 
     //the editParkingSpot which will be called by the provider
@@ -787,11 +705,11 @@ public class ClientController {
         //map.put("PICTURE", imageStrings);
         Log.d("ps", "send ps");
         NP.addEntry("EDITSPACE", ps);
-        try {
+//        try {
             clientCommunicator.sendPackage(NP);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void deleteOldParkingSpotImages(ParkingSpot ps)
@@ -800,30 +718,30 @@ public class ClientController {
         NetworkPackage updateImageNP = new NetworkPackage();
         updateImageNP.addEntry("DELETEOLDPARKINGSPOTIMAGES", ps.getParkingSpotID());
 
-        try {
+//        try {
             clientCommunicator.sendPackage(updateImageNP);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void getUserWithID(long userID) {
         NP.addEntry("GETUSERWITHID", userID);
-        try {
+//        try {
             clientCommunicator.sendPackage(NP);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
 
     public void providerReport(long resID){
         NP.addEntry("REPORT", resID);
-        try {
+//        try {
             clientCommunicator.sendPackage(NP);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void getPrice(long userID, long parkingSpotID, TimeInterval timeInterval) {
@@ -833,20 +751,45 @@ public class ClientController {
         map.put("RENTERID", userID);
         map.put("TIMEINTERVAL", timeInterval);
         NP.addEntry("PRICE", map);
-        try {
+//        try {
             clientCommunicator.sendPackage(NP);
-        } catch (IOException e) {
-            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+    }
+
+
+//    public void stopReceiving() {
+//        receiving = false;
+//    }
+//
+//    public void startReceiving(){
+//        receiving = true;
+//    }
+
+
+    private class ResetConnAsync extends AsyncTask<Void, Void, Void> {
+
+
+
+        ResetConnAsync() {
+
+
         }
-    }
 
+        @Override
+        protected Void doInBackground(Void... params) {
 
-    public void stopReceiving() {
-        receiving = false;
-    }
+            return null;
+        }
 
-    public void startReceiving(){
-        receiving = true;
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            Toast.makeText(currentActivity.getApplicationContext(), "Reconnecting", Toast.LENGTH_LONG).show();
+            clientCommunicator = new ClientCommunicator(ClientController.this);
+
+        }
     }
 
     public void getProfilePic() {

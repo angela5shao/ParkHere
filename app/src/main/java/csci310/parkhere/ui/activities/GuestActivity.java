@@ -1,10 +1,12 @@
 package csci310.parkhere.ui.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -32,7 +34,7 @@ import resource.SearchResults;
 /**
  * Created by ivylinlaw on 10/17/16.
  */
-public class GuestActivity extends AppCompatActivity implements SearchFragment.OnFragmentInteractionListener,
+public class GuestActivity extends FragmentActivity implements SearchFragment.OnFragmentInteractionListener,
         DisplaySearchFragment.OnFragmentInteractionListener {
 
     Intent myIntent;
@@ -43,7 +45,6 @@ public class GuestActivity extends AppCompatActivity implements SearchFragment.O
             reservationsFragment, searchSpaceDetailFragment, reservationDetailFragment;
 
     ClientController clientController;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

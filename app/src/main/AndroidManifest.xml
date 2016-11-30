@@ -54,11 +54,12 @@
         <!-- android:theme="@style/AppTheme.NoActionBar" /> -->
         <activity android:name=".ui.activities.LoginActivity" />
         <activity android:name=".ui.activities.GuestActivity"
-            android:label="GuestActivity"
+                  android:label="GuestActivity"
             />
         <activity
             android:name=".ui.activities.RegisterMainActivity"
-            android:label="RegisterMainActivity" />
+            android:label="RegisterMainActivity"
+            />
         <activity
             android:name=".ui.activities.RegisterRenterActivity"
             android:label="RegisterRenterActivity" />

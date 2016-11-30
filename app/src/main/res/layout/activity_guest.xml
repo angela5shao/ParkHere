@@ -8,11 +8,6 @@
     android:background="@color/colorLightBackground"
     android:id="@+id/guest_ui"
     tools:context=".ui.activities.GuestActivity">
-    <FrameLayout
-        android:id="@+id/fragContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
 
     <Button
         android:layout_width="match_parent"
@@ -21,7 +16,14 @@
         android:id="@+id/guestRegisterButton"
         android:background="@color/colorPrimary"
         android:textColor="@color/colorMainFont"
-        android:layout_alignBottom="@+id/fragContainer"
-        android:layout_marginTop="28dp"
         android:padding="12dp" />
+
+    <FrameLayout
+        android:id="@+id/fragContainer"
+        android:layout_below="@id/guestRegisterButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+
 </RelativeLayout>

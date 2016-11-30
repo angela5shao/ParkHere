@@ -183,6 +183,7 @@ public class ProviderActivity extends AppCompatActivity implements SpacesFragmen
         _profilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                updateBarImage();
                 fragmentTransaction = fm.beginTransaction();
 
                 privateProfileFragment = new PrivateProfileFragment();

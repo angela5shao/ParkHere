@@ -160,6 +160,8 @@ public class RenterActivity extends AppCompatActivity implements SearchFragment.
         _profilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                updateBarImage();
+
                 fragmentTransaction = fm.beginTransaction();
 
                 privateProfileFragment = new PrivateProfileFragment();

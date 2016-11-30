@@ -106,6 +106,10 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
         View v = inflater.inflate(R.layout.fragment_display_search, container, false);
 
         _MapviewSwitch = (Button) v.findViewById(R.id.MapviewSwitch);
+
+        if(getActivity() instanceof  GuestActivity)
+            _MapviewSwitch.setVisibility(View.INVISIBLE);
+
         _MapviewSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

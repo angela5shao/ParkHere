@@ -1,5 +1,6 @@
 package csci310.parkhere.ui.activities;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,6 +9,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -32,8 +35,9 @@ import resource.SearchResults;
 public class GuestActivity extends AppCompatActivity implements SearchFragment.OnFragmentInteractionListener,
         DisplaySearchFragment.OnFragmentInteractionListener {
 
-
+    Intent myIntent;
     FragmentManager fm;
+    Button registerButton;
     FragmentTransaction fragmentTransaction;
     Fragment searchFragment, privateProfileFragment, editProfileFragment, displaySearchFragment,
             reservationsFragment, searchSpaceDetailFragment, reservationDetailFragment;
@@ -47,6 +51,15 @@ public class GuestActivity extends AppCompatActivity implements SearchFragment.O
         clientController = ClientController.getInstance();
         clientController.setCurrentActivity(this);
         setContentView(R.layout.activity_guest);
+        registerButton=(Button)findViewById(R.id.guestRegisterButton);
+
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myIntent = new Intent(v.getContext(), RegisterMainActivity.class);
+                startActivity(myIntent);
+            }
+        });
         fm = getSupportFragmentManager();
         fragmentTransaction = fm.beginTransaction();
         searchFragment = new SearchFragment();

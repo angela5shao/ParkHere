@@ -8,11 +8,20 @@
     android:background="@color/colorLightBackground"
     android:id="@+id/guest_ui"
     tools:context=".ui.activities.GuestActivity">
-android:orientation="vertical" android:layout_width="match_parent"
-    >
     <FrameLayout
         android:id="@+id/fragContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="?attr/actionBarSize"/>
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="signup"
+        android:id="@+id/guestRegisterButton"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/colorMainFont"
+        android:layout_alignBottom="@+id/fragContainer"
+        android:layout_marginTop="28dp"
+        android:padding="12dp" />
 </RelativeLayout>

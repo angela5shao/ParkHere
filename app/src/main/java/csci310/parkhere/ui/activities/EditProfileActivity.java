@@ -1,41 +1,35 @@
 package csci310.parkhere.ui.activities;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Base64;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
 import csci310.parkhere.ui.adapters.PhotoAdapter;
-import csci310.parkhere.ui.fragments.PrivateProfileFragment;
 import me.iwf.photopicker.PhotoPicker;
 import me.iwf.photopicker.PhotoPreview;
 import resource.MyEntry;
@@ -110,7 +104,7 @@ public class EditProfileActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_edit_profile);
+        setContentView(R.layout.activity_edit_profile);
         ClientController.getInstance().setCurrentActivity(this);
 
 
@@ -307,7 +301,7 @@ public class EditProfileActivity extends Activity {
             this.licenseIdText = licenseIdText;
             this.licenseplateText = licenseplateText;
             this.phoneText = phoneText;
-            doInBackground((Void) null);
+//            doInBackground((Void) null);
         }
 
 //        @Override
@@ -323,9 +317,25 @@ public class EditProfileActivity extends Activity {
             MyEntry<String, Serializable> entry = NP.getCommand();
             String key = entry.getKey();
             Object value = entry.getValue();
+
+
+            Log.d("EDITPROFILE 1", key);
+
             if(key.equals("EDITPROFILE")){
                 User user = (User) value;
                 clientController.setUser(user);
+
+
+                if(selectedPhoto.size() == 1)
+                    try {
+                        clientController.sendImagetoServer(readEncodeImage(selectedPhoto.get(0)), "USERPROFILEIMAGE", user.userID);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+
+
+
                 return true;
             }
             return false;
@@ -354,5 +364,24 @@ public class EditProfileActivity extends Activity {
                 // back to reservation detail
             }
         }
+    }
+
+    public String readEncodeImage(String filepath) throws IOException {
+        File imagefile = new File(filepath);
+        FileInputStream fis = null;
+        try {
+            fis = new FileInputStream(imagefile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+//        Bitmap bm = BitmapFactory.decodeFile(imagefile);
+        Bitmap bm = BitmapFactory.decodeStream(fis);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.JPEG, 100 , baos);
+        byte[] b = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+        Log.d("@@@EDITSPACE", "encodedImage = " + encodedImage);
+        return encodedImage;
     }
 }

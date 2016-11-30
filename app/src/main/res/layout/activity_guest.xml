@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@color/colorLightBackground"
+    android:id="@+id/guest_ui"
+    tools:context=".ui.activities.GuestActivity">
+android:orientation="vertical" android:layout_width="match_parent"
+    >
+    <FrameLayout
+        android:id="@+id/fragContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="?attr/actionBarSize"/>
+</RelativeLayout>

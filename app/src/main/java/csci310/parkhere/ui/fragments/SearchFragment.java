@@ -477,6 +477,7 @@ import java.util.HashMap;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
+import csci310.parkhere.ui.activities.GuestActivity;
 import csci310.parkhere.ui.activities.RenterActivity;
 import resource.MyEntry;
 import resource.NetworkPackage;
@@ -728,6 +729,11 @@ public class SearchFragment extends Fragment {
                     curr_location = new LatLng(mLat, mLong);
                 }
 
+                if (txtStartDate.getText().toString().length() == 0 || txtEndDate.getText().toString().length() == 0) {
+                    Toast.makeText(getContext(), "Please input start/end date(s)! Please try again.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 String [] sDate = txtStartDate.getText().toString().split("-");
                 startDay = Integer.valueOf(sDate[0]);
                 startMonth = Integer.valueOf(sDate[1]) - 1;
@@ -930,7 +936,14 @@ public class SearchFragment extends Fragment {
         protected void onPostExecute(SearchResults result) {
             if(result!=null) {
                 Log.d("SEARCH_RESULT", "onPostExecute");
-                ((RenterActivity) getActivity()).displaySearchResult(result, curr_location, mStartDate, mStartTime, mEndDate, mEndTime);
+                Activity activity =  getActivity();
+                if(activity instanceof RenterActivity) {
+                    ((RenterActivity) getActivity()).displaySearchResult(result, curr_location, mStartDate, mStartTime, mEndDate, mEndTime);
+                }
+                else if(activity instanceof GuestActivity)
+                {
+                    ((GuestActivity) getActivity()).displaySearchResult(result, curr_location, mStartDate, mStartTime, mEndDate, mEndTime);
+                }
             }
             else{
                 Toast.makeText(getContext(), "Error to find space! Please try again.", Toast.LENGTH_SHORT).show();

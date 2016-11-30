@@ -1,5 +1,6 @@
 package csci310.parkhere.ui.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
@@ -32,6 +33,7 @@ import java.util.List;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
+import csci310.parkhere.ui.activities.GuestActivity;
 import csci310.parkhere.ui.activities.OnInfoWindowElemTouchListener;
 import csci310.parkhere.ui.activities.RenterActivity;
 import csci310.parkhere.ui.layout.MapWrapperLayout;
@@ -104,8 +106,15 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
                 // TODO: Switch to ListView
                 ClientController clientController = ClientController.getInstance();
                 SearchResults results = clientController.searchResults;
-                ((RenterActivity) getActivity()).displaySearchResult(results, new LatLng(searchLat, searchLon),
+                Activity activity = getActivity();
+                if(activity instanceof RenterActivity) {
+                    ((RenterActivity) getActivity()).displaySearchResult(results, new LatLng(searchLat, searchLon),
+                            startDate, startTime, endDate, endTime);
+                }else if(activity instanceof GuestActivity)
+                {
+                    ((GuestActivity)getActivity()).displaySearchResult(results, new LatLng(searchLat, searchLon),
                         startDate, startTime, endDate, endTime);
+                }
             }
         });
 

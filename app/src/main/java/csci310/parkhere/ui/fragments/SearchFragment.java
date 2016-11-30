@@ -729,6 +729,11 @@ public class SearchFragment extends Fragment {
                     curr_location = new LatLng(mLat, mLong);
                 }
 
+                if (txtStartDate.getText().toString().length() == 0 || txtEndDate.getText().toString().length() == 0) {
+                    Toast.makeText(getContext(), "Please input start/end date(s)! Please try again.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 String [] sDate = txtStartDate.getText().toString().split("-");
                 startDay = Integer.valueOf(sDate[0]);
                 startMonth = Integer.valueOf(sDate[1]) - 1;

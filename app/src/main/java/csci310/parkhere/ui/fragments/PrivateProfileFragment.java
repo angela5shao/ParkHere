@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.concurrent.ExecutionException;
 
 import csci310.parkhere.R;
@@ -127,7 +129,11 @@ public class PrivateProfileFragment extends Fragment {
         }
 //        byte[] imageAsBytes = Base64.decode(encodedPic.getBytes(), Base64.DEFAULT);
 //        Bitmap bp = BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
-        Glide.with(getContext()).load(encodedPic).into(_privatProfileImage);
+
+        Calendar cal = Calendar.getInstance();
+        Glide.with(getContext())
+                .load(encodedPic+"?"+String.valueOf(cal.getTimeInMillis()))
+                .into(_privatProfileImage);
 
 //        _privatProfileImage.setImageBitmap(bp);
 
@@ -265,5 +271,28 @@ public class PrivateProfileFragment extends Fragment {
 //            _profilePic.setImageBitmap();
         }
 
+    }
+
+
+    public void refreshPrivateProfilePic()
+    {
+        getProfilePic gpc = new getProfilePic(clientController.getUser().userID);
+        String encodedPic = "";
+        try {
+            encodedPic = gpc.execute((Void) null).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        Log.d("UPDATEBARIMAGE", encodedPic);
+
+        Calendar cal = Calendar.getInstance();
+
+//        byte[] imageAsBytes = Base64.decode(encodedPic.getBytes(), Base64.DEFAULT);
+//        Bitmap bp = BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
+        Glide.with(getContext())
+                .load(encodedPic+"?"+String.valueOf(cal.getTimeInMillis()))
+                .into(_privatProfileImage);
     }
 }

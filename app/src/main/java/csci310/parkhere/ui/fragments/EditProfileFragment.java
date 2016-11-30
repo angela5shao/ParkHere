@@ -114,7 +114,7 @@ public class EditProfileFragment extends Fragment {
 
         _privatProfileImage = (ImageView) v.findViewById(R.id.privatProfileImage);
 
-        _usernameText = (EditText) v.findViewById(R.id.usernameText);
+        _usernameText = (EditText) v.findViewById(R.id.edit_usernameText);
         _usernameText.setText(controller.getUser().userName);
         _usernameText.setFocusable(false);
         _usernameText.setEnabled(false);
@@ -124,12 +124,12 @@ public class EditProfileFragment extends Fragment {
 
 
 
-        _pwText = (EditText) v.findViewById(R.id.pwText);
+        _pwText = (EditText) v.findViewById(R.id.edit_pwText);
 
-        _licenseIDText = (EditText) v.findViewById(R.id.licenseIDText);
+        _licenseIDText = (EditText) v.findViewById(R.id.edit_licenseIDText);
         _licenseIDText.setText(controller.getUser().userLicense);
 
-        _licenseplateText = (EditText) v.findViewById(R.id.licenseplateText);
+        _licenseplateText = (EditText) v.findViewById(R.id.edit_licenseplateText);
         _licenseplateText.setText(controller.getUser().userPlate);
 
 

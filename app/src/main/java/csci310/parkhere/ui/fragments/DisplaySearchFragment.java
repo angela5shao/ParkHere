@@ -1,5 +1,6 @@
 package csci310.parkhere.ui.fragments;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
+import csci310.parkhere.ui.activities.GuestActivity;
 import csci310.parkhere.ui.activities.RenterActivity;
 import csci310.parkhere.ui.adapters.CustomSearchListAdapter;
 import csci310.parkhere.ui.helpers.DiplayListViewHelper;
@@ -121,7 +123,14 @@ public class DisplaySearchFragment extends Fragment implements AdapterView.OnIte
                 //*********************************************************
 
                 mapViewFragment.setArguments(args);
-                ((RenterActivity) getActivity()).switchToMapViewFrag(mapViewFragment);
+                Activity activity = getActivity();
+                if(activity instanceof RenterActivity) {
+                    ((RenterActivity) getActivity()).switchToMapViewFrag(mapViewFragment);
+                }
+                else if(activity instanceof GuestActivity)
+                {
+                    ((GuestActivity) getActivity()).switchToMapViewFrag(mapViewFragment);
+                }
             }
         });
 

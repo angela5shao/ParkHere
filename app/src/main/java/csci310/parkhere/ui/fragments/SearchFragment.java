@@ -477,6 +477,7 @@ import java.util.HashMap;
 
 import csci310.parkhere.R;
 import csci310.parkhere.controller.ClientController;
+import csci310.parkhere.ui.activities.GuestActivity;
 import csci310.parkhere.ui.activities.RenterActivity;
 import resource.MyEntry;
 import resource.NetworkPackage;
@@ -930,7 +931,14 @@ public class SearchFragment extends Fragment {
         protected void onPostExecute(SearchResults result) {
             if(result!=null) {
                 Log.d("SEARCH_RESULT", "onPostExecute");
-                ((RenterActivity) getActivity()).displaySearchResult(result, curr_location, mStartDate, mStartTime, mEndDate, mEndTime);
+                Activity activity =  getActivity();
+                if(activity instanceof RenterActivity) {
+                    ((RenterActivity) getActivity()).displaySearchResult(result, curr_location, mStartDate, mStartTime, mEndDate, mEndTime);
+                }
+                else if(activity instanceof GuestActivity)
+                {
+                    ((GuestActivity) getActivity()).displaySearchResult(result, curr_location, mStartDate, mStartTime, mEndDate, mEndTime);
+                }
             }
             else{
                 Toast.makeText(getContext(), "Error to find space! Please try again.", Toast.LENGTH_SHORT).show();

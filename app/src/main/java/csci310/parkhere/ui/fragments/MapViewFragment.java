@@ -408,10 +408,16 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
             if (results != null && isShowCircle == true) {
                 for (ParkingSpot spot : results.keySet()) {
                     Log.d("MapLoadCirclesTask ", spot.getParkingSpotID() + "- results.get(spot) = " + results.get(spot));
+                    Log.d("MapLoadCirclesTask ", "mapCircleRadius = " + mapCircleRadius);
 
-                    float radius = (float)( mapCircleRadius / ( 100 - Color.alpha(results.get(spot)) ) ) * 50;
+                    float radius;
+                    if(Color.alpha(results.get(spot)) == 100) radius = (float) mapCircleRadius;
+                    else {
+                        radius = (float)( mapCircleRadius / ( 100 - Color.alpha(results.get(spot)) ) ) * 50;
+                    }
                     Log.d("MapLoadCirclesTask ", "Color.alpha(results.get(spot)) = " + Color.alpha(results.get(spot)));
                     Log.d("MapLoadCirclesTask ", "radius = " + radius);
+                    Log.d("MapLoadCirclesTask ", " CIRCLE spot.getLat() = " + spot.getLat() + "spot.getLon()" + spot.getLon());
 
                     Circle circle = map.addCircle(new CircleOptions()
                             .center(new LatLng(spot.getLat(), spot.getLon()))

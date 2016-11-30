@@ -215,7 +215,13 @@ public class ClientController {
 //        if(receiving) {
 
             while (received == false || NP == null) {
-
+                if(!clientCommunicator.connecting)
+                {
+                    Log.d("Not connecting", "gg");
+                    NetworkPackage np = new NetworkPackage();
+                    np.addEntry("BADNETWORK", "BADNETWORK");
+                    return np;
+                }
             }
             received = false;
             if (NP == null)

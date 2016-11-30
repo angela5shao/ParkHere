@@ -70,7 +70,14 @@ public class HomeActivity extends Activity {
         _guestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //
+                if(clientController == null)
+                {
+                    ServerConnectTask sct = new ServerConnectTask();
+                    sct.execute((Void) null);
+                    return;
+                }
+                myIntent = new Intent(v.getContext(), GuestActivity.class);
+                startActivity(myIntent);
             }
         });
     }

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@color/colorLightBackground"
+    android:id="@+id/guest_ui"
+    tools:context=".ui.activities.GuestActivity">
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="signup"
+        android:id="@+id/guestRegisterButton"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/colorMainFont"
+        android:padding="12dp" />
+
+    <FrameLayout
+        android:id="@+id/fragContainer"
+        android:layout_below="@id/guestRegisterButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+
+</RelativeLayout>
